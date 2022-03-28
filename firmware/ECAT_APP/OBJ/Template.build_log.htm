@@ -1,0 +1,87 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.20.0.0
+Copyright (C) 2016 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: z Microsoft, Microsoft, LIC=MGX63-AG09L-D1BPR-KW387-P51IW-5MT21
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.20
+Toolchain Path:  C:\Program Files\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 2 (build 183)
+Assembler:       Armasm.exe V5.06 update 2 (build 183)
+Linker/Locator:  ArmLink.exe V5.06 update 2 (build 183)
+Library Manager: ArmAr.exe V5.06 update 2 (build 183)
+Hex Converter:   FromElf.exe V5.06 update 2 (build 183)
+CPU DLL:         SARMCM3.DLL V5.20
+Dialog DLL:      DCM.DLL V1.13.7.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V2.0.18.0
+Dialog DLL:      TCM.DLL V1.14.9.0
+ 
+<h2>Project:</h2>
+D:\workspace\gpio_chagen\firmware\ECAT_APP\USER\Template.uvprojx
+Project File Date:  03/24/2022
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 2 (build 183)', folder: 'C:\Program Files\Keil_v5\ARM\ARMCC\Bin'
+Build target 'Template'
+compiling mailbox.c...
+..\HARDWARE\Src\mailbox.c(23): warning:  #177-D: variable "sm1Activate" was declared but never referenced
+  	 UINT16 sm1Activate = 0;
+..\HARDWARE\Src\mailbox.c(131): warning:  #177-D: variable "sm1Activate" was declared but never referenced
+  	  UINT16 sm1Activate;
+..\HARDWARE\Src\mailbox.c: 2 warnings, 0 errors
+linking...
+Program Size: Code=69352 RO-data=14936 RW-data=5880 ZI-data=14608  
+FromELF: creating hex file...
+After Build - User command #1: "C:\Program Files\Keil_v5\ARM\ARMCC\bin\fromelf.exe"
+Product: MDK Professional 5.20
+Component: ARM Compiler 5.06 update 2 (build 183)
+Tool: fromelf [4d35b1]
+For support see http://www.arm.com/support
+Software supplied by: ARM Limited
+ARM image conversion utility
+fromelf [options] input_file
+Options:
+       --help         display this help screen
+       --vsn          display version information
+       --output file  the output file. (defaults to stdout for -text format)
+       --nodebug      do not put debug areas in the output image
+       --nolinkview   do not put sections in the output image
+Binary Output Formats:
+       --bin          Plain Binary
+       --m32          Motorola 32 bit Hex
+       --i32          Intel 32 bit Hex
+       --vhx          Byte Oriented Hex format
+       --base addr    Optionally set base address for m32,i32
+Output Formats Requiring Debug Information
+       --fieldoffsets Assembly Language Description of Structures/Classes
+       --expandarrays Arrays inside and outside structures are expanded
+Other Output Formats:
+       --elf         ELF
+       --text        Text Information
+                Flags for Text Information
+                -v          verbose
+                -a          print data addresses (For images built with debug)
+                -c          disassemble code
+                -d          print contents of data section
+                -e          print exception tables
+                -g          print debug tables
+                -r          print relocation information
+                -s          print symbol table
+                -t          print string table
+                -y          print dynamic segment contents
+                -z          print code and data size information
+"..\OBJ\Template.axf" - 0 Error(s), 2 Warning(s).
+
+<h2>Collection of Component include folders:</h2>
+  D:\workspace\gpio_chagen\firmware\ECAT_APP\USER\RTE
+  C:\Program Files\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+
+<h2>Collection of Component Files used:</h2>
+Build Time Elapsed:  00:00:03
+</pre>
+</body>
+</html>
