@@ -532,7 +532,7 @@ void work_mode_operation(void)
 				}				
 			}	
 			
-			//if(adcok_flag==1)		//why waiting for adc ok???		ysgang 2021.12.30
+			if(adcok_flag==1)		
 			{
 				USART1_Data_Recieve();			//正常接收数据	
 				
@@ -598,7 +598,6 @@ void work_mode_operation(void)
 			//发送请求关机指令时间到，且未收到确认
 			if((1==send_code3_flag)&&(0==receive_code3_flag))
 			{
-				//send_code3_flag=0;		//why clear it here??? lead to send only once! ysgang 2022.1.29				
 				send_code3_flag=0;
 				
 				usart1_send_code3_cmd();
@@ -665,14 +664,14 @@ void work_mode_operation(void)
 			break;
 	}
 
-	if(adcok_flag == 1)		//finish reading all the adc channels
-	{
-		adcok_flag = 0;
-		if(Alarm_Manage() != 0)
-		{
-			power_manage.work_mode = 7;
-		}
-	}
+//	if(adcok_flag == 1)		//finish reading all the adc channels
+//	{
+//		adcok_flag = 0;
+//		if(Alarm_Manage() != 0)
+//		{
+//			power_manage.work_mode = 7;
+//		}
+//	}
 }
 
 

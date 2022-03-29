@@ -274,9 +274,9 @@ void TIM2_IRQHandler(void)
 	{
 		time_1ms_cnt++;
 		
-		ECAT_CheckTimer(); /* Timeout detection */
+	//	ECAT_CheckTimer(); /* Timeout detection */
 		
-		EtherCAT_LED_Control(); /* ethercat led state	*/	
+	//	EtherCAT_LED_Control(); /* ethercat led state	*/	
 
 		if(time_1ms_cnt >= 2)  //2ms
 		{
@@ -305,7 +305,7 @@ void TIM2_IRQHandler(void)
 			/* ad sample fast flag */
 			ad_fast_flag = 1;		
 			/* res heat sum calculation */
-			Res_Heat_Calculation();
+	//		Res_Heat_Calculation();
 			/* power key scan */
 			keyscan(power_manage.work_mode);
 			
@@ -340,8 +340,7 @@ void TIM2_IRQHandler(void)
 					  delay_count=0;
 					  send_code3_flag=1;			//请求关机指令继续
 			 	  }
-		  	}	
-				
+		  	}				
 			}
 		}
 

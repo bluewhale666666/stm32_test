@@ -1,7 +1,7 @@
 ..\obj\can.o: ..\HARDWARE\CAN\CAN.C
 ..\obj\can.o: ..\USER\stm32f4xx.h
 ..\obj\can.o: ..\CORE\core_cm4.h
-..\obj\can.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\can.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\can.o: ..\CORE\core_cmInstr.h
 ..\obj\can.o: ..\CORE\core_cmFunc.h
 ..\obj\can.o: ..\CORE\core_cm4_simd.h
@@ -37,8 +37,8 @@
 ..\obj\can.o: ..\HARDWARE\CAN\CAN_DATA.h
 ..\obj\can.o: ..\HARDWARE\Src\Robot-Device.h
 ..\obj\can.o: ..\HARDWARE\Src\ecat_def.h
-..\obj\can.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-..\obj\can.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\can.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\obj\can.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\can.o: ..\HARDWARE\Src\ecatappl.h
 ..\obj\can.o: ..\HARDWARE\Src\Robot-DeviceObjects.h
 ..\obj\can.o: ..\HARDWARE\TestMode\testmode.h

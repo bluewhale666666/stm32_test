@@ -3,7 +3,7 @@
 ..\obj\testmode.o: ..\SYSTEM\sys\sys.h
 ..\obj\testmode.o: ..\USER\stm32f4xx.h
 ..\obj\testmode.o: ..\CORE\core_cm4.h
-..\obj\testmode.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\testmode.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\testmode.o: ..\CORE\core_cmInstr.h
 ..\obj\testmode.o: ..\CORE\core_cmFunc.h
 ..\obj\testmode.o: ..\CORE\core_cm4_simd.h
@@ -38,8 +38,8 @@
 ..\obj\testmode.o: ..\FWLIB\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h
 ..\obj\testmode.o: ..\HARDWARE\Src\Robot-Device.h
 ..\obj\testmode.o: ..\HARDWARE\Src\ecat_def.h
-..\obj\testmode.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-..\obj\testmode.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\testmode.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\obj\testmode.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\testmode.o: ..\HARDWARE\Src\ecatappl.h
 ..\obj\testmode.o: ..\HARDWARE\Src\Robot-DeviceObjects.h
 ..\obj\testmode.o: ..\HARDWARE\CAN\CAN_DATA.h

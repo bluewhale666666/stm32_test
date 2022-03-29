@@ -61,7 +61,7 @@ void usart1_init(uint32_t bound)
 	
 	//USART1
 //	USART_DeInit(USART1);	
-	USART_InitStructure.USART_BaudRate=bound;						  					//波特率为：115200
+	USART_InitStructure.USART_BaudRate=bound;						  					//波特率
 	USART_InitStructure.USART_WordLength=USART_WordLength_8b;				//8位数据
 	USART_InitStructure.USART_StopBits=USART_StopBits_1;						//在帧结尾传输1个停止位
 	USART_InitStructure.USART_Parity=USART_Parity_No;				  			//奇偶失能

@@ -2,7 +2,7 @@
 ..\obj\recieve_send_command_done.o: ..\HARDWARE\power_inc\Recieve_Send_Command_Done.h
 ..\obj\recieve_send_command_done.o: ..\USER\stm32f4xx.h
 ..\obj\recieve_send_command_done.o: ..\CORE\core_cm4.h
-..\obj\recieve_send_command_done.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\recieve_send_command_done.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\recieve_send_command_done.o: ..\CORE\core_cmInstr.h
 ..\obj\recieve_send_command_done.o: ..\CORE\core_cmFunc.h
 ..\obj\recieve_send_command_done.o: ..\CORE\core_cm4_simd.h
@@ -35,7 +35,7 @@
 ..\obj\recieve_send_command_done.o: ..\FWLIB\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dac.h
 ..\obj\recieve_send_command_done.o: ..\FWLIB\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h
 ..\obj\recieve_send_command_done.o: ..\FWLIB\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h
-..\obj\recieve_send_command_done.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\recieve_send_command_done.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\recieve_send_command_done.o: ..\HARDWARE\power_inc\usart.h
 ..\obj\recieve_send_command_done.o: ..\HARDWARE\STMFLASH\stmflash.h
 ..\obj\recieve_send_command_done.o: ..\SYSTEM\sys\sys.h

@@ -3,7 +3,7 @@
 ..\obj\incappl.o: ..\SYSTEM\sys\sys.h
 ..\obj\incappl.o: ..\USER\stm32f4xx.h
 ..\obj\incappl.o: ..\CORE\core_cm4.h
-..\obj\incappl.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\incappl.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\incappl.o: ..\CORE\core_cmInstr.h
 ..\obj\incappl.o: ..\CORE\core_cmFunc.h
 ..\obj\incappl.o: ..\CORE\core_cm4_simd.h
@@ -37,8 +37,8 @@
 ..\obj\incappl.o: ..\FWLIB\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h
 ..\obj\incappl.o: ..\FWLIB\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h
 ..\obj\incappl.o: ..\HARDWARE\Src\ecat_def.h
-..\obj\incappl.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-..\obj\incappl.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\incappl.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\obj\incappl.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\incappl.o: ..\HARDWARE\TIMER\timer.h
 ..\obj\incappl.o: ..\HARDWARE\HW_ReadWrite\hw_readwrite.h
 ..\obj\incappl.o: ..\HARDWARE\AD_DA_SPI\ad_da_spi.h

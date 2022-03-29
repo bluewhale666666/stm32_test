@@ -2,7 +2,7 @@
 ..\obj\menu.o: ..\HARDWARE\power_inc\menu.h
 ..\obj\menu.o: ..\USER\stm32f4xx.h
 ..\obj\menu.o: ..\CORE\core_cm4.h
-..\obj\menu.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\menu.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\menu.o: ..\CORE\core_cmInstr.h
 ..\obj\menu.o: ..\CORE\core_cmFunc.h
 ..\obj\menu.o: ..\CORE\core_cm4_simd.h

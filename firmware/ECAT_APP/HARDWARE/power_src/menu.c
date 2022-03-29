@@ -70,6 +70,7 @@ void save_control_state_to_dr(uint8_t pdata)
 void close_all_dr_save_state(void)
 {
 	power_manage.p_constate.val = 0x00;
+	power_manage.p_state.val = 0x00;
 	
 	DC24V1A_DR = 0;		
 	DC24V2A_DR = 0;			
@@ -80,28 +81,12 @@ void close_all_dr_save_state(void)
 //上电按键后的动作，打开所有输出
 void first_open_dr_save_state(void)
 {
-	//power_manage.p_constate.val = 0x0f;	
-  power_manage.p_constate.val = 0x0b;
-	DC24V1A_DR = 1;			//示教器、主控、FAN、安全控制器的24V，与48V remote复用
-	DC24V2A_DR = 1;			//24V2A 安全IO,从站IO
-//	DC48V_ES_SHUTDOWN_DR = 1;  //48V异常控制	
+  power_manage.p_constate.val = 0x7f;
+	power_manage.p_state.val = 0x04; 
+	
+	DC24V1A_DR = 1;		//示教器、主控、FAN、安全控制器的24V，与48V remote复用
+	DC24V2A_DR = 1;		//24V2A 安全IO,从站IO
 	DC24V_FK_DR = 1;	//示教器指示灯
-	
-	
-//	power_manage.p_constate.val = 0x7f;	
-//	
-//	DC48V_RE_DR = power_manage.p_constate.b.DC48V_REM;	//48V开关电源
-//	DC24V1A_DR = power_manage.p_constate.b.DC24V1A;			//24V1A 主控制器，示教器  
-//	DC24V1B_DR = power_manage.p_constate.b.DC24V1B;			//24V1B 从站MCU
-//	DC24V1C_DR = power_manage.p_constate.b.DC24V1C;			//24V1C 安全MCU
-//	DC24V2A_DR = power_manage.p_constate.b.DC24V2A;			//24V2A 安全IO,从站IO
-//	DC24V2B_DR = power_manage.p_constate.b.DC24V2B;			//24V2B 外设
-//	FAN_DR = power_manage.p_constate.b.FAN_RUN;					//风扇
-//	
-//	tim8_PWM_init(40);
-//	
-//	DC24V_FK_DR = power_manage.p_constate.b.DC24V1A;		//24V反馈输出
-//	power_manage.p_state.b.DC24V1_FK=power_manage.p_constate.b.DC24V1A;		//24v反馈输出状态
 }
 
 //轮询读取ADC采样芯片的数据,v0.2版本和V0.1版本的ads1115c  AD接口有区别！！！！！！！！！！！！！！！！！
@@ -114,16 +99,12 @@ void adc_get_data(void)
 	
 	switch(ch1)	
 	{
-		//48v ads1115c
+		/* 48v ads1115c */
 		case 0:
 		{
-#if RELEASE_TEST
-		ftmp = 4800;	
-#else
-			ftmp = ADS1115c_Switch_Channl(0);				//48v电压
-			ftmp = 409.6*32.2*ftmp/(2.2*ADC_Accuracy);
-//			ftmp = 409.6*32.4*ftmp/(2.4*ADC_Accuracy);
-#endif		
+			ftmp = ADS1115c_Switch_Channl(0);				//48v电压 x100
+			ftmp = 409.6*31.5*ftmp/(1.5*ADC_Accuracy);
+
 			if((ftmp<6000)&&(ftmp>200))	
 				power_manage.dc48v_u = ftmp;
 			else
@@ -134,25 +115,17 @@ void adc_get_data(void)
 		}
 		case 1:
 		{
-#if RELEASE_TEST
-			utmp = 450;
-#else
-			utmp = ADS1115c_Switch_Channl(1);	//48v 电流参考 改为ntc2
-#endif			
-			save_ntc2_data(utmp);			//++++++++++++++++++++
+			utmp = ADS1115c_Switch_Channl(1);	//ntc2		
+			save_ntc2_data(utmp);			
 			
 			ch1++;
 			break;
 		}
 		case 2:
 		{
-#if RELEASE_TEST
-	//	ftmp = 50;
-			ftmp = 0;
-#else
 			ftmp = ADS1115c_Switch_Channl(2);	//48v 电流  x100
 			ftmp = 409.6*ftmp/(0.05*ADC_Accuracy);	
-#endif
+
 			if((ftmp<10000)&&(ftmp>5))	
 			{
 				power_manage.dc48v_i = ftmp;
@@ -167,15 +140,11 @@ void adc_get_data(void)
 			ch1++;		
 			break;
 		}
-		//24v1 ads1115a
+		/* 24v ads1115a */
 		case 3:
 		{
-#if RELEASE_TEST
-			ftmp = 2400;
-#else
-			ftmp = ADS1115a_Switch_Channl(0);			//24v1电压
+			ftmp = ADS1115a_Switch_Channl(0);			//24v电压
 			ftmp = 409.6*8.5*ftmp/ADC_Accuracy;	
-#endif
 			
 			if((ftmp<3200)&&(ftmp>100))	
 				power_manage.dc24v1_u = ftmp;
@@ -187,12 +156,8 @@ void adc_get_data(void)
 		}
 		case 4:
 		{
-#if RELEASE_TEST
-			ftmp = 500;
-#else
-			ftmp = ADS1115a_Switch_Channl(1);			//24v1电流
+			ftmp = ADS1115a_Switch_Channl(1);			//24v电流
 			ftmp = 409.6*ftmp/(0.5*ADC_Accuracy);	
-#endif
 			
 		  if(ftmp>500)	
 				power_manage.dc24v1_i=0;
@@ -202,122 +167,82 @@ void adc_get_data(void)
 			ch1++;
 			break;	
 		}
-		case 5:						//++++++++++++++++++++++++++++++++++++++++++++
+		case 5:					
 		{
-#if RELEASE_TEST
-			ftmp = 450;
-#else
-			ftmp = ADS1115a_Switch_Channl(3);			//ntc
-#endif
-			
-			//save_ntc_data(ftmp); /* NC in new version */
+			ftmp = ADS1115a_Switch_Channl(3);			//ntc			
+			save_ntc_data(ftmp);
 
 			ch1++;
 			break;	
 		}
 		
-		//24v2 ads1115b AI
+		/* ads1115b AI */
 		case 6:
 		{
-#if RELEASE_TEST
-			if(power_manage.p_constate.b.AI_SW2 == 0)
+			if(power_manage.p_constate.b.AI_SW1 == 1)
 			{
-				ftmp = 2400;
-				if((ftmp<3200)&&(ftmp>100))	
-					power_manage.dc24v2_i2 = ftmp;
-				else
-					power_manage.dc24v2_i2 = 0;	
+				AI_IU_SW1 = 0;
+				ftmp = ADS1115b_Switch_Analog1Voltage();	//AI_IU_SW1电压
+				ftmp = 409.6*2.8*ftmp/ADC_Accuracy;			
+				power_manage.dc24v2_u = ftmp;				
 			}
 			else
 			{
-				ftmp = 500;			
-				if((ftmp<800)&&(ftmp>3))			
-					power_manage.dc24v2_i2 = ftmp;
-				else
-					power_manage.dc24v2_i2 = 0;
+				power_manage.dc24v2_u = 0;
 			}
-			
-#else
-			if(power_manage.p_constate.b.AI_SW2 == 0)
-			{
-				ftmp = ADS1115b_Switch_Channl(1);			//AI_IU_SW2电压
-				ftmp = 409.6*8.5*ftmp/ADC_Accuracy;		
-				if((ftmp<3200)&&(ftmp>100))	
-					power_manage.dc24v2_i2 = ftmp;
-				else
-					power_manage.dc24v2_i2 = 0;					
-			}
-			else
-			{
-				ftmp = ADS1115b_Switch_Channl(2);			//AI_IU_SW2电流
-				ftmp = 409.6*ftmp/(0.5*ADC_Accuracy);
-				if((ftmp<800)&&(ftmp>3))			
-					power_manage.dc24v2_i2 = ftmp;
-				else
-					power_manage.dc24v2_i2 = 0;
-			}
-#endif		
+		
 			ch1++;
 			break;
 		}
 		case 7:
 		{
-#if RELEASE_TEST
-			if(power_manage.p_constate.b.AI_SW1 == 0)
+			if(power_manage.p_constate.b.AI_SW2 == 1)
 			{
-				ftmp = 2400;
-				if((ftmp<3200)&&(ftmp>100))	
-					power_manage.dc24v2_i1 = ftmp;
-				else
-					power_manage.dc24v2_i1 = 0;	
+				AI_IU_SW2 = 0;
+				ftmp = ADS1115b_Switch_Analog2Voltage();	//AI_IU_SW2电压
+				ftmp = 409.6*2.8*ftmp/ADC_Accuracy;		
+				power_manage.dc24v2_ul = ftmp;				
 			}
 			else
 			{
-				ftmp = 500;			
-				if((ftmp<800)&&(ftmp>3))			
-					power_manage.dc24v2_i1 = ftmp;
-				else
-					power_manage.dc24v2_i1 = 0;
+		  	power_manage.dc24v2_ul = 0;
 			}
-#else
-			if(power_manage.p_constate.b.AI_SW1 == 0)
-			{
-				ftmp = ADS1115b_Switch_Channl(0);			//AI_IU_SW1电压
-				ftmp = 409.6*8.5*ftmp/ADC_Accuracy;		
-				if((ftmp<3200)&&(ftmp>100))	
-					power_manage.dc24v2_i1 = ftmp;
-				else
-					power_manage.dc24v2_i1 = 0;					
-			}
-			else
-			{
-				ftmp = ADS1115b_Switch_Channl(3);			//AI_IU_SW1电流
-				ftmp = 409.6*ftmp/(0.5*ADC_Accuracy);
-				if((ftmp<800)&&(ftmp>3))			
-					power_manage.dc24v2_i1 = ftmp;
-				else
-					power_manage.dc24v2_i1 = 0;
-			}
-#endif			
+			
 			ch1++;
 			break;
 		}
 		case 8:
 		{
-#if RELEASE_TEST
-			ftmp = 2400;
-#else
-			ftmp = ADS1115b_Switch_Channl(2);		
-			ftmp = 409.6*7.04*ftmp/ADC_Accuracy;
-#endif
-			
-			if((ftmp<3000)&&(ftmp>100))	
-				power_manage.dc24v2_u = ftmp;
+			if(power_manage.p_constate.b.AI_SW2 == 0)
+			{			
+				AI_IU_SW2 = 1;
+				ftmp = ADS1115b_Switch_Analog2Current();			//AI_IU_SW2电流
+				ftmp = 409.6*ftmp/(0.16*ADC_Accuracy);					
+				power_manage.dc24v2_i2 = ftmp;
+			}
 			else
-				power_manage.dc24v2_u = 0;
-
-			ch1=0;
-			
+			{
+		  	power_manage.dc24v2_i2 = 0;
+			}
+				
+      ch1++;
+			break;
+		}
+		case 9:
+		{
+			if(power_manage.p_constate.b.AI_SW1 == 0)
+			{			
+		    AI_IU_SW1 = 1;				
+				ftmp = ADS1115b_Switch_Analog1Current();			//AI_IU_SW1电流
+				ftmp = 409.6*ftmp/(0.16*ADC_Accuracy);						
+				power_manage.dc24v2_i1 = ftmp;
+			}
+			else
+			{
+		  	power_manage.dc24v2_i1 = 0;
+			}
+				
+			ch1=0;		
 			adcok_flag = 1;	
 			break;
 		}

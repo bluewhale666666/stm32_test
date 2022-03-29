@@ -1,7 +1,7 @@
 ..\obj\mailbox.o: ..\HARDWARE\Src\mailbox.c
 ..\obj\mailbox.o: ..\HARDWARE\Src\ecat_def.h
-..\obj\mailbox.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-..\obj\mailbox.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\mailbox.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\obj\mailbox.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\mailbox.o: ..\HARDWARE\Src\ecatslv.h
 ..\obj\mailbox.o: ..\HARDWARE\Src\esc.h
 ..\obj\mailbox.o: ..\HARDWARE\Src\mailbox.h
@@ -16,7 +16,7 @@
 ..\obj\mailbox.o: ..\SYSTEM\sys\sys.h
 ..\obj\mailbox.o: ..\USER\stm32f4xx.h
 ..\obj\mailbox.o: ..\CORE\core_cm4.h
-..\obj\mailbox.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\mailbox.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\mailbox.o: ..\CORE\core_cmInstr.h
 ..\obj\mailbox.o: ..\CORE\core_cmFunc.h
 ..\obj\mailbox.o: ..\CORE\core_cm4_simd.h

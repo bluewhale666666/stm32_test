@@ -2,7 +2,7 @@
 ..\obj\rs485.o: ..\SYSTEM\sys\sys.h
 ..\obj\rs485.o: ..\USER\stm32f4xx.h
 ..\obj\rs485.o: ..\CORE\core_cm4.h
-..\obj\rs485.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\rs485.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\rs485.o: ..\CORE\core_cmInstr.h
 ..\obj\rs485.o: ..\CORE\core_cmFunc.h
 ..\obj\rs485.o: ..\CORE\core_cm4_simd.h
@@ -38,8 +38,8 @@
 ..\obj\rs485.o: ..\HARDWARE\RS485\rs485.h
 ..\obj\rs485.o: ..\HARDWARE\Src\Robot-Device.h
 ..\obj\rs485.o: ..\HARDWARE\Src\ecat_def.h
-..\obj\rs485.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-..\obj\rs485.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\rs485.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\obj\rs485.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\rs485.o: ..\HARDWARE\Src\ecatappl.h
 ..\obj\rs485.o: ..\HARDWARE\Src\Robot-DeviceObjects.h
 ..\obj\rs485.o: ..\SYSTEM\delay\delay.h

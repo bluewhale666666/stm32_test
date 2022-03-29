@@ -3,7 +3,7 @@
 ..\obj\hw_readwrite.o: ..\SYSTEM\sys\sys.h
 ..\obj\hw_readwrite.o: ..\USER\stm32f4xx.h
 ..\obj\hw_readwrite.o: ..\CORE\core_cm4.h
-..\obj\hw_readwrite.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\hw_readwrite.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\hw_readwrite.o: ..\CORE\core_cmInstr.h
 ..\obj\hw_readwrite.o: ..\CORE\core_cmFunc.h
 ..\obj\hw_readwrite.o: ..\CORE\core_cm4_simd.h
@@ -38,8 +38,8 @@
 ..\obj\hw_readwrite.o: ..\FWLIB\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h
 ..\obj\hw_readwrite.o: ..\HARDWARE\AD_DA_SPI\ad_da_spi.h
 ..\obj\hw_readwrite.o: ..\HARDWARE\Src\ecat_def.h
-..\obj\hw_readwrite.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-..\obj\hw_readwrite.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\hw_readwrite.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\obj\hw_readwrite.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\hw_readwrite.o: ..\HARDWARE\Src\Robot-Device.h
 ..\obj\hw_readwrite.o: ..\HARDWARE\Src\ecatappl.h
 ..\obj\hw_readwrite.o: ..\HARDWARE\Src\Robot-DeviceObjects.h

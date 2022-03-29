@@ -3,7 +3,7 @@
 ..\obj\ad_da_spi.o: ..\SYSTEM\sys\sys.h
 ..\obj\ad_da_spi.o: ..\USER\stm32f4xx.h
 ..\obj\ad_da_spi.o: ..\CORE\core_cm4.h
-..\obj\ad_da_spi.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\ad_da_spi.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\ad_da_spi.o: ..\CORE\core_cmInstr.h
 ..\obj\ad_da_spi.o: ..\CORE\core_cmFunc.h
 ..\obj\ad_da_spi.o: ..\CORE\core_cm4_simd.h
@@ -37,8 +37,8 @@
 ..\obj\ad_da_spi.o: ..\FWLIB\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h
 ..\obj\ad_da_spi.o: ..\FWLIB\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h
 ..\obj\ad_da_spi.o: ..\HARDWARE\Src\ecat_def.h
-..\obj\ad_da_spi.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-..\obj\ad_da_spi.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\ad_da_spi.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\obj\ad_da_spi.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\ad_da_spi.o: ..\HARDWARE\Src\Robot-Device.h
 ..\obj\ad_da_spi.o: ..\HARDWARE\Src\ecatappl.h
 ..\obj\ad_da_spi.o: ..\HARDWARE\Src\Robot-DeviceObjects.h

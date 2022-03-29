@@ -2,7 +2,7 @@
 ..\obj\gpio.o: ..\HARDWARE\power_inc\gpio.h
 ..\obj\gpio.o: ..\USER\stm32f4xx.h
 ..\obj\gpio.o: ..\CORE\core_cm4.h
-..\obj\gpio.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\gpio.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\gpio.o: ..\CORE\core_cmInstr.h
 ..\obj\gpio.o: ..\CORE\core_cmFunc.h
 ..\obj\gpio.o: ..\CORE\core_cm4_simd.h

@@ -49,19 +49,19 @@ void Reload_Config_All_Value(void)
 {
 	power_manage.upload_time = 500;
 	power_manage.temperature_h = 850;
-	power_manage.alarm_cfc = 5;
-	power_manage.dc48v_ul = 4300;
-	power_manage.dc48v_uh = 6300;
+//	power_manage.alarm_cfc = 5;
+//	power_manage.dc48v_ul = 4300;
+//	power_manage.dc48v_uh = 6300;
 //	power_manage.dc48v_ih = 4000;
-	power_manage.dc48v_ih = 0;			//???
-	power_manage.dc24v1_ul = 2200;
-	power_manage.dc24v1_uh = 2640;
-	power_manage.dc24v1_ih = 840;
-	power_manage.dc24v2_ul = 2300;
-	power_manage.dc24v2_uh = 2800;
-	power_manage.dc24v2_i1h = 600;
-	power_manage.dc24v2_i2h = 600;
-	power_manage.uart1_bps = 19200;
+//	power_manage.dc48v_ih = 0;			//???
+//	power_manage.dc24v1_ul = 2200;
+//	power_manage.dc24v1_uh = 2640;
+//	power_manage.dc24v1_ih = 840;
+//	power_manage.dc24v2_ul = 2300;
+//	power_manage.dc24v2_uh = 2800;
+//	power_manage.dc24v2_i1h = 600;
+//	power_manage.dc24v2_i2h = 600;
+//	power_manage.uart1_bps = 19200;
 }
 
 

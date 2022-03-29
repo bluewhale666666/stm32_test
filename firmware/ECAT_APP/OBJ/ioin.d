@@ -2,7 +2,7 @@
 ..\obj\ioin.o: ..\HARDWARE\power_inc\ioin.h
 ..\obj\ioin.o: ..\USER\stm32f4xx.h
 ..\obj\ioin.o: ..\CORE\core_cm4.h
-..\obj\ioin.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\ioin.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\ioin.o: ..\CORE\core_cmInstr.h
 ..\obj\ioin.o: ..\CORE\core_cmFunc.h
 ..\obj\ioin.o: ..\CORE\core_cm4_simd.h

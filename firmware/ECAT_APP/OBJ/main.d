@@ -2,7 +2,7 @@
 ..\obj\main.o: ..\SYSTEM\sys\sys.h
 ..\obj\main.o: ..\USER\stm32f4xx.h
 ..\obj\main.o: ..\CORE\core_cm4.h
-..\obj\main.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\main.o: ..\CORE\core_cmInstr.h
 ..\obj\main.o: ..\CORE\core_cmFunc.h
 ..\obj\main.o: ..\CORE\core_cm4_simd.h
@@ -35,9 +35,9 @@
 ..\obj\main.o: ..\FWLIB\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dac.h
 ..\obj\main.o: ..\FWLIB\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h
 ..\obj\main.o: ..\FWLIB\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h
-..\obj\main.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-..\obj\main.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-..\obj\main.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+..\obj\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\obj\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 ..\obj\main.o: ..\HARDWARE\power_inc\main.h
 ..\obj\main.o: ..\HARDWARE\power_inc\main_data.h
 ..\obj\main.o: ..\HARDWARE\power_inc\usart.h
@@ -64,8 +64,8 @@
 ..\obj\main.o: ..\HARDWARE\Src\Robot-DeviceObjects.h
 ..\obj\main.o: ..\HARDWARE\TIMER\timer.h
 ..\obj\main.o: ..\UCOSII\CONFIG\includes.h
-..\obj\main.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\ctype.h
-..\obj\main.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+..\obj\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\ctype.h
+..\obj\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
 ..\obj\main.o: ..\UCOSII\CORE\ucos_ii.h
 ..\obj\main.o: ..\UCOSII\CONFIG\includes.h
 ..\obj\main.o: ..\UCOSII\CONFIG\os_cfg.h

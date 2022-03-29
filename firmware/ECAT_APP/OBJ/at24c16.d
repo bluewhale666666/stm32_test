@@ -2,7 +2,7 @@
 ..\obj\at24c16.o: ..\HARDWARE\power_inc\at24c16.h
 ..\obj\at24c16.o: ..\USER\stm32f4xx.h
 ..\obj\at24c16.o: ..\CORE\core_cm4.h
-..\obj\at24c16.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\at24c16.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\at24c16.o: ..\CORE\core_cmInstr.h
 ..\obj\at24c16.o: ..\CORE\core_cmFunc.h
 ..\obj\at24c16.o: ..\CORE\core_cm4_simd.h

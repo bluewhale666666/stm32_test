@@ -1,6 +1,5 @@
 #include "ads1115b.h"
-
-#include "main.h"							//主函数头文件
+#include "main.h"							
 #include "delay.h"
 
 //sda2   ADS1115_ADDR_1
@@ -100,6 +99,118 @@ uint16_t ADS1115b_Switch_Channl(uint8_t ch)
 		default:
 			break;		
 	}
+
+	return AD_value;
+}
+
+/** 
+   *@brief   AI1 Voltage Read
+   *@param   None 
+   *@note    Channel 0
+   *@return  None
+   *@author  liu  
+   *@date    2022/3/29       
+   *@version V1.0.0 
+   */
+uint16_t ADS1115b_Switch_Analog1Voltage(void)
+{
+	s16 AD_value=0;
+	static uint8_t flagb = 0;		
+	
+	if(0==flagb)			
+	{
+		flagb = 1;
+		ADS1115b_Config(CH0);   
+		delay_ms(100);	
+	}		
+	
+	ADS1115b_Config(CH0);   
+	delay_ms(10);	//延时		
+	AD_value = ADS1115b_Read();	
+
+	return AD_value;
+}
+
+/** 
+   *@brief   AI2 Voltage Read
+   *@param   None 
+   *@note    Channel 1
+   *@return  None
+   *@author  liu  
+   *@date    2022/3/29       
+   *@version V1.0.0 
+   */
+uint16_t ADS1115b_Switch_Analog2Voltage(void)
+{
+	s16 AD_value=0;
+	static uint8_t flagb = 0;		
+	
+	if(0==flagb)			
+	{
+		flagb = 1;
+		ADS1115b_Config(CH1);   
+		delay_ms(100);	
+	}		
+	
+	ADS1115b_Config(CH1);   
+	delay_ms(10);		
+	AD_value = ADS1115b_Read();	
+
+	return AD_value;
+}
+
+/** 
+   *@brief   AI1 Current Read
+   *@param   None 
+   *@note    Channel 3
+   *@return  None
+   *@author  liu  
+   *@date    2022/3/29       
+   *@version V1.0.0 
+   */
+uint16_t ADS1115b_Switch_Analog1Current(void)
+{
+	s16 AD_value=0;	
+	static uint8_t flagb = 0;		//第一次延时读取
+	
+	if(0==flagb)			//开机第一次采样+延时
+	{
+		flagb = 1;
+		ADS1115b_Config(CH3);   
+		delay_ms(100);	//延时
+	}		
+	
+	ADS1115b_Config(CH3);   
+	delay_ms(10);	//延时		
+	AD_value = ADS1115b_Read();	//AI1 U,先读取再配置下一通道
+
+	return AD_value;
+}
+
+/** 
+   *@brief   AI2 Current Read
+   *@param   None 
+   *@note    Channel 2
+   *@return  None
+   *@author  liu  
+   *@date    2022/3/29       
+   *@version V1.0.0 
+   */
+uint16_t ADS1115b_Switch_Analog2Current(void)
+{
+	s16 AD_value=0;
+	static uint8_t flagb = 0;		//第一次延时读取
+	
+	if(0==flagb)			//开机第一次采样+延时
+	{
+		flagb = 1;
+		ADS1115b_Config(CH2);   
+		delay_ms(100);	//延时
+	}		
+	
+	ADS1115b_Config(CH2);   
+	delay_ms(10);	//延时		
+	AD_value = ADS1115b_Read();	//AI1 U,先读取再配置下一通道
 
 	return AD_value;
 }

@@ -3,7 +3,7 @@
 ..\obj\exti.o: ..\SYSTEM\sys\sys.h
 ..\obj\exti.o: ..\USER\stm32f4xx.h
 ..\obj\exti.o: ..\CORE\core_cm4.h
-..\obj\exti.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\exti.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\exti.o: ..\CORE\core_cmInstr.h
 ..\obj\exti.o: ..\CORE\core_cmFunc.h
 ..\obj\exti.o: ..\CORE\core_cm4_simd.h
@@ -40,8 +40,8 @@
 ..\obj\exti.o: ..\HARDWARE\DO_LED\do_led.h
 ..\obj\exti.o: ..\HARDWARE\Src\Robot-Device.h
 ..\obj\exti.o: ..\HARDWARE\Src\ecat_def.h
-..\obj\exti.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-..\obj\exti.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\exti.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\obj\exti.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\exti.o: ..\HARDWARE\Src\ecatappl.h
 ..\obj\exti.o: ..\HARDWARE\Src\Robot-DeviceObjects.h
 ..\obj\exti.o: ..\HARDWARE\DI_KEY\di_key.h

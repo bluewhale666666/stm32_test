@@ -863,69 +863,72 @@ UINT8 HW_Init(void)
 	u32 rs485_br[1];
 	u32 can_br[1];
 	
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//设置系统中断优先级分组2
+	int i;
+	uint16_t a0=3,a1=3,a2=3,a3=3,a4=3,a5=3,a6=3,a7=3,a16=3,a17=3,a18=3,a19=3,a20=3,a21=3,a22=3,a23=3;
+	BOOL b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0,b7=0,b16=0,b17=0,b18=0,b19=0,b20=0,b21=0,b22=0,b23=0;
 	
-	delay_init(168);                               //初始化延时函数
-	LED_Init();				                             //初始化LED 	
-	DO_Init();									                   //初始化DO
-//	DI_Init(); 
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+	
+	delay_init(168);                             
+	LED_Init();				                        	
+	DO_Init();									                   
+	DI_Init(); 
 
 	gpio_init();
   Reload_State_All_Value();
-//  Reload_Config_All_Value();	
-//  usart1_init(power_manage.uart1_bps);
-//	ads1115a_Init();
-//	ads1115b_Init();
-//	ads1115c_Init();
-
-//	uint16_t a0=3,a1=3,a2=3,a3=3,a4=3,a5=3,a6=3,a7=3,a16=3,a17=3,a18=3,a19=3,a20=3,a21=3,a22=3,a23=3;
-//	BOOL b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0,b7=0,b16=0,b17=0,b18=0,b19=0,b20=0,b21=0,b22=0,b23=0;
-//	
-//	for(int i=0; i<32; i++)
-//	{
-//		/* 8 channel DI, 取反才是合理的逻辑，这时接收到高电平就是1，低电平就是0 */
-//		inputresult=~input_filter(ST_IN1_I0_3,(uint16_t *)&a0,6,2,(BOOL *)&b0);
-//		inputresult=~input_filter(ST_IN2_I0_2,(uint16_t *)&a1,6,2,(BOOL *)&b1);
-//		inputresult=~input_filter(ST_IN3_I0_1,(uint16_t *)&a2,6,2,(BOOL *)&b2);
-//		inputresult=~input_filter(ST_IN4_I0_0,(uint16_t *)&a3,6,2,(BOOL *)&b3);
-//		inputresult=~input_filter(ST_IN5_I1_0,(uint16_t *)&a4,6,2,(BOOL *)&b4);
-//		inputresult=~input_filter(ST_IN6_I1_1,(uint16_t *)&a5,6,2,(BOOL *)&b5);
-//		inputresult=~input_filter(ST_IN7_I1_2,(uint16_t *)&a6,6,2,(BOOL *)&b6);
-//		inputresult=~input_filter(ST_IN8_I1_3,(uint16_t *)&a7,6,2,(BOOL *)&b7);
-//		
-//		/* 8 channel Function/User DI, 取反才是合理的逻辑，这时接收到高电平就是1，低电平就是0 */
-//		inputresult=~input_filter(ST_IN17_I2_0,(uint16_t *)&a16,6,2,(BOOL *)&b16);
-//		inputresult=~input_filter(ST_IN18_I2_1,(uint16_t *)&a17,6,2,(BOOL *)&b17);
-//		inputresult=~input_filter(ST_IN19_I2_2,(uint16_t *)&a18,6,2,(BOOL *)&b18);
-//		inputresult=~input_filter(ST_IN20_I2_3,(uint16_t *)&a19,6,2,(BOOL *)&b19);
-//		inputresult=~input_filter(ST_IN24_I3_0,(uint16_t *)&a20,6,2,(BOOL *)&b20);
-//		inputresult=~input_filter(ST_IN23_I3_1,(uint16_t *)&a21,6,2,(BOOL *)&b21);
-//		inputresult=~input_filter(ST_IN22_I3_2,(uint16_t *)&a22,6,2,(BOOL *)&b22);
-//		inputresult=~input_filter(ST_IN21_I3_3,(uint16_t *)&a23,6,2,(BOOL *)&b23);	
-//	}
-
-//  TIM_ENCODER_Configuration();	
+  Reload_Config_All_Value();	
+  usart1_init(19200);
+	ads1115a_Init();
+	ads1115b_Init();
+	ads1115c_Init();
 
 
-//  //从EEPROM中读取485波特率
-//	STMFLASH_Read(FLASH_SAVE_ADDR_baud,(u32*)rs485_br,1);
-//	if((rs485_br[0]!= 1200)&&(rs485_br[0]!= 2400)&&(rs485_br[0]!= 4800)&&(rs485_br[0]!= 9600)&&(rs485_br[0]!= 14400)&&(rs485_br[0]!= 19200)&&(rs485_br[0]!= 38400)\
-//		&&(rs485_br[0]!= 56000)&&(rs485_br[0]!= 57600)&&(rs485_br[0]!= 115200)&&(rs485_br[0]!= 128000)&&(rs485_br[0]!= 256000))
-//	{
-//    rs485_br[0] = 115200;
-//		
-//	}	
-//		RS485_Init(rs485_br[0]);
-//	
-//	 //从EEPROM中读取CAN波特率
-//	 STMFLASH_Read(FLASH_SAVE_ADDR_baud + 4,(u32*)can_br,1);
-//	if((can_br[0]!= 10)&&(can_br[0]!= 20)&&(can_br[0]!= 50)&&(can_br[0]!= 100)&&(can_br[0]!= 125)&&(can_br[0]!= 250)&&(can_br[0]!= 500)\
-//		&&(can_br[0]!= 1000))
-//	{
-//    can_br[0] = 500;
-//		
-//	}	
-//  CAN_Configuration(can_br[0]); 
+	
+	for(i=0; i<32; i++)
+	{
+		/* 8 channel DI, 取反才是合理的逻辑，这时接收到高电平就是1，低电平就是0 */
+		inputresult=~input_filter(ST_IN1_I0_3,(uint16_t *)&a0,6,2,(BOOL *)&b0);
+		inputresult=~input_filter(ST_IN2_I0_2,(uint16_t *)&a1,6,2,(BOOL *)&b1);
+		inputresult=~input_filter(ST_IN3_I0_1,(uint16_t *)&a2,6,2,(BOOL *)&b2);
+		inputresult=~input_filter(ST_IN4_I0_0,(uint16_t *)&a3,6,2,(BOOL *)&b3);
+		inputresult=~input_filter(ST_IN5_I1_0,(uint16_t *)&a4,6,2,(BOOL *)&b4);
+		inputresult=~input_filter(ST_IN6_I1_1,(uint16_t *)&a5,6,2,(BOOL *)&b5);
+		inputresult=~input_filter(ST_IN7_I1_2,(uint16_t *)&a6,6,2,(BOOL *)&b6);
+		inputresult=~input_filter(ST_IN8_I1_3,(uint16_t *)&a7,6,2,(BOOL *)&b7);
+		
+		/* 8 channel Function/User DI, 取反才是合理的逻辑，这时接收到高电平就是1，低电平就是0 */
+		inputresult=~input_filter(ST_IN17_I2_0,(uint16_t *)&a16,6,2,(BOOL *)&b16);
+		inputresult=~input_filter(ST_IN18_I2_1,(uint16_t *)&a17,6,2,(BOOL *)&b17);
+		inputresult=~input_filter(ST_IN19_I2_2,(uint16_t *)&a18,6,2,(BOOL *)&b18);
+		inputresult=~input_filter(ST_IN20_I2_3,(uint16_t *)&a19,6,2,(BOOL *)&b19);
+		inputresult=~input_filter(ST_IN24_I3_0,(uint16_t *)&a20,6,2,(BOOL *)&b20);
+		inputresult=~input_filter(ST_IN23_I3_1,(uint16_t *)&a21,6,2,(BOOL *)&b21);
+		inputresult=~input_filter(ST_IN22_I3_2,(uint16_t *)&a22,6,2,(BOOL *)&b22);
+		inputresult=~input_filter(ST_IN21_I3_3,(uint16_t *)&a23,6,2,(BOOL *)&b23);	
+	}
+
+  TIM_ENCODER_Configuration();	
+
+
+  //从EEPROM中读取485波特率
+	STMFLASH_Read(FLASH_SAVE_ADDR_baud,(u32*)rs485_br,1);
+	if((rs485_br[0]!= 1200)&&(rs485_br[0]!= 2400)&&(rs485_br[0]!= 4800)&&(rs485_br[0]!= 9600)&&(rs485_br[0]!= 14400)&&(rs485_br[0]!= 19200)&&(rs485_br[0]!= 38400)\
+		&&(rs485_br[0]!= 56000)&&(rs485_br[0]!= 57600)&&(rs485_br[0]!= 115200)&&(rs485_br[0]!= 128000)&&(rs485_br[0]!= 256000))
+	{
+    rs485_br[0] = 115200;
+		
+	}	
+	RS485_Init(rs485_br[0]);
+	
+	 //从EEPROM中读取CAN波特率
+	 STMFLASH_Read(FLASH_SAVE_ADDR_baud + 4,(u32*)can_br,1);
+	if((can_br[0]!= 10)&&(can_br[0]!= 20)&&(can_br[0]!= 50)&&(can_br[0]!= 100)&&(can_br[0]!= 125)&&(can_br[0]!= 250)&&(can_br[0]!= 500)\
+		&&(can_br[0]!= 1000))
+	{
+    can_br[0] = 500;
+		
+	}	
+  CAN_Configuration(can_br[0]); 
 	
 //	SPIHW_Init();			                        //SPI3初始化
 
@@ -947,9 +950,9 @@ UINT8 HW_Init(void)
 ////	 EXTI1_Init();                  //初始化ESC中断
 //	 EXTI2_Init();                  // 初始化同步中断信号0                    
 //	 EXTI3_Init();                  // 初始化同步中断信号1
-//	TIM2_Int_Init(10-1,8400-1);
+	TIM2_Int_Init(10-1,8400-1);
 //	TIM4_Int_Init(1000-1,84-1);  // DC时钟。初始化ECAT定时器 ，TIM4的APB1的时钟是84M，所以84分频之后就变为1MHz，也就是周期1us，乘以1000，即：1ms
-//	 INTX_ENABLE();
+	 INTX_ENABLE();
 
 	return 0;
 }

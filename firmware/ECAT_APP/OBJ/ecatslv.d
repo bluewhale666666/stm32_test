@@ -1,8 +1,8 @@
 ..\obj\ecatslv.o: ..\HARDWARE\Src\ecatslv.c
 ..\obj\ecatslv.o: ..\HARDWARE\Src\ecatslv.h
 ..\obj\ecatslv.o: ..\HARDWARE\Src\ecat_def.h
-..\obj\ecatslv.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-..\obj\ecatslv.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\ecatslv.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\obj\ecatslv.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\ecatslv.o: ..\HARDWARE\Src\esc.h
 ..\obj\ecatslv.o: ..\HARDWARE\Src\ecatappl.h
 ..\obj\ecatslv.o: ..\HARDWARE\Src\bootmode.h
@@ -16,7 +16,7 @@
 ..\obj\ecatslv.o: ..\SYSTEM\sys\sys.h
 ..\obj\ecatslv.o: ..\USER\stm32f4xx.h
 ..\obj\ecatslv.o: ..\CORE\core_cm4.h
-..\obj\ecatslv.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\ecatslv.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\ecatslv.o: ..\CORE\core_cmInstr.h
 ..\obj\ecatslv.o: ..\CORE\core_cmFunc.h
 ..\obj\ecatslv.o: ..\CORE\core_cm4_simd.h

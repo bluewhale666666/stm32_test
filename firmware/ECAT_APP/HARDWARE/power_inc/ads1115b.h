@@ -35,6 +35,12 @@ uint8_t IIC2_Read_One_Byte(uint8_t daddr,uint8_t addr);
 uint8_t IIC2_Write_NByte(uint8_t *writebuffer, uint8_t n);
 
 uint16_t ADS1115b_Switch_Channl(uint8_t ch);
+
+uint16_t ADS1115b_Switch_Analog1Voltage(void);
+uint16_t ADS1115b_Switch_Analog2Voltage(void);
+uint16_t ADS1115b_Switch_Analog1Current(void);
+uint16_t ADS1115b_Switch_Analog2Current(void);
+
 void ADS1115b_Config(u16 config);
 s16 ADS1115b_Read(void);
 

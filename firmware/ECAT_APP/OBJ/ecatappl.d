@@ -1,8 +1,8 @@
 ..\obj\ecatappl.o: ..\HARDWARE\Src\ecatappl.c
 ..\obj\ecatappl.o: ..\HARDWARE\Src\ecatslv.h
 ..\obj\ecatappl.o: ..\HARDWARE\Src\ecat_def.h
-..\obj\ecatappl.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-..\obj\ecatappl.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\ecatappl.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\obj\ecatappl.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\ecatappl.o: ..\HARDWARE\Src\esc.h
 ..\obj\ecatappl.o: ..\HARDWARE\Src\ecatappl.h
 ..\obj\ecatappl.o: ..\HARDWARE\Src\coeappl.h
@@ -14,7 +14,7 @@
 ..\obj\ecatappl.o: ..\SYSTEM\sys\sys.h
 ..\obj\ecatappl.o: ..\USER\stm32f4xx.h
 ..\obj\ecatappl.o: ..\CORE\core_cm4.h
-..\obj\ecatappl.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\ecatappl.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\ecatappl.o: ..\CORE\core_cmInstr.h
 ..\obj\ecatappl.o: ..\CORE\core_cmFunc.h
 ..\obj\ecatappl.o: ..\CORE\core_cm4_simd.h

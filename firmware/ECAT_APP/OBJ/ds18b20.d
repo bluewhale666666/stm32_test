@@ -2,7 +2,7 @@
 ..\obj\ds18b20.o: ..\HARDWARE\power_inc\ds18b20.h
 ..\obj\ds18b20.o: ..\USER\stm32f4xx.h
 ..\obj\ds18b20.o: ..\CORE\core_cm4.h
-..\obj\ds18b20.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\ds18b20.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\ds18b20.o: ..\CORE\core_cmInstr.h
 ..\obj\ds18b20.o: ..\CORE\core_cmFunc.h
 ..\obj\ds18b20.o: ..\CORE\core_cm4_simd.h

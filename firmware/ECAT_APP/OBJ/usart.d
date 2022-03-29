@@ -2,7 +2,7 @@
 ..\obj\usart.o: ..\HARDWARE\power_inc\usart.h
 ..\obj\usart.o: ..\USER\stm32f4xx.h
 ..\obj\usart.o: ..\CORE\core_cm4.h
-..\obj\usart.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\usart.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\usart.o: ..\CORE\core_cmInstr.h
 ..\obj\usart.o: ..\CORE\core_cmFunc.h
 ..\obj\usart.o: ..\CORE\core_cm4_simd.h
@@ -38,4 +38,4 @@
 ..\obj\usart.o: ..\HARDWARE\power_inc\main.h
 ..\obj\usart.o: ..\SYSTEM\sys\sys.h
 ..\obj\usart.o: ..\HARDWARE\STMFLASH\stmflash.h
-..\obj\usart.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\usart.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

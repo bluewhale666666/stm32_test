@@ -3,7 +3,7 @@
 ..\obj\timer.o: ..\SYSTEM\sys\sys.h
 ..\obj\timer.o: ..\USER\stm32f4xx.h
 ..\obj\timer.o: ..\CORE\core_cm4.h
-..\obj\timer.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\timer.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\timer.o: ..\CORE\core_cmInstr.h
 ..\obj\timer.o: ..\CORE\core_cmFunc.h
 ..\obj\timer.o: ..\CORE\core_cm4_simd.h
@@ -37,8 +37,8 @@
 ..\obj\timer.o: ..\FWLIB\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_dcmi.h
 ..\obj\timer.o: ..\FWLIB\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_fsmc.h
 ..\obj\timer.o: ..\HARDWARE\Src\ecat_def.h
-..\obj\timer.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
-..\obj\timer.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\timer.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\obj\timer.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\timer.o: ..\HARDWARE\DO_LED\do_led.h
 ..\obj\timer.o: ..\HARDWARE\Src\Robot-Device.h
 ..\obj\timer.o: ..\HARDWARE\Src\ecatappl.h

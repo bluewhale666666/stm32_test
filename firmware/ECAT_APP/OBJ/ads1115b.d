@@ -2,7 +2,7 @@
 ..\obj\ads1115b.o: ..\HARDWARE\power_inc\ads1115b.h
 ..\obj\ads1115b.o: ..\USER\stm32f4xx.h
 ..\obj\ads1115b.o: ..\CORE\core_cm4.h
-..\obj\ads1115b.o: C:\Program Files\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\ads1115b.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 ..\obj\ads1115b.o: ..\CORE\core_cmInstr.h
 ..\obj\ads1115b.o: ..\CORE\core_cmFunc.h
 ..\obj\ads1115b.o: ..\CORE\core_cm4_simd.h
