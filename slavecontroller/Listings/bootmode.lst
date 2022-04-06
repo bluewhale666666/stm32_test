@@ -1,0 +1,3413 @@
+L 1 "etherCAT\bootmode.c"
+N/*
+N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
+N* The corresponding license agreement applies. This hint shall not be removed.
+N* https://www.beckhoff.com/media/downloads/slave-stack-code/ethercat_ssc_license.pdf
+N*/
+N
+N/**
+N\addtogroup ESM EtherCAT State Machine
+N@{
+N*/
+N
+N/**
+N\file bootmode.c
+N\author EthercatSSC@beckhoff.com
+N\brief Implementation
+N
+N\version 5.12
+N
+N<br>Changes to version V4.20:<br>
+NV5.12 BOOT2: call BL_Start() from Init to Boot<br>
+N<br>Changes to version - :<br>
+NV4.20: File created
+N*/
+N
+N/*--------------------------------------------------------------------------------------
+N------
+N------    Includes
+N------
+N--------------------------------------------------------------------------------------*/
+N#include "ecat_def.h"
+L 1 "etherCAT\ecat_def.h" 1
+N/*
+N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
+N* The corresponding license agreement applies. This hint shall not be removed.
+N*/
+N
+N
+N/*-----------------------------------------------------------------------------------------
+N------	
+N------	ecat_def.h
+N------  SSC version : 5.13
+N-----------------------------------------------------------------------------------------*/
+N
+N#ifndef _ECATDEF_H_
+N#define _ECATDEF_H_
+N
+N/*-----------------------------------------------------------------------------------------
+N------	
+N------	Includes
+N------ 
+N-----------------------------------------------------------------------------------------*/
+N#include <stdlib.h>
+L 1 "D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h" 1
+N/* stdlib.h: ANSI draft (X3J11 May 88) library header, section 4.10 */
+N/* Copyright (C) Codemist Ltd., 1988-1993.                          */
+N/* Copyright 1991-1998,2014 ARM Limited. All rights reserved.       */
+N/*
+N * RCS $Revision$
+N * Checkin $Date$
+N * Revising $Author: agrant $
+N */
+N 
+N/*
+N * stdlib.h declares four types, several general purpose functions,
+N * and defines several macros.
+N */
+N
+N#ifndef __stdlib_h
+N#define __stdlib_h
+N#define __ARMCLIB_VERSION 5060009
+N
+N#if defined(__clang__) || (defined(__ARMCC_VERSION) && !defined(__STRICT_ANSI__))
+X#if 0L || (1L && !0L)
+N  /* armclang and non-strict armcc allow 'long long' in system headers */
+N  #define __LONGLONG long long
+N#else
+S  /* strict armcc has '__int64' */
+S  #define __LONGLONG __int64
+N#endif
+N
+N#define _ARMABI __declspec(__nothrow)
+N#define _ARMABI_PURE __declspec(__nothrow) __attribute__((const))
+N#define _ARMABI_NORETURN __declspec(__nothrow) __declspec(__noreturn)
+N#define _ARMABI_THROW
+N
+N  #ifndef __STDLIB_DECLS
+N  #define __STDLIB_DECLS
+N
+N  /*
+N   * Some of these declarations are new in C99.  To access them in C++
+N   * you can use -D__USE_C99_STDLIB (or -D__USE_C99ALL).
+N   */
+N  #ifndef __USE_C99_STDLIB
+N    #if defined(__USE_C99_ALL) || (defined(__STDC_VERSION__) && 199901L <= __STDC_VERSION__) || (defined(__cplusplus) && 201103L <= __cplusplus)
+X    #if 0L || (1L && 199901L <= 199901L) || (0L && 201103L <= __cplusplus)
+N      #define __USE_C99_STDLIB 1
+N    #endif
+N  #endif
+N
+N    #undef __CLIBNS
+N
+N    #ifdef __cplusplus
+S      namespace std {
+S          #define __CLIBNS ::std::
+S          extern "C" {
+N    #else
+N      #define __CLIBNS
+N    #endif  /* __cplusplus */
+N
+N#if defined(__cplusplus) || !defined(__STRICT_ANSI__)
+X#if 0L || !0L
+N /* unconditional in C++ and non-strict C for consistency of debug info */
+N  #if __sizeof_ptr == 8
+X  #if 4 == 8
+S    typedef unsigned long size_t;   /* see <stddef.h> */
+N  #else
+N    typedef unsigned int size_t;   /* see <stddef.h> */
+N  #endif
+N#elif !defined(__size_t)
+S  #define __size_t 1
+S  #if __sizeof_ptr == 8
+S    typedef unsigned long size_t;   /* see <stddef.h> */
+S  #else
+S    typedef unsigned int size_t;   /* see <stddef.h> */
+S  #endif
+N#endif
+N
+N#undef NULL
+N#define NULL 0                   /* see <stddef.h> */
+N
+N#ifndef __cplusplus  /* wchar_t is a builtin type for C++ */
+N  #if !defined(__STRICT_ANSI__)
+X  #if !0L
+N   /* unconditional in non-strict C for consistency of debug info */
+N   #if defined(__WCHAR32) || (defined(__ARM_SIZEOF_WCHAR_T) && __ARM_SIZEOF_WCHAR_T == 4)
+X   #if 0L || (0L && __ARM_SIZEOF_WCHAR_T == 4)
+S    typedef unsigned int wchar_t; /* see <stddef.h> */
+N   #else
+N    typedef unsigned short wchar_t; /* see <stddef.h> */
+N   #endif
+N  #elif !defined(__wchar_t)
+S    #define __wchar_t 1
+S   #if defined(__WCHAR32) || (defined(__ARM_SIZEOF_WCHAR_T) && __ARM_SIZEOF_WCHAR_T == 4)
+S    typedef unsigned int wchar_t; /* see <stddef.h> */
+S   #else
+S    typedef unsigned short wchar_t; /* see <stddef.h> */
+S   #endif
+N  #endif
+N#endif
+N
+Ntypedef struct div_t { int quot, rem; } div_t;
+N   /* type of the value returned by the div function. */
+Ntypedef struct ldiv_t { long int quot, rem; } ldiv_t;
+N   /* type of the value returned by the ldiv function. */
+N#if !defined(__STRICT_ANSI__) || __USE_C99_STDLIB
+X#if !0L || 1
+Ntypedef struct lldiv_t { __LONGLONG quot, rem; } lldiv_t;
+Xtypedef struct lldiv_t { long long quot, rem; } lldiv_t;
+N   /* type of the value returned by the lldiv function. */
+N#endif
+N
+N#ifdef __EXIT_FAILURE
+S#  define EXIT_FAILURE __EXIT_FAILURE
+S   /*
+S    * an integral expression which may be used as an argument to the exit
+S    * function to return unsuccessful termination status to the host
+S    * environment.
+S    */
+N#else
+N#  define EXIT_FAILURE 1  /* unixoid */
+N#endif
+N#define EXIT_SUCCESS 0
+N   /*
+N    * an integral expression which may be used as an argument to the exit
+N    * function to return successful termination status to the host
+N    * environment.
+N    */
+N
+N   /*
+N    * Defining __USE_ANSI_EXAMPLE_RAND at compile time switches to
+N    * the example implementation of rand() and srand() provided in
+N    * the ANSI C standard. This implementation is very poor, but is
+N    * provided for completeness.
+N    */
+N#ifdef __USE_ANSI_EXAMPLE_RAND
+S#define srand _ANSI_srand
+S#define rand _ANSI_rand
+S#define RAND_MAX 0x7fff
+N#else
+N#define RAND_MAX 0x7fffffff
+N#endif
+N   /*
+N    * RAND_MAX: an integral constant expression, the value of which
+N    * is the maximum value returned by the rand function.
+N    */
+Nextern _ARMABI int __aeabi_MB_CUR_MAX(void);
+Xextern __declspec(__nothrow) int __aeabi_MB_CUR_MAX(void);
+N#define MB_CUR_MAX ( __aeabi_MB_CUR_MAX() )
+N   /*
+N    * a positive integer expression whose value is the maximum number of bytes
+N    * in a multibyte character for the extended character set specified by the
+N    * current locale (category LC_CTYPE), and whose value is never greater
+N    * than MB_LEN_MAX.
+N    */
+N
+N   /*
+N    * If the compiler supports signalling nans as per N965 then it
+N    * will define __SUPPORT_SNAN__, in which case a user may define
+N    * _WANT_SNAN in order to obtain a compliant version of the strtod
+N    * family of functions.
+N    */
+N#if defined(__SUPPORT_SNAN__) && defined(_WANT_SNAN)
+X#if 0L && 0L
+S#pragma import(__use_snan)
+N#endif
+N
+Nextern _ARMABI double atof(const char * /*nptr*/) __attribute__((__nonnull__(1)));
+Xextern __declspec(__nothrow) double atof(const char *  ) __attribute__((__nonnull__(1)));
+N   /*
+N    * converts the initial part of the string pointed to by nptr to double
+N    * representation.
+N    * Returns: the converted value.
+N    */
+Nextern _ARMABI int atoi(const char * /*nptr*/) __attribute__((__nonnull__(1)));
+Xextern __declspec(__nothrow) int atoi(const char *  ) __attribute__((__nonnull__(1)));
+N   /*
+N    * converts the initial part of the string pointed to by nptr to int
+N    * representation.
+N    * Returns: the converted value.
+N    */
+Nextern _ARMABI long int atol(const char * /*nptr*/) __attribute__((__nonnull__(1)));
+Xextern __declspec(__nothrow) long int atol(const char *  ) __attribute__((__nonnull__(1)));
+N   /*
+N    * converts the initial part of the string pointed to by nptr to long int
+N    * representation.
+N    * Returns: the converted value.
+N    */
+N#if !defined(__STRICT_ANSI__) || __USE_C99_STDLIB
+X#if !0L || 1
+Nextern _ARMABI __LONGLONG atoll(const char * /*nptr*/) __attribute__((__nonnull__(1)));
+Xextern __declspec(__nothrow) long long atoll(const char *  ) __attribute__((__nonnull__(1)));
+N   /*
+N    * converts the initial part of the string pointed to by nptr to
+N    * long long int representation.
+N    * Returns: the converted value.
+N    */
+N#endif
+N
+Nextern _ARMABI double strtod(const char * __restrict /*nptr*/, char ** __restrict /*endptr*/) __attribute__((__nonnull__(1)));
+Xextern __declspec(__nothrow) double strtod(const char * __restrict  , char ** __restrict  ) __attribute__((__nonnull__(1)));
+N   /*
+N    * converts the initial part of the string pointed to by nptr to double
+N    * representation. First it decomposes the input string into three parts:
+N    * an initial, possibly empty, sequence of white-space characters (as
+N    * specified by the isspace function), a subject sequence resembling a
+N    * floating point constant; and a final string of one or more unrecognised
+N    * characters, including the terminating null character of the input string.
+N    * Then it attempts to convert the subject sequence to a floating point
+N    * number, and returns the result. A pointer to the final string is stored
+N    * in the object pointed to by endptr, provided that endptr is not a null
+N    * pointer.
+N    * Returns: the converted value if any. If no conversion could be performed,
+N    *          zero is returned. If the correct value is outside the range of
+N    *          representable values, plus or minus HUGE_VAL is returned
+N    *          (according to the sign of the value), and the value of the macro
+N    *          ERANGE is stored in errno. If the correct value would cause
+N    *          underflow, zero is returned and the value of the macro ERANGE is
+N    *          stored in errno.
+N    */
+N#if !defined(__STRICT_ANSI__) || __USE_C99_STDLIB
+X#if !0L || 1
+Nextern _ARMABI float strtof(const char * __restrict /*nptr*/, char ** __restrict /*endptr*/) __attribute__((__nonnull__(1)));
+Xextern __declspec(__nothrow) float strtof(const char * __restrict  , char ** __restrict  ) __attribute__((__nonnull__(1)));
+Nextern _ARMABI long double strtold(const char * __restrict /*nptr*/, char ** __restrict /*endptr*/) __attribute__((__nonnull__(1)));
+Xextern __declspec(__nothrow) long double strtold(const char * __restrict  , char ** __restrict  ) __attribute__((__nonnull__(1)));
+N   /*
+N    * same as strtod, but return float and long double respectively.
+N    */
+N#endif
+Nextern _ARMABI long int strtol(const char * __restrict /*nptr*/,
+Xextern __declspec(__nothrow) long int strtol(const char * __restrict  ,
+N                        char ** __restrict /*endptr*/, int /*base*/) __attribute__((__nonnull__(1)));
+N   /*
+N    * converts the initial part of the string pointed to by nptr to long int
+N    * representation. First it decomposes the input string into three parts:
+N    * an initial, possibly empty, sequence of white-space characters (as
+N    * specified by the isspace function), a subject sequence resembling an
+N    * integer represented in some radix determined by the value of base, and a
+N    * final string of one or more unrecognised characters, including the
+N    * terminating null character of the input string. Then it attempts to
+N    * convert the subject sequence to an integer, and returns the result.
+N    * If the value of base is 0, the expected form of the subject sequence is
+N    * that of an integer constant (described in ANSI Draft, section 3.1.3.2),
+N    * optionally preceded by a '+' or '-' sign, but not including an integer
+N    * suffix. If the value of base is between 2 and 36, the expected form of
+N    * the subject sequence is a sequence of letters and digits representing an
+N    * integer with the radix specified by base, optionally preceded by a plus
+N    * or minus sign, but not including an integer suffix. The letters from a
+N    * (or A) through z (or Z) are ascribed the values 10 to 35; only letters
+N    * whose ascribed values are less than that of the base are permitted. If
+N    * the value of base is 16, the characters 0x or 0X may optionally precede
+N    * the sequence of letters and digits following the sign if present.
+N    * A pointer to the final string is stored in the object
+N    * pointed to by endptr, provided that endptr is not a null pointer.
+N    * Returns: the converted value if any. If no conversion could be performed,
+N    *          zero is returned and nptr is stored in *endptr.
+N    *          If the correct value is outside the range of
+N    *          representable values, LONG_MAX or LONG_MIN is returned
+N    *          (according to the sign of the value), and the value of the
+N    *          macro ERANGE is stored in errno.
+N    */
+Nextern _ARMABI unsigned long int strtoul(const char * __restrict /*nptr*/,
+Xextern __declspec(__nothrow) unsigned long int strtoul(const char * __restrict  ,
+N                                       char ** __restrict /*endptr*/, int /*base*/) __attribute__((__nonnull__(1)));
+N   /*
+N    * converts the initial part of the string pointed to by nptr to unsigned
+N    * long int representation. First it decomposes the input string into three
+N    * parts: an initial, possibly empty, sequence of white-space characters (as
+N    * determined by the isspace function), a subject sequence resembling an
+N    * unsigned integer represented in some radix determined by the value of
+N    * base, and a final string of one or more unrecognised characters,
+N    * including the terminating null character of the input string. Then it
+N    * attempts to convert the subject sequence to an unsigned integer, and
+N    * returns the result. If the value of base is zero, the expected form of
+N    * the subject sequence is that of an integer constant (described in ANSI
+N    * Draft, section 3.1.3.2), optionally preceded by a '+' or '-' sign, but
+N    * not including an integer suffix. If the value of base is between 2 and
+N    * 36, the expected form of the subject sequence is a sequence of letters
+N    * and digits representing an integer with the radix specified by base,
+N    * optionally preceded by a '+' or '-' sign, but not including an integer
+N    * suffix. The letters from a (or A) through z (or Z) stand for the values
+N    * 10 to 35; only letters whose ascribed values are less than that of the
+N    * base are permitted. If the value of base is 16, the characters 0x or 0X
+N    * may optionally precede the sequence of letters and digits following the
+N    * sign, if present. A pointer to the final string is stored in the object
+N    * pointed to by endptr, provided that endptr is not a null pointer.
+N    * Returns: the converted value if any. If no conversion could be performed,
+N    *          zero is returned and nptr is stored in *endptr.
+N    *          If the correct value is outside the range of
+N    *          representable values, ULONG_MAX is returned, and the value of
+N    *          the macro ERANGE is stored in errno.
+N    */
+N
+N/* C90 reserves all names beginning with 'str' */
+Nextern _ARMABI __LONGLONG strtoll(const char * __restrict /*nptr*/,
+Xextern __declspec(__nothrow) long long strtoll(const char * __restrict  ,
+N                                  char ** __restrict /*endptr*/, int /*base*/)
+N                          __attribute__((__nonnull__(1)));
+N   /*
+N    * as strtol but returns a long long int value.  If the correct value is
+N    * outside the range of representable values,  LLONG_MAX or LLONG_MIN is
+N    * returned (according to the sign of the value), and the value of the
+N    * macro ERANGE is stored in errno.
+N    */
+Nextern _ARMABI unsigned __LONGLONG strtoull(const char * __restrict /*nptr*/,
+Xextern __declspec(__nothrow) unsigned long long strtoull(const char * __restrict  ,
+N                                            char ** __restrict /*endptr*/, int /*base*/)
+N                                   __attribute__((__nonnull__(1)));
+N   /*
+N    * as strtoul but returns an unsigned long long int value.  If the correct
+N    * value is outside the range of representable values, ULLONG_MAX is returned,
+N    * and the value of the macro ERANGE is stored in errno.
+N    */
+N
+Nextern _ARMABI int rand(void);
+Xextern __declspec(__nothrow) int rand(void);
+N   /*
+N    * Computes a sequence of pseudo-random integers in the range 0 to RAND_MAX.
+N    * Uses an additive generator (Mitchell & Moore) of the form:
+N    *   Xn = (X[n-24] + X[n-55]) MOD 2^31
+N    * This is described in section 3.2.2 of Knuth, vol 2. It's period is
+N    * in excess of 2^55 and its randomness properties, though unproven, are
+N    * conjectured to be good. Empirical testing since 1958 has shown no flaws.
+N    * Returns: a pseudo-random integer.
+N    */
+Nextern _ARMABI void srand(unsigned int /*seed*/);
+Xextern __declspec(__nothrow) void srand(unsigned int  );
+N   /*
+N    * uses its argument as a seed for a new sequence of pseudo-random numbers
+N    * to be returned by subsequent calls to rand. If srand is then called with
+N    * the same seed value, the sequence of pseudo-random numbers is repeated.
+N    * If rand is called before any calls to srand have been made, the same
+N    * sequence is generated as when srand is first called with a seed value
+N    * of 1.
+N    */
+N
+Nstruct _rand_state { int __x[57]; };
+Nextern _ARMABI int _rand_r(struct _rand_state *);
+Xextern __declspec(__nothrow) int _rand_r(struct _rand_state *);
+Nextern _ARMABI void _srand_r(struct _rand_state *, unsigned int);
+Xextern __declspec(__nothrow) void _srand_r(struct _rand_state *, unsigned int);
+Nstruct _ANSI_rand_state { int __x[1]; };
+Nextern _ARMABI int _ANSI_rand_r(struct _ANSI_rand_state *);
+Xextern __declspec(__nothrow) int _ANSI_rand_r(struct _ANSI_rand_state *);
+Nextern _ARMABI void _ANSI_srand_r(struct _ANSI_rand_state *, unsigned int);
+Xextern __declspec(__nothrow) void _ANSI_srand_r(struct _ANSI_rand_state *, unsigned int);
+N   /*
+N    * Re-entrant variants of both flavours of rand, which operate on
+N    * an explicitly supplied state buffer.
+N    */
+N
+Nextern _ARMABI void *calloc(size_t /*nmemb*/, size_t /*size*/);
+Xextern __declspec(__nothrow) void *calloc(size_t  , size_t  );
+N   /*
+N    * allocates space for an array of nmemb objects, each of whose size is
+N    * 'size'. The space is initialised to all bits zero.
+N    * Returns: either a null pointer or a pointer to the allocated space.
+N    */
+Nextern _ARMABI void free(void * /*ptr*/);
+Xextern __declspec(__nothrow) void free(void *  );
+N   /*
+N    * causes the space pointed to by ptr to be deallocated (i.e., made
+N    * available for further allocation). If ptr is a null pointer, no action
+N    * occurs. Otherwise, if ptr does not match a pointer earlier returned by
+N    * calloc, malloc or realloc or if the space has been deallocated by a call
+N    * to free or realloc, the behaviour is undefined.
+N    */
+Nextern _ARMABI void *malloc(size_t /*size*/);
+Xextern __declspec(__nothrow) void *malloc(size_t  );
+N   /*
+N    * allocates space for an object whose size is specified by 'size' and whose
+N    * value is indeterminate.
+N    * Returns: either a null pointer or a pointer to the allocated space.
+N    */
+Nextern _ARMABI void *realloc(void * /*ptr*/, size_t /*size*/);
+Xextern __declspec(__nothrow) void *realloc(void *  , size_t  );
+N   /*
+N    * changes the size of the object pointed to by ptr to the size specified by
+N    * size. The contents of the object shall be unchanged up to the lesser of
+N    * the new and old sizes. If the new size is larger, the value of the newly
+N    * allocated portion of the object is indeterminate. If ptr is a null
+N    * pointer, the realloc function behaves like a call to malloc for the
+N    * specified size. Otherwise, if ptr does not match a pointer earlier
+N    * returned by calloc, malloc or realloc, or if the space has been
+N    * deallocated by a call to free or realloc, the behaviour is undefined.
+N    * If the space cannot be allocated, the object pointed to by ptr is
+N    * unchanged. If size is zero and ptr is not a null pointer, the object it
+N    * points to is freed.
+N    * Returns: either a null pointer or a pointer to the possibly moved
+N    *          allocated space.
+N    */
+N#if !defined(__STRICT_ANSI__)
+X#if !0L
+Nextern _ARMABI int posix_memalign(void ** /*ret*/, size_t /*alignment*/, size_t /*size*/);
+Xextern __declspec(__nothrow) int posix_memalign(void **  , size_t  , size_t  );
+N   /*
+N    * allocates space for an object of size 'size', aligned to a
+N    * multiple of 'alignment' (which must be a power of two and at
+N    * least 4).
+N    *
+N    * On success, a pointer to the allocated object is stored in
+N    * *ret, and zero is returned. On failure, the return value is
+N    * either ENOMEM (allocation failed because no suitable piece of
+N    * memory was available) or EINVAL (the 'alignment' parameter was
+N    * invalid).
+N    */
+N#endif
+Ntypedef int (*__heapprt)(void *, char const *, ...);
+Nextern _ARMABI void __heapstats(int (* /*dprint*/)(void * /*param*/,
+Xextern __declspec(__nothrow) void __heapstats(int (*  )(void *  ,
+N                                           char const * /*format*/, ...),
+N                        void * /*param*/) __attribute__((__nonnull__(1)));
+N   /*
+N    * reports current heap statistics (eg. number of free blocks in
+N    * the free-list). Output is as implementation-defined free-form
+N    * text, provided via the dprint function. `param' gives an
+N    * extra data word to pass to dprint. You can call
+N    * __heapstats(fprintf,stdout) by casting fprintf to the above
+N    * function type; the typedef `__heapprt' is provided for this
+N    * purpose.
+N    *
+N    * `dprint' will not be called while the heap is being examined,
+N    * so it can allocate memory itself without trouble.
+N    */
+Nextern _ARMABI int __heapvalid(int (* /*dprint*/)(void * /*param*/,
+Xextern __declspec(__nothrow) int __heapvalid(int (*  )(void *  ,
+N                                           char const * /*format*/, ...),
+N                       void * /*param*/, int /*verbose*/) __attribute__((__nonnull__(1)));
+N   /*
+N    * performs a consistency check on the heap. Errors are reported
+N    * through dprint, like __heapstats. If `verbose' is nonzero,
+N    * full diagnostic information on the heap state is printed out.
+N    *
+N    * This routine probably won't work if the heap isn't a
+N    * contiguous chunk (for example, if __user_heap_extend has been
+N    * overridden).
+N    *
+N    * `dprint' may be called while the heap is being examined or
+N    * even in an invalid state, so it must perform no memory
+N    * allocation. In particular, if `dprint' calls (or is) a stdio
+N    * function, the stream it outputs to must already have either
+N    * been written to or been setvbuf'ed, or else the system will
+N    * allocate buffer space for it on the first call to dprint.
+N    */
+Nextern _ARMABI_NORETURN void abort(void);
+Xextern __declspec(__nothrow) __declspec(__noreturn) void abort(void);
+N   /*
+N    * causes abnormal program termination to occur, unless the signal SIGABRT
+N    * is being caught and the signal handler does not return. Whether open
+N    * output streams are flushed or open streams are closed or temporary
+N    * files removed is implementation-defined.
+N    * An implementation-defined form of the status 'unsuccessful termination'
+N    * is returned to the host environment by means of a call to
+N    * raise(SIGABRT).
+N    */
+N
+Nextern _ARMABI int atexit(void (* /*func*/)(void)) __attribute__((__nonnull__(1)));
+Xextern __declspec(__nothrow) int atexit(void (*  )(void)) __attribute__((__nonnull__(1)));
+N   /*
+N    * registers the function pointed to by func, to be called without its
+N    * arguments at normal program termination. It is possible to register at
+N    * least 32 functions.
+N    * Returns: zero if the registration succeeds, nonzero if it fails.
+N    */
+N#if defined(__EDG__) && !defined(__GNUC__)
+X#if 1L && !0L
+N#define __LANGUAGE_LINKAGE_CHANGES_FUNCTION_TYPE
+N#endif
+N#if defined(__cplusplus) && defined(__LANGUAGE_LINKAGE_CHANGES_FUNCTION_TYPE) 
+X#if 0L && 1L 
+S    /* atexit that takes a ptr to a function with C++ linkage 
+S     * but not in GNU mode  
+S     */
+S    typedef void (* __C_exitfuncptr)();
+S    extern "C++"
+S    inline int atexit(void (* __func)()) {
+S      return atexit((__C_exitfuncptr)__func);
+S    }
+N#endif
+N
+N
+Nextern _ARMABI_NORETURN void exit(int /*status*/);
+Xextern __declspec(__nothrow) __declspec(__noreturn) void exit(int  );
+N   /*
+N    * causes normal program termination to occur. If more than one call to the
+N    * exit function is executed by a program, the behaviour is undefined.
+N    * First, all functions registered by the atexit function are called, in the
+N    * reverse order of their registration.
+N    * Next, all open output streams are flushed, all open streams are closed,
+N    * and all files created by the tmpfile function are removed.
+N    * Finally, control is returned to the host environment. If the value of
+N    * status is zero or EXIT_SUCCESS, an implementation-defined form of the
+N    * status 'successful termination' is returned. If the value of status is
+N    * EXIT_FAILURE, an implementation-defined form of the status
+N    * 'unsuccessful termination' is returned. Otherwise the status returned
+N    * is implementation-defined.
+N    */
+N
+Nextern _ARMABI_NORETURN void _Exit(int /*status*/);
+Xextern __declspec(__nothrow) __declspec(__noreturn) void _Exit(int  );
+N   /*
+N    * causes normal program termination to occur. No functions registered
+N    * by the atexit function are called.
+N    * In this implementation, all open output streams are flushed, all
+N    * open streams are closed, and all files created by the tmpfile function
+N    * are removed.
+N    * Control is returned to the host environment. The status returned to
+N    * the host environment is determined in the same way as for 'exit'.
+N    */     
+N
+Nextern _ARMABI char *getenv(const char * /*name*/) __attribute__((__nonnull__(1)));
+Xextern __declspec(__nothrow) char *getenv(const char *  ) __attribute__((__nonnull__(1)));
+N   /*
+N    * searches the environment list, provided by the host environment, for a
+N    * string that matches the string pointed to by name. The set of environment
+N    * names and the method for altering the environment list are
+N    * implementation-defined.
+N    * Returns: a pointer to a string associated with the matched list member.
+N    *          The array pointed to shall not be modified by the program, but
+N    *          may be overwritten by a subsequent call to the getenv function.
+N    *          If the specified name cannot be found, a null pointer is
+N    *          returned.
+N    */
+N
+Nextern _ARMABI int  system(const char * /*string*/);
+Xextern __declspec(__nothrow) int  system(const char *  );
+N   /*
+N    * passes the string pointed to by string to the host environment to be
+N    * executed by a command processor in an implementation-defined manner.
+N    * A null pointer may be used for string, to inquire whether a command
+N    * processor exists.
+N    *
+N    * Returns: If the argument is a null pointer, the system function returns
+N    *          non-zero only if a command processor is available. If the
+N    *          argument is not a null pointer, the system function returns an
+N    *          implementation-defined value.
+N    */
+N
+Nextern _ARMABI_THROW void *bsearch(const void * /*key*/, const void * /*base*/,
+Xextern  void *bsearch(const void *  , const void *  ,
+N              size_t /*nmemb*/, size_t /*size*/,
+N              int (* /*compar*/)(const void *, const void *)) __attribute__((__nonnull__(1,2,5)));
+N   /*
+N    * searches an array of nmemb objects, the initial member of which is
+N    * pointed to by base, for a member that matches the object pointed to by
+N    * key. The size of each member of the array is specified by size.
+N    * The contents of the array shall be in ascending sorted order according to
+N    * a comparison function pointed to by compar, which is called with two
+N    * arguments that point to the key object and to an array member, in that
+N    * order. The function shall return an integer less than, equal to, or
+N    * greater than zero if the key object is considered, respectively, to be
+N    * less than, to match, or to be greater than the array member.
+N    * Returns: a pointer to a matching member of the array, or a null pointer
+N    *          if no match is found. If two members compare as equal, which
+N    *          member is matched is unspecified.
+N    */
+N#if defined(__cplusplus) && defined(__LANGUAGE_LINKAGE_CHANGES_FUNCTION_TYPE)
+X#if 0L && 1L
+S    /* bsearch that takes a ptr to a function with C++ linkage 
+S     * but not in GNU mode
+S     */
+S    typedef int (* __C_compareprocptr)(const void *, const void *);
+S    extern "C++"
+S    void *bsearch(const void * __key, const void * __base,
+S              size_t __nmemb, size_t __size,
+S              int (* __compar)(const void *, const void *)) __attribute__((__nonnull__(1,2,5)));
+S    extern "C++"
+S    inline void *bsearch(const void * __key, const void * __base,
+S              size_t __nmemb, size_t __size,
+S              int (* __compar)(const void *, const void *)) {
+S      return bsearch(__key, __base, __nmemb, __size, (__C_compareprocptr)__compar);
+S    }
+N#endif
+N
+N
+Nextern _ARMABI_THROW void qsort(void * /*base*/, size_t /*nmemb*/, size_t /*size*/,
+Xextern  void qsort(void *  , size_t  , size_t  ,
+N           int (* /*compar*/)(const void *, const void *)) __attribute__((__nonnull__(1,4)));
+N   /*
+N    * sorts an array of nmemb objects, the initial member of which is pointed
+N    * to by base. The size of each object is specified by size.
+N    * The contents of the array shall be in ascending order according to a
+N    * comparison function pointed to by compar, which is called with two
+N    * arguments that point to the objects being compared. The function shall
+N    * return an integer less than, equal to, or greater than zero if the first
+N    * argument is considered to be respectively less than, equal to, or greater
+N    * than the second. If two members compare as equal, their order in the
+N    * sorted array is unspecified.
+N    */
+N
+N#if defined(__cplusplus) && defined(__LANGUAGE_LINKAGE_CHANGES_FUNCTION_TYPE)
+X#if 0L && 1L
+S    /* qsort that takes a ptr to a function with C++ linkage 
+S     * but not in GNU mode
+S     */    
+S    extern "C++"
+S    void qsort(void * __base, size_t __nmemb, size_t __size,
+S               int (* __compar)(const void *, const void *)) __attribute__((__nonnull__(1,4)));
+S    extern "C++"
+S    inline void qsort(void * __base, size_t __nmemb, size_t __size,
+S                      int (* __compar)(const void *, const void *)) {
+S      qsort(__base, __nmemb, __size, (__C_compareprocptr)__compar);
+S    }
+N#endif
+N
+Nextern _ARMABI_PURE int abs(int /*j*/);
+Xextern __declspec(__nothrow) __attribute__((const)) int abs(int  );
+N   /*
+N    * computes the absolute value of an integer j. If the result cannot be
+N    * represented, the behaviour is undefined.
+N    * Returns: the absolute value.
+N    */
+N
+Nextern _ARMABI_PURE div_t div(int /*numer*/, int /*denom*/);
+Xextern __declspec(__nothrow) __attribute__((const)) div_t div(int  , int  );
+N   /*
+N    * computes the quotient and remainder of the division of the numerator
+N    * numer by the denominator denom. If the division is inexact, the resulting
+N    * quotient is the integer of lesser magnitude that is the nearest to the
+N    * algebraic quotient. If the result cannot be represented, the behaviour is
+N    * undefined; otherwise, quot * denom + rem shall equal numer.
+N    * Returns: a structure of type div_t, comprising both the quotient and the
+N    *          remainder. the structure shall contain the following members,
+N    *          in either order.
+N    *          int quot; int rem;
+N    */
+Nextern _ARMABI_PURE long int labs(long int /*j*/);
+Xextern __declspec(__nothrow) __attribute__((const)) long int labs(long int  );
+N   /*
+N    * computes the absolute value of an long integer j. If the result cannot be
+N    * represented, the behaviour is undefined.
+N    * Returns: the absolute value.
+N    */
+N#ifdef __cplusplus
+S   extern "C++" inline _ARMABI_PURE long abs(long int x) { return labs(x); }
+N#endif
+N
+Nextern _ARMABI_PURE ldiv_t ldiv(long int /*numer*/, long int /*denom*/);
+Xextern __declspec(__nothrow) __attribute__((const)) ldiv_t ldiv(long int  , long int  );
+N   /*
+N    * computes the quotient and remainder of the division of the numerator
+N    * numer by the denominator denom. If the division is inexact, the sign of
+N    * the resulting quotient is that of the algebraic quotient, and the
+N    * magnitude of the resulting quotient is the largest integer less than the
+N    * magnitude of the algebraic quotient. If the result cannot be represented,
+N    * the behaviour is undefined; otherwise, quot * denom + rem shall equal
+N    * numer.
+N    * Returns: a structure of type ldiv_t, comprising both the quotient and the
+N    *          remainder. the structure shall contain the following members,
+N    *          in either order.
+N    *          long int quot; long int rem;
+N    */
+N#ifdef __cplusplus
+S   extern "C++" inline _ARMABI_PURE ldiv_t div(long int __numer, long int __denom) {
+S       return ldiv(__numer, __denom);
+S   }
+N#endif
+N
+N#if !defined(__STRICT_ANSI__) || __USE_C99_STDLIB
+X#if !0L || 1
+Nextern _ARMABI_PURE __LONGLONG llabs(__LONGLONG /*j*/);
+Xextern __declspec(__nothrow) __attribute__((const)) long long llabs(long long  );
+N   /*
+N    * computes the absolute value of a long long integer j. If the
+N    * result cannot be represented, the behaviour is undefined.
+N    * Returns: the absolute value.
+N    */
+N#ifdef __cplusplus
+S   extern "C++" inline _ARMABI_PURE __LONGLONG abs(__LONGLONG x) { return llabs(x); }
+N#endif
+N
+Nextern _ARMABI_PURE lldiv_t lldiv(__LONGLONG /*numer*/, __LONGLONG /*denom*/);
+Xextern __declspec(__nothrow) __attribute__((const)) lldiv_t lldiv(long long  , long long  );
+N   /*
+N    * computes the quotient and remainder of the division of the numerator
+N    * numer by the denominator denom. If the division is inexact, the sign of
+N    * the resulting quotient is that of the algebraic quotient, and the
+N    * magnitude of the resulting quotient is the largest integer less than the
+N    * magnitude of the algebraic quotient. If the result cannot be represented,
+N    * the behaviour is undefined; otherwise, quot * denom + rem shall equal
+N    * numer.
+N    * Returns: a structure of type lldiv_t, comprising both the quotient and the
+N    *          remainder. the structure shall contain the following members,
+N    *          in either order.
+N    *          long long quot; long long rem;
+N    */
+N#ifdef __cplusplus
+S   extern "C++" inline _ARMABI_PURE lldiv_t div(__LONGLONG __numer, __LONGLONG __denom) {
+S       return lldiv(__numer, __denom);
+S   }
+N#endif
+N#endif
+N
+N#if !(__ARM_NO_DEPRECATED_FUNCTIONS)
+N/*
+N * ARM real-time divide functions for guaranteed performance
+N */
+Ntypedef struct __sdiv32by16 { int quot, rem; } __sdiv32by16;
+Ntypedef struct __udiv32by16 { unsigned int quot, rem; } __udiv32by16;
+N   /* used int so that values return in separate regs, although 16-bit */
+Ntypedef struct __sdiv64by32 { int rem, quot; } __sdiv64by32;
+N
+N__value_in_regs extern _ARMABI_PURE __sdiv32by16 __rt_sdiv32by16(
+X__value_in_regs extern __declspec(__nothrow) __attribute__((const)) __sdiv32by16 __rt_sdiv32by16(
+N     int /*numer*/,
+N     short int /*denom*/);
+N   /*
+N    * Signed divide: (16-bit quot), (16-bit rem) = (32-bit) / (16-bit)
+N    */
+N__value_in_regs extern _ARMABI_PURE __udiv32by16 __rt_udiv32by16(
+X__value_in_regs extern __declspec(__nothrow) __attribute__((const)) __udiv32by16 __rt_udiv32by16(
+N     unsigned int /*numer*/,
+N     unsigned short /*denom*/);
+N   /*
+N    * Unsigned divide: (16-bit quot), (16-bit rem) = (32-bit) / (16-bit)
+N    */
+N__value_in_regs extern _ARMABI_PURE __sdiv64by32 __rt_sdiv64by32(
+X__value_in_regs extern __declspec(__nothrow) __attribute__((const)) __sdiv64by32 __rt_sdiv64by32(
+N     int /*numer_h*/, unsigned int /*numer_l*/,
+N     int /*denom*/);
+N   /*
+N    * Signed divide: (32-bit quot), (32-bit rem) = (64-bit) / (32-bit)
+N    */
+N#endif
+N
+N/*
+N * ARM floating-point mask/status function (for both hardfp and softfp)
+N */
+Nextern _ARMABI unsigned int __fp_status(unsigned int /*mask*/, unsigned int /*flags*/);
+Xextern __declspec(__nothrow) unsigned int __fp_status(unsigned int  , unsigned int  );
+N   /*
+N    * mask and flags are bit-fields which correspond directly to the
+N    * floating point status register in the FPE/FPA and fplib.  
+N    * __fp_status returns the current value of the status register,
+N    * and also sets the writable bits of the word
+N    * (the exception control and flag bytes) to:
+N    *
+N    *     new = (old & ~mask) ^ flags;
+N    */
+N#define __fpsr_IXE  0x100000
+N#define __fpsr_UFE  0x80000
+N#define __fpsr_OFE  0x40000
+N#define __fpsr_DZE  0x20000
+N#define __fpsr_IOE  0x10000
+N
+N#define __fpsr_IXC  0x10
+N#define __fpsr_UFC  0x8
+N#define __fpsr_OFC  0x4
+N#define __fpsr_DZC  0x2
+N#define __fpsr_IOC  0x1
+N
+N/*
+N * Multibyte Character Functions.
+N * The behaviour of the multibyte character functions is affected by the
+N * LC_CTYPE category of the current locale. For a state-dependent encoding,
+N * each function is placed into its initial state by a call for which its
+N * character pointer argument, s, is a null pointer. Subsequent calls with s
+N * as other than a null pointer cause the internal state of the function to be
+N * altered as necessary. A call with s as a null pointer causes these functions
+N * to return a nonzero value if encodings have state dependency, and a zero
+N * otherwise. After the LC_CTYPE category is changed, the shift state of these
+N * functions is indeterminate.
+N */
+Nextern _ARMABI int mblen(const char * /*s*/, size_t /*n*/);
+Xextern __declspec(__nothrow) int mblen(const char *  , size_t  );
+N   /*
+N    * If s is not a null pointer, the mblen function determines the number of
+N    * bytes compromising the multibyte character pointed to by s. Except that
+N    * the shift state of the mbtowc function is not affected, it is equivalent
+N    * to   mbtowc((wchar_t *)0, s, n);
+N    * Returns: If s is a null pointer, the mblen function returns a nonzero or
+N    *          zero value, if multibyte character encodings, respectively, do
+N    *          or do not have state-dependent encodings. If s is not a null
+N    *          pointer, the mblen function either returns a 0 (if s points to a
+N    *          null character), or returns the number of bytes that compromise
+N    *          the multibyte character (if the next n of fewer bytes form a
+N    *          valid multibyte character), or returns -1 (they do not form a
+N    *          valid multibyte character).
+N    */
+Nextern _ARMABI int mbtowc(wchar_t * __restrict /*pwc*/,
+Xextern __declspec(__nothrow) int mbtowc(wchar_t * __restrict  ,
+N                   const char * __restrict /*s*/, size_t /*n*/);
+N   /*
+N    * If s is not a null pointer, the mbtowc function determines the number of
+N    * bytes that compromise the multibyte character pointed to by s. It then
+N    * determines the code for value of type wchar_t that corresponds to that
+N    * multibyte character. (The value of the code corresponding to the null
+N    * character is zero). If the multibyte character is valid and pwc is not a
+N    * null pointer, the mbtowc function stores the code in the object pointed
+N    * to by pwc. At most n bytes of the array pointed to by s will be examined.
+N    * Returns: If s is a null pointer, the mbtowc function returns a nonzero or
+N    *          zero value, if multibyte character encodings, respectively, do
+N    *          or do not have state-dependent encodings. If s is not a null
+N    *          pointer, the mbtowc function either returns a 0 (if s points to
+N    *          a null character), or returns the number of bytes that
+N    *          compromise the converted multibyte character (if the next n of
+N    *          fewer bytes form a valid multibyte character), or returns -1
+N    *          (they do not form a valid multibyte character).
+N    */
+Nextern _ARMABI int wctomb(char * /*s*/, wchar_t /*wchar*/);
+Xextern __declspec(__nothrow) int wctomb(char *  , wchar_t  );
+N   /*
+N    * determines the number of bytes need to represent the multibyte character
+N    * corresponding to the code whose value is wchar (including any change in
+N    * shift state). It stores the multibyte character representation in the
+N    * array object pointed to by s (if s is not a null pointer). At most
+N    * MB_CUR_MAX characters are stored. If the value of wchar is zero, the
+N    * wctomb function is left in the initial shift state).
+N    * Returns: If s is a null pointer, the wctomb function returns a nonzero or
+N    *          zero value, if multibyte character encodings, respectively, do
+N    *          or do not have state-dependent encodings. If s is not a null
+N    *          pointer, the wctomb function returns a -1 if the value of wchar
+N    *          does not correspond to a valid multibyte character, or returns
+N    *          the number of bytes that compromise the multibyte character
+N    *          corresponding to the value of wchar.
+N    */
+N
+N/*
+N * Multibyte String Functions.
+N * The behaviour of the multibyte string functions is affected by the LC_CTYPE
+N * category of the current locale.
+N */
+Nextern _ARMABI size_t mbstowcs(wchar_t * __restrict /*pwcs*/,
+Xextern __declspec(__nothrow) size_t mbstowcs(wchar_t * __restrict  ,
+N                      const char * __restrict /*s*/, size_t /*n*/) __attribute__((__nonnull__(2)));
+N   /*
+N    * converts a sequence of multibyte character that begins in the initial
+N    * shift state from the array pointed to by s into a sequence of
+N    * corresponding codes and stores not more than n codes into the array
+N    * pointed to by pwcs. No multibyte character that follow a null character
+N    * (which is converted into a code with value zero) will be examined or
+N    * converted. Each multibyte character is converted as if by a call to
+N    * mbtowc function, except that the shift state of the mbtowc function is
+N    * not affected. No more than n elements will be modified in the array
+N    * pointed to by pwcs. If copying takes place between objects that overlap,
+N    * the behaviour is undefined.
+N    * Returns: If an invalid multibyte character is encountered, the mbstowcs
+N    *          function returns (size_t)-1. Otherwise, the mbstowcs function
+N    *          returns the number of array elements modified, not including
+N    *          a terminating zero code, if any.
+N    */
+Nextern _ARMABI size_t wcstombs(char * __restrict /*s*/,
+Xextern __declspec(__nothrow) size_t wcstombs(char * __restrict  ,
+N                      const wchar_t * __restrict /*pwcs*/, size_t /*n*/) __attribute__((__nonnull__(2)));
+N   /*
+N    * converts a sequence of codes that correspond to multibyte characters
+N    * from the array pointed to by pwcs into a sequence of multibyte
+N    * characters that begins in the initial shift state and stores these
+N    * multibyte characters into the array pointed to by s, stopping if a
+N    * multibyte character would exceed the limit of n total bytes or if a
+N    * null character is stored. Each code is converted as if by a call to the
+N    * wctomb function, except that the shift state of the wctomb function is
+N    * not affected. No more than n elements will be modified in the array
+N    * pointed to by s. If copying takes place between objects that overlap,
+N    * the behaviour is undefined.
+N    * Returns: If a code is encountered that does not correspond to a valid
+N    *          multibyte character, the wcstombs function returns (size_t)-1.
+N    *          Otherwise, the wcstombs function returns the number of bytes
+N    *          modified, not including a terminating null character, if any.
+N    */
+N
+Nextern _ARMABI void __use_realtime_heap(void);
+Xextern __declspec(__nothrow) void __use_realtime_heap(void);
+Nextern _ARMABI void __use_realtime_division(void);
+Xextern __declspec(__nothrow) void __use_realtime_division(void);
+Nextern _ARMABI void __use_two_region_memory(void);
+Xextern __declspec(__nothrow) void __use_two_region_memory(void);
+Nextern _ARMABI void __use_no_heap(void);
+Xextern __declspec(__nothrow) void __use_no_heap(void);
+Nextern _ARMABI void __use_no_heap_region(void);
+Xextern __declspec(__nothrow) void __use_no_heap_region(void);
+N
+Nextern _ARMABI char const *__C_library_version_string(void);
+Xextern __declspec(__nothrow) char const *__C_library_version_string(void);
+Nextern _ARMABI int __C_library_version_number(void);
+Xextern __declspec(__nothrow) int __C_library_version_number(void);
+N
+N    #ifdef __cplusplus
+S         }  /* extern "C" */
+S      }  /* namespace std */
+N    #endif /* __cplusplus */
+N  #endif /* __STDLIB_DECLS */
+N
+N  #if _AEABI_PORTABILITY_LEVEL != 0 && !defined _AEABI_PORTABLE
+X  #if _AEABI_PORTABILITY_LEVEL != 0 && !0L
+S    #define _AEABI_PORTABLE
+N  #endif
+N
+N  #ifdef __cplusplus
+S    #ifndef __STDLIB_NO_EXPORTS
+S      #if !defined(__STRICT_ANSI__) || __USE_C99_STDLIB
+S        using ::std::atoll;
+S        using ::std::lldiv_t;
+S      #endif /* !defined(__STRICT_ANSI__) || __USE_C99_STDLIB */
+S      using ::std::div_t;
+S      using ::std::ldiv_t;
+S      using ::std::atof;
+S      using ::std::atoi;
+S      using ::std::atol;
+S      using ::std::strtod;
+S#if !defined(__STRICT_ANSI__) || __USE_C99_STDLIB
+S      using ::std::strtof;
+S      using ::std::strtold;
+S#endif
+S      using ::std::strtol;
+S      using ::std::strtoul;
+S      using ::std::strtoll;
+S      using ::std::strtoull;
+S      using ::std::rand;
+S      using ::std::srand;
+S      using ::std::_rand_state;
+S      using ::std::_rand_r;
+S      using ::std::_srand_r;
+S      using ::std::_ANSI_rand_state;
+S      using ::std::_ANSI_rand_r;
+S      using ::std::_ANSI_srand_r;
+S      using ::std::calloc;
+S      using ::std::free;
+S      using ::std::malloc;
+S      using ::std::realloc;
+S#if !defined(__STRICT_ANSI__)
+S      using ::std::posix_memalign;
+S#endif
+S      using ::std::__heapprt;
+S      using ::std::__heapstats;
+S      using ::std::__heapvalid;
+S      using ::std::abort;
+S      using ::std::atexit;
+S      using ::std::exit;
+S      using ::std::_Exit;
+S      using ::std::getenv;
+S      using ::std::system;
+S      using ::std::bsearch;
+S      using ::std::qsort;
+S      using ::std::abs;
+S      using ::std::div;
+S      using ::std::labs;
+S      using ::std::ldiv;
+S      #if !defined(__STRICT_ANSI__) || __USE_C99_STDLIB
+S        using ::std::llabs;
+S        using ::std::lldiv;
+S      #endif /* !defined(__STRICT_ANSI__) || __USE_C99_STDLIB */
+S#if !(__ARM_NO_DEPRECATED_FUNCTIONS)
+S      using ::std::__sdiv32by16;
+S      using ::std::__udiv32by16;
+S      using ::std::__sdiv64by32;
+S      using ::std::__rt_sdiv32by16;
+S      using ::std::__rt_udiv32by16;
+S      using ::std::__rt_sdiv64by32;
+S#endif
+S      using ::std::__fp_status;
+S      using ::std::mblen;
+S      using ::std::mbtowc;
+S      using ::std::wctomb;
+S      using ::std::mbstowcs;
+S      using ::std::wcstombs;
+S      using ::std::__use_realtime_heap;
+S      using ::std::__use_realtime_division;
+S      using ::std::__use_two_region_memory;
+S      using ::std::__use_no_heap;
+S      using ::std::__use_no_heap_region;
+S      using ::std::__C_library_version_string;
+S      using ::std::__C_library_version_number;
+S      using ::std::size_t;
+S      using ::std::__aeabi_MB_CUR_MAX;
+S    #endif /* __STDLIB_NO_EXPORTS */
+N  #endif /* __cplusplus */
+N
+N#undef __LONGLONG
+N
+N#endif /* __stdlib_h */
+N
+N/* end of stdlib.h */
+L 22 "etherCAT\ecat_def.h" 2
+N#include <string.h>
+L 1 "D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h" 1
+N/* string.h: ANSI 'C' (X3J11 Oct 88) library header, section 4.11 */
+N/* Copyright (C) Codemist Ltd., 1988-1993.                        */
+N/* Copyright 1991-1993 ARM Limited. All rights reserved.          */
+N/* version 0.04 */
+N
+N/*
+N * RCS $Revision$
+N * Checkin $Date$
+N */
+N
+N/*
+N * string.h declares one type and several functions, and defines one macro
+N * useful for manipulating character arrays and other objects treated as
+N * character arrays. Various methods are used for determining the lengths of
+N * the arrays, but in all cases a char * or void * argument points to the
+N * initial (lowest addresses) character of the array. If an array is written
+N * beyond the end of an object, the behaviour is undefined.
+N */
+N
+N#ifndef __string_h
+N#define __string_h
+N#define __ARMCLIB_VERSION 5060009
+N
+N#define _ARMABI __declspec(__nothrow)
+N
+N  #ifndef __STRING_DECLS
+N  #define __STRING_DECLS
+N
+N    #undef __CLIBNS
+N
+N    #ifdef __cplusplus
+S        namespace std {
+S        #define __CLIBNS std::
+S        extern "C" {
+N    #else
+N      #define __CLIBNS
+N    #endif  /* __cplusplus */
+N
+N#if defined(__cplusplus) || !defined(__STRICT_ANSI__)
+X#if 0L || !0L
+N /* unconditional in C++ and non-strict C for consistency of debug info */
+N  #if __sizeof_ptr == 8
+X  #if 4 == 8
+S    typedef unsigned long size_t;   /* see <stddef.h> */
+N  #else
+N    typedef unsigned int size_t;   /* see <stddef.h> */
+N  #endif
+N#elif !defined(__size_t)
+S  #define __size_t 1
+S  #if __sizeof_ptr == 8
+S    typedef unsigned long size_t;   /* see <stddef.h> */
+S  #else
+S    typedef unsigned int size_t;   /* see <stddef.h> */
+S  #endif
+N#endif
+N
+N#undef NULL
+N#define NULL 0                   /* see <stddef.h> */
+N
+Nextern _ARMABI void *memcpy(void * __restrict /*s1*/,
+Xextern __declspec(__nothrow) void *memcpy(void * __restrict  ,
+N                    const void * __restrict /*s2*/, size_t /*n*/) __attribute__((__nonnull__(1,2)));
+N   /*
+N    * copies n characters from the object pointed to by s2 into the object
+N    * pointed to by s1. If copying takes place between objects that overlap,
+N    * the behaviour is undefined.
+N    * Returns: the value of s1.
+N    */
+Nextern _ARMABI void *memmove(void * /*s1*/,
+Xextern __declspec(__nothrow) void *memmove(void *  ,
+N                    const void * /*s2*/, size_t /*n*/) __attribute__((__nonnull__(1,2)));
+N   /*
+N    * copies n characters from the object pointed to by s2 into the object
+N    * pointed to by s1. Copying takes place as if the n characters from the
+N    * object pointed to by s2 are first copied into a temporary array of n
+N    * characters that does not overlap the objects pointed to by s1 and s2,
+N    * and then the n characters from the temporary array are copied into the
+N    * object pointed to by s1.
+N    * Returns: the value of s1.
+N    */
+Nextern _ARMABI char *strcpy(char * __restrict /*s1*/, const char * __restrict /*s2*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) char *strcpy(char * __restrict  , const char * __restrict  ) __attribute__((__nonnull__(1,2)));
+N   /*
+N    * copies the string pointed to by s2 (including the terminating nul
+N    * character) into the array pointed to by s1. If copying takes place
+N    * between objects that overlap, the behaviour is undefined.
+N    * Returns: the value of s1.
+N    */
+Nextern _ARMABI char *strncpy(char * __restrict /*s1*/, const char * __restrict /*s2*/, size_t /*n*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) char *strncpy(char * __restrict  , const char * __restrict  , size_t  ) __attribute__((__nonnull__(1,2)));
+N   /*
+N    * copies not more than n characters (characters that follow a null
+N    * character are not copied) from the array pointed to by s2 into the array
+N    * pointed to by s1. If copying takes place between objects that overlap,
+N    * the behaviour is undefined.
+N    * Returns: the value of s1.
+N    */
+N
+Nextern _ARMABI char *strcat(char * __restrict /*s1*/, const char * __restrict /*s2*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) char *strcat(char * __restrict  , const char * __restrict  ) __attribute__((__nonnull__(1,2)));
+N   /*
+N    * appends a copy of the string pointed to by s2 (including the terminating
+N    * null character) to the end of the string pointed to by s1. The initial
+N    * character of s2 overwrites the null character at the end of s1.
+N    * Returns: the value of s1.
+N    */
+Nextern _ARMABI char *strncat(char * __restrict /*s1*/, const char * __restrict /*s2*/, size_t /*n*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) char *strncat(char * __restrict  , const char * __restrict  , size_t  ) __attribute__((__nonnull__(1,2)));
+N   /*
+N    * appends not more than n characters (a null character and characters that
+N    * follow it are not appended) from the array pointed to by s2 to the end of
+N    * the string pointed to by s1. The initial character of s2 overwrites the
+N    * null character at the end of s1. A terminating null character is always
+N    * appended to the result.
+N    * Returns: the value of s1.
+N    */
+N
+N/*
+N * The sign of a nonzero value returned by the comparison functions is
+N * determined by the sign of the difference between the values of the first
+N * pair of characters (both interpreted as unsigned char) that differ in the
+N * objects being compared.
+N */
+N
+Nextern _ARMABI int memcmp(const void * /*s1*/, const void * /*s2*/, size_t /*n*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) int memcmp(const void *  , const void *  , size_t  ) __attribute__((__nonnull__(1,2)));
+N   /*
+N    * compares the first n characters of the object pointed to by s1 to the
+N    * first n characters of the object pointed to by s2.
+N    * Returns: an integer greater than, equal to, or less than zero, according
+N    *          as the object pointed to by s1 is greater than, equal to, or
+N    *          less than the object pointed to by s2.
+N    */
+Nextern _ARMABI int strcmp(const char * /*s1*/, const char * /*s2*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) int strcmp(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+N   /*
+N    * compares the string pointed to by s1 to the string pointed to by s2.
+N    * Returns: an integer greater than, equal to, or less than zero, according
+N    *          as the string pointed to by s1 is greater than, equal to, or
+N    *          less than the string pointed to by s2.
+N    */
+Nextern _ARMABI int strncmp(const char * /*s1*/, const char * /*s2*/, size_t /*n*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) int strncmp(const char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+N   /*
+N    * compares not more than n characters (characters that follow a null
+N    * character are not compared) from the array pointed to by s1 to the array
+N    * pointed to by s2.
+N    * Returns: an integer greater than, equal to, or less than zero, according
+N    *          as the string pointed to by s1 is greater than, equal to, or
+N    *          less than the string pointed to by s2.
+N    */
+Nextern _ARMABI int strcasecmp(const char * /*s1*/, const char * /*s2*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) int strcasecmp(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+N   /*
+N    * compares the string pointed to by s1 to the string pointed to by s2,
+N    * case-insensitively as defined by the current locale.
+N    * Returns: an integer greater than, equal to, or less than zero, according
+N    *          as the string pointed to by s1 is greater than, equal to, or
+N    *          less than the string pointed to by s2.
+N    */
+Nextern _ARMABI int strncasecmp(const char * /*s1*/, const char * /*s2*/, size_t /*n*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) int strncasecmp(const char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+N   /*
+N    * compares not more than n characters (characters that follow a null
+N    * character are not compared) from the array pointed to by s1 to the array
+N    * pointed to by s2, case-insensitively as defined by the current locale.
+N    * Returns: an integer greater than, equal to, or less than zero, according
+N    *          as the string pointed to by s1 is greater than, equal to, or
+N    *          less than the string pointed to by s2.
+N    */
+Nextern _ARMABI int strcoll(const char * /*s1*/, const char * /*s2*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) int strcoll(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+N   /*
+N    * compares the string pointed to by s1 to the string pointed to by s2, both
+N    * interpreted as appropriate to the LC_COLLATE category of the current
+N    * locale.
+N    * Returns: an integer greater than, equal to, or less than zero, according
+N    *          as the string pointed to by s1 is greater than, equal to, or
+N    *          less than the string pointed to by s2 when both are interpreted
+N    *          as appropriate to the current locale.
+N    */
+N
+Nextern _ARMABI size_t strxfrm(char * __restrict /*s1*/, const char * __restrict /*s2*/, size_t /*n*/) __attribute__((__nonnull__(2)));
+Xextern __declspec(__nothrow) size_t strxfrm(char * __restrict  , const char * __restrict  , size_t  ) __attribute__((__nonnull__(2)));
+N   /*
+N    * transforms the string pointed to by s2 and places the resulting string
+N    * into the array pointed to by s1. The transformation function is such that
+N    * if the strcmp function is applied to two transformed strings, it returns
+N    * a value greater than, equal to or less than zero, corresponding to the
+N    * result of the strcoll function applied to the same two original strings.
+N    * No more than n characters are placed into the resulting array pointed to
+N    * by s1, including the terminating null character. If n is zero, s1 is
+N    * permitted to be a null pointer. If copying takes place between objects
+N    * that overlap, the behaviour is undefined.
+N    * Returns: The length of the transformed string is returned (not including
+N    *          the terminating null character). If the value returned is n or
+N    *          more, the contents of the array pointed to by s1 are
+N    *          indeterminate.
+N    */
+N
+N
+N#ifdef __cplusplus
+Sextern _ARMABI const void *memchr(const void * /*s*/, int /*c*/, size_t /*n*/) __attribute__((__nonnull__(1)));
+Sextern "C++" void *memchr(void * __s, int __c, size_t __n) __attribute__((__nonnull__(1)));
+Sextern "C++" inline void *memchr(void * __s, int __c, size_t __n)
+S    { return const_cast<void *>(memchr(const_cast<const void *>(__s), __c, __n)); }
+N#else
+Nextern _ARMABI void *memchr(const void * /*s*/, int /*c*/, size_t /*n*/) __attribute__((__nonnull__(1)));
+Xextern __declspec(__nothrow) void *memchr(const void *  , int  , size_t  ) __attribute__((__nonnull__(1)));
+N#endif
+N   /*
+N    * locates the first occurence of c (converted to an unsigned char) in the
+N    * initial n characters (each interpreted as unsigned char) of the object
+N    * pointed to by s.
+N    * Returns: a pointer to the located character, or a null pointer if the
+N    *          character does not occur in the object.
+N    */
+N
+N#ifdef __cplusplus
+Sextern _ARMABI const char *strchr(const char * /*s*/, int /*c*/) __attribute__((__nonnull__(1)));
+Sextern "C++" char *strchr(char * __s, int __c) __attribute__((__nonnull__(1)));
+Sextern "C++" inline char *strchr(char * __s, int __c)
+S    { return const_cast<char *>(strchr(const_cast<const char *>(__s), __c)); }
+N#else
+Nextern _ARMABI char *strchr(const char * /*s*/, int /*c*/) __attribute__((__nonnull__(1)));
+Xextern __declspec(__nothrow) char *strchr(const char *  , int  ) __attribute__((__nonnull__(1)));
+N#endif
+N   /*
+N    * locates the first occurence of c (converted to an char) in the string
+N    * pointed to by s (including the terminating null character).
+N    * Returns: a pointer to the located character, or a null pointer if the
+N    *          character does not occur in the string.
+N    */
+N
+Nextern _ARMABI size_t strcspn(const char * /*s1*/, const char * /*s2*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) size_t strcspn(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+N   /*
+N    * computes the length of the initial segment of the string pointed to by s1
+N    * which consists entirely of characters not from the string pointed to by
+N    * s2. The terminating null character is not considered part of s2.
+N    * Returns: the length of the segment.
+N    */
+N
+N#ifdef __cplusplus
+Sextern _ARMABI const char *strpbrk(const char * /*s1*/, const char * /*s2*/) __attribute__((__nonnull__(1,2)));
+Sextern "C++" char *strpbrk(char * __s1, const char * __s2) __attribute__((__nonnull__(1,2)));
+Sextern "C++" inline char *strpbrk(char * __s1, const char * __s2)
+S    { return const_cast<char *>(strpbrk(const_cast<const char *>(__s1), __s2)); }
+N#else
+Nextern _ARMABI char *strpbrk(const char * /*s1*/, const char * /*s2*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) char *strpbrk(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+N#endif
+N   /*
+N    * locates the first occurence in the string pointed to by s1 of any
+N    * character from the string pointed to by s2.
+N    * Returns: returns a pointer to the character, or a null pointer if no
+N    *          character form s2 occurs in s1.
+N    */
+N
+N#ifdef __cplusplus
+Sextern _ARMABI const char *strrchr(const char * /*s*/, int /*c*/) __attribute__((__nonnull__(1)));
+Sextern "C++" char *strrchr(char * __s, int __c) __attribute__((__nonnull__(1)));
+Sextern "C++" inline char *strrchr(char * __s, int __c)
+S    { return const_cast<char *>(strrchr(const_cast<const char *>(__s), __c)); }
+N#else
+Nextern _ARMABI char *strrchr(const char * /*s*/, int /*c*/) __attribute__((__nonnull__(1)));
+Xextern __declspec(__nothrow) char *strrchr(const char *  , int  ) __attribute__((__nonnull__(1)));
+N#endif
+N   /*
+N    * locates the last occurence of c (converted to a char) in the string
+N    * pointed to by s. The terminating null character is considered part of
+N    * the string.
+N    * Returns: returns a pointer to the character, or a null pointer if c does
+N    *          not occur in the string.
+N    */
+N
+Nextern _ARMABI size_t strspn(const char * /*s1*/, const char * /*s2*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) size_t strspn(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+N   /*
+N    * computes the length of the initial segment of the string pointed to by s1
+N    * which consists entirely of characters from the string pointed to by S2
+N    * Returns: the length of the segment.
+N    */
+N
+N#ifdef __cplusplus
+Sextern _ARMABI const char *strstr(const char * /*s1*/, const char * /*s2*/) __attribute__((__nonnull__(1,2)));
+Sextern "C++" char *strstr(char * __s1, const char * __s2) __attribute__((__nonnull__(1,2)));
+Sextern "C++" inline char *strstr(char * __s1, const char * __s2)
+S    { return const_cast<char *>(strstr(const_cast<const char *>(__s1), __s2)); }
+N#else
+Nextern _ARMABI char *strstr(const char * /*s1*/, const char * /*s2*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) char *strstr(const char *  , const char *  ) __attribute__((__nonnull__(1,2)));
+N#endif
+N   /*
+N    * locates the first occurence in the string pointed to by s1 of the
+N    * sequence of characters (excluding the terminating null character) in the
+N    * string pointed to by s2.
+N    * Returns: a pointer to the located string, or a null pointer if the string
+N    *          is not found.
+N    */
+N
+Nextern _ARMABI char *strtok(char * __restrict /*s1*/, const char * __restrict /*s2*/) __attribute__((__nonnull__(2)));
+Xextern __declspec(__nothrow) char *strtok(char * __restrict  , const char * __restrict  ) __attribute__((__nonnull__(2)));
+Nextern _ARMABI char *_strtok_r(char * /*s1*/, const char * /*s2*/, char ** /*ptr*/) __attribute__((__nonnull__(2,3)));
+Xextern __declspec(__nothrow) char *_strtok_r(char *  , const char *  , char **  ) __attribute__((__nonnull__(2,3)));
+N#ifndef __STRICT_ANSI__
+Nextern _ARMABI char *strtok_r(char * /*s1*/, const char * /*s2*/, char ** /*ptr*/) __attribute__((__nonnull__(2,3)));
+Xextern __declspec(__nothrow) char *strtok_r(char *  , const char *  , char **  ) __attribute__((__nonnull__(2,3)));
+N#endif
+N   /*
+N    * A sequence of calls to the strtok function breaks the string pointed to
+N    * by s1 into a sequence of tokens, each of which is delimited by a
+N    * character from the string pointed to by s2. The first call in the
+N    * sequence has s1 as its first argument, and is followed by calls with a
+N    * null pointer as their first argument. The separator string pointed to by
+N    * s2 may be different from call to call.
+N    * The first call in the sequence searches for the first character that is
+N    * not contained in the current separator string s2. If no such character
+N    * is found, then there are no tokens in s1 and the strtok function returns
+N    * a null pointer. If such a character is found, it is the start of the
+N    * first token.
+N    * The strtok function then searches from there for a character that is
+N    * contained in the current separator string. If no such character is found,
+N    * the current token extends to the end of the string pointed to by s1, and
+N    * subsequent searches for a token will fail. If such a character is found,
+N    * it is overwritten by a null character, which terminates the current
+N    * token. The strtok function saves a pointer to the following character,
+N    * from which the next search for a token will start.
+N    * Each subsequent call, with a null pointer as the value for the first
+N    * argument, starts searching from the saved pointer and behaves as
+N    * described above.
+N    * Returns: pointer to the first character of a token, or a null pointer if
+N    *          there is no token.
+N    *
+N    * strtok_r() is a common extension which works exactly like
+N    * strtok(), but instead of storing its state in a hidden
+N    * library variable, requires the user to pass in a pointer to a
+N    * char * variable which will be used instead. Any sequence of
+N    * calls to strtok_r() passing the same char ** pointer should
+N    * behave exactly like the corresponding sequence of calls to
+N    * strtok(). This means that strtok_r() can safely be used in
+N    * multi-threaded programs, and also that you can tokenise two
+N    * strings in parallel.
+N    */
+N
+Nextern _ARMABI void *memset(void * /*s*/, int /*c*/, size_t /*n*/) __attribute__((__nonnull__(1)));
+Xextern __declspec(__nothrow) void *memset(void *  , int  , size_t  ) __attribute__((__nonnull__(1)));
+N   /*
+N    * copies the value of c (converted to an unsigned char) into each of the
+N    * first n charactes of the object pointed to by s.
+N    * Returns: the value of s.
+N    */
+Nextern _ARMABI char *strerror(int /*errnum*/);
+Xextern __declspec(__nothrow) char *strerror(int  );
+N   /*
+N    * maps the error number in errnum to an error message string.
+N    * Returns: a pointer to the string, the contents of which are
+N    *          implementation-defined. The array pointed to shall not be
+N    *          modified by the program, but may be overwritten by a
+N    *          subsequent call to the strerror function.
+N    */
+Nextern _ARMABI size_t strlen(const char * /*s*/) __attribute__((__nonnull__(1)));
+Xextern __declspec(__nothrow) size_t strlen(const char *  ) __attribute__((__nonnull__(1)));
+N   /*
+N    * computes the length of the string pointed to by s.
+N    * Returns: the number of characters that precede the terminating null
+N    *          character.
+N    */
+N
+Nextern _ARMABI size_t strlcpy(char * /*dst*/, const char * /*src*/, size_t /*len*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) size_t strlcpy(char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+N   /*
+N    * copies the string src into the string dst, using no more than
+N    * len bytes of dst. Always null-terminates dst _within the
+N    * length len (i.e. will copy at most len-1 bytes of string plus
+N    * a NUL), unless len is actually zero.
+N    * 
+N    * Return value is the length of the string that _would_ have
+N    * been written, i.e. the length of src. Thus, the operation
+N    * succeeded without truncation if and only if ret < len;
+N    * otherwise, the value in ret tells you how big to make dst if
+N    * you decide to reallocate it. (That value does _not_ include
+N    * the NUL.)
+N    * 
+N    * This is a BSD-derived library extension, which we are
+N    * permitted to declare in a standard header because ISO defines
+N    * function names beginning with 'str' as reserved for future
+N    * expansion of <string.h>.
+N    */
+N
+Nextern _ARMABI size_t strlcat(char * /*dst*/, const char * /*src*/, size_t /*len*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) size_t strlcat(char *  , const char *  , size_t  ) __attribute__((__nonnull__(1,2)));
+N   /*
+N    * concatenates the string src to the string dst, using no more
+N    * than len bytes of dst. Always null-terminates dst _within the
+N    * length len (i.e. will copy at most len-1 bytes of string plus
+N    * a NUL), unless len is actually zero.
+N    * 
+N    * Return value is the length of the string that _would_ have
+N    * been written, i.e. the length of src plus the original length
+N    * of dst. Thus, the operation succeeded without truncation if
+N    * and only if ret < len; otherwise, the value in ret tells you
+N    * how big to make dst if you decide to reallocate it. (That
+N    * value does _not_ include the NUL.)
+N    * 
+N    * If no NUL is encountered within the first len bytes of dst,
+N    * then the length of dst is considered to have been equal to
+N    * len for the purposes of the return value (as if there were a
+N    * NUL at dst[len]). Thus, the return value in this case is len
+N    * + strlen(src).
+N    * 
+N    * This is a BSD-derived library extension, which we are
+N    * permitted to declare in a standard header because ISO defines
+N    * function names beginning with 'str' as reserved for future
+N    * expansion of <string.h>.
+N    */
+N
+Nextern _ARMABI void _membitcpybl(void * /*dest*/, const void * /*src*/, int /*destoffset*/, int /*srcoffset*/, size_t /*nbits*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) void _membitcpybl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+Nextern _ARMABI void _membitcpybb(void * /*dest*/, const void * /*src*/, int /*destoffset*/, int /*srcoffset*/, size_t /*nbits*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) void _membitcpybb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+Nextern _ARMABI void _membitcpyhl(void * /*dest*/, const void * /*src*/, int /*destoffset*/, int /*srcoffset*/, size_t /*nbits*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) void _membitcpyhl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+Nextern _ARMABI void _membitcpyhb(void * /*dest*/, const void * /*src*/, int /*destoffset*/, int /*srcoffset*/, size_t /*nbits*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) void _membitcpyhb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+Nextern _ARMABI void _membitcpywl(void * /*dest*/, const void * /*src*/, int /*destoffset*/, int /*srcoffset*/, size_t /*nbits*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) void _membitcpywl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+Nextern _ARMABI void _membitcpywb(void * /*dest*/, const void * /*src*/, int /*destoffset*/, int /*srcoffset*/, size_t /*nbits*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) void _membitcpywb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+Nextern _ARMABI void _membitmovebl(void * /*dest*/, const void * /*src*/, int /*destoffset*/, int /*srcoffset*/, size_t /*nbits*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) void _membitmovebl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+Nextern _ARMABI void _membitmovebb(void * /*dest*/, const void * /*src*/, int /*destoffset*/, int /*srcoffset*/, size_t /*nbits*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) void _membitmovebb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+Nextern _ARMABI void _membitmovehl(void * /*dest*/, const void * /*src*/, int /*destoffset*/, int /*srcoffset*/, size_t /*nbits*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) void _membitmovehl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+Nextern _ARMABI void _membitmovehb(void * /*dest*/, const void * /*src*/, int /*destoffset*/, int /*srcoffset*/, size_t /*nbits*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) void _membitmovehb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+Nextern _ARMABI void _membitmovewl(void * /*dest*/, const void * /*src*/, int /*destoffset*/, int /*srcoffset*/, size_t /*nbits*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) void _membitmovewl(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+Nextern _ARMABI void _membitmovewb(void * /*dest*/, const void * /*src*/, int /*destoffset*/, int /*srcoffset*/, size_t /*nbits*/) __attribute__((__nonnull__(1,2)));
+Xextern __declspec(__nothrow) void _membitmovewb(void *  , const void *  , int  , int  , size_t  ) __attribute__((__nonnull__(1,2)));
+N    /*
+N     * Copies or moves a piece of memory from one place to another,
+N     * with one-bit granularity. So you can start or finish a copy
+N     * part way through a byte, and you can copy between regions
+N     * with different alignment within a byte.
+N     * 
+N     * All these functions have the same prototype: two void *
+N     * pointers for destination and source, then two integers
+N     * giving the bit offset from those pointers, and finally the
+N     * number of bits to copy.
+N     * 
+N     * Just like memcpy and memmove, the "cpy" functions copy as
+N     * fast as they can in the assumption that the memory regions
+N     * do not overlap, while the "move" functions cope correctly
+N     * with overlap.
+N     *
+N     * Treating memory as a stream of individual bits requires
+N     * defining a convention about what order those bits are
+N     * considered to be arranged in. The above functions support
+N     * multiple conventions:
+N     * 
+N     *  - the "bl" functions consider the unit of memory to be the
+N     *    byte, and consider the bits within each byte to be
+N     *    arranged in little-endian fashion, so that the LSB comes
+N     *    first. (For example, membitcpybl(a,b,0,7,1) would copy
+N     *    the MSB of the byte at b to the LSB of the byte at a.)
+N     * 
+N     *  - the "bb" functions consider the unit of memory to be the
+N     *    byte, and consider the bits within each byte to be
+N     *    arranged in big-endian fashion, so that the MSB comes
+N     *    first.
+N     * 
+N     *  - the "hl" functions consider the unit of memory to be the
+N     *    16-bit halfword, and consider the bits within each word
+N     *    to be arranged in little-endian fashion.
+N     * 
+N     *  - the "hb" functions consider the unit of memory to be the
+N     *    16-bit halfword, and consider the bits within each word
+N     *    to be arranged in big-endian fashion.
+N     * 
+N     *  - the "wl" functions consider the unit of memory to be the
+N     *    32-bit word, and consider the bits within each word to be
+N     *    arranged in little-endian fashion.
+N     * 
+N     *  - the "wb" functions consider the unit of memory to be the
+N     *    32-bit word, and consider the bits within each word to be
+N     *    arranged in big-endian fashion.
+N     */
+N
+N    #ifdef __cplusplus
+S         }  /* extern "C" */
+S      }  /* namespace std */
+N    #endif /* __cplusplus */
+N  #endif /* __STRING_DECLS */
+N
+N  #ifdef __cplusplus
+S    #ifndef __STRING_NO_EXPORTS
+S      using ::std::size_t;
+S      using ::std::memcpy;
+S      using ::std::memmove;
+S      using ::std::strcpy;
+S      using ::std::strncpy;
+S      using ::std::strcat;
+S      using ::std::strncat;
+S      using ::std::memcmp;
+S      using ::std::strcmp;
+S      using ::std::strncmp;
+S      using ::std::strcasecmp;
+S      using ::std::strncasecmp;
+S      using ::std::strcoll;
+S      using ::std::strxfrm;
+S      using ::std::memchr;
+S      using ::std::strchr;
+S      using ::std::strcspn;
+S      using ::std::strpbrk;
+S      using ::std::strrchr;
+S      using ::std::strspn;
+S      using ::std::strstr;
+S      using ::std::strtok;
+S#ifndef __STRICT_ANSI__
+S      using ::std::strtok_r;
+S#endif
+S      using ::std::_strtok_r;
+S      using ::std::memset;
+S      using ::std::strerror;
+S      using ::std::strlen;
+S      using ::std::strlcpy;
+S      using ::std::strlcat;
+S      using ::std::_membitcpybl;
+S      using ::std::_membitcpybb;
+S      using ::std::_membitcpyhl;
+S      using ::std::_membitcpyhb;
+S      using ::std::_membitcpywl;
+S      using ::std::_membitcpywb;
+S      using ::std::_membitmovebl;
+S      using ::std::_membitmovebb;
+S      using ::std::_membitmovehl;
+S      using ::std::_membitmovehb;
+S      using ::std::_membitmovewl;
+S      using ::std::_membitmovewb;
+S    #endif /* __STRING_NO_EXPORTS */
+N  #endif /* __cplusplus */
+N
+N#endif
+N
+N/* end of string.h */
+N
+L 23 "etherCAT\ecat_def.h" 2
+N
+N/*-----------------------------------------------------------------------------------------
+N------	
+N------	Slave Sample Code Configuration Defines
+N------	
+N-----------------------------------------------------------------------------------------*/
+N#define SSC_VERSION_MAJOR 5
+N#define SSC_VERSION_MINOR 13
+N
+N
+N/** 
+NEL9800_HW: Shall be set if the Slave code is executed on the PIC mounted on the EL9800 EtherCAT Evaluation Board.<br>
+N(if the MCI interface provided by EL9800 board should be used MCI_HW shall be set and this define shall be reset).<br>
+NThis settings should also be enabled if the ESC is connected via a serial interface and no specific hardware access files are avilable yet.<br>
+NNOTE: The PDI type needs also to be configured in the "ESC_CONFIG_DATA". */
+N#ifndef EL9800_HW
+N#define EL9800_HW                                 0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NMCI_HW: Shall be set if the MCI of the ESC is connected.<br>
+NThis settings should also be enabled if the ESC is connected via a parallel interface and no specific hardware access files are avilable yet.<br>
+NNOTE: The PDI type needs also to be configured in the "ESC_CONFIG_DATA". */
+N#ifndef MCI_HW
+N#define MCI_HW                                    0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NFC1100_HW: Shall be set if the EtherCAT slave controller is located on an FC1100 PCI card.<br>
+NNOTE: The PDI type needs also to be configured in the "ESC_CONFIG_DATA". */
+N#ifndef FC1100_HW
+N#define FC1100_HW                                 0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NTIESC_HW: Temporary define to support TI ICE/IDK development board (Shall be set if the Slave code shall executed on an AM335X ICE/IDK Evaluation Board<br>
+Nfrom Texas Instruments) */
+N#ifndef TIESC_HW
+N#define TIESC_HW                                  0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NCONTROLLER_16BIT: Shall be set if the host controller is a 16Bit architecture */
+N#ifndef CONTROLLER_16BIT
+N#define CONTROLLER_16BIT                          0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NCONTROLLER_32BIT: Shall be set if the host controller is a 32Bit architecture */
+N#ifndef CONTROLLER_32BIT
+N#define CONTROLLER_32BIT                          1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NMEMORY_UNIT_16BIT: Shall be set if the smallest controller memory unit is 16bit */
+N#ifndef MEMORY_UNIT_16BIT
+N#define MEMORY_UNIT_16BIT                         0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+N_PIC18: Microchip PIC18F452 Specific Code <br>
+NThis processor is mounted on the Beckhoff Slave Evaluation Board (Hardware version up to EL9800_2). */
+N#ifndef _PIC18
+N#define _PIC18                                    0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+N_PIC24: Microchip PIC24HJ128GP306 Specific Code <br>
+NThis processor is mounted on the Beckhoff Slave Evaluation Board (Hardware version up to EL9800_4A). */
+N#ifndef _PIC24
+N#define _PIC24                                    0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NESC_16BIT_ACCESS: If the microcontroller only supports 16Bit access to the ESC. */
+N#ifndef ESC_16BIT_ACCESS
+N#define ESC_16BIT_ACCESS                          1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NESC_32BIT_ACCESS: If the microcontroller only supports 32Bit access to the ESC. */
+N#ifndef ESC_32BIT_ACCESS
+N#define ESC_32BIT_ACCESS                          0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NMBX_16BIT_ACCESS: If the microcontroller only supports 16Bit access to local mailbox memory(access to ESC DPRAM is controlled by "ESC_16BIT_ACCESS"). If reset 8Bit access is used. */
+N#ifndef MBX_16BIT_ACCESS
+N#define MBX_16BIT_ACCESS                          1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NBIG_ENDIAN_16BIT: If the microcontroller always make 16 bit access to external memory, operates in BigEndian format<br>
+Nand the switching of the high and low byte is done in hardware. */
+N#ifndef BIG_ENDIAN_16BIT
+N#define BIG_ENDIAN_16BIT                          0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NBIG_ENDIAN_FORMAT: If the microcontroller works with BigEndian format, then this switch shall be set. In that case all WORD-<br>
+Nand DWORD-accesses will make a BYTE- or WORD-swapping, the macros SWAPWORD and SWAPDWORD in ecatslv.h might be adapted. <br>
+NIf this switch is set, then BIG_ENDIAN_16BIT shall be reset. */
+N#ifndef BIG_ENDIAN_FORMAT
+N#define BIG_ENDIAN_FORMAT                         0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NEXT_DEBUGER_INTERFACE: If this switch is set, the external debugger interface on the EL9800_4A (_PIC24) will be activated.<br>
+NThis define will be ignored if _PIC24 is not set. */
+N#ifndef EXT_DEBUGER_INTERFACE
+N#define EXT_DEBUGER_INTERFACE                     0
+N#endif
+N
+N/** 
+NUC_SET_ECAT_LED: If set the EtherCAT Run and Error LEDs are set by the uController. If set ESC_SUPPORT_ECAT_LED shall be reset. */
+N#ifndef UC_SET_ECAT_LED
+N#define UC_SET_ECAT_LED                           0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NESC_SUPPORT_ECAT_LED: This switch can be enabled if the connected ESC support Error and Run LED indication. See the ESC datasheet if the LED indication is supported. If set UC_SET_ECAT_LED shall be reset. */
+N#ifndef ESC_SUPPORT_ECAT_LED
+N#define ESC_SUPPORT_ECAT_LED                      1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NESC_EEPROM_EMULATION: If this switch is set EEPROM emulation is supported. Not all ESC types support EEPROM emulation. See ESC datasheet for more information. */
+N#ifndef ESC_EEPROM_EMULATION
+N#define ESC_EEPROM_EMULATION                      0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NESC_EEPROM_SIZE: Specify the EEPROM size in Bytes of the connected EEPROM or the emulated EEPROM. */
+N#ifndef ESC_EEPROM_SIZE
+N#define ESC_EEPROM_SIZE                           0x800
+N#endif
+N
+N/** 
+NEEPROM_WRITE_SIZE: Only required if EEPROM emulation is active. This value defines the number of bytes which will be written per opertion. */
+N#ifndef EEPROM_WRITE_SIZE
+N#define EEPROM_WRITE_SIZE                         0x2
+N#endif
+N
+N/** 
+NAL_EVENT_ENABLED: If an interrupt routine shall be called when one of the Events in the AL Event Register (0x220) changes, <br>
+Nthis switch has to be defined to 1 (synchronous modes are supported). <br>
+NIf the AL Event register shall only be polled, this switch has to be defined to 0 (only free run mode is supported). */
+N#ifndef AL_EVENT_ENABLED
+N#define AL_EVENT_ENABLED                          1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NDC_SUPPORTED: If distributed clocks should be supported by the slave, this switch shall be set.<br>
+NNOTE: The DC support needs also be set in the "ESC_CONFIG_DATA" settings. */
+N#ifndef DC_SUPPORTED
+N#define DC_SUPPORTED                              1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NECAT_TIMER_INT: If this switch is set, then the watchdog time for the EtherCAT watchdog will be checked in a timer interrupt routine. */
+N#ifndef ECAT_TIMER_INT
+N#define ECAT_TIMER_INT                            0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NINTERRUPTS_SUPPORTED: If this switch is set the slave stack provides interrupt handling.<br>
+NNOTE: value will be evaluated automatically!! */
+N#ifndef INTERRUPTS_SUPPORTED
+N#define INTERRUPTS_SUPPORTED                      1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NTEST_APPLICATION: NOTE: THIS SETTING SHALL NOT BE USED TO CREATE A USER SPECIFIC APPLICATION!<br>
+NSelect this setting to test the slave stack or a master implementation. For further information about this application see the SSC Application Node. */
+N#ifndef TEST_APPLICATION
+N#define TEST_APPLICATION                          0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NTEST_APPLICATION_REDUCED_MEMORY: This define reduces the memory footprint of the test application (should only be used if the default test application generates no memory errors when accessing the OD or FoE files) */
+N#ifndef TEST_APPLICATION_REDUCED_MEMORY
+N#define TEST_APPLICATION_REDUCED_MEMORY           0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NEL9800_APPLICATION: Should be set if the Slave Sample Code runs on an EL9800_x Evaluation Board. */
+N#ifndef EL9800_APPLICATION
+N#define EL9800_APPLICATION                        0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NCiA402_SAMPLE_APPLICATION: If this switch is set, then the sample implementation of CiA402 device profile will be activated. */
+N#ifndef CiA402_SAMPLE_APPLICATION
+N#define CiA402_SAMPLE_APPLICATION                 0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NSAMPLE_APPLICATION: Select this define if the hardware independent sample application shall be activated. */
+N#ifndef SAMPLE_APPLICATION
+N#define SAMPLE_APPLICATION                        0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NSAMPLE_APPLICATION_INTERFACE: Select this define to activate the Sample Application Interface. This provides an simple interface to create a static library and used in an external application.<br>
+NNOTE: The file "EtherCATSampleLibrary.h" includes the library interface (maybe need to be adapted).  */
+N#ifndef SAMPLE_APPLICATION_INTERFACE
+N#define SAMPLE_APPLICATION_INTERFACE              0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NBOOTLOADER_SAMPLE: Select this define to enable a small footprint application which only supports the BOOT state and FoE mailbox protocol. */
+N#ifndef BOOTLOADER_SAMPLE
+N#define BOOTLOADER_SAMPLE                         0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NUSE_DEFAULT_MAIN: Set to 1 if the main function of a default application shall be used.<br>
+NOtherwise the Init functions and the mainloop handler shall be called for a user specific function (see ET9300 Application Note for further details https://www.beckhoff.com/de-de/support/downloadfinder/technische-dokumentationen/?q=ET1100). */
+N#ifndef USE_DEFAULT_MAIN
+N#define USE_DEFAULT_MAIN                          0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NMAILBOX_QUEUE: If this switch is set, the mailbox services will be stored in a queue.<br>
+NWith this switch reset only one mailbox service can be processed in parallel. */
+N#ifndef MAILBOX_QUEUE
+N#define MAILBOX_QUEUE                             1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NAOE_SUPPORTED: If the AoE services are supported, then this switch shall be set. */
+N#ifndef AOE_SUPPORTED
+N#define AOE_SUPPORTED                             0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NCOE_SUPPORTED: If the CoE services are supported, then his switch shall be set. */
+N#ifndef COE_SUPPORTED
+N#define COE_SUPPORTED                             1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NCOMPLETE_ACCESS_SUPPORTED: If the complete SDO access (accessing all entries of an object with one SDO service, then this<br>
+Nswitch shall be set. Furthermore,COE_SUPPORTED shall be set. */
+N#ifndef COMPLETE_ACCESS_SUPPORTED
+N#define COMPLETE_ACCESS_SUPPORTED                 1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NSEGMENTED_SDO_SUPPORTED: If the segmented SDO services should be supported, then this switch shall be set.<br>
+NFurthermore, COE_SUPPORTED shall be set. */
+N#ifndef SEGMENTED_SDO_SUPPORTED
+N#define SEGMENTED_SDO_SUPPORTED                   1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NSDO_RES_INTERFACE: If a SDO response cannot be generated immediately (e.g. when access over<br>
+Na serial interface is needed), this switch should be set. In that case ABORTIDX_WORKING shall be<br>
+Nreturned from OBJ_Read or OBJ_Write and the response shall be sent by calling SDOS_SdoRes, when<br>
+Nthe response is available. */
+N#ifndef SDO_RES_INTERFACE
+N#define SDO_RES_INTERFACE                         1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NUSE_SINGLE_PDO_MAPPING_ENTRY_DESCR: If this setting is set a PDO mapping entry description just need to be defined for the first entry. For all furher entries the same description is used. */
+N#ifndef USE_SINGLE_PDO_MAPPING_ENTRY_DESCR
+N#define USE_SINGLE_PDO_MAPPING_ENTRY_DESCR        0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NBACKUP_PARAMETER_SUPPORTED: If this switch is set, then the functions in the application example to load and<br>
+Nstore backup parameter will be compiled. Furthermore, COE_SUPPORTED shall be set. */
+N#ifndef BACKUP_PARAMETER_SUPPORTED
+N#define BACKUP_PARAMETER_SUPPORTED                0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NSTORE_BACKUP_PARAMETER_IMMEDIATELY: Objet values will be stored when they are written.This switch is only evaluated if "BACKUP_PARAMETER_SUPPORTED" is set. */
+N#ifndef STORE_BACKUP_PARAMETER_IMMEDIATELY
+N#define STORE_BACKUP_PARAMETER_IMMEDIATELY        0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NDIAGNOSIS_SUPPORTED: If this define is set the slave stack supports diagnosis messages (Object 0x10F3). <br>
+NTo support diagnosis messages COE_SUPPORTED shall be enabled and the platform shall support dynamic memory allocation.<br>
+NNOTE: this feature is implemented according to ETG.1020 */
+N#ifndef DIAGNOSIS_SUPPORTED
+N#define DIAGNOSIS_SUPPORTED                       0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NEMERGENCY_SUPPORTED: If this define is set the slave stack supports emergency messages. COE_SUPPORTED or SOE_SUPPORTED shall be enabled */
+N#ifndef EMERGENCY_SUPPORTED
+N#define EMERGENCY_SUPPORTED                       1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NVOE_SUPPORTED: If the VoE services should be supported, then this switch shall be set. This means only the calling of the <br>
+NVoE functions in mailbox.c are implemented, but the VoE service functions have to be added. Furthermore, the example code cannot be linked<br>
+Ncorrectly, because these functions are missing. */
+N#ifndef VOE_SUPPORTED
+N#define VOE_SUPPORTED                             0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NSOE_SUPPORTED: If the SoE services should be supported, then this switch shall be set. This means only the calling of the <br>
+NSoE functions in mailbox.c are implemented, but the SoE service functions have to be added. Furthermore, the example code cannot be linked<br>
+Ncorrectly, because these functions are missing. */
+N#ifndef SOE_SUPPORTED
+N#define SOE_SUPPORTED                             0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NEOE_SUPPORTED: If the EoE services should be supported, then this switch shall be set. */
+N#ifndef EOE_SUPPORTED
+N#define EOE_SUPPORTED                             0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NSTATIC_ETHERNET_BUFFER: If this switch is set a static buffer is used to store ethernet frames, otherwise the buffer is allocated on demand */
+N#ifndef STATIC_ETHERNET_BUFFER
+N#define STATIC_ETHERNET_BUFFER                    0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NFOE_SUPPORTED: If the FoE services should be supported, then this switch shall be set.  */
+N#ifndef FOE_SUPPORTED
+N#define FOE_SUPPORTED                             1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NMAILBOX_SUPPORTED: This switch is set automatically if at least one mailbox protocol is enabled. */
+N#ifndef MAILBOX_SUPPORTED
+N#define MAILBOX_SUPPORTED                         1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NBOOTSTRAPMODE_SUPPORTED: If the firmware update over FoE services should be supported, then this switch shall be set.<br>
+NIf this switch is set, then also "FOE_SUPPORTED" shall be set.  */
+N#ifndef BOOTSTRAPMODE_SUPPORTED
+N#define BOOTSTRAPMODE_SUPPORTED                   1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NOP_PD_REQUIRED: If this switch is reset the state transition SAFEOP_2_OP will also successful if no process data was received. The watchdog will only be active when first process data was received (bEcatFirstOutputsReceived) */
+N#ifndef OP_PD_REQUIRED
+N#define OP_PD_REQUIRED                            1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NPREOPTIMEOUT: Specify timeout value in ms for the state transition from Init to PreOP/Boot.(ESI Value : "PreopTimeout").<br>
+NNOTE: Within the stack this value - 50ms will be used to react before the master run into the timeout. */
+N#ifndef PREOPTIMEOUT
+N#define PREOPTIMEOUT                              0x7D0
+N#endif
+N
+N/** 
+NSAFEOP2OPTIMEOUT: Specifiy the timeout in ms from SafeOP to OP. (ESI Value : "SafeopOpTimeout")<br>
+NNOTE: Within the stack this value - 50ms will be used to react before the master run into the timeout. */
+N#ifndef SAFEOP2OPTIMEOUT
+N#define SAFEOP2OPTIMEOUT                          0x2328
+N#endif
+N
+N/** 
+NCHECK_SM_PARAM_ALIGNMENT: If true the SyncManager length and start address will be checked according the ESC Access.<br>
+Ne.g. ESC_32BIT_ACCESS is set the length and address shall be to an even 4Byte address. */
+N#ifndef CHECK_SM_PARAM_ALIGNMENT
+N#define CHECK_SM_PARAM_ALIGNMENT                  0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NEXPLICIT_DEVICE_ID: If this switch is set Explicit device ID requests are handled. For further information about Explicit Device ID see ETG.1020 specification: www.ethercat.org/MemberArea/download_protocolenhancements.asp */
+N#ifndef EXPLICIT_DEVICE_ID
+N#define EXPLICIT_DEVICE_ID                        1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NESC_SM_WD_SUPPORTED: This switch should be set if the SyncManger watchdog provided by the ESC should be used. If reset the process data watchdog is triggered by a local timer */
+N#ifndef ESC_SM_WD_SUPPORTED
+N#define ESC_SM_WD_SUPPORTED                       1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NSTATIC_OBJECT_DIC: If this switch is set, the object dictionary is "build" static (by default only PIC18 objects are added static) */
+N#ifndef STATIC_OBJECT_DIC
+N#define STATIC_OBJECT_DIC                         0 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NESC_EEPROM_ACCESS_SUPPORT: If this switch is set the slave stack provides functions to access the EEPROM. */
+N#ifndef ESC_EEPROM_ACCESS_SUPPORT
+N#define ESC_EEPROM_ACCESS_SUPPORT                 1 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N
+N/*-----------------------------------------------------------------------------------------
+N------	
+N------	Compiler Defines
+N------	
+N-----------------------------------------------------------------------------------------*/
+N
+N/** 
+NFALSE: Will be used for variables from type BOOL */
+N#ifndef FALSE
+N#define FALSE                                     0
+N#endif
+N
+N/** 
+NTRUE: Will be used for variables from type BOOL  */
+N#ifndef TRUE
+N#define TRUE                                      1
+N#endif
+N
+N/** 
+NBOOL: Should be adapted to the boolean type of the microcontroller */
+N#ifndef BOOL
+N#define BOOL                                      unsigned char
+N#endif
+N
+N/** 
+NUINT8: Should be adapted to the unsigned8 type of the microcontroller  */
+N#ifndef UINT8
+N#define UINT8                                     unsigned char
+N#endif
+N
+N/** 
+NUINT16: Should be adapted to the unsigned16 type of the microcontroller  */
+N#ifndef UINT16
+N#define UINT16                                    unsigned short
+N#endif
+N
+N/** 
+NUINT32: Should be adapted to the unsigned32 type of the microcontroller  */
+N#ifndef UINT32
+N#define UINT32                                    unsigned int
+N#endif
+N
+N/** 
+NUINT64: Should be adapted to the unsigned64 type of the microcontroller  */
+N#ifndef UINT64
+N#define UINT64                                    unsigned long long
+N#endif
+N
+N/** 
+NUSHORT: Should be adapted to the unsigned16 type of the microcontroller */
+N#ifndef USHORT
+N#define USHORT                                    unsigned short
+N#endif
+N
+N/** 
+NINT8: Should be adapted to the integer8 type of the microcontroller */
+N#ifndef INT8
+N#define INT8                                      char
+N#endif
+N
+N/** 
+NINT16: Should be adapted to the integer16 type of the microcontroller  */
+N#ifndef INT16
+N#define INT16                                     short
+N#endif
+N
+N/** 
+NINT32: Should be adapted to the integer32 type of the microcontroller */
+N#ifndef INT32
+N#define INT32                                     int
+N#endif
+N
+N/** 
+NINT64: Should be adapted to the integer64 type of the microcontroller */
+N#ifndef INT64
+N#define INT64                                     long long
+N#endif
+N
+N/** 
+NCHAR: Should be adapted to the character type of the microcontroller */
+N#ifndef CHAR
+N#define CHAR                                      char
+N#endif
+N
+N/** 
+NUCHAR: Should be adapted to the unsigned character type of the microcontroller */
+N#ifndef UCHAR
+N#define UCHAR                                     unsigned char
+N#endif
+N
+N/** 
+NREAL32: Should be adapted to the 32bit real type of the microcontroller */
+N#ifndef REAL32
+N#define REAL32                                    float
+N#endif
+N
+N/** 
+NREAL64: Should be adapted to the 64bit real type of the microcontroller */
+N#ifndef REAL64
+N#define REAL64                                    double
+N#endif
+N
+N/** 
+NSIZEOF(x): Used to calculate the size in Bytes */
+N#ifndef SIZEOF
+N#define SIZEOF(x)                                 sizeof(x)
+N#endif
+N
+N/** 
+NHUGE: Should be adapted to the huge type of the microcontroller, if the microcontroller<br>
+Ndoes not support a huge type, HUGE shall be defined to nothing */
+N#ifndef HUGE
+N#define HUGE 
+N#endif
+N
+N/** 
+NHMEMSET: Should be defined to the memset function for huge memory, if the microcontroller<br>
+Ndoes not support a huge type, HMEMSET shall be defined to a 'normal' memset function */
+N#ifndef HMEMSET
+N#define HMEMSET                                   memset
+N#endif
+N
+N/** 
+NHMEMCPY: Should be defined to the memcpy function for huge memory, if the microcontroller<br>
+Ndoes not support a huge type, HMEMCPY shall be defined to a 'normal' memcpy function */
+N#ifndef HMEMCPY
+N#define HMEMCPY                                   memcpy
+N#endif
+N
+N/** 
+NHMEMCMP: Should be defined to the memcmp function for huge memory, if the microcontroller<br>
+Ndoes not support a huge type, HMEMCMP shall be defined to a 'normal' memcmp function */
+N#ifndef HMEMCMP
+N#define HMEMCMP                                   memcmp
+N#endif
+N
+N/** 
+NESCMEM: Should be defined to select the memory type of the ESC memory (e.g. near, far or huge), if the microcontroller<br>
+Ndoes not support different memory types, ESCMEM shall be defined to nothing */
+N#ifndef ESCMEM
+N#define ESCMEM 
+N#endif
+N
+N/** 
+NESCMEMCPY: Should be defined to the memcpy function for ESCMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, ESCMEMCPY shall be defined to a 'normal' memcpy function */
+N#ifndef ESCMEMCPY
+N#define ESCMEMCPY                                 memcpy
+N#endif
+N
+N/** 
+NESCMEMSET: Should be defined to the memset function for ESCMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, ESCMEMSET shall be defined to a 'normal' memset function */
+N#ifndef ESCMEMSET
+N#define ESCMEMSET                                 memset
+N#endif
+N
+N/** 
+NESCMBXMEMCPY: Should be defined to the memcpy function for copying ESCMEM memory to or from MBXMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, ESCMBXMEMCPY shall be defined to a 'normal' memcpy function */
+N#ifndef ESCMBXMEMCPY
+N#define ESCMBXMEMCPY                              memcpy
+N#endif
+N
+N/** 
+NMBXMEM: Should be defined to select the memory type of the memory used for mailbox communication (e.g. near, far or huge), <br>
+Nif the microcontroller does not support different memory types, MBXMEM shall be defined to nothing */
+N#ifndef MBXMEM
+N#define MBXMEM 
+N#endif
+N
+N/** 
+NMBXMEMCPY: Should be defined to the memcpy function for MBXMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, MBXMEMCPY shall be defined to a 'normal' memcpy function */
+N#ifndef MBXMEMCPY
+N#define MBXMEMCPY                                 memcpy
+N#endif
+N
+N/** 
+NMBXMEMCMP: Should be defined to the memcmp function for MBXMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, MBXMEMCMP shall be defined to a 'normal' memcmp function */
+N#ifndef MBXMEMCMP
+N#define MBXMEMCMP                                 memcmp
+N#endif
+N
+N/** 
+NMBXMEMSET: Should be defined to the memcpy function for MBXMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, MBXMEMSET shall be defined to a 'normal' memset function */
+N#ifndef MBXMEMSET
+N#define MBXMEMSET                                 memset
+N#endif
+N
+N/** 
+NMBXSTRLEN: Should be defined to the strlen function for MBXMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, MBXSTRLEN shall be defined to a 'normal' strlen function */
+N#ifndef MBXSTRLEN
+N#define MBXSTRLEN                                 strlen
+N#endif
+N
+N/** 
+NMBXSTRCPY: Should be defined to the strcpy function for MBXMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, MBXSTRCPY shall be defined to a 'normal' strcpy function */
+N#ifndef MBXSTRCPY
+N#define MBXSTRCPY                                 memcpy
+N#endif
+N
+N/** 
+NOBJCONST: Should be used to define the object dictionary in ROM (f.e. define OBJCONST const) or<br>
+Nin RAM (e.g. define OBJCONST) */
+N#ifndef OBJCONST
+N#define OBJCONST                                  const
+N#endif
+N
+N/** 
+NVARCONST: Should be used to define the constant variables in ROM (f.e. define VARCONST const) or<br>
+Nin RAM (e.g. define VARCONST) */
+N#ifndef VARCONST
+N#define VARCONST 
+N#endif
+N
+N/** 
+NVARVOLATILE: Should be used to prevent dummy variables to be deleted due to compiler optimization.  */
+N#ifndef VARVOLATILE
+N#define VARVOLATILE                               volatile
+N#endif
+N
+N/** 
+NOBJMEM: Should be defined to select the memory type of the memory used for the object dictionary (e.g. near, far or huge), <br>
+Nif the microcontroller does not support different memory types, OBJMEM shall be defined to nothing */
+N#ifndef OBJMEM
+N#define OBJMEM 
+N#endif
+N
+N/** 
+NOBJTOMBXMEMCPY: Should be defined to the memcpy function for copying OBJMEM memory to MBXMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, OBJTOMBXMEMCPY shall be defined to a 'normal' memcpy function */
+N#ifndef OBJTOMBXMEMCPY
+N#define OBJTOMBXMEMCPY                            memcpy
+N#endif
+N
+N/** 
+NOBJTOMBXSTRCPY: Should be defined to the strcpy function for copying OBJMEM memory to MBXMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, OBJTOMBXSTRCPY shall be defined to a 'normal' memcpy function */
+N#ifndef OBJTOMBXSTRCPY
+N#define OBJTOMBXSTRCPY                            memcpy
+N#endif
+N
+N/** 
+NMBXTOOBJSTRCPY: Should be defined to the strcpy function for copying MBXMEM memory to OBJMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, MBXTOOBJSTRCPY shall be defined to a 'normal' memcpy function */
+N#ifndef MBXTOOBJSTRCPY
+N#define MBXTOOBJSTRCPY                            memcpy
+N#endif
+N
+N/** 
+NOBJMEMCPY: Should be defined to the memcpy function for OBJMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, OBJMEMCPY shall be defined to a 'normal' memcpy function */
+N#ifndef OBJMEMCPY
+N#define OBJMEMCPY                                 memcpy
+N#endif
+N
+N/** 
+NOBJSTRLEN: Should be defined to the strlen function for OBJMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, OBJSTRLEN shall be defined to a 'normal' strlen function */
+N#ifndef OBJSTRLEN
+N#define OBJSTRLEN                                 strlen
+N#endif
+N
+N/** 
+NOBJSTRCPY: Should be defined to the strcpy function for OBJMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, OBJSTRCPY shall be defined to a 'normal' strcpy function */
+N#ifndef OBJSTRCPY
+N#define OBJSTRCPY                                 memcpy
+N#endif
+N
+N/** 
+NMAKE_HUGE_PTR: Should be defined to the initialize a pointer variable with an absolute address */
+N#ifndef MAKE_HUGE_PTR
+N#define MAKE_HUGE_PTR 
+N#endif
+N
+N/** 
+NMAKE_PTR_TO_ESC: Should be defined to the initialize the pointer to the ESC */
+N#ifndef MAKE_PTR_TO_ESC
+N#define MAKE_PTR_TO_ESC 
+N#endif
+N
+N/** 
+NEMCYMEMCPY: Should be defined to the memcpy function for EMCYMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, EMCYMEMCPY shall be defined to a 'normal' memcpy function */
+N#ifndef EMCYMEMCPY
+N#define EMCYMEMCPY                                memcpy
+N#endif
+N
+N/** 
+NEMCYMEMSET: Should be defined to the memset function for EMCYMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, EMCYMEMSET shall be defined to a 'normal' memcset function */
+N#ifndef EMCYMEMSET
+N#define EMCYMEMSET                                memset
+N#endif
+N
+N/** 
+NEMCYMEM: Should be defined to select the memory type of the memory used for the emergencies (e.g. near, far or huge), <br>
+Nif the microcontroller does not support different memory types, EMCYMEM shall be defined to nothing */
+N#ifndef EMCYMEM
+N#define EMCYMEM 
+N#endif
+N
+N/** 
+NMEMCPY: Should be defined to copy data within local memory. */
+N#ifndef MEMCPY
+N#define MEMCPY                                    memcpy
+N#endif
+N
+N/** 
+NALLOCMEM(size): Should be defined to the alloc function to get dynamic memory */
+N#ifndef ALLOCMEM
+N#define ALLOCMEM(size)                            malloc((size))
+N#endif
+N
+N/** 
+NFREEMEM(pointer): Should be defined to the free function to put back dynamic memory */
+N#ifndef FREEMEM
+N#define FREEMEM(pointer)                          free((pointer))
+N#endif
+N
+N/** 
+NVARMEMSET: Should be defined to the memset function for VARMEM memory, if the microcontroller<br>
+Ndoes not support different memory types, EMCYMEMSET shall be defined to a 'normal' memcset function */
+N#ifndef VARMEMSET
+N#define VARMEMSET                                 memset
+N#endif
+N
+N/** 
+NVARMEM: Should be defined to select the memory type of the memory used for dynamic memory (e.g. near, far or huge), <br>
+Nif the microcontroller does not support different memory types, VARMEM shall be defined to nothing */
+N#ifndef VARMEM
+N#define VARMEM 
+N#endif
+N
+N/** 
+NMEM_ADDR: Type to access local memory addresses */
+N#ifndef MEM_ADDR
+N#define MEM_ADDR                                  UINT8
+N#endif
+N
+N/** 
+NGET_MEM_SIZE(ByteSize): Round up the byte size to next matching memory boundary depending on "MEM_ADDR" */
+N#ifndef GET_MEM_SIZE
+N#define GET_MEM_SIZE(ByteSize)                    (((ByteSize)+3) >> 2)
+N#endif
+N
+N/** 
+NAPPL_AllocMailboxBuffer(size): Should be defined to a function to get a buffer for a mailbox service,<br>
+Nthis is only used if the switch MAILBOX_QUEUE is set */
+N#ifndef APPL_AllocMailboxBuffer
+N#define APPL_AllocMailboxBuffer(size)             malloc((size))
+N#endif
+N
+N/** 
+NAPPL_FreeMailboxBuffer(pointer): Should be defined to a function to put back a buffer for a mailbox service,<br>
+Nthis is only used if the switch MAILBOX_QUEUE is set */
+N#ifndef APPL_FreeMailboxBuffer
+N#define APPL_FreeMailboxBuffer(pointer)           free((pointer))
+N#endif
+N
+N/** 
+NSTRUCT_PACKED_START: Is defined before the typedef struct construct to pack the generic structures if necessary */
+N#ifndef STRUCT_PACKED_START
+N#define STRUCT_PACKED_START 
+N#endif
+N
+N/** 
+NSTRUCT_PACKED_END: Is defined after the typedef struct {} construct to pack the generic structures if necessary */
+N#ifndef STRUCT_PACKED_END
+N#define STRUCT_PACKED_END
+N#endif
+N
+N/** 
+NMBX_STRUCT_PACKED_START: Is defined before the typedef struct construct to pack the MAILBOX structures if necessary */
+N#ifndef MBX_STRUCT_PACKED_START
+N#define MBX_STRUCT_PACKED_START 
+N#endif
+N
+N/** 
+NMBX_STRUCT_PACKED_END: Is defined after the typedef struct {} construct to pack the MAILBOX structures if necessary */
+N#ifndef MBX_STRUCT_PACKED_END
+N#define MBX_STRUCT_PACKED_END
+N#endif
+N
+N/** 
+NOBJ_STRUCT_PACKED_START: Is defined before the typedef struct construct to pack the OBJECT structures if necessary */
+N#ifndef OBJ_STRUCT_PACKED_START
+N#define OBJ_STRUCT_PACKED_START 
+N#endif
+N
+N/** 
+NOBJ_STRUCT_PACKED_END: Is defined after the typedef struct {} construct to pack the OBJECT structures if necessary */
+N#ifndef OBJ_STRUCT_PACKED_END
+N#define OBJ_STRUCT_PACKED_END 
+N#endif
+N
+N/** 
+NOBJ_DWORD_ALIGN: Shall be set if the object structures are not Byte aligned and 32bit entries are implicitly padded to even 32bit memory addresses. */
+N#ifndef OBJ_DWORD_ALIGN
+N#define OBJ_DWORD_ALIGN                           1
+N#endif
+N
+N/** 
+NOBJ_WORD_ALIGN: Shall be set if the object structures are not Byte aligned and 16bit entries are implicitly padded to even 16bit memory addresses. */
+N#ifndef OBJ_WORD_ALIGN
+N#define OBJ_WORD_ALIGN                            0
+N#endif
+N
+N/** 
+NENTER_MBX_CRITICAL: Macro which is called when a critical mailbox section is entered */
+N#ifndef ENTER_MBX_CRITICAL
+N#define ENTER_MBX_CRITICAL 
+N#endif
+N
+N/** 
+NLEAVE_MBX_CRITICAL: Macro which is called when a critical mailbox section is left */
+N#ifndef LEAVE_MBX_CRITICAL
+N#define LEAVE_MBX_CRITICAL 
+N#endif
+N
+N/** 
+NENTER_AOE_CRITICAL: Macro which is called when a critical AoE section is entered */
+N#ifndef ENTER_AOE_CRITICAL
+N#define ENTER_AOE_CRITICAL 
+N#endif
+N
+N/** 
+NLEAVE_AOE_CRITICAL: Macro which is called when a critical AoE section is left */
+N#ifndef LEAVE_AOE_CRITICAL
+N#define LEAVE_AOE_CRITICAL 
+N#endif
+N
+N/** 
+NENTER_EMCY_CRITICAL: Macro which is called when a critical emergency section is entered */
+N#ifndef ENTER_EMCY_CRITICAL
+N#define ENTER_EMCY_CRITICAL 
+N#endif
+N
+N/** 
+NLEAVE_EMCY_CRITICAL: Macro which is called when a critical emergency section is left */
+N#ifndef LEAVE_EMCY_CRITICAL
+N#define LEAVE_EMCY_CRITICAL 
+N#endif
+N
+N
+N/*-----------------------------------------------------------------------------------------
+N------	
+N------	Application Specific Defines
+N------	
+N-----------------------------------------------------------------------------------------*/
+N
+N/** 
+NMAX_DIAG_MSG: Number of diagnosis message ringbuffer */
+N#ifndef MAX_DIAG_MSG
+N#define MAX_DIAG_MSG                              0x14
+N#endif
+N
+N/** 
+NMAX_EMERGENCIES: Number of emergencies supported in parallel */
+N#ifndef MAX_EMERGENCIES
+N#define MAX_EMERGENCIES                           0x1
+N#endif
+N
+N/** 
+NVENDOR_ID: Object 0x1018 SI1 (Vendor ID)	 <br>
+NAn unique EtherCAT Vendor ID is required. Please find all valid Vendor IDs listed at www.ethercat.org/en/vendor_id_list.html.<br>
+NIf your company is not listed, please assign an ID for free at www.ethercat.org/memberarea/vendor_id.asp */
+N#ifndef VENDOR_ID
+N#define VENDOR_ID                                 0x8CF
+N#endif
+N
+N/** 
+NPRODUCT_CODE: Object 0x1018 SI2 (EtherCAT product code) */
+N#ifndef PRODUCT_CODE
+N#define PRODUCT_CODE                              0x00000001
+N#endif
+N
+N/** 
+NREVISION_NUMBER: Object 0x1018 SI3 (EtherCAT product revision number) */
+N#ifndef REVISION_NUMBER
+N#define REVISION_NUMBER                           0x00000001
+N#endif
+N
+N/** 
+NSERIAL_NUMBER: Object 0x1018 SI4 (EtherCAT product serial number) */
+N#ifndef SERIAL_NUMBER
+N#define SERIAL_NUMBER                             0x00000001
+N#endif
+N
+N/** 
+NDEVICE_PROFILE_TYPE: Slave device type (Object 0x1000)  */
+N#ifndef DEVICE_PROFILE_TYPE
+N#define DEVICE_PROFILE_TYPE                       0x00001389
+N#endif
+N
+N/** 
+NDEVICE_NAME: Name of the slave device (Object 0x1008) */
+N#ifndef DEVICE_NAME
+N#define DEVICE_NAME                               "IO_ECAT_DC00"
+N#endif
+N
+N/** 
+NDEVICE_NAME_LEN: Length of 'DEVICE_NAME' without '\0' */
+N#ifndef DEVICE_NAME_LEN
+N#define DEVICE_NAME_LEN                           0xC
+N#endif
+N
+N/** 
+NDEVICE_HW_VERSION: Hardware version of the slave device (Object 0x1009) */
+N#ifndef DEVICE_HW_VERSION
+N#define DEVICE_HW_VERSION                         "0.0.0"
+N#endif
+N
+N/** 
+NDEVICE_HW_VERSION_LEN: Length of 'DEVICE_HW_VERSION' without '\0' */
+N#ifndef DEVICE_HW_VERSION_LEN
+N#define DEVICE_HW_VERSION_LEN                     0x5
+N#endif
+N
+N/** 
+NDEVICE_SW_VERSION: Software version of the slave device (Object 0x100A) */
+N#ifndef DEVICE_SW_VERSION
+N#define DEVICE_SW_VERSION                         "1.0.0"
+N#endif
+N
+N/** 
+NDEVICE_SW_VERSION_LEN: Length of 'DEVICE_SW_VERSION' without '\0' */
+N#ifndef DEVICE_SW_VERSION_LEN
+N#define DEVICE_SW_VERSION_LEN                     0x5
+N#endif
+N
+N/** 
+NMIN_PD_WRITE_ADDRESS: Minimum address for the process output data (Sync Manager 2)<br>
+Ninside the application memory of the EtherCAT Slave Controller which could be set by the master. The setting have to be within the ranges of the user memory of the ESC (this is not checked by the tool). */
+N#ifndef MIN_PD_WRITE_ADDRESS
+N#define MIN_PD_WRITE_ADDRESS                      0x1000
+N#endif
+N
+N/** 
+NMAX_PD_WRITE_ADDRESS: Maximum address for the process output data (Sync Manager 2)<br>
+Ninside the application memory of the EtherCAT Slave Controller which could be set by the master. The setting have to be within the ranges of the user memory of the ESC (this is not checked by the tool). */
+N#ifndef MAX_PD_WRITE_ADDRESS
+N#define MAX_PD_WRITE_ADDRESS                      0x1FFF
+N#endif
+N
+N/** 
+NMIN_PD_READ_ADDRESS: Minimum address for the process input data (Sync Manager 3)<br>
+Ninside the application memory of the EtherCAT Slave Controller which could be set by the master. The setting have to be within the ranges of the user memory of the ESC (this is not checked by the tool). */
+N#ifndef MIN_PD_READ_ADDRESS
+N#define MIN_PD_READ_ADDRESS                       0x1000
+N#endif
+N
+N/** 
+NMAX_PD_READ_ADDRESS: Maximum address for the process input data (Sync Manager 3)<br>
+Ninside the application memory of the EtherCAT Slave Controller which could be set by the master. The setting have to be within the ranges of the user memory of the ESC (this is not checked by the tool). */
+N#ifndef MAX_PD_READ_ADDRESS
+N#define MAX_PD_READ_ADDRESS                       0x1FFF
+N#endif
+N
+N/** 
+NMIN_MBX_SIZE: Minimum mailbox size (Sync Manager 0 and 1) which could be set by the master. The SSC don't support fragmented SDO info object/entry service => at least entry info including 12byte name shall fit in the mailbox buffer */
+N#ifndef MIN_MBX_SIZE
+N#define MIN_MBX_SIZE                              0x0024
+N#endif
+N
+N/** 
+NMAX_MBX_SIZE: Maximum mailbox size (Sync Manager 0 and 1) which could be set by the master. */
+N#ifndef MAX_MBX_SIZE
+N#define MAX_MBX_SIZE                              0x0100
+N#endif
+N
+N/** 
+NMIN_MBX_WRITE_ADDRESS: Minimum address for the write (receive) mailbox (Sync Manager 0). The setting have to be within the ranges of the user memory of the ESC (this is not checked by the tool). */
+N#ifndef MIN_MBX_WRITE_ADDRESS
+N#define MIN_MBX_WRITE_ADDRESS                     0x1000
+N#endif
+N
+N/** 
+NMAX_MBX_WRITE_ADDRESS: Maximum address for the write (receive) mailbox (Sync Manager 0). The setting have to be within the ranges of the user memory of the ESC (this is not checked by the tool). */
+N#ifndef MAX_MBX_WRITE_ADDRESS
+N#define MAX_MBX_WRITE_ADDRESS                     0x1FFF
+N#endif
+N
+N/** 
+NMAX_PD_INPUT_SIZE: Maximum size of the process input data (Sync Manager 3) for cyclic exchange. */
+N#ifndef MAX_PD_INPUT_SIZE
+N#define MAX_PD_INPUT_SIZE                         0x0100 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NMIN_MBX_READ_ADDRESS: Minimum address for the read (send) mailbox (Sync Manager 1). */
+N#ifndef MIN_MBX_READ_ADDRESS
+N#define MIN_MBX_READ_ADDRESS                      0x1080
+N#endif
+N
+N/** 
+NMAX_MBX_READ_ADDRESS: Maximum address for the read (send) mailbox (Sync Manager 1). */
+N#ifndef MAX_MBX_READ_ADDRESS
+N#define MAX_MBX_READ_ADDRESS                      0x1FFF
+N#endif
+N
+N/** 
+NMAX_PD_OUTPUT_SIZE: Maximum size of the process output data (Sync Manager 2) for cyclic exchange. */
+N#ifndef MAX_PD_OUTPUT_SIZE
+N#define MAX_PD_OUTPUT_SIZE                        0x0100 //This define was already evaluated by ET9300 Project Handler(V. 1.5.0.0)!
+N#endif
+N
+N/** 
+NMIN_PD_CYCLE_TIME: Minimum cycle time in ns the slave is supporting (entry 0x1C3x:05).<br>
+NIn case that the value is set to 0 the value of 0x1C3x:5 is calculated if 0x1C3x.8 is 1 */
+N#ifndef MIN_PD_CYCLE_TIME
+N#define MIN_PD_CYCLE_TIME                         0
+N#endif
+N
+N/** 
+NMAX_PD_CYCLE_TIME: Maximum cycle time in ns the slave is supporting */
+N#ifndef MAX_PD_CYCLE_TIME
+N#define MAX_PD_CYCLE_TIME                         0xC3500000
+N#endif
+N
+N/** 
+NPD_OUTPUT_DELAY_TIME: Minimum output delay time in ns the slave is supporting (entry 0x1C32:09) */
+N#ifndef PD_OUTPUT_DELAY_TIME
+N#define PD_OUTPUT_DELAY_TIME                      0x0
+N#endif
+N
+N/** 
+NPD_OUTPUT_CALC_AND_COPY_TIME: Output calc+copy time in ns the slave is supporting (entry 0x1C32:06)<br>
+NIn case that the value is set to 0 the value of 0x1C32:6 is calculated if 0x1C3x.8 is 1 */
+N#ifndef PD_OUTPUT_CALC_AND_COPY_TIME
+N#define PD_OUTPUT_CALC_AND_COPY_TIME              0x0
+N#endif
+N
+N/** 
+NPD_INPUT_CALC_AND_COPY_TIME: Input calc+copy time in ns the slave is supporting (entry 0x1C33:06)<br>
+NIn case that the value is set to 0 the value of 0x1C33:6 is calculated if 0x1C3x.8 is 1 */
+N#ifndef PD_INPUT_CALC_AND_COPY_TIME
+N#define PD_INPUT_CALC_AND_COPY_TIME               0x0
+N#endif
+N
+N/** 
+NPD_INPUT_DELAY_TIME: Input delay time in ns the slave is supporting (entry 0x1C33:09) */
+N#ifndef PD_INPUT_DELAY_TIME
+N#define PD_INPUT_DELAY_TIME                       0x0
+N#endif
+N
+N
+N
+N/*-----------------------------------------------------------------------------------------
+N------	
+N------	Test Configuration Defines
+N------	
+N-----------------------------------------------------------------------------------------*/
+N
+N
+N#endif // _ECATDEF_H_
+N
+L 31 "etherCAT\bootmode.c" 2
+N
+N
+N#define    _BOOTMODE_ 1
+N#include "bootmode.h"
+L 1 "etherCAT\bootmode.h" 1
+N/*
+N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
+N* The corresponding license agreement applies. This hint shall not be removed.
+N* https://www.beckhoff.com/media/downloads/slave-stack-code/ethercat_ssc_license.pdf
+N*/
+N
+N/**
+N * \addtogroup ESM EtherCAT State Machine
+N * @{
+N */
+N
+N/**
+N\file bootmode.h
+N\author EthercatSSC@beckhoff.com
+N\brief Function prototypes for the Boot state
+N
+N\version 5.11
+N
+N<br>Changes to version V5.01:<br>
+NV5.11 ECAT10: change PROTO handling to prevent compiler errors<br>
+N<br>Changes to version - :<br>
+NV5.01 : Start file change log
+N */
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Includes
+N------
+N-----------------------------------------------------------------------------------------*/
+N#include "ecat_def.h"
+N
+N
+N#ifndef _BOOTMODE_H_
+N#define _BOOTMODE_H_
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Defines and Types
+N------
+N-----------------------------------------------------------------------------------------*/
+N
+N#endif //_BOOTMODE_H_
+N
+N#if defined(_BOOTMODE_) && (_BOOTMODE_ == 1)
+X#if 1L && (1 == 1)
+N    #define PROTO
+N#else
+S    #define PROTO extern
+N#endif
+N /*-----------------------------------------------------------------------------------------
+N------
+N------    Global variables
+N------
+N-----------------------------------------------------------------------------------------*/
+N
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Global functions
+N------
+N-----------------------------------------------------------------------------------------*/
+NPROTO    void BL_Start( UINT8 State);
+X    void BL_Start( unsigned char State);
+NPROTO   void BL_Stop(void);
+X   void BL_Stop(void);
+NPROTO    void BL_StartDownload(UINT32 password);
+X    void BL_StartDownload(unsigned int password);
+NPROTO   UINT16 BL_Data(UINT16 *pData,UINT16 Size);
+X   unsigned short BL_Data(unsigned short *pData,unsigned short Size);
+N
+N#undef PROTO
+N/** @}*/
+L 35 "etherCAT\bootmode.c" 2
+N#undef _BOOTMODE_
+N
+N#include "ecatfoe.h"
+L 1 "etherCAT\ecatfoe.h" 1
+N/*
+N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
+N* The corresponding license agreement applies. This hint shall not be removed.
+N* https://www.beckhoff.com/media/downloads/slave-stack-code/ethercat_ssc_license.pdf
+N*/
+N
+N/**
+N * \addtogroup FoE FileTransfer over EtherCAT
+N * @{
+N */
+N
+N/**
+N\file ecatfoe.h
+N\author EthercatSSC@beckhoff.com
+N
+N\version 5.12
+N
+N<br>Changes to version V5.11:<br>
+NV5.12 FOE2: handle 16bit only access<br>
+N<br>Changes to version V5.10:<br>
+NV5.11 FOE1: handle busy on a read request, change OPMode to OPCode (same terms as in the spec)<br>
+N<br>Changes to version V5.01:<br>
+NV5.10 FOE1: Add new FoE error codes (0x800C,0x800D,0x800F)<br>
+NV5.10 FOE2: Update file handling to support File sizes greater than 0x8000 Bytes (change value of "FOE_MAXDATA")<br>
+N<br>Changes to version - :<br>
+NV5.01 : Start file change log
+N */
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Includes
+N------
+N-----------------------------------------------------------------------------------------*/
+N#include "esc.h"
+L 1 "etherCAT\esc.h" 1
+N/*
+N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
+N* The corresponding license agreement applies. This hint shall not be removed.
+N* https://www.beckhoff.com/media/downloads/slave-stack-code/ethercat_ssc_license.pdf
+N*/
+N
+N/**
+N * \addtogroup ESCRegister  ESC Register
+N * @{
+N */
+N
+N/**
+N\file esc.h
+N\author EthercatSSC@beckhoff.com
+N\brief EtherCAT Slave Controller related defines and Types
+N
+N\version 5.10
+N
+N<br>Changes to version V5.01:<br>
+NV5.10 ESC1: Update address register offset for 32Bit ESC access<br>
+NV5.10 ESC2: Check if defined SM settings do not exceed the available DPRAM range (in error case AL Status 0x14 is returned)<br>
+NV5.10 ESC3: Handle DC cControl register values in case of 32Bit ESC access (a Sync activation mask need to defined/used)<br>
+N<br>Changes to version - :<br>
+NV5.01 : Start file change log
+N */
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Includes
+N------
+N-----------------------------------------------------------------------------------------*/
+N#include "ecat_def.h"
+N
+N#ifndef _ESC_H_
+N#define _ESC_H_
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Defines and Types
+N------
+N-----------------------------------------------------------------------------------------*/
+N
+N#define SIZEOF_SM_REGISTER                      8 /**< \brief Each SyncManger has 8Byte Configuration/Status Registers*/
+N#define MAX_NO_OF_SYNC_MAN                      16/**< \brief Maximum Number of SyncManager channels supported by an ESC*/
+N
+N#define    BL_PAGE_SIZE        512
+N
+N/*---------------------------------------------
+N-    ESC Offsets (Detailed Information about the registers are located in the ESC Datasheets e.g. ET1100 Datasheet http://www.beckhoff.com/english.asp?download/ethercat_development_products.htm?id=71003127100387)
+N-----------------------------------------------*/
+N#define ESC_INFO_OFFSET                         0x0000                               /**< \brief ESC information registers startoffset*/
+N
+N#define ESC_COMM_INFO_OFFSET                    0x0004                               /**< \brief Communication information registers startoffset*/
+N
+N/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 54 to 59 deleted*/
+N#define ESC_DPRAM_SIZE_OFFSET                   0x0006                              /**< \brief Register Description: Size of the supported DPRAM in KB*/
+N#define ESC_SM_CHANNELS_MASK                    0xFF00                              /**< \brief Mask based on ESC offset "ESC_COMM_INFO_OFFSET"*/
+N#define ESC_SM_CHANNELS_SHIFT                   8                                   /**< \brief Bit shift based on ESC offset "ESC_COMM_INFO_OFFSET"*/
+N#define ESC_DPRAM_SIZE_MASK                     0x00FF
+N/*ET9300 Project Handler :(#if ESC_16BIT_ACCESS #else) lines 65 to 67 deleted*/
+N
+N#define ESC_FEATURES_OFFSET                     0x0008                              /**< \brief Register indicating ESC features*/
+N#define ESC_DC_32BIT_MASK                       0x00000008                          /**< \brief register 0x0008.3 indicates if the DC Unit supports 32Bit/64Bit DC*/
+N
+N/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 73 to 75 deleted*/
+N
+N#define ESC_SLAVE_ADDRESS_OFFSET                0x0010                              /**< \brief Register Description: Address used for node addressing (FPxx commands)*/
+N
+N
+N
+N#define ESC_AL_CONTROL_OFFSET                   0x0120                              /**< \brief Register Description: Initiate State Transition of the Device State Machine*/
+N#define ESC_AL_STATUS_OFFSET                    0x0130                              /**< \brief Register Description: Actual State of the Device State Machine*/
+N#define ESC_AL_STATUS_CODE_OFFSET               0x0134                              /**< \brief Register Description: AL Status Code*/
+N
+N#define ESC_RUN_LED_OVERRIDE                    0x0138                              /**< \brief Register Description: Set Ecat Run indication via ESC. (not all ESC types support this feature)*/
+N#define ESC_ERROR_LED_OVERRIDE                  0x0139                              /**< \brief Register Description: Set Ecat Error indication via ESC. (not all ESC types support this feature)*/
+N
+N#define ESC_PDI_CONTROL_OFFSET                  0x0140                              /**< \brief Register Description: Specifies the process data interface*/
+N/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 89 to 91 deleted*/
+N#define ESC_DEVICE_EMULATION                    0x0100                              /**< \brief Device emulation bit*/
+N
+N#define ESC_PDI_CONFIGURATION					0x0150								/**< \brief Register Description: PDI configuration register (values defined by the ESC configuration data)*/
+N#define ESC_SYNC0_MAPPED_TO_ALEVENT				0x0800								/**< \brief bit indicating if the Sync0 event is mapped to the AL Event register*/
+N#define ESC_SYNC1_MAPPED_TO_ALEVENT				0x8000								/**< \brief bit indicating if the Sync1 event is mapped to the AL Event register*/
+N/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS || ESC_16BIT_ACCESS #else) lines 99 to 103 deleted*/
+N
+N
+N#define ESC_AL_EVENTMASK_OFFSET                 0x0204                              /**< \brief Register Description: AL Event masking of the AL Event Request register Events for mapping to PDI IRQ signal*/
+N#define ESC_AL_EVENT_OFFSET                     0x0220                              /**< \brief Register Description: "Mirror" register for ESC events*/
+N
+N#define ESC_WD_DIVIDER_OFFSET                   0x0400                              /**< \brief Register Description: Number of 25 MHz tics (minus 2) that represents the basic watchdog increment. (Default value is 100us = 2498)*/
+N
+N#define ESC_PD_WD_TIME                          0x0420                              /**< \brief Register Description: Number of basic watchdog increments (Default value with Watchdog divider 100us means 100ms Watchdog)*/
+N#define ESC_PD_WD_STATE                         0x0440                              /**< \brief Register Description: Watchdog Status of Process Data (triggered by SyncManagers)*/
+N/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 113 to 115 deleted*/
+N#define ESC_PD_WD_TRIGGER_MASK                  0x0001                              /**< \brief Trigger state of the process data watchdog*/
+N
+N#define ESC_EEPROM_CONFIG_OFFSET                0x0500                              /**< \brief Register Description: EEPROM Access Configuration*/
+N/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 120 to 138 deleted*/
+N/*EEPROM config and access state bit mask (based on "ESC_EEPROM_CONFIG_OFFSET") - START*/
+N#define ESC_EEPROM_ASSIGN_TO_PDI_MASK           0x0001                              /**< \brief Description (0x500.0): PDI has EEPROM control*/
+N#define ESC_EEPROM_LOCKED_BY_PDI_MASK           0x0100                              /**< \brief Description (0x500.8): PDI locked EEPROM access*/
+N/*EEPROM config and access state bit mask (based on "ESC_EEPROM_CONFIG_OFFSET") - END*/
+N
+N#define ESC_EEPROM_CONTROL_OFFSET               0x0502
+N/* EEPROM command and status bit masks (based on "ESC_EEPROM_CONTROL_OFFSET") - START*/
+N#define ESC_EEPROM_SUPPORTED_READBYTES_MASK     0x0040                              /**< \brief Description (0x502.6): Supported number of EEPROM read bytes: 0-> 4 Bytes; 1 -> 8 Bytes*/
+N#define ESC_EEPROM_CMD_MASK                     0x0700                              /**< \brief Description (0x502.8:10): Command bit mask*/
+N#define ESC_EEPROM_CMD_READ_MASK                0x0100                              /**< \brief Description (0x502.8): Currently executed read command*/
+N#define ESC_EEPROM_CMD_WRITE_MASK               0x0200                              /**< \brief Description (0x502.9): Initialize Write Command*/
+N#define ESC_EEPROM_CMD_RELOAD_MASK              0x0400                              /**< \brief Description (0x502.10): Trigger EEPROM reload*/
+N#define ESC_EEPROM_ERROR_MASK                   0x7800                              /**< \brief Description : Mask all EEPROM error bits; Checksum error (0x0502.11); EEPROM not loaded (0x0502.12); Missing EEPROM Acknowledge (0x0502.13); Write Error (0x0502.14)*/
+N#define ESC_EEPROM_ERROR_CRC                    0x0800                              /**< \brief Description (0x502.11): EEPROM CRC Error*/
+N#define ESC_EEPROM_ERROR_LOAD                   0x1000                              /**< \brief Description (0x502.11): EEPROM loading status (0 = OK)*/
+N#define ESC_EEPROM_ERROR_CMD_ACK                0x2000                              /**< \brief Description (0x502.13): EEPROM Acknowledge/Command*/
+N#define ESC_EEPROM_BUSY_MASK                    0x8000                              /**< \brief Description (0x502.15): EEPROM Busy*/
+N/* EEPROM command and status bit masks (based on "ESC_EEPROM_CONTROL_OFFSET") - END*/
+N#define ESC_EEPROM_ADDRESS_OFFSET               0x0504
+N#define ESC_EEPROM_DATA_OFFSET                  0x0508
+N
+N#define ESC_SYNCMAN_REG_OFFSET                  0x0800                              /**< \brief Register Description: Start address of the SyncManager Configuration/Staus registers*/
+N#define ESC_SYNCMAN_CONTROL_OFFSET              0x0804                              /**< \brief Register Description: SyncManager Setting Register*/
+N
+N/*ET9300 Project Handler :(#if !ESC_32BIT_ACCESS && !ESC_16BIT_ACCESS) lines 164 to 166 deleted*/
+N
+N#define ESC_SYNCMAN_ACTIVE_OFFSET               0x0806                              /**< \brief Register Description: SyncManager Activation Register*/
+N
+N/*ET9300 Project Handler :(#if !ESC_32BIT_ACCESS && !ESC_16BIT_ACCESS) lines 172 to 174 deleted*/
+N
+N#define    ESC_SYSTEMTIME_OFFSET                0x0910                              /**< \brief Register Description: Local copy of the System Time*/
+N
+N#define    ESC_DC_UNIT_CONTROL_OFFSET           0x0980                              /**< \brief Register Description: Control registers for Cycle and Sync Unit (can be predefined with the "AssignActivate" Element in the device description, for further information see ETG.2000)*/
+N/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 179 to 185 deleted*/
+N#define ESC_DC_SYNC_UNIT_ACTIVE_MASK            0x0100                              /**< \brief Description (0x980.8): Sync Out Unit is activated*/
+N#define ESC_DC_SYNC0_ACTIVE_MASK                0x0200                              /**< \brief Description (0x980.9): Sync0 generation is activated*/
+N#define ESC_DC_SYNC1_ACTIVE_MASK                0x0400                              /**< \brief Description (0x980.10): Sync1 generation is activated*/
+N#define ESC_DC_SYNC_UNIT_AUTO_ACTIVE_MASK       0x0800                              /**< \brief Description (0x980.11): Sync Out Unit is activated automatic when System time was written*/
+N/*ET9300 Project Handler :( #else) lines 190 to 196 deleted*/
+N
+N#define    ESC_DC_SYNC_STATUS		            0x098C                              /**< \brief Register Description: register 0x98E and 0x98F reflecting the status of Sync0 and Sync1*/
+N
+N#define ESC_DC_SYNC0_CYCLETIME_OFFSET           0x09A0                              /**< \brief Register Description: 32Bit Time between two consecutive SYNC0 pulses in ns*/
+N#define ESC_DC_SYNC1_CYCLETIME_OFFSET           0x09A4                              /**< \brief Register Description: 32Bit Time between two consecutive SYNC1 pulses in ns*/
+N
+N
+N/*ET9300 Project Handler :(#if FC1100_HW) lines 205 to 207 deleted*/
+N
+N
+N/*---------------------------------------------
+N-    Sync Manager
+N-----------------------------------------------*/
+N/** \brief SyncManager register structure*/
+Ntypedef struct STRUCT_PACKED_START
+Xtypedef struct 
+N{
+N/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 217 to 259 deleted*/
+N
+N  UINT16                        PhysicalStartAddress; /**< \brief SyncManager address*/
+X  unsigned short                        PhysicalStartAddress;  
+N  UINT16                        Length; /**< \brief SyncManager length*/
+X  unsigned short                        Length;  
+N
+N    UINT16                        Settings[2]; /**< \brief Register values 0x0804 : 0x0807*/
+X    unsigned short                        Settings[2];  
+N
+N/*Defines to access :
+N* - SM Control register 0x0804
+N* - SM Status register 0x0805
+N*
+N* all defines are based on 0x0804
+N*/
+N
+N/*SyncManger control (0x0804) access*/
+N#define SM_SETTING_CONTROL_OFFSET           0 /**< \brief Offset to value of register 0x0804*/
+N#define SM_SETTING_MODE_MASK                0x0002 /**< \brief SyncManager mode mask*/
+N#define SM_SETTING_MODE_THREE_BUFFER_VALUE  0x0000 /**< \brief SyncManager 3Buffer mode value*/
+N#define SM_SETTING_MODE_ONE_BUFFER_VALUE    0x0002 /**< \brief SyncManager 1Buffer mode value*/
+N#define SM_SETTING_DIRECTION_MASK           0x000C /**< \brief SyncManager direction mask*/
+N#define SM_SETTING_DIRECTION_READ_VALUE     0x0000 /**< \brief SyncManager read direction*/
+N#define SM_SETTING_DIRECTION_WRITE_VALUE    0x0004 /**< \brief SyncManager write direction*/
+N#define SM_SETTING_WATCHDOG_VALUE           0x0040 /**< \brief SyncManager watchdog value*/
+N
+N/*SyncManger status (0x0805) access*/
+N#define SM_STATUS_MBX_BUFFER_FULL           0x0800 /**< \brief Indicates in one buffer mode if buffer was completely written*/
+N
+N/*Defines to access :
+N* - SM Active register 0x0806
+N* - SM PDI Control register 0x0807
+N*
+N* all defines are based on 0x0806
+N*/
+N
+N/*SyncManger active (0x0806) access*/
+N#define SM_SETTING_ACTIVATE_OFFSET          1 /**< \brief Offset to value of register 0x0806*/
+N#define SM_SETTING_ENABLE_VALUE             0x0001 /**< \brief SyncManager enable*/
+N#define SM_SETTING_REPAET_REQ_MASK          0x0002 /**< \brief SyncManager Repeat request*/
+N#define SM_SETTING_REPEAT_REQ_SHIFT         0 /**< \brief SyncManager Repeat request shift*/
+N
+N/*SyncManger PDI Control (0x0807) access*/
+N#define SM_SETTING_PDI_DISABLE              0x0100  /**< \brief Bit0 of register 0x0807 (if 1 SM is disabled from PDI)*/
+N#define SM_SETTING_REPEAT_ACK               0x0200 /**< \brief Bit1 of register 0x0807*/
+N/*ET9300 Project Handler :(#if ESC_16BIT_ACCESS #else) lines 303 to 354 deleted*/
+N}STRUCT_PACKED_END
+X}
+NTSYNCMAN;
+N
+N
+N/*ET9300 Project Handler :(#if FC1100_HW) lines 361 to 363 deleted*/
+N
+N#endif //_ESC_H_
+N/** @}*/
+L 35 "etherCAT\ecatfoe.h" 2
+N#include "mailbox.h"
+L 1 "etherCAT\mailbox.h" 1
+N/*
+N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
+N* The corresponding license agreement applies. This hint shall not be removed.
+N* https://www.beckhoff.com/media/downloads/slave-stack-code/ethercat_ssc_license.pdf
+N*/
+N
+N/**
+N * \addtogroup Mailbox Mailbox Functions
+N * @{
+N */
+N
+N/**
+N\file mailbox.h
+N\author EthercatSSC@beckhoff.com
+N
+N\version 5.12
+N
+N<br>Changes to version V5.11:<br>
+NV5.12 ECAT2: big endian changes<br>
+NV5.12 MBX3: handle incomplete mailbox communication<br>
+N<br>Changes to version V5.01:<br>
+NV5.11 ECAT10: change PROTO handling to prevent compiler errors<br>
+NV5.11 MBX1: "return value of ""MBX_StartMailboxHandler()"" changed to UINT16"<br>
+NV5.11 MBX3: set application triggered emergency and EoE data to pending if no mailbox queue is supported and another mailbox request is currently handled, Handle only one mailbox request at a time (in case that MAILBPX_QUEUE is disabled)<br>
+N<br>Changes to version - :<br>
+NV5.01 : Start file change log
+N */
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Includes
+N------
+N-----------------------------------------------------------------------------------------*/
+N#include "ecat_def.h"
+N
+N
+N#ifndef _MAILBOX_H_
+N#define _MAILBOX_H_
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Defines and Types
+N------
+N-----------------------------------------------------------------------------------------*/
+N#define     MBX_TYPE_AOE                        1 /**< \brief Mailbox type AoE*/
+N#define     MBX_TYPE_EOE                        2 /**< \brief Mailbox type EoE*/
+N#define     MBX_TYPE_COE                        3 /**< \brief Mailbox type CoE*/
+N#define     MBX_TYPE_FOE                        4 /**< \brief Mailbox type FoE*/
+N#define     MBX_TYPE_SOE                        5 /**< \brief Mailbox type SoE*/
+N#define     MBX_TYPE_VOE                        15 /**< \brief Mailbox type VoE*/
+N
+N#define     EMCY_SERVICE                        ((UINT8) 0x0001) /**< \brief Emergency service*/
+N#define     COE_SERVICE                         ((UINT8) 0x0002) /**< \brief CoE service*/
+N#define     SOE_SERVICE                         ((UINT8) 0x0004) /**< \brief SoE service*/
+N#define     EOE_SERVICE                         ((UINT8) 0x0008) /**< \brief EoE service*/
+N#define     AOE_SERVICE                         ((UINT8) 0x0010) /**< \brief AoE service*/
+N#define     VOE_SERVICE                         ((UINT8) 0x0020) /**< \brief VoE service*/
+N#define     FOE_SERVICE                         ((UINT8) 0x0040) /**< \brief FoE service*/
+N#define     FRAGMENTS_FOLLOW                    ((UINT8) 0x0080) /**< \brief Fragments follow service*/
+N
+N#ifndef    ENTER_MBX_CRITICAL
+S    #define    ENTER_MBX_CRITICAL /**< \brief Enter mailbox critical section*/
+N#endif
+N
+N#ifndef    LEAVE_MBX_CRITICAL
+S    #define    LEAVE_MBX_CRITICAL /**< \brief Leave mailbox critical section*/
+N#endif
+N
+N#ifndef    MAX_MBX_QUEUE_SIZE
+N    #define    MAX_MBX_QUEUE_SIZE    10 /**< \brief Mailbox queue size*/
+N#endif
+N
+N
+N/*---------------------------------------------
+N-    Command Codes for the mailbox type 0
+N-----------------------------------------------*/
+N#define    MBXSERVICE_MBXERRORCMD          0x01 /**< \brief Mailbox error command*/
+N
+N
+N/*---------------------------------------------
+N-    Error Codes for a mailbox error response
+N-----------------------------------------------*/
+N#define    MBXERR_SYNTAX                   0x01 /**< \brief Mailbox error "syntax"*/
+N#define    MBXERR_UNSUPPORTEDPROTOCOL      0x02 /**< \brief Mailbox error "unsupported protocol"*/
+N#define    MBXERR_INVALIDCHANNEL           0x03 /**< \brief Mailbox error "invalid channel"*/
+N#define    MBXERR_SERVICENOTSUPPORTED      0x04 /**< \brief Mailbox error "service not supported"*/
+N#define    MBXERR_INVALIDHEADER            0x05 /**< \brief Mailbox error "invalid header"*/
+N#define    MBXERR_SIZETOOSHORT             0x06 /**< \brief Mailbox error "Size too short"*/
+N#define    MBXERR_NOMOREMEMORY             0x07 /**< \brief Mailbox error "No memory"*/
+N#define    MBXERR_INVALIDSIZE              0x08 /**< \brief Mailbox error "Invalid size"*/
+N#define    MBXERR_SERVICEINWORK            0x09 /**< \brief Mailbox error "Service in work"*/
+N
+N
+N/**
+N * \brief Mailbox header
+N */
+Ntypedef struct MBX_STRUCT_PACKED_START
+Xtypedef struct 
+N{
+N    UINT16                          Length; /**< \brief Length*/
+X    unsigned short                          Length;  
+N    UINT16                          Address; /**< \brief Address*/
+X    unsigned short                          Address;  
+N
+N    UINT16                          Flags[1]; /**< \brief Flags*/
+X    unsigned short                          Flags[1];  
+N/*ET9300 Project Handler :(#if BIG_ENDIAN_FORMAT) lines 105 to 112 deleted*/
+N    #define    MBX_OFFS_TYPE        0 /**< \brief Protocol type offset*/
+N    #define    MBX_MASK_TYPE        0x0F00 /**< \brief Protocol type mask*/
+N    #define    MBX_SHIFT_TYPE       8 /**< \brief Protocol type shift*/
+N    #define    MBX_OFFS_COUNTER     0 /**< \brief Protocol counter offset*/
+N    #define    MBX_MASK_COUNTER     0xF000 /**< \brief Protocol counter mask*/
+N    #define    MBX_SHIFT_COUNTER    12 /**< \brief Protocol counter shift*/
+N/*ET9300 Project Handler :(#if MBX_16BIT_ACCESS #else) lines 120 to 133 deleted*/
+N}MBX_STRUCT_PACKED_END
+X}
+NTMBXHEADER;
+N
+N
+N#define     MBX_HEADER_SIZE         6 /**< \brief Mailbox header size*/
+N
+N
+N#define     MAX_MBX_DATA_SIZE       (MAX_MBX_SIZE - MBX_HEADER_SIZE) /**< \brief Mailbox data size*/
+N
+N/**
+N * \brief Mailbox datagram
+N */
+Ntypedef struct MBX_STRUCT_PACKED_START
+Xtypedef struct 
+N{
+N    TMBXHEADER                      MbxHeader; /**< \brief Mailbox header*/
+N    UINT16                          Data[(MAX_MBX_DATA_SIZE >> 1)]; /**< \brief Mailbox data*/
+X    unsigned short                          Data[((0x0100 - 6) >> 1)];  
+N}MBX_STRUCT_PACKED_END
+X}
+NTMBX;
+N
+N
+N/**
+N * \brief Mailbox queue
+N */
+Ntypedef struct
+N{
+N    UINT16    firstInQueue; /**< \brief First in Queue*/
+X    unsigned short    firstInQueue;  
+N    UINT16    lastInQueue; /**< \brief Last in Queue*/
+X    unsigned short    lastInQueue;  
+N    UINT16    maxQueueSize; /**< \brief Max queue size*/
+X    unsigned short    maxQueueSize;  
+N    TMBX MBXMEM * queue[(MAX_MBX_QUEUE_SIZE)+1]; /**< \brief Queue buffer*/
+X    TMBX  * queue[(10)+1];  
+N} TMBXQUEUE;
+N
+N
+N
+N#endif //_MAILBOX_H_
+N
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Global Variables
+N------
+N-----------------------------------------------------------------------------------------*/
+N#if defined(_MAILBOX_) && (_MAILBOX_ == 1)
+X#if 0L && (_MAILBOX_ == 1)
+S    #define PROTO
+N#else
+N    #define PROTO extern
+N#endif
+N
+NPROTO BOOL                    bReceiveMbxIsLocked; /**< \brief Receive mailbox is locked (MBoxOut, default SM0)*/
+Xextern unsigned char                    bReceiveMbxIsLocked;  
+NPROTO BOOL                    bSendMbxIsFull; /**< \brief Send mailbox is full (MBoxIn, default SM1)*/
+Xextern unsigned char                    bSendMbxIsFull;  
+NPROTO BOOL                    bMbxRunning; /**< \brief Mailbox running (At least PreOP state)*/
+Xextern unsigned char                    bMbxRunning;  
+NPROTO BOOL                    bMbxRepeatToggle; /**< \brief Mailbox repeat toggle*/
+Xextern unsigned char                    bMbxRepeatToggle;  
+NPROTO UINT16                  u16SendMbxSize; /**< \brief Send mailbox size (default SM1)*/
+Xextern unsigned short                  u16SendMbxSize;  
+NPROTO UINT16                  u16ReceiveMbxSize; /**< \brief Receive mailbox size (default SM0)*/
+Xextern unsigned short                  u16ReceiveMbxSize;  
+NPROTO UINT16                  u16EscAddrReceiveMbx; /**< \brief Receive mailbox address (default SM0)*/
+Xextern unsigned short                  u16EscAddrReceiveMbx;  
+NPROTO UINT16                  u16EscAddrSendMbx; /**< \brief Send mailbox address (default SM1)*/
+Xextern unsigned short                  u16EscAddrSendMbx;  
+NPROTO UINT8                   u8MbxWriteCounter; /**< \brief Write mailbox counter*/
+Xextern unsigned char                   u8MbxWriteCounter;  
+NPROTO UINT8                   u8MbxReadCounter; /**< \brief Read mailbox counter*/
+Xextern unsigned char                   u8MbxReadCounter;  
+N/*ET9300 Project Handler :(#if !MAILBOX_QUEUE) lines 193 to 195 deleted*/
+NPROTO UINT8                   u8MailboxSendReqStored; /**< \brief Mailbox send request stored*/
+Xextern unsigned char                   u8MailboxSendReqStored;  
+NPROTO TMBX MBXMEM *           psWriteMbx; /**< \brief Pointer to write mailbox buffer*/
+Xextern TMBX  *           psWriteMbx;  
+NPROTO TMBX MBXMEM *           psReadMbx; /**< \brief Pointer to read mailbox buffer*/
+Xextern TMBX  *           psReadMbx;  
+NPROTO TMBX MBXMEM *           psRepeatMbx; /**< \brief Pointer to repeat mailbox buffer*/
+Xextern TMBX  *           psRepeatMbx;  
+NPROTO TMBX MBXMEM *           psStoreMbx; /**< \brief Pointer to store mailbox buffer*/
+Xextern TMBX  *           psStoreMbx;  
+N/*ET9300 Project Handler :(#if !MAILBOX_QUEUE) lines 201 to 203 deleted*/
+NPROTO TMBXQUEUE MBXMEM        sMbxSendQueue; /**< \brief Send mailbox queue*/
+Xextern TMBXQUEUE         sMbxSendQueue;  
+NPROTO TMBXQUEUE MBXMEM        sMbxReceiveQueue; /**< \brief Receive mailbox queue*/
+Xextern TMBXQUEUE         sMbxReceiveQueue;  
+N
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Global Functions
+N------
+N-----------------------------------------------------------------------------------------*/
+N
+NPROTO   void     MBX_Init(void);
+Xextern   void     MBX_Init(void);
+NPROTO   UINT16    MBX_StartMailboxHandler(void);
+Xextern   unsigned short    MBX_StartMailboxHandler(void);
+NPROTO   void     MBX_StopMailboxHandler(void);
+Xextern   void     MBX_StopMailboxHandler(void);
+NPROTO   void     MBX_MailboxWriteInd(TMBX MBXMEM *pMbx);
+Xextern   void     MBX_MailboxWriteInd(TMBX  *pMbx);
+NPROTO   void     MBX_MailboxReadInd(void);
+Xextern   void     MBX_MailboxReadInd(void);
+NPROTO   void     MBX_MailboxRepeatReq(void);
+Xextern   void     MBX_MailboxRepeatReq(void);
+NPROTO   UINT8    MBX_MailboxSendReq(TMBX MBXMEM * pMbx, UINT8 flags);
+Xextern   unsigned char    MBX_MailboxSendReq(TMBX  * pMbx, unsigned char flags);
+NPROTO   void     MBX_CheckAndCopyMailbox(void);
+Xextern   void     MBX_CheckAndCopyMailbox(void);
+NPROTO   UINT8    MBX_CopyToSendMailbox(TMBX MBXMEM *pMbx);
+Xextern   unsigned char    MBX_CopyToSendMailbox(TMBX  *pMbx);
+NPROTO   void     MBX_Main(void);
+Xextern   void     MBX_Main(void);
+N
+N#undef PROTO
+N/** @}*/
+L 36 "etherCAT\ecatfoe.h" 2
+N
+N#ifndef _ECATFOE_H_
+N#define _ECATFOE_H_
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Defines and Types
+N------
+N-----------------------------------------------------------------------------------------*/
+N
+N
+N
+N/*---------------------------------------------
+N-    Services
+N-----------------------------------------------*/
+N#define    ECAT_FOE_OPCODE_RRQ                  1 /**< \brief Read request*/
+N#define    ECAT_FOE_OPCODE_WRQ                  2 /**< \brief Write request*/
+N#define    ECAT_FOE_OPCODE_DATA                 3 /**< \brief Data datagram*/
+N#define    ECAT_FOE_OPCODE_ACK                  4 /**< \brief Acknowledge datagram*/
+N#define    ECAT_FOE_OPCODE_ERR                  5 /**< \brief Error datagram*/
+N#define    ECAT_FOE_OPCODE_BUSY                 6 /**< \brief Busy datagram*/
+N
+N
+N/*---------------------------------------------
+N-    States
+N-----------------------------------------------*/
+N#define    FOE_READY                            0 /**< \brief Ready state*/
+N#define    FOE_WAIT_FOR_ACK                     1 /**< \brief Wait for acknowledgement state*/
+N#define    FOE_WAIT_FOR_DATA                    2 /**< \brief Wait for data state*/
+N#define    FOE_WAIT_FOR_RESET                   3 /**< \brief Wait for reset state*/
+N#define    FOE_WAIT_FOR_LAST_ACK                4 /**< \brief Wait for last acknowledgement state*/
+N#define    FOE_PROGRAMMING                      5 /**< \brief Programming state*/
+N#define    FOE_WAIT_FOR_LAST_DATA               6 /**< \brief Wait for last data state*/
+N
+N
+N/*ET9300 Project Handler :(#if FC1100_HW) lines 71 to 73 deleted*/
+N
+N
+N
+N/** \brief FoE header*/
+Ntypedef struct  MBX_STRUCT_PACKED_START
+Xtypedef struct  
+N{
+N    UINT16        OpCode; /**< \brief OpCode
+X    unsigned short        OpCode; 
+N                             *
+N                             * 1 : RRQ<br>
+N                             * 2 : WRQ<br>
+N                             * 3 : DATA<br>
+N                             * 4 : ACK<br>
+N                             * 5 : ERR<br>
+N                             * 6 : BUSY*/
+N    union MBX_STRUCT_PACKED_START
+X    union 
+N    {
+N        UINT16        Password[2]; /**< \brief Password (used in Read request and Write request). 0 if unknown*/
+X        unsigned short        Password[2];  
+N        UINT16        PacketNo[2]; /**< \brief Packet number (used in DATA and ACK datagram)*/
+X        unsigned short        PacketNo[2];  
+N        UINT16        ErrorCode[2]; /**< \brief Error code (used in ERR datagram)*/
+X        unsigned short        ErrorCode[2];  
+N/*ET9300 Project Handler :(#if BIG_ENDIAN_16BIT) lines 94 to 97 deleted*/
+N        #define FOE_COMMAND_LOWWORD		0
+N        #define FOE_COMMAND_HIGHWORD	1
+N        struct MBX_STRUCT_PACKED_START
+X        struct 
+N        {
+N            UINT16    Done; /**< \brief Done indication (used in BUSY datagram)*/
+X            unsigned short    Done;  
+N            UINT16    Entire;  /**< \brief Entire indication (used in BUSY datagram)*/
+X            unsigned short    Entire;   
+N        }MBX_STRUCT_PACKED_END
+X        }
+N        Busy; /**< \brief Busy variable*/
+N    }MBX_STRUCT_PACKED_END
+X    }
+N    Cmd; /**< \brief Command field*/
+N
+N
+N}MBX_STRUCT_PACKED_END
+X}
+NTFOEHEADER;
+N
+N
+N#define     FOE_HEADER_SIZE     SIZEOF(TFOEHEADER) /**< \brief FoE header size*/
+N
+N /** \brief Complete FoE datagram*/
+Ntypedef struct MBX_STRUCT_PACKED_START
+Xtypedef struct 
+N{
+N      TMBXHEADER        MbxHeader; /**< \brief Mailbox header*/
+N      TFOEHEADER        FoeHeader; /**< \brief FoE header*/
+N    UINT16              Data[((MAX_MBX_DATA_SIZE)-(FOE_HEADER_SIZE)) >> 1]; /**< \brief FoE Data buffer*/
+X    unsigned short              Data[(((0x0100 - 6))-(sizeof(TFOEHEADER))) >> 1];  
+N}MBX_STRUCT_PACKED_END
+X}
+NTFOEMBX;
+N
+N
+N/*ET9300 Project Handler :(#if FC1100_HW) lines 128 to 130 deleted*/
+N
+N
+N/*---------------------------------------------
+N-    Results
+N-----------------------------------------------*/
+N#define    FOE_ERROR                            0x8000 /**< \brief Error result*/
+N#define    FOE_FINISHED                         ((FOE_ERROR)-1) /**< \brief Datagram finished*/
+N#define    FOE_FINISHED_NOACK                   ((FOE_FINISHED)-1) /**< \brief Datagram finished no acknowledgement*/
+N#define    FOE_ACK                              ((FOE_FINISHED_NOACK)-1) /**< \brief Acknowledgement*/
+N#define    FOE_ACKFINISHED                      ((FOE_ACK)-1) /**< \brief Acknowledgement finished*/
+N#define    FOE_WAIT                             ((FOE_ACKFINISHED)-1) /**< \brief Wait */
+N#define    FOE_MAXBUSY                          ((FOE_WAIT)-1) /**< \brief Max busy indication*/
+N#define    FOE_MAXBUSY_ZERO                     ((FOE_MAXBUSY)-100) /**< \brief Min busy indication*/
+N#define    FOE_MAXDATA                          ((FOE_MAXBUSY_ZERO)-1) /**< \brief Maximum data within one FoE Datagram*/
+N
+N#endif //_ECATFOE_H_
+N
+N#if _ECATFOE_
+S    #define PROTO
+N#else
+N    #define PROTO extern
+N#endif
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Global Variables
+N------
+N-----------------------------------------------------------------------------------------*/
+NPROTO    UINT32                                 u32PacketNo; /**< \brief Stores the actual packet number to be expected*/
+Xextern    unsigned int                                 u32PacketNo;  
+NPROTO    UINT32                                 u32FileOffset;  /**< \brief Stores the next file offset to be sent */
+Xextern    unsigned int                                 u32FileOffset;   
+NPROTO    UINT32                                 u32LastFileOffset; /**< \brief Stores the actual sent file offset */
+Xextern    unsigned int                                 u32LastFileOffset;  
+NPROTO    UINT16                                 u16FileAccessState; /**< \brief Stores the actual state of the file transmission sequence */
+Xextern    unsigned short                                 u16FileAccessState;  
+NPROTO    TMBX MBXMEM *                          pFoeSendStored; /**<If the mailbox service could not be sent (or stored),
+Xextern    TMBX  *                          pFoeSendStored; 
+N                                                                                the FoE service will be stored in this variable
+N                                                                                and will be sent automatically from the mailbox handler
+N                                                                                (FOE_ContinueInd) when the send mailbox will be read
+N                                                                                the next time from the master */
+N
+NPROTO   UINT16                                  u16FoeMaxSendBlockSize;  /**< \brief indicates the maximum size of an FoE fragment (from the slave to the master)*/
+Xextern   unsigned short                                  u16FoeMaxSendBlockSize;   
+N/*-----------------------------------------------------------------------------------------
+N------
+N------   Global Functions
+N------
+N-----------------------------------------------------------------------------------------*/
+N
+NPROTO    void     FOE_Init(void);
+Xextern    void     FOE_Init(void);
+NPROTO    UINT8 FOE_ServiceInd(TFOEMBX MBXMEM * pFoeInd);
+Xextern    unsigned char FOE_ServiceInd(TFOEMBX  * pFoeInd);
+NPROTO    void     FOE_ContinueInd(TMBX MBXMEM * pMbx);
+Xextern    void     FOE_ContinueInd(TMBX  * pMbx);
+N
+N#undef PROTO
+N/** @}*/
+L 38 "etherCAT\bootmode.c" 2
+N
+N/////////////////////////////////////////////////////////////////////////////////////////
+N/**
+N \param    State        Current state
+N
+N \brief Called from INIT to BOOT
+N*////////////////////////////////////////////////////////////////////////////////////////
+Nvoid BL_Start( UINT8 State)
+Xvoid BL_Start( unsigned char State)
+N{
+N}
+N
+N/////////////////////////////////////////////////////////////////////////////////////////
+N/**
+N
+N\brief Called in the state transition from BOOT to Init
+N*////////////////////////////////////////////////////////////////////////////////////////
+Nvoid BL_Stop(void)
+N{
+N}
+N
+N/////////////////////////////////////////////////////////////////////////////////////////
+N/**
+N \param    password    download password
+N
+N \brief Dummy BL_StartDownload function
+N*////////////////////////////////////////////////////////////////////////////////////////
+Nvoid BL_StartDownload(UINT32 password)
+Xvoid BL_StartDownload(unsigned int password)
+N{
+N}
+N/////////////////////////////////////////////////////////////////////////////////////////
+N/**
+N \param    pData    Data pointer
+N \param    Size    Data Length
+N
+N
+N \return    FoE error code
+N
+N \brief Dummy BL_Data function
+N*////////////////////////////////////////////////////////////////////////////////////////
+NUINT16 BL_Data(UINT16 *pData,UINT16 Size)
+Xunsigned short BL_Data(unsigned short *pData,unsigned short Size)
+N{
+N    return 0;
+N}
+N/** @} */
