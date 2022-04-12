@@ -17076,11 +17076,52 @@ typedef struct __UART_HandleTypeDef
 
   volatile uint32_t                 ErrorCode;         
 
-#line 200 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+  void (* TxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);         
+  void (* TxCpltCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* RxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);         
+  void (* RxCpltCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* ErrorCallback)(struct __UART_HandleTypeDef *huart);              
+  void (* AbortCpltCallback)(struct __UART_HandleTypeDef *huart);          
+  void (* AbortTransmitCpltCallback)(struct __UART_HandleTypeDef *huart);  
+  void (* AbortReceiveCpltCallback)(struct __UART_HandleTypeDef *huart);   
+  void (* WakeupCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* RxEventCallback)(struct __UART_HandleTypeDef *huart, uint16_t Pos);  
+
+  void (* MspInitCallback)(struct __UART_HandleTypeDef *huart);            
+  void (* MspDeInitCallback)(struct __UART_HandleTypeDef *huart);          
+
 
 } UART_HandleTypeDef;
 
-#line 231 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+
+
+ 
+typedef enum
+{
+  HAL_UART_TX_HALFCOMPLETE_CB_ID         = 0x00U,     
+  HAL_UART_TX_COMPLETE_CB_ID             = 0x01U,     
+  HAL_UART_RX_HALFCOMPLETE_CB_ID         = 0x02U,     
+  HAL_UART_RX_COMPLETE_CB_ID             = 0x03U,     
+  HAL_UART_ERROR_CB_ID                   = 0x04U,     
+  HAL_UART_ABORT_COMPLETE_CB_ID          = 0x05U,     
+  HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID = 0x06U,     
+  HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID  = 0x07U,     
+  HAL_UART_WAKEUP_CB_ID                  = 0x08U,     
+
+  HAL_UART_MSPINIT_CB_ID                 = 0x0BU,     
+  HAL_UART_MSPDEINIT_CB_ID               = 0x0CU      
+
+} HAL_UART_CallbackIDTypeDef;
+
+
+
+ 
+typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);   
+typedef  void (*pUART_RxEventCallbackTypeDef)(struct __UART_HandleTypeDef *huart, uint16_t Pos);    
+
+
 
 
 
@@ -17520,7 +17561,14 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart);
 void HAL_UART_MspDeInit(UART_HandleTypeDef *huart);
 
  
-#line 713 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+HAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
+                                            pUART_CallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID);
+
+HAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart);
+
 
 
 
@@ -17955,7 +18003,7 @@ uint32_t HAL_GetUIDw2(void);
  
 
 
-
+void UART_InitCallbacksToDefault(UART_HandleTypeDef *huart);
 
 static void UART_EndTxTransfer(UART_HandleTypeDef *huart);
 static void UART_EndRxTransfer(UART_HandleTypeDef *huart);
@@ -18055,9 +18103,19 @@ HAL_StatusTypeDef HAL_UART_Init(UART_HandleTypeDef *huart)
      
     huart->Lock = HAL_UNLOCKED;
 
-#line 396 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Src\\stm32f4xx_hal_uart.c"
+
+    UART_InitCallbacksToDefault(huart);
+
+    if (huart->MspInitCallback == 0)
+    {
+      huart->MspInitCallback = HAL_UART_MspInit;
+    }
+
      
-    HAL_UART_MspInit(huart);
+    huart->MspInitCallback(huart);
+
+
+
 
   }
 
@@ -18111,9 +18169,19 @@ HAL_StatusTypeDef HAL_HalfDuplex_Init(UART_HandleTypeDef *huart)
      
     huart->Lock = HAL_UNLOCKED;
 
-#line 462 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Src\\stm32f4xx_hal_uart.c"
+
+    UART_InitCallbacksToDefault(huart);
+
+    if (huart->MspInitCallback == 0)
+    {
+      huart->MspInitCallback = HAL_UART_MspInit;
+    }
+
      
-    HAL_UART_MspInit(huart);
+    huart->MspInitCallback(huart);
+
+
+
 
   }
 
@@ -18177,9 +18245,19 @@ HAL_StatusTypeDef HAL_LIN_Init(UART_HandleTypeDef *huart, uint32_t BreakDetectLe
      
     huart->Lock = HAL_UNLOCKED;
 
-#line 538 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Src\\stm32f4xx_hal_uart.c"
+
+    UART_InitCallbacksToDefault(huart);
+
+    if (huart->MspInitCallback == 0)
+    {
+      huart->MspInitCallback = HAL_UART_MspInit;
+    }
+
      
-    HAL_UART_MspInit(huart);
+    huart->MspInitCallback(huart);
+
+
+
 
   }
 
@@ -18249,9 +18327,19 @@ HAL_StatusTypeDef HAL_MultiProcessor_Init(UART_HandleTypeDef *huart, uint8_t Add
      
     huart->Lock = HAL_UNLOCKED;
 
-#line 620 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Src\\stm32f4xx_hal_uart.c"
+
+    UART_InitCallbacksToDefault(huart);
+
+    if (huart->MspInitCallback == 0)
+    {
+      huart->MspInitCallback = HAL_UART_MspInit;
+    }
+
      
-    HAL_UART_MspInit(huart);
+    huart->MspInitCallback(huart);
+
+
+
 
   }
 
@@ -18310,9 +18398,16 @@ HAL_StatusTypeDef HAL_UART_DeInit(UART_HandleTypeDef *huart)
    
   ((huart)->Instance ->CR1 &= ~(0x1UL << (13U)));
 
-#line 688 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Src\\stm32f4xx_hal_uart.c"
+
+  if (huart->MspDeInitCallback == 0)
+  {
+    huart->MspDeInitCallback = HAL_UART_MspDeInit;
+  }
    
-  HAL_UART_MspDeInit(huart);
+  huart->MspDeInitCallback(huart);
+
+
+
 
 
   huart->ErrorCode = 0x00000000U;
@@ -18356,7 +18451,311 @@ __weak void HAL_UART_MspDeInit(UART_HandleTypeDef *huart)
  
 }
 
-#line 1038 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Src\\stm32f4xx_hal_uart.c"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+HAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
+                                            pUART_CallbackTypeDef pCallback)
+{
+  HAL_StatusTypeDef status = HAL_OK;
+
+  if (pCallback == 0)
+  {
+     
+    huart->ErrorCode |= 0x00000020U;
+
+    return HAL_ERROR;
+  }
+   
+  do{ if((huart)->Lock == HAL_LOCKED) { return HAL_BUSY; } else { (huart)->Lock = HAL_LOCKED; } }while (0U);
+
+  if (huart->gState == HAL_UART_STATE_READY)
+  {
+    switch (CallbackID)
+    {
+      case HAL_UART_TX_HALFCOMPLETE_CB_ID :
+        huart->TxHalfCpltCallback = pCallback;
+        break;
+
+      case HAL_UART_TX_COMPLETE_CB_ID :
+        huart->TxCpltCallback = pCallback;
+        break;
+
+      case HAL_UART_RX_HALFCOMPLETE_CB_ID :
+        huart->RxHalfCpltCallback = pCallback;
+        break;
+
+      case HAL_UART_RX_COMPLETE_CB_ID :
+        huart->RxCpltCallback = pCallback;
+        break;
+
+      case HAL_UART_ERROR_CB_ID :
+        huart->ErrorCallback = pCallback;
+        break;
+
+      case HAL_UART_ABORT_COMPLETE_CB_ID :
+        huart->AbortCpltCallback = pCallback;
+        break;
+
+      case HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID :
+        huart->AbortTransmitCpltCallback = pCallback;
+        break;
+
+      case HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID :
+        huart->AbortReceiveCpltCallback = pCallback;
+        break;
+
+      case HAL_UART_MSPINIT_CB_ID :
+        huart->MspInitCallback = pCallback;
+        break;
+
+      case HAL_UART_MSPDEINIT_CB_ID :
+        huart->MspDeInitCallback = pCallback;
+        break;
+
+      default :
+         
+        huart->ErrorCode |= 0x00000020U;
+
+         
+        status =  HAL_ERROR;
+        break;
+    }
+  }
+  else if (huart->gState == HAL_UART_STATE_RESET)
+  {
+    switch (CallbackID)
+    {
+      case HAL_UART_MSPINIT_CB_ID :
+        huart->MspInitCallback = pCallback;
+        break;
+
+      case HAL_UART_MSPDEINIT_CB_ID :
+        huart->MspDeInitCallback = pCallback;
+        break;
+
+      default :
+         
+        huart->ErrorCode |= 0x00000020U;
+
+         
+        status =  HAL_ERROR;
+        break;
+    }
+  }
+  else
+  {
+     
+    huart->ErrorCode |= 0x00000020U;
+
+     
+    status =  HAL_ERROR;
+  }
+
+   
+  do{ (huart)->Lock = HAL_UNLOCKED; }while (0U);
+
+  return status;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+HAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID)
+{
+  HAL_StatusTypeDef status = HAL_OK;
+
+   
+  do{ if((huart)->Lock == HAL_LOCKED) { return HAL_BUSY; } else { (huart)->Lock = HAL_LOCKED; } }while (0U);
+
+  if (HAL_UART_STATE_READY == huart->gState)
+  {
+    switch (CallbackID)
+    {
+      case HAL_UART_TX_HALFCOMPLETE_CB_ID :
+        huart->TxHalfCpltCallback = HAL_UART_TxHalfCpltCallback;                
+        break;
+
+      case HAL_UART_TX_COMPLETE_CB_ID :
+        huart->TxCpltCallback = HAL_UART_TxCpltCallback;                        
+        break;
+
+      case HAL_UART_RX_HALFCOMPLETE_CB_ID :
+        huart->RxHalfCpltCallback = HAL_UART_RxHalfCpltCallback;                
+        break;
+
+      case HAL_UART_RX_COMPLETE_CB_ID :
+        huart->RxCpltCallback = HAL_UART_RxCpltCallback;                        
+        break;
+
+      case HAL_UART_ERROR_CB_ID :
+        huart->ErrorCallback = HAL_UART_ErrorCallback;                          
+        break;
+
+      case HAL_UART_ABORT_COMPLETE_CB_ID :
+        huart->AbortCpltCallback = HAL_UART_AbortCpltCallback;                  
+        break;
+
+      case HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID :
+        huart->AbortTransmitCpltCallback = HAL_UART_AbortTransmitCpltCallback;  
+        break;
+
+      case HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID :
+        huart->AbortReceiveCpltCallback = HAL_UART_AbortReceiveCpltCallback;    
+        break;
+
+      case HAL_UART_MSPINIT_CB_ID :
+        huart->MspInitCallback = HAL_UART_MspInit;                              
+        break;
+
+      case HAL_UART_MSPDEINIT_CB_ID :
+        huart->MspDeInitCallback = HAL_UART_MspDeInit;                          
+        break;
+
+      default :
+         
+        huart->ErrorCode |= 0x00000020U;
+
+         
+        status =  HAL_ERROR;
+        break;
+    }
+  }
+  else if (HAL_UART_STATE_RESET == huart->gState)
+  {
+    switch (CallbackID)
+    {
+      case HAL_UART_MSPINIT_CB_ID :
+        huart->MspInitCallback = HAL_UART_MspInit;
+        break;
+
+      case HAL_UART_MSPDEINIT_CB_ID :
+        huart->MspDeInitCallback = HAL_UART_MspDeInit;
+        break;
+
+      default :
+         
+        huart->ErrorCode |= 0x00000020U;
+
+         
+        status =  HAL_ERROR;
+        break;
+    }
+  }
+  else
+  {
+     
+    huart->ErrorCode |= 0x00000020U;
+
+     
+    status =  HAL_ERROR;
+  }
+
+   
+  do{ (huart)->Lock = HAL_UNLOCKED; }while (0U);
+
+  return status;
+}
+
+
+
+
+
+
+
+ 
+HAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback)
+{
+  HAL_StatusTypeDef status = HAL_OK;
+
+  if (pCallback == 0)
+  {
+    huart->ErrorCode |= 0x00000020U;
+
+    return HAL_ERROR;
+  }
+
+   
+  do{ if((huart)->Lock == HAL_LOCKED) { return HAL_BUSY; } else { (huart)->Lock = HAL_LOCKED; } }while (0U);
+
+  if (huart->gState == HAL_UART_STATE_READY)
+  {
+    huart->RxEventCallback = pCallback;
+  }
+  else
+  {
+    huart->ErrorCode |= 0x00000020U;
+
+    status =  HAL_ERROR;
+  }
+
+   
+  do{ (huart)->Lock = HAL_UNLOCKED; }while (0U);
+
+  return status;
+}
+
+
+
+
+
+
+ 
+HAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart)
+{
+  HAL_StatusTypeDef status = HAL_OK;
+
+   
+  do{ if((huart)->Lock == HAL_LOCKED) { return HAL_BUSY; } else { (huart)->Lock = HAL_LOCKED; } }while (0U);
+
+  if (huart->gState == HAL_UART_STATE_READY)
+  {
+    huart->RxEventCallback = HAL_UARTEx_RxEventCallback;  
+  }
+  else
+  {
+    huart->ErrorCode |= 0x00000020U;
+
+    status =  HAL_ERROR;
+  }
+
+   
+  do{ (huart)->Lock = HAL_UNLOCKED; }while (0U);
+  return status;
+}
+
 
 
 
@@ -19495,11 +19894,11 @@ HAL_StatusTypeDef HAL_UART_Abort_IT(UART_HandleTypeDef *huart)
 
      
 
-
-
-
      
-    HAL_UART_AbortCpltCallback(huart);
+    huart->AbortCpltCallback(huart);
+
+
+
 
   }
 
@@ -19554,11 +19953,11 @@ HAL_StatusTypeDef HAL_UART_AbortTransmit_IT(UART_HandleTypeDef *huart)
 
        
 
-
-
-
        
-      HAL_UART_AbortTransmitCpltCallback(huart);
+      huart->AbortTransmitCpltCallback(huart);
+
+
+
 
     }
   }
@@ -19572,11 +19971,11 @@ HAL_StatusTypeDef HAL_UART_AbortTransmit_IT(UART_HandleTypeDef *huart)
 
      
 
-
-
-
      
-    HAL_UART_AbortTransmitCpltCallback(huart);
+    huart->AbortTransmitCpltCallback(huart);
+
+
+
 
   }
 
@@ -19639,11 +20038,11 @@ HAL_StatusTypeDef HAL_UART_AbortReceive_IT(UART_HandleTypeDef *huart)
 
        
 
-
-
-
        
-      HAL_UART_AbortReceiveCpltCallback(huart);
+      huart->AbortReceiveCpltCallback(huart);
+
+
+
 
     }
   }
@@ -19658,11 +20057,11 @@ HAL_StatusTypeDef HAL_UART_AbortReceive_IT(UART_HandleTypeDef *huart)
 
      
 
-
-
-
      
-    HAL_UART_AbortReceiveCpltCallback(huart);
+    huart->AbortReceiveCpltCallback(huart);
+
+
+
 
   }
 
@@ -19764,11 +20163,11 @@ void HAL_UART_IRQHandler(UART_HandleTypeDef *huart)
           {
              
 
-
-
-
              
-            HAL_UART_ErrorCallback(huart);
+            huart->ErrorCallback(huart);
+
+
+
 
           }
         }
@@ -19776,11 +20175,11 @@ void HAL_UART_IRQHandler(UART_HandleTypeDef *huart)
         {
            
 
-
-
-
            
-          HAL_UART_ErrorCallback(huart);
+          huart->ErrorCallback(huart);
+
+
+
 
         }
       }
@@ -19789,11 +20188,11 @@ void HAL_UART_IRQHandler(UART_HandleTypeDef *huart)
         
  
 
-
-
-
          
-        HAL_UART_ErrorCallback(huart);
+        huart->ErrorCallback(huart);
+
+
+
 
 
         huart->ErrorCode = 0x00000000U;
@@ -19845,11 +20244,11 @@ void HAL_UART_IRQHandler(UART_HandleTypeDef *huart)
           (void)HAL_DMA_Abort(huart->hdmarx);
         }
 
-
-
-
          
-        HAL_UARTEx_RxEventCallback(huart, (huart->RxXferSize - huart->RxXferCount));
+        huart->RxEventCallback(huart, (huart->RxXferSize - huart->RxXferCount));
+
+
+
 
       }
       return;
@@ -19875,11 +20274,11 @@ void HAL_UART_IRQHandler(UART_HandleTypeDef *huart)
 
         do { uint32_t val; do { val = _Pragma("push") _Pragma("diag_suppress 3731") ((uint32_t ) __ldrex((volatile uint32_t *)&(huart->Instance ->CR1))) _Pragma("pop") & ~((0x1UL << (4U))); } while ((_Pragma("push") _Pragma("diag_suppress 3731") __strex(val, (volatile uint32_t *)&(huart->Instance ->CR1)) _Pragma("pop")) != 0U); } while(0);
 
-
-
-
          
-        HAL_UARTEx_RxEventCallback(huart, nb_rx_data);
+        huart->RxEventCallback(huart, nb_rx_data);
+
+
+
 
       }
       return;
@@ -20278,7 +20677,22 @@ uint32_t HAL_UART_GetError(UART_HandleTypeDef *huart)
 
 
  
-#line 2975 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Src\\stm32f4xx_hal_uart.c"
+
+void UART_InitCallbacksToDefault(UART_HandleTypeDef *huart)
+{
+   
+  huart->TxHalfCpltCallback        = HAL_UART_TxHalfCpltCallback;         
+  huart->TxCpltCallback            = HAL_UART_TxCpltCallback;             
+  huart->RxHalfCpltCallback        = HAL_UART_RxHalfCpltCallback;         
+  huart->RxCpltCallback            = HAL_UART_RxCpltCallback;             
+  huart->ErrorCallback             = HAL_UART_ErrorCallback;              
+  huart->AbortCpltCallback         = HAL_UART_AbortCpltCallback;          
+  huart->AbortTransmitCpltCallback = HAL_UART_AbortTransmitCpltCallback;  
+  huart->AbortReceiveCpltCallback  = HAL_UART_AbortReceiveCpltCallback;   
+  huart->RxEventCallback           = HAL_UARTEx_RxEventCallback;          
+
+}
+
 
 
 
@@ -20306,11 +20720,11 @@ static void UART_DMATransmitCplt(DMA_HandleTypeDef *hdma)
   else
   {
 
-
-
-
      
-    HAL_UART_TxCpltCallback(huart);
+    huart->TxCpltCallback(huart);
+
+
+
 
   }
 }
@@ -20326,11 +20740,11 @@ static void UART_DMATxHalfCplt(DMA_HandleTypeDef *hdma)
   UART_HandleTypeDef *huart = (UART_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
 
 
-
-
-
    
-  HAL_UART_TxHalfCpltCallback(huart);
+  huart->TxHalfCpltCallback(huart);
+
+
+
 
 }
 
@@ -20371,22 +20785,22 @@ static void UART_DMAReceiveCplt(DMA_HandleTypeDef *hdma)
   if (huart->ReceptionType == (0x00000001U))
   {
 
-
-
-
      
-    HAL_UARTEx_RxEventCallback(huart, huart->RxXferSize);
+    huart->RxEventCallback(huart, huart->RxXferSize);
+
+
+
 
   }
   else
   {
      
 
-
-
-
      
-    HAL_UART_RxCpltCallback(huart);
+    huart->RxCpltCallback(huart);
+
+
+
 
   }
 }
@@ -20406,22 +20820,22 @@ static void UART_DMARxHalfCplt(DMA_HandleTypeDef *hdma)
   if (huart->ReceptionType == (0x00000001U))
   {
 
-
-
-
      
-    HAL_UARTEx_RxEventCallback(huart, huart->RxXferSize / 2U);
+    huart->RxEventCallback(huart, huart->RxXferSize / 2U);
+
+
+
 
   }
   else
   {
      
 
-
-
-
      
-    HAL_UART_RxHalfCpltCallback(huart);
+    huart->RxHalfCpltCallback(huart);
+
+
+
 
   }
 }
@@ -20455,11 +20869,11 @@ static void UART_DMAError(DMA_HandleTypeDef *hdma)
 
   huart->ErrorCode |= 0x00000010U;
 
-
-
-
    
-  HAL_UART_ErrorCallback(huart);
+  huart->ErrorCallback(huart);
+
+
+
 
 }
 
@@ -20642,11 +21056,11 @@ static void UART_DMAAbortOnError(DMA_HandleTypeDef *hdma)
   huart->TxXferCount = 0x00U;
 
 
-
-
-
    
-  HAL_UART_ErrorCallback(huart);
+  huart->ErrorCallback(huart);
+
+
+
 
 }
 
@@ -20688,11 +21102,11 @@ static void UART_DMATxAbortCallback(DMA_HandleTypeDef *hdma)
 
    
 
-
-
-
    
-  HAL_UART_AbortCpltCallback(huart);
+  huart->AbortCpltCallback(huart);
+
+
+
 
 }
 
@@ -20734,11 +21148,11 @@ static void UART_DMARxAbortCallback(DMA_HandleTypeDef *hdma)
 
    
 
-
-
-
    
-  HAL_UART_AbortCpltCallback(huart);
+  huart->AbortCpltCallback(huart);
+
+
+
 
 }
 
@@ -20762,11 +21176,11 @@ static void UART_DMATxOnlyAbortCallback(DMA_HandleTypeDef *hdma)
 
    
 
-
-
-
    
-  HAL_UART_AbortTransmitCpltCallback(huart);
+  huart->AbortTransmitCpltCallback(huart);
+
+
+
 
 }
 
@@ -20791,11 +21205,11 @@ static void UART_DMARxOnlyAbortCallback(DMA_HandleTypeDef *hdma)
 
    
 
-
-
-
    
-  HAL_UART_AbortReceiveCpltCallback(huart);
+  huart->AbortReceiveCpltCallback(huart);
+
+
+
 
 }
 
@@ -20854,11 +21268,11 @@ static HAL_StatusTypeDef UART_EndTransmit_IT(UART_HandleTypeDef *huart)
   huart->gState = HAL_UART_STATE_READY;
 
 
-
-
-
    
-  HAL_UART_TxCpltCallback(huart);
+  huart->TxCpltCallback(huart);
+
+
+
 
 
   return HAL_OK;
@@ -20933,22 +21347,22 @@ static HAL_StatusTypeDef UART_Receive_IT(UART_HandleTypeDef *huart)
         }
 
 
-
-
-
          
-        HAL_UARTEx_RxEventCallback(huart, huart->RxXferSize);
+        huart->RxEventCallback(huart, huart->RxXferSize);
+
+
+
 
       }
       else
       {
          
 
-
-
-
          
-        HAL_UART_RxCpltCallback(huart);
+        huart->RxCpltCallback(huart);
+
+
+
 
       }
 

@@ -256,7 +256,7 @@ N#define  USE_HAL_SPDIFRX_REGISTER_CALLBACKS     0U /* SPDIFRX register callback
 N#define  USE_HAL_SMBUS_REGISTER_CALLBACKS       0U /* SMBUS register callback disabled     */
 N#define  USE_HAL_SPI_REGISTER_CALLBACKS         0U /* SPI register callback disabled       */
 N#define  USE_HAL_TIM_REGISTER_CALLBACKS         0U /* TIM register callback disabled       */
-N#define  USE_HAL_UART_REGISTER_CALLBACKS        0U /* UART register callback disabled      */
+N#define  USE_HAL_UART_REGISTER_CALLBACKS        1U /* UART register callback enabled      */
 N#define  USE_HAL_USART_REGISTER_CALLBACKS       0U /* USART register callback disabled     */
 N#define  USE_HAL_WWDG_REGISTER_CALLBACKS        0U /* WWDG register callback disabled      */
 N
@@ -42718,52 +42718,52 @@ N  __IO uint32_t                 ErrorCode;        /*!< UART Error code         
 X  volatile uint32_t                 ErrorCode;         
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S  void (* TxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);        /*!< UART Tx Half Complete Callback        */
-S  void (* TxCpltCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Tx Complete Callback             */
-S  void (* RxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);        /*!< UART Rx Half Complete Callback        */
-S  void (* RxCpltCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Rx Complete Callback             */
-S  void (* ErrorCallback)(struct __UART_HandleTypeDef *huart);             /*!< UART Error Callback                   */
-S  void (* AbortCpltCallback)(struct __UART_HandleTypeDef *huart);         /*!< UART Abort Complete Callback          */
-S  void (* AbortTransmitCpltCallback)(struct __UART_HandleTypeDef *huart); /*!< UART Abort Transmit Complete Callback */
-S  void (* AbortReceiveCpltCallback)(struct __UART_HandleTypeDef *huart);  /*!< UART Abort Receive Complete Callback  */
-S  void (* WakeupCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Wakeup Callback                  */
-S  void (* RxEventCallback)(struct __UART_HandleTypeDef *huart, uint16_t Pos); /*!< UART Reception Event Callback     */
-S
-S  void (* MspInitCallback)(struct __UART_HandleTypeDef *huart);           /*!< UART Msp Init callback                */
-S  void (* MspDeInitCallback)(struct __UART_HandleTypeDef *huart);         /*!< UART Msp DeInit callback              */
+X#if (1U == 1)
+N  void (* TxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);        /*!< UART Tx Half Complete Callback        */
+N  void (* TxCpltCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Tx Complete Callback             */
+N  void (* RxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);        /*!< UART Rx Half Complete Callback        */
+N  void (* RxCpltCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Rx Complete Callback             */
+N  void (* ErrorCallback)(struct __UART_HandleTypeDef *huart);             /*!< UART Error Callback                   */
+N  void (* AbortCpltCallback)(struct __UART_HandleTypeDef *huart);         /*!< UART Abort Complete Callback          */
+N  void (* AbortTransmitCpltCallback)(struct __UART_HandleTypeDef *huart); /*!< UART Abort Transmit Complete Callback */
+N  void (* AbortReceiveCpltCallback)(struct __UART_HandleTypeDef *huart);  /*!< UART Abort Receive Complete Callback  */
+N  void (* WakeupCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Wakeup Callback                  */
+N  void (* RxEventCallback)(struct __UART_HandleTypeDef *huart, uint16_t Pos); /*!< UART Reception Event Callback     */
+N
+N  void (* MspInitCallback)(struct __UART_HandleTypeDef *huart);           /*!< UART Msp Init callback                */
+N  void (* MspDeInitCallback)(struct __UART_HandleTypeDef *huart);         /*!< UART Msp DeInit callback              */
 N#endif  /* USE_HAL_UART_REGISTER_CALLBACKS */
 N
 N} UART_HandleTypeDef;
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S/**
-S  * @brief  HAL UART Callback ID enumeration definition
-S  */
-Stypedef enum
-S{
-S  HAL_UART_TX_HALFCOMPLETE_CB_ID         = 0x00U,    /*!< UART Tx Half Complete Callback ID        */
-S  HAL_UART_TX_COMPLETE_CB_ID             = 0x01U,    /*!< UART Tx Complete Callback ID             */
-S  HAL_UART_RX_HALFCOMPLETE_CB_ID         = 0x02U,    /*!< UART Rx Half Complete Callback ID        */
-S  HAL_UART_RX_COMPLETE_CB_ID             = 0x03U,    /*!< UART Rx Complete Callback ID             */
-S  HAL_UART_ERROR_CB_ID                   = 0x04U,    /*!< UART Error Callback ID                   */
-S  HAL_UART_ABORT_COMPLETE_CB_ID          = 0x05U,    /*!< UART Abort Complete Callback ID          */
-S  HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID = 0x06U,    /*!< UART Abort Transmit Complete Callback ID */
-S  HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID  = 0x07U,    /*!< UART Abort Receive Complete Callback ID  */
-S  HAL_UART_WAKEUP_CB_ID                  = 0x08U,    /*!< UART Wakeup Callback ID                  */
-S
-S  HAL_UART_MSPINIT_CB_ID                 = 0x0BU,    /*!< UART MspInit callback ID                 */
-S  HAL_UART_MSPDEINIT_CB_ID               = 0x0CU     /*!< UART MspDeInit callback ID               */
-S
-S} HAL_UART_CallbackIDTypeDef;
-S
-S/**
-S  * @brief  HAL UART Callback pointer definition
-S  */
-Stypedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer to an UART callback function */
-Stypedef  void (*pUART_RxEventCallbackTypeDef)(struct __UART_HandleTypeDef *huart, uint16_t Pos);   /*!< pointer to a UART Rx Event specific callback function */
-S
+X#if (1U == 1)
+N/**
+N  * @brief  HAL UART Callback ID enumeration definition
+N  */
+Ntypedef enum
+N{
+N  HAL_UART_TX_HALFCOMPLETE_CB_ID         = 0x00U,    /*!< UART Tx Half Complete Callback ID        */
+N  HAL_UART_TX_COMPLETE_CB_ID             = 0x01U,    /*!< UART Tx Complete Callback ID             */
+N  HAL_UART_RX_HALFCOMPLETE_CB_ID         = 0x02U,    /*!< UART Rx Half Complete Callback ID        */
+N  HAL_UART_RX_COMPLETE_CB_ID             = 0x03U,    /*!< UART Rx Complete Callback ID             */
+N  HAL_UART_ERROR_CB_ID                   = 0x04U,    /*!< UART Error Callback ID                   */
+N  HAL_UART_ABORT_COMPLETE_CB_ID          = 0x05U,    /*!< UART Abort Complete Callback ID          */
+N  HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID = 0x06U,    /*!< UART Abort Transmit Complete Callback ID */
+N  HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID  = 0x07U,    /*!< UART Abort Receive Complete Callback ID  */
+N  HAL_UART_WAKEUP_CB_ID                  = 0x08U,    /*!< UART Wakeup Callback ID                  */
+N
+N  HAL_UART_MSPINIT_CB_ID                 = 0x0BU,    /*!< UART MspInit callback ID                 */
+N  HAL_UART_MSPDEINIT_CB_ID               = 0x0CU     /*!< UART MspDeInit callback ID               */
+N
+N} HAL_UART_CallbackIDTypeDef;
+N
+N/**
+N  * @brief  HAL UART Callback pointer definition
+N  */
+Ntypedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer to an UART callback function */
+Ntypedef  void (*pUART_RxEventCallbackTypeDef)(struct __UART_HandleTypeDef *huart, uint16_t Pos);   /*!< pointer to a UART Rx Event specific callback function */
+N
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N
 N/**
@@ -42785,8 +42785,8 @@ N#define HAL_UART_ERROR_FE                0x00000004U   /*!< Frame error        
 N#define HAL_UART_ERROR_ORE               0x00000008U   /*!< Overrun error       */
 N#define HAL_UART_ERROR_DMA               0x00000010U   /*!< DMA transfer error  */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S#define  HAL_UART_ERROR_INVALID_CALLBACK 0x00000020U   /*!< Invalid Callback error  */
+X#if (1U == 1)
+N#define  HAL_UART_ERROR_INVALID_CALLBACK 0x00000020U   /*!< Invalid Callback error  */
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N/**
 N  * @}
@@ -42945,19 +42945,19 @@ N  *         (USART,UART availability and x,y values depending on device).
 N  * @retval None
 N  */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                   \
-S                                                       (__HANDLE__)->gState = HAL_UART_STATE_RESET;      \
-S                                                       (__HANDLE__)->RxState = HAL_UART_STATE_RESET;     \
-S                                                       (__HANDLE__)->MspInitCallback = NULL;             \
-S                                                       (__HANDLE__)->MspDeInitCallback = NULL;           \
-S                                                     } while(0U)
-X#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                                                                          (__HANDLE__)->gState = HAL_UART_STATE_RESET;                                                             (__HANDLE__)->RxState = HAL_UART_STATE_RESET;                                                            (__HANDLE__)->MspInitCallback = NULL;                                                                    (__HANDLE__)->MspDeInitCallback = NULL;                                                                } while(0U)
-N#else
+X#if (1U == 1)
 N#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                   \
 N                                                       (__HANDLE__)->gState = HAL_UART_STATE_RESET;      \
 N                                                       (__HANDLE__)->RxState = HAL_UART_STATE_RESET;     \
+N                                                       (__HANDLE__)->MspInitCallback = NULL;             \
+N                                                       (__HANDLE__)->MspDeInitCallback = NULL;           \
 N                                                     } while(0U)
+X#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                                                                          (__HANDLE__)->gState = HAL_UART_STATE_RESET;                                                             (__HANDLE__)->RxState = HAL_UART_STATE_RESET;                                                            (__HANDLE__)->MspInitCallback = NULL;                                                                    (__HANDLE__)->MspDeInitCallback = NULL;                                                                } while(0U)
+N#else
+S#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                   \
+S                                                       (__HANDLE__)->gState = HAL_UART_STATE_RESET;      \
+S                                                       (__HANDLE__)->RxState = HAL_UART_STATE_RESET;     \
+S                                                     } while(0U)
 X#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                                                                          (__HANDLE__)->gState = HAL_UART_STATE_RESET;                                                             (__HANDLE__)->RxState = HAL_UART_STATE_RESET;                                                          } while(0U)
 N#endif /*USE_HAL_UART_REGISTER_CALLBACKS */
 N
@@ -43253,13 +43253,13 @@ Nvoid HAL_UART_MspDeInit(UART_HandleTypeDef *huart);
 N
 N/* Callbacks Register/UnRegister functions  ***********************************/
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-SHAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
-S                                            pUART_CallbackTypeDef pCallback);
-SHAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID);
-S
-SHAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback);
-SHAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart);
+X#if (1U == 1)
+NHAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
+N                                            pUART_CallbackTypeDef pCallback);
+NHAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID);
+N
+NHAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback);
+NHAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N
 N/**
@@ -43815,113 +43815,6 @@ N#endif /* __STM32F4xx_HAL_H */
 N
 N/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 L 16 "Power\Command.h" 2
-N
-N#define POWER_COMMAND_TXRX_BUFFER_SIZE 32u
-N
-N#define POWER_COMMAND_HEADER_SIZE (4u)
-N#define POWER_COMMAND_END_SIZE (4u)
-N#define POWER_COMMAND_CMD_SIZE (1u)
-N#define POWER_COMMAND_LENGTH_SIZE (1u)
-N#define POWER_COMMAND_INFO_MAX_SIZE (16u)
-N#define POWER_COMMAND_CRC_SIZE (2u)
-N#define POWER_COMMAND_DMA_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + \
-N																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
-N																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
-X#define POWER_COMMAND_DMA_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + 																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
-N
-N#define SOI 0xFFAAAAFFu
-N#define EOI 0xEE5555EEu
-N
-N#define SM2SU_PERIODIC_TRANSMIT_IN_MS 500u
-N#define SM2SU_PERIODIC_TRANSMIT_TIMEOUT_IN_MS 1000u
-N#define POWER_COMMAND_TRANSMIT_TIMEOUT_IN_MS 500u
-N
-Ntypedef void (*SM2SU_REQ_CALL)(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
-N
-Ntypedef struct	tag_SM2SU_REQ_DPCH{
-N	uint8_t	SM2SU_REQ_CD;
-N	SM2SU_REQ_CALL	pFunc;
-N	uint16_t InfoLength;
-N} SM2SU_REQ_DPCH;
-N
-N//	SM->SU
-N//	require code used by Power_Command_Transmit()
-N#define SM2SU_REQ_CD_PERIODIC_TRANSMISSION 1u
-N#define SM2SU_REQ_CD_REPLY_CONTROL_COMMAND 2u
-N#define SM2SU_REQ_CD_POWER_OFF_REQUIRE 3u
-N#define SM2SU_REQ_CD_REPLY_POWER_OFF_COMMAND 4u
-N#define SM2SU_REQ_CD_REPLY_REBOOT_COMMAND 5u
-N#define SM2SU_REQ_CD_COMPULSORY_POWER_OFF_COMMAND 6u
-N#define SM2SU_REQ_MAX 6u
-N
-N//	SU->SM
-N//	require code used by Power_Command_Receive()
-N#define SU2SM_REQ_CD_PERIODIC_TRANSMISSION_COMMAND 1u
-N#define SU2SM_REQ_CD_CONTROL_COMMAND 2u
-N#define SU2SM_REQ_CD_REPLY_POWER_OFF_REQUIRE 3u
-N#define SU2SM_REQ_CD_POWER_OFF_COMMAND 4u
-N#define SU2SM_REQ_CD_REBOOT_COMMAND 5u
-N#define SU2SM_REQ_CD_REPLY_COMPULSORY_POWER_OFF_COMMAND 6u
-N#define SU2SM_REQ_MAX 6u
-N
-N
-Ntypedef struct tag_POWER_COMMAND_PROTOCOL
-N{
-N		uint8_t HEADER[POWER_COMMAND_HEADER_SIZE];
-X		uint8_t HEADER[(4u)];
-N		uint8_t CMD;
-N		uint8_t LENGTH;
-N		uint8_t INFO[POWER_COMMAND_INFO_MAX_SIZE];	
-X		uint8_t INFO[(16u)];	
-N		uint16_t CRC16;
-N		uint8_t END[POWER_COMMAND_END_SIZE];
-X		uint8_t END[(4u)];
-N}POWER_COMMAND_PROTOCOL;
-N
-Ntypedef union 
-N{
-N		uint8_t ByteAccess[POWER_COMMAND_DMA_SIZE];
-X		uint8_t ByteAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u))];
-N		uint16_t WordAccess[POWER_COMMAND_DMA_SIZE >> 1];
-X		uint16_t WordAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u)) >> 1];
-N		uint32_t	LongAccess[POWER_COMMAND_DMA_SIZE >> 2];
-X		uint32_t	LongAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u)) >> 2];
-N		POWER_COMMAND_PROTOCOL  ContentDefAccess;
-N}POWER_COMMAND;
-N
-Nextern uint8_t PowerCommandRxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
-Xextern uint8_t PowerCommandRxBuffer[32u];
-Nextern uint8_t PowerCommandTxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
-Xextern uint8_t PowerCommandTxBuffer[32u];
-N
-Nextern UART_HandleTypeDef * Uart_HandlePtr;
-Nextern DMA_HandleTypeDef * Udma_UartRx_HandlePtr;
-Nextern DMA_HandleTypeDef * Udma_Uarttx_HandlePtr;
-N
-NHAL_StatusTypeDef Power_Command_Transmit(uint8_t ReqCode);
-Nvoid Power_Command_Initilization(void);
-Nvoid Power_Command_Main_Loop(void);
-N
-N#endif
-N
-N
-L 11 "Power\Command.c" 2
-N#include "ADS1115Driver.h"
-L 1 "Power\ADS1115Driver.h" 1
-N/**
-N  ******************************************************************************
-N  * @file    ADS1115Driver.h
-N  * @author  Xi Liang
-N  * @brief   ADS1115 I2C module driver.
-N  *         
-N  @verbatim
-N  ******************************************************************************
-N  */
-N#ifndef __ADS1115DRIVER_H
-N#define __ADS1115DRIVER_H
-N
-N
-N#include "stm32f4xx_hal.h"
 N#include "data_def.h"
 L 1 "Power\data_def.h" 1
 N/**
@@ -43937,7 +43830,7 @@ N
 N#ifndef __DATA_DEF_H
 N#define __DATA_DEF_H
 N
-N#include "stm32f4xx_hal.h"
+N#include <stdint.h>
 N
 N
 N
@@ -44016,6 +43909,9 @@ N	uint16_t ai1_i;
 N	uint16_t ai2_u;
 N	uint16_t ai2_i;
 N	
+N	uint8_t AI_SW1;
+N	uint8_t AI_SW2;
+N	
 N	STATE_INFORMATION_H p_state_h;
 N	STATE_INFORMATION_L p_state_l;
 N	FAULT_INFORMATION_H p_breakdown_h;
@@ -44029,203 +43925,123 @@ N	POWER_STATUS_IDLE = 0x00u,
 N	POWER_STATUS_POWERON,
 N	POWER_STATUS_48VNOSTART,
 N	POWER_STATUS_48VSTART,
-N	POWER_STATUS_REMOTEOFF,
-N	POWER_STATUS_POWEROFF,
 N	POWER_STATUS_SHUTDWON,
+N	POWER_STATUS_SOFTWAREPOWEROFF,
 N	POWER_STATUS_FAULT,
 N}POWER_STATUS_TYPE;
 N
 N#endif
 N
-L 16 "Power\ADS1115Driver.h" 2
-N#include "TemperatureDriver.h"
-L 1 "Power\TemperatureDriver.h" 1
-N#ifndef __TEMPERATUREDRIVER_H
-N#define __TEMPERATUREDRIVER_H
+L 17 "Power\Command.h" 2
+N#include "PowerMenu.h"
+L 1 "Power\PowerMenu.h" 1
+N/**
+N  ******************************************************************************
+N  * @file    PowerMenu.h
+N  * @author  Xi Liang/Liu Gui Qing
+N  * @brief   Power Menu Driver.
+N  *         
+N  @verbatim
+N  ******************************************************************************
+N  */
+N	
+N#ifndef __POWERMENU_H
+N#define __POWERMENU_H
 N
 N
-N
-N#include "stm32f4xx_hal.h"
 N#include "data_def.h"
-N
-N
-Nuint8_t look_up_table(uint16_t *a,uint8_t ArrayLong,uint16_t data);
-Nfloat num_to_temperature(uint8_t num);
-Nvoid save_ntc_data(uint16_t data);			//直插
-Nvoid save_ntc2_data(uint16_t data);		//smd
-N
-N
-N
-N#endif
-L 17 "Power\ADS1115Driver.h" 2
-N
-N
-N#define ADS1115_Voltage_48V
-N
-N#define ADS1115_I2C_TIMEOUT_IN_MS 500u
-N
-N//Warning! 7 bits ADDR should must be shifted to the left
-N//ADDR PIN ->GND
-N/*1001000y*/
-N#define ADS1115_ADDR_0  (72u << 1)
-N
-N//ADDR PIN ->VDD
-N/*1001001y*/
-N#define ADS1115_ADDR_1  (73u << 1)
-N
-N//ADDR PIN ->SDA
-N/*1001010Y*/
-N#define ADS1115_ADDR_2  (74u << 1)
-N
-N//ADDR PIN ->SCL
-N/*1001011Y*/
-N#define ADS1115_ADDR_3  (75u << 1)
-N
-N#define ADS1115_CONVERSION_REG      0x00	//Convertion register
-N#define ADS1115_CONFIG_REG          0x01	//Config register
-N#define ADS1115_Lo_THRESH_REG       0x02	//Lo_thresh register
-N#define ADS1115_Ho_THRESH_REG       0x03	//Hi_thresh register
-N
-N#define ADS1115_CONFIG_REG_OS_NO_EFFECT 0u
-N#define ADS1115_CONFIG_REG_OS_START_SINGLE_CONVERSION ((uint16_t)1u << 15u)
-N
-N#define ADS1115_CONFIG_REG_MUX_AIN0_AIN1 0u
-N#define ADS1115_CONFIG_REG_MUX_AIN0_AIN3 ((uint16_t)1u << 12u)
-N#define ADS1115_CONFIG_REG_MUX_AIN1_AIN3 ((uint16_t)2u << 12u)
-N#define ADS1115_CONFIG_REG_MUX_AIN2_AIN3 ((uint16_t)3u << 12u)
-N#define ADS1115_CONFIG_REG_MUX_AIN0_GND ((uint16_t)4u << 12u)
-N#define ADS1115_CONFIG_REG_MUX_AIN1_GND ((uint16_t)5u << 12u)
-N#define ADS1115_CONFIG_REG_MUX_AIN2_GND ((uint16_t)6u << 12u)
-N#define ADS1115_CONFIG_REG_MUX_AIN3_GND ((uint16_t)7u << 12u)
-N
-N#define ADS1115_CONFIG_REG_FSR_6p114	(0u)
-N#define ADS1115_CONFIG_REG_FSR_4p096	((uint16_t)1u << 9u)
-N#define ADS1115_CONFIG_REG_FSR_2p048	((uint16_t)2u << 9u)
-N#define ADS1115_CONFIG_REG_FSR_1p024	((uint16_t)3u << 9u)
-N#define ADS1115_CONFIG_REG_FSR_0p512	((uint16_t)4u << 9u)
-N#define ADS1115_CONFIG_REG_FSR_0p256_1	((uint16_t)5u << 9u)
-N#define ADS1115_CONFIG_REG_FSR_0p256_2	((uint16_t)6u << 9u)
-N#define ADS1115_CONFIG_REG_FSR_0p256_3	((uint16_t)7u << 9u)
-N
-N#define ADS1115_CONFIG_REG_MODE_CONTINUOUS	(0u)
-N#define ADS1115_CONFIG_REG_MODE_SINGLE_SHOT	((uint16_t)(1u) << 8u)
-N
-N#define ADS1115_CONFIG_REG_DR_SPS_8	(0u)
-N#define ADS1115_CONFIG_REG_DR_SPS_16	((uint16_t)1u << 5u)
-N#define ADS1115_CONFIG_REG_DR_SPS_32	((uint16_t)2u << 5u)
-N#define ADS1115_CONFIG_REG_DR_SPS_64	((uint16_t)3u << 5u)
-N#define ADS1115_CONFIG_REG_DR_SPS_128	((uint16_t)4u << 5u)
-N#define ADS1115_CONFIG_REG_DR_SPS_250	((uint16_t)5u << 5u)
-N#define ADS1115_CONFIG_REG_DR_SPS_475	((uint16_t)6u << 5u)
-N#define ADS1115_CONFIG_REG_DR_SPS_860	((uint16_t)7u << 5u)
-N
-N#define ADS1115_CONFIG_REG_COMP_MODE_TRANDITIONAL 0u
-N#define ADS1115_CONFIG_REG_COMP_MODE_WINDOW ((uint16_t)(1) << 4u)
-N
-N#define ADS1115_CONFIG_REG_COMP_POL_ACT_LOW (0u)
-N#define ADS1115_CONFIG_REG_COMP_POL_ACT_HIGH ((uint16_t)(1) << 3u)
-N
-N#define ADS1115_CONFIG_REG_COMP_QUE_ONE 0u
-N#define ADS1115_CONFIG_REG_COMP_QUE_TWO (1u)
-N#define ADS1115_CONFIG_REG_COMP_QUE_FOUR (2u)
-N#define ADS1115_CONFIG_REG_COMP_QUE_DISABLE (3u)
-N
-N
-N#define ADC_Accuracy 		32768   //定义ADC精度，ADS1115单端输入时15位
-N
-Nextern I2C_HandleTypeDef * I2C_Ptr_48V_NTC;
-Nextern I2C_HandleTypeDef * I2C_Ptr_24V;
-Nextern I2C_HandleTypeDef * I2C_Ptr_AI;
-N
-Ntypedef union
-N{
-N	struct 
-N	{
-N		uint16_t COMP_QUE 		:2;
-N		uint16_t COMP_LAT 		:1;
-N		uint16_t COMP_POL 		:1;
-N		uint16_t COMP_MODE  	:1;
-N		uint16_t DR         	:3;
-N		uint16_t MODE     		:1;
-N		uint16_t PGA        	:3;
-N		uint16_t MUX        	:3;
-N		uint16_t OS         	:1;
-N	}BIT;
-N	uint16_t ALL;
-N}ADS1115_CFG;
-N
-Ntypedef struct tag_ADS1115_DRIVER
-N{
-N	I2C_HandleTypeDef * I2C_Handle;
-N	uint8_t ADDR;
-N	ADS1115_CFG ConfigRegData;
-N	int16_t SampleValue;
-N	uint32_t *StartConversionTimerPtr;
-N	uint32_t ConversionTime;
-N	uint32_t ConfigErrorCnt;
-N	uint32_t ConversionErrorCnt;
-N	int16_t SampleValueMax;
-N	int16_t SampleValueMin;
-N	uint8_t SampleBuffer[2u];
-N	HAL_StatusTypeDef ConfigResult;
-N	HAL_StatusTypeDef ConversionTransmitResult;
-N	HAL_StatusTypeDef ConversionReceiveResult;	
-N}ADS1115_DRIVER;
-N
-Nextern ADS1115_DRIVER ADS1115_NTC;
-Nextern ADS1115_DRIVER ADS1115_Voltage48V;
-Nextern ADS1115_DRIVER ADS1115_Current48V;
-Nextern ADS1115_DRIVER ADS1115_Voltage24V;
-Nextern ADS1115_DRIVER ADS1115_Current24V;
-Nextern ADS1115_DRIVER ADS1115_AnalogVoltageInput0;
-Nextern ADS1115_DRIVER ADS1115_AnalogVoltageInput1;
-Nextern ADS1115_DRIVER ADS1115_AnalogCurrentInput0;
-Nextern ADS1115_DRIVER ADS1115_AnalogCurrentInput1;
-Nvoid ADS1115_Driver_Initilization(void);
-Nvoid ADS1115_Driver_MainLoop(void);
-N
-N#endif
-L 12 "Power\Command.c" 2
-N#include "applInterface.h"
-L 1 ".\etherCAT\applInterface.h" 1
-N/*
-N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
-N* The corresponding license agreement applies. This hint shall not be removed.
-N* https://www.beckhoff.com/media/downloads/slave-stack-code/ethercat_ssc_license.pdf
-N*/
-N
+N#include "main.h"
+L 1 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 1
+N/* USER CODE BEGIN Header */
 N/**
-N\addtogroup EcatAppl EtherCAT application
-N@{
-N*/
+N  ******************************************************************************
+N  * @file           : main.h
+N  * @brief          : Header for main.c file.
+N  *                   This file contains the common defines of the application.
+N  ******************************************************************************
+N  * @attention
+N  *
+N  * Copyright (c) 2022 STMicroelectronics.
+N  * All rights reserved.
+N  *
+N  * This software is licensed under terms that can be found in the LICENSE file
+N  * in the root directory of this software component.
+N  * If no LICENSE file comes with this software, it is provided AS-IS.
+N  *
+N  ******************************************************************************
+N  */
+N/* USER CODE END Header */
 N
-N/**
-N\file applInterface.h
-N\author EthercatSSC@beckhoff.com
-N\brief Definition of the application interface functions
+N/* Define to prevent recursive inclusion -------------------------------------*/
+N#ifndef __MAIN_H
+N#define __MAIN_H
 N
-N\version 5.13
+N#ifdef __cplusplus
+Sextern "C" {
+N#endif
 N
-N<br>Changes to version V5.12:<br>
-NV5.13 COE4: update default entry name handling in case of 16Bit characters, add CoE Read/write indication functions<br>
-N<br>Changes to version V5.11:<br>
-NV5.12 APPL1: add optional application function called from the main loop (after mbx and esm are executed)<br>
-NV5.12 EEPROM3: implement a store EEPROM timeout handler<br>
-NV5.12 EOE1: move icmp sample to the sampleappl,add EoE application interface functions<br>
-NV5.12 FOE1: update new interface,move the FoE sample to sampleappl,add FoE application callback functions<br>
-N<br>Changes to version - :<br>
-NV5.10.1 : Start file change log
-N*/
+N/* Includes ------------------------------------------------------------------*/
+N#include "stm32f4xx_hal.h"
 N
-N/*-----------------------------------------------------------------------------------------
-N------
-N------    Includes
-N------
-N-----------------------------------------------------------------------------------------*/
+N/* Private includes ----------------------------------------------------------*/
+N/* USER CODE BEGIN Includes */
+N#include "SPIDriver.h"
+L 1 ".\etherCAT\SPIDriver.h" 1
+N/*******************************************************************************
+N PIC32 SPI Interface Driver
+N
+N  Company:
+N    Microchip Technology Inc.
+N
+N  File Name:
+N    SPIDriver.h
+N
+N  Summary:
+N    Contains the Header File of PIC32 SPI Interface Driver
+N
+N  Description:
+N    This file contains the Header File of PIC32 SPI Interface Driver
+N	
+N  Change History:
+N    Version		Changes
+N	1.3			Initial version.
+N
+N*******************************************************************************/
+N
+N// DOM-IGNORE-BEGIN
+N/*******************************************************************************
+N Copyright (c) 2015 released Microchip Technology Inc.  All rights reserved.
+N
+N Microchip licenses to you the right to use, modify, copy and distribute
+N Software only when embedded on a Microchip microcontroller or digital signal
+N controller that is integrated into your product or third party product
+N (pursuant to the sublicense terms in the accompanying license agreement).
+N
+N You should refer to the license agreement accompanying this Software for
+N additional information regarding your rights and obligations.
+N
+N SOFTWARE AND DOCUMENTATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
+N EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF
+N MERCHANTABILITY, TITLE, NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE.
+N IN NO EVENT SHALL MICROCHIP OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER
+N CONTRACT, NEGLiPMPCE, STRICT LIABILITY, CONTRIBUTION, BREACH OF WARRANTY, OR
+N OTHER LEGAL EQUITABLE THEORY ANY DIRECT OR INDIRECT DAMAGES OR EXPENSES
+N INCLUDING BUT NOT LIMITED TO ANY INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE OR
+N CONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST DATA, COST OF PROCUREMENT OF
+N SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
+N (INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
+N *******************************************************************************/
+N// DOM-IGNORE-END
+N
+N// *****************************************************************************
+N// *****************************************************************************
+N// Section: Included Files
+N// *****************************************************************************
+N// *****************************************************************************
 N
 N
-N#ifndef _APPL_INTERFACE_H_
-N#define _APPL_INTERFACE_H_
+N#ifndef SPIDRIVER_H
+N#define	SPIDRIVER_H
 N
 N#include "ecat_def.h"
 L 1 ".\etherCAT\ecat_def.h" 1
@@ -46832,10 +46648,199 @@ N
 N
 N#endif // _ECATDEF_H_
 N
-L 41 ".\etherCAT\applInterface.h" 2
-N#include <stdlib.h>
-N#include <string.h>
-N#include "esc.h"
+L 58 ".\etherCAT\SPIDriver.h" 2
+N#include "stm32f4xx_hal.h"
+N
+N#ifdef	__cplusplus
+Sextern "C" {
+N#endif
+N	// *****************************************************************************
+N	// *****************************************************************************
+N	// Section: File Scope or Global Data Types
+N	// *****************************************************************************
+N	// *****************************************************************************
+N	#define CMD_SERIAL_READ 0x03
+N	#define CMD_FAST_READ 0x0B
+N	#define CMD_DUAL_OP_READ 0x3B
+N	#define CMD_DUAL_IO_READ 0xBB
+N	#define CMD_QUAD_OP_READ 0x6B
+N	#define CMD_QUAD_IO_READ 0xEB
+N	#define CMD_SERIAL_WRITE 0x02
+N	#define CMD_DUAL_DATA_WRITE 0x32
+N	#define CMD_DUAL_ADDR_DATA_WRITE 0xB2
+N	#define CMD_QUAD_DATA_WRITE 0x62
+N	#define CMD_QUAD_ADDR_DARA_WRITE 0xE2
+N
+N	#define CMD_SERIAL_READ_DUMMY 0
+N	#define CMD_FAST_READ_DUMMY 1
+N	#define CMD_DUAL_OP_READ_DUMMY 1
+N	#define CMD_DUAL_IO_READ_DUMMY 2
+N	#define CMD_QUAD_OP_READ_DUMMY 1
+N	#define CMD_QUAD_IO_READ_DUMMY 4
+N	#define CMD_SERIAL_WRITE_DUMMY 0
+N	#define CMD_DUAL_DATA_WRITE_DUMMY 0
+N	#define CMD_DUAL_ADDR_DATA_WRITE_DUMMY 0
+N	#define CMD_QUAD_DATA_WRITE_DUMMY 0
+N	#define CMD_QUAD_ADDR_DARA_WRITE_DUMMY 0
+N
+N	#define ESC_CSR_CMD_REG		0x304
+N	#define ESC_CSR_DATA_REG	0x300
+N	#define ESC_WRITE_BYTE 		0x80
+N	#define ESC_READ_BYTE 		0xC0
+N	#define ESC_CSR_BUSY		0x80
+N
+N  
+N	#define SPIWriteByte(UINT8) SPIWrite(UINT8)
+N	#define SPIReadByte() SPIRead()
+N
+N
+N    typedef union {
+N        UINT16 Val;
+X        unsigned short Val;
+N        struct __attribute__((packed)) {
+N            UINT8 LB;
+X            unsigned char LB;
+N            UINT8 HB;
+X            unsigned char HB;
+N        } byte;
+N    } UINT16_VAL;
+N
+N    typedef union {
+N        UINT32 Val;
+X        unsigned int Val;
+N        UINT16 w[2] __attribute__((packed));
+X        unsigned short w[2] __attribute__((packed));
+N        UINT8  v[4];
+X        unsigned char  v[4];
+N        struct __attribute__((packed)) {
+N            UINT16 LW;
+X            unsigned short LW;
+N            UINT16 HW;
+X            unsigned short HW;
+N        } word;
+N        struct __attribute__((packed)) {
+N            UINT8 LB;
+X            unsigned char LB;
+N            UINT8 HB;
+X            unsigned char HB;
+N            UINT8 UB;
+X            unsigned char UB;
+N            UINT8 MB;
+X            unsigned char MB;
+N        } byte;
+N    } UINT32_VAL;
+N
+N    typedef union {
+N        UINT64 Val;
+X        unsigned long long Val;
+N        UINT16 w[4];
+X        unsigned short w[4];
+N        UINT8  v[8];
+X        unsigned char  v[8];
+N    } UINT64_VAL;
+N
+N#define SPI_BUFFER_SIZE 512u
+N
+N#define ECAT_SPI_TIMEOUT 2000u
+N		
+Nextern SPI_HandleTypeDef *EcatHspiPtr;
+Nextern UINT8 EcatSpiReadBuffer[SPI_BUFFER_SIZE];
+Xextern unsigned char EcatSpiReadBuffer[512u];
+Nextern UINT8 EcatSpiWriteBuffer[SPI_BUFFER_SIZE];
+Xextern unsigned char EcatSpiWriteBuffer[512u];
+N	// *****************************************************************************
+N	// *****************************************************************************
+N	// Section: File Scope Functions
+N	// *****************************************************************************
+N	// *****************************************************************************
+N
+N	void SPIWritePDRamRegister(UINT8 *WriteBuffer, UINT16 Address, UINT16 Count);
+X	void SPIWritePDRamRegister(unsigned char *WriteBuffer, unsigned short Address, unsigned short Count);
+N	void SPIReadPDRamRegister(UINT8 *ReadBuffer, UINT16 Address, UINT16 Count);
+X	void SPIReadPDRamRegister(unsigned char *ReadBuffer, unsigned short Address, unsigned short Count);
+N    void SPIReadRegUsingCSR(UINT8 *ReadBuffer, UINT16 Address, UINT8 Count);
+X    void SPIReadRegUsingCSR(unsigned char *ReadBuffer, unsigned short Address, unsigned char Count);
+N    void SPIWriteRegUsingCSR( UINT8 *WriteBuffer, UINT16 Address, UINT8 Count);
+X    void SPIWriteRegUsingCSR( unsigned char *WriteBuffer, unsigned short Address, unsigned char Count);
+N	void SPIWriteDWord (UINT16 Address, UINT32 Val);
+X	void SPIWriteDWord (unsigned short Address, unsigned int Val);
+N	UINT32 SPIReadDWord (UINT16 Address);
+X	unsigned int SPIReadDWord (unsigned short Address);
+N    void SPIWriteBurstMode (UINT32 Val);
+X    void SPIWriteBurstMode (unsigned int Val);
+N    UINT32 SPIReadBurstMode (void);
+X    unsigned int SPIReadBurstMode (void);
+N    void SPISendAddr (UINT16 Address);
+X    void SPISendAddr (unsigned short Address);
+N    void PDIWriteLAN9252DirectReg( UINT32 Val, UINT16 Address);
+X    void PDIWriteLAN9252DirectReg( unsigned int Val, unsigned short Address);
+N    UINT32 PDIReadLAN9252DirectReg( UINT16 Address);
+X    unsigned int PDIReadLAN9252DirectReg( unsigned short Address);
+N    void PDIReadReg(UINT8 *ReadBuffer, UINT16 Address, UINT16 Count);
+X    void PDIReadReg(unsigned char *ReadBuffer, unsigned short Address, unsigned short Count);
+N    void PDIWriteReg( UINT8 *WriteBuffer, UINT16 Address, UINT16 Count);
+X    void PDIWriteReg( unsigned char *WriteBuffer, unsigned short Address, unsigned short Count);
+N#ifdef	__cplusplus
+S}
+N#endif
+N
+N#endif	/* PMPDRIVER_H */
+N
+L 35 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 2
+N#include "9252_HW.h"
+L 1 ".\etherCAT\9252_HW.h" 1
+N/*******************************************************************************
+N LAN9252 - Hardware Abtraction Layer header file.
+N
+N  Company:
+N    Microchip Technology Inc.
+N
+N  File Name:
+N    9252_HW.h
+N
+N  Description:
+N    This file contains the defines, function protypes for LAN9252 Hardware Abtraction Layer
+N
+N  Change History:
+N    Version		Changes
+N	0.1			Initial version.
+N	0.2			-
+N	0.3			-
+N	0.4			-
+N	1.0			-
+N	1.3			- *Re-arranged the functions. 
+N*******************************************************************************/
+N
+N/*******************************************************************************
+NCopyright (c) 2015 released Microchip Technology Inc.  All rights reserved.
+N
+NMicrochip licenses to you the right to use, modify, copy and distribute
+NSoftware only when embedded on a Microchip microcontroller or digital signal
+Ncontroller that is integrated into your product or third party product
+N(pursuant to the sublicense terms in the accompanying license agreement).
+N
+NYou should refer to the license agreement accompanying this Software for
+Nadditional information regarding your rights and obligations.
+N
+NSOFTWARE AND DOCUMENTATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY KIND,
+NEITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF
+NMERCHANTABILITY, TITLE, NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE.
+NIN NO EVENT SHALL MICROCHIP OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER
+NCONTRACT, NEGLIGENCE, STRICT LIABILITY, CONTRIBUTION, BREACH OF WARRANTY, OR
+NOTHER LEGAL EQUITABLE THEORY ANY DIRECT OR INDIRECT DAMAGES OR EXPENSES
+NINCLUDING BUT NOT LIMITED TO ANY INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE OR
+NCONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST DATA, COST OF PROCUREMENT OF
+NSUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
+N(INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
+N *******************************************************************************/
+N
+N#ifndef _9252_HW_H_
+N#define _9252_HW_H_
+N
+N///////////////////////////////////////////////////////////////////////////////
+N// Includes
+N
+N#include  "esc.h"
 L 1 ".\etherCAT\esc.h" 1
 N/*
 N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
@@ -47048,725 +47053,8 @@ N/*ET9300 Project Handler :(#if FC1100_HW) lines 361 to 363 deleted*/
 N
 N#endif //_ESC_H_
 N/** @}*/
-L 44 ".\etherCAT\applInterface.h" 2
-N#include "ecatslv.h"
-L 1 ".\etherCAT\ecatslv.h" 1
-N/*
-N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
-N* The corresponding license agreement applies. This hint shall not be removed.
-N* https://www.beckhoff.com/media/downloads/slave-stack-code/ethercat_ssc_license.pdf
-N*/
-N
-N/**
-N * \addtogroup ESM EtherCAT State Machine
-N * @{
-N */
-N
-N/**
-N\file ecatslv.h
-N\author EthercatSSC@beckhoff.com
-N
-N\version 5.13
-N
-N<br>Changes to version V5.12:<br>
-NV5.13 EMCY1: update emergency diagcodes for invalid sm configuration<br>
-NV5.13 ESM1: local error handling update, ECAT_StateChange triggers only transitions from Op->Any or reject/accept a pending transition<br>
-N<br>Changes to version V5.11:<br>
-NV5.12 COE4: add timestamp object (0x10F8) and update diagnosis handling<br>
-NV5.12 ECAT6: remove mailbox SyncManager if no mailbox is supported (SM0 Output, SM1 Input)<br>
-N<br>Changes to version V5.10:<br>
-NV5.11 ECAT10: change PROTO handling to prevent compiler errors<br>
-NV5.11 ECAT4: enhance SM/Sync monitoring for input/output only slaves<br>
-NV5.11 ECAT9: add new AL Status Codes (ALSTATUSCODE_FW_SII_NOT_MATCH/0x0006, ALSTATUSCODE_FW_UPDATE_FAILED / 0x0007)<br>
-NV5.11 ESM7: "add Sync define for 0x22 (""SYNCTYPE_SM2_SYNCHRON""), support value 0x22 for 0x1C33.1 (SM2 sync)"<br>
-NV5.11 HW1: "move hardware independent functions ""HW_DisableSyncManChannel()"", ""HW_EnableSyncManChannel()"", ""HW_GetSyncMan()"", ""HW_ResetALEventMask()"", ""HW_SetALEventMask()"" to ecatalv.c"<br>
-N<br>Changes to version V5.01:<br>
-NV5.10 COE1: Define one entry description for all 0x1C3x objects and change data type of SI11,12,13 to UINT16 (according ETG.1020)<br>
-NV5.10 ECAT12: Add new AL Status Codes (0x2E,0x52,0x70)<br>
-NV5.10 ECAT13: Update Synchronisation handling (FreeRun,SM Sync, Sync0, Sync1)<br>
-N              Compare DC UINT configuration (by ESC Config data) vs. DC activation register settings<br>
-N              Update 0x1C3x entries<br>
-N<br>Changes to version - :<br>
-NV5.01 : Start file change log
-N */
-N
-N/*-----------------------------------------------------------------------------------------
-N------
-N------    Includes
-N------
-N-----------------------------------------------------------------------------------------*/
-N
-N#include "ecat_def.h"
-N
-N/*ET9300 Project Handler :(#if EL9800_HW #elif FC1100_HW #elif MCI_HW) lines 47 to 53 deleted*/
-N#include  "esc.h"
-L 1 ".\etherCAT\esc.h" 1
-N/*
-N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
-N* The corresponding license agreement applies. This hint shall not be removed.
-N* https://www.beckhoff.com/media/downloads/slave-stack-code/ethercat_ssc_license.pdf
-N*/
-N
-N/**
-N * \addtogroup ESCRegister  ESC Register
-N * @{
-N */
-N
-N/**
-N\file esc.h
-N\author EthercatSSC@beckhoff.com
-N\brief EtherCAT Slave Controller related defines and Types
-N
-N\version 5.10
-N
-N<br>Changes to version V5.01:<br>
-NV5.10 ESC1: Update address register offset for 32Bit ESC access<br>
-NV5.10 ESC2: Check if defined SM settings do not exceed the available DPRAM range (in error case AL Status 0x14 is returned)<br>
-NV5.10 ESC3: Handle DC cControl register values in case of 32Bit ESC access (a Sync activation mask need to defined/used)<br>
-N<br>Changes to version - :<br>
-NV5.01 : Start file change log
-N */
-N
-N/*-----------------------------------------------------------------------------------------
-N------
-N------    Includes
-N------
-N-----------------------------------------------------------------------------------------*/
-N#include "ecat_def.h"
-N
-N#ifndef _ESC_H_
-S#define _ESC_H_
-S
-S/*-----------------------------------------------------------------------------------------
-S------
-S------    Defines and Types
-S------
-S-----------------------------------------------------------------------------------------*/
-S
-S#define SIZEOF_SM_REGISTER                      8 /**< \brief Each SyncManger has 8Byte Configuration/Status Registers*/
-S#define MAX_NO_OF_SYNC_MAN                      16/**< \brief Maximum Number of SyncManager channels supported by an ESC*/
-S
-S#define    BL_PAGE_SIZE        512
-S
-S/*---------------------------------------------
-S-    ESC Offsets (Detailed Information about the registers are located in the ESC Datasheets e.g. ET1100 Datasheet http://www.beckhoff.com/english.asp?download/ethercat_development_products.htm?id=71003127100387)
-S-----------------------------------------------*/
-S#define ESC_INFO_OFFSET                         0x0000                               /**< \brief ESC information registers startoffset*/
-S
-S#define ESC_COMM_INFO_OFFSET                    0x0004                               /**< \brief Communication information registers startoffset*/
-S
-S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 54 to 59 deleted*/
-S#define ESC_DPRAM_SIZE_OFFSET                   0x0006                              /**< \brief Register Description: Size of the supported DPRAM in KB*/
-S#define ESC_SM_CHANNELS_MASK                    0xFF00                              /**< \brief Mask based on ESC offset "ESC_COMM_INFO_OFFSET"*/
-S#define ESC_SM_CHANNELS_SHIFT                   8                                   /**< \brief Bit shift based on ESC offset "ESC_COMM_INFO_OFFSET"*/
-S#define ESC_DPRAM_SIZE_MASK                     0x00FF
-S/*ET9300 Project Handler :(#if ESC_16BIT_ACCESS #else) lines 65 to 67 deleted*/
-S
-S#define ESC_FEATURES_OFFSET                     0x0008                              /**< \brief Register indicating ESC features*/
-S#define ESC_DC_32BIT_MASK                       0x00000008                          /**< \brief register 0x0008.3 indicates if the DC Unit supports 32Bit/64Bit DC*/
-S
-S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 73 to 75 deleted*/
-S
-S#define ESC_SLAVE_ADDRESS_OFFSET                0x0010                              /**< \brief Register Description: Address used for node addressing (FPxx commands)*/
-S
-S
-S
-S#define ESC_AL_CONTROL_OFFSET                   0x0120                              /**< \brief Register Description: Initiate State Transition of the Device State Machine*/
-S#define ESC_AL_STATUS_OFFSET                    0x0130                              /**< \brief Register Description: Actual State of the Device State Machine*/
-S#define ESC_AL_STATUS_CODE_OFFSET               0x0134                              /**< \brief Register Description: AL Status Code*/
-S
-S#define ESC_RUN_LED_OVERRIDE                    0x0138                              /**< \brief Register Description: Set Ecat Run indication via ESC. (not all ESC types support this feature)*/
-S#define ESC_ERROR_LED_OVERRIDE                  0x0139                              /**< \brief Register Description: Set Ecat Error indication via ESC. (not all ESC types support this feature)*/
-S
-S#define ESC_PDI_CONTROL_OFFSET                  0x0140                              /**< \brief Register Description: Specifies the process data interface*/
-S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 89 to 91 deleted*/
-S#define ESC_DEVICE_EMULATION                    0x0100                              /**< \brief Device emulation bit*/
-S
-S#define ESC_PDI_CONFIGURATION					0x0150								/**< \brief Register Description: PDI configuration register (values defined by the ESC configuration data)*/
-S#define ESC_SYNC0_MAPPED_TO_ALEVENT				0x0800								/**< \brief bit indicating if the Sync0 event is mapped to the AL Event register*/
-S#define ESC_SYNC1_MAPPED_TO_ALEVENT				0x8000								/**< \brief bit indicating if the Sync1 event is mapped to the AL Event register*/
-S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS || ESC_16BIT_ACCESS #else) lines 99 to 103 deleted*/
-S
-S
-S#define ESC_AL_EVENTMASK_OFFSET                 0x0204                              /**< \brief Register Description: AL Event masking of the AL Event Request register Events for mapping to PDI IRQ signal*/
-S#define ESC_AL_EVENT_OFFSET                     0x0220                              /**< \brief Register Description: "Mirror" register for ESC events*/
-S
-S#define ESC_WD_DIVIDER_OFFSET                   0x0400                              /**< \brief Register Description: Number of 25 MHz tics (minus 2) that represents the basic watchdog increment. (Default value is 100us = 2498)*/
-S
-S#define ESC_PD_WD_TIME                          0x0420                              /**< \brief Register Description: Number of basic watchdog increments (Default value with Watchdog divider 100us means 100ms Watchdog)*/
-S#define ESC_PD_WD_STATE                         0x0440                              /**< \brief Register Description: Watchdog Status of Process Data (triggered by SyncManagers)*/
-S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 113 to 115 deleted*/
-S#define ESC_PD_WD_TRIGGER_MASK                  0x0001                              /**< \brief Trigger state of the process data watchdog*/
-S
-S#define ESC_EEPROM_CONFIG_OFFSET                0x0500                              /**< \brief Register Description: EEPROM Access Configuration*/
-S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 120 to 138 deleted*/
-S/*EEPROM config and access state bit mask (based on "ESC_EEPROM_CONFIG_OFFSET") - START*/
-S#define ESC_EEPROM_ASSIGN_TO_PDI_MASK           0x0001                              /**< \brief Description (0x500.0): PDI has EEPROM control*/
-S#define ESC_EEPROM_LOCKED_BY_PDI_MASK           0x0100                              /**< \brief Description (0x500.8): PDI locked EEPROM access*/
-S/*EEPROM config and access state bit mask (based on "ESC_EEPROM_CONFIG_OFFSET") - END*/
-S
-S#define ESC_EEPROM_CONTROL_OFFSET               0x0502
-S/* EEPROM command and status bit masks (based on "ESC_EEPROM_CONTROL_OFFSET") - START*/
-S#define ESC_EEPROM_SUPPORTED_READBYTES_MASK     0x0040                              /**< \brief Description (0x502.6): Supported number of EEPROM read bytes: 0-> 4 Bytes; 1 -> 8 Bytes*/
-S#define ESC_EEPROM_CMD_MASK                     0x0700                              /**< \brief Description (0x502.8:10): Command bit mask*/
-S#define ESC_EEPROM_CMD_READ_MASK                0x0100                              /**< \brief Description (0x502.8): Currently executed read command*/
-S#define ESC_EEPROM_CMD_WRITE_MASK               0x0200                              /**< \brief Description (0x502.9): Initialize Write Command*/
-S#define ESC_EEPROM_CMD_RELOAD_MASK              0x0400                              /**< \brief Description (0x502.10): Trigger EEPROM reload*/
-S#define ESC_EEPROM_ERROR_MASK                   0x7800                              /**< \brief Description : Mask all EEPROM error bits; Checksum error (0x0502.11); EEPROM not loaded (0x0502.12); Missing EEPROM Acknowledge (0x0502.13); Write Error (0x0502.14)*/
-S#define ESC_EEPROM_ERROR_CRC                    0x0800                              /**< \brief Description (0x502.11): EEPROM CRC Error*/
-S#define ESC_EEPROM_ERROR_LOAD                   0x1000                              /**< \brief Description (0x502.11): EEPROM loading status (0 = OK)*/
-S#define ESC_EEPROM_ERROR_CMD_ACK                0x2000                              /**< \brief Description (0x502.13): EEPROM Acknowledge/Command*/
-S#define ESC_EEPROM_BUSY_MASK                    0x8000                              /**< \brief Description (0x502.15): EEPROM Busy*/
-S/* EEPROM command and status bit masks (based on "ESC_EEPROM_CONTROL_OFFSET") - END*/
-S#define ESC_EEPROM_ADDRESS_OFFSET               0x0504
-S#define ESC_EEPROM_DATA_OFFSET                  0x0508
-S
-S#define ESC_SYNCMAN_REG_OFFSET                  0x0800                              /**< \brief Register Description: Start address of the SyncManager Configuration/Staus registers*/
-S#define ESC_SYNCMAN_CONTROL_OFFSET              0x0804                              /**< \brief Register Description: SyncManager Setting Register*/
-S
-S/*ET9300 Project Handler :(#if !ESC_32BIT_ACCESS && !ESC_16BIT_ACCESS) lines 164 to 166 deleted*/
-S
-S#define ESC_SYNCMAN_ACTIVE_OFFSET               0x0806                              /**< \brief Register Description: SyncManager Activation Register*/
-S
-S/*ET9300 Project Handler :(#if !ESC_32BIT_ACCESS && !ESC_16BIT_ACCESS) lines 172 to 174 deleted*/
-S
-S#define    ESC_SYSTEMTIME_OFFSET                0x0910                              /**< \brief Register Description: Local copy of the System Time*/
-S
-S#define    ESC_DC_UNIT_CONTROL_OFFSET           0x0980                              /**< \brief Register Description: Control registers for Cycle and Sync Unit (can be predefined with the "AssignActivate" Element in the device description, for further information see ETG.2000)*/
-S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 179 to 185 deleted*/
-S#define ESC_DC_SYNC_UNIT_ACTIVE_MASK            0x0100                              /**< \brief Description (0x980.8): Sync Out Unit is activated*/
-S#define ESC_DC_SYNC0_ACTIVE_MASK                0x0200                              /**< \brief Description (0x980.9): Sync0 generation is activated*/
-S#define ESC_DC_SYNC1_ACTIVE_MASK                0x0400                              /**< \brief Description (0x980.10): Sync1 generation is activated*/
-S#define ESC_DC_SYNC_UNIT_AUTO_ACTIVE_MASK       0x0800                              /**< \brief Description (0x980.11): Sync Out Unit is activated automatic when System time was written*/
-S/*ET9300 Project Handler :( #else) lines 190 to 196 deleted*/
-S
-S#define    ESC_DC_SYNC_STATUS		            0x098C                              /**< \brief Register Description: register 0x98E and 0x98F reflecting the status of Sync0 and Sync1*/
-S
-S#define ESC_DC_SYNC0_CYCLETIME_OFFSET           0x09A0                              /**< \brief Register Description: 32Bit Time between two consecutive SYNC0 pulses in ns*/
-S#define ESC_DC_SYNC1_CYCLETIME_OFFSET           0x09A4                              /**< \brief Register Description: 32Bit Time between two consecutive SYNC1 pulses in ns*/
-S
-S
-S/*ET9300 Project Handler :(#if FC1100_HW) lines 205 to 207 deleted*/
-S
-S
-S/*---------------------------------------------
-S-    Sync Manager
-S-----------------------------------------------*/
-S/** \brief SyncManager register structure*/
-Stypedef struct STRUCT_PACKED_START
-S{
-S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 217 to 259 deleted*/
-S
-S  UINT16                        PhysicalStartAddress; /**< \brief SyncManager address*/
-S  UINT16                        Length; /**< \brief SyncManager length*/
-S
-S    UINT16                        Settings[2]; /**< \brief Register values 0x0804 : 0x0807*/
-S
-S/*Defines to access :
-S* - SM Control register 0x0804
-S* - SM Status register 0x0805
-S*
-S* all defines are based on 0x0804
-S*/
-S
-S/*SyncManger control (0x0804) access*/
-S#define SM_SETTING_CONTROL_OFFSET           0 /**< \brief Offset to value of register 0x0804*/
-S#define SM_SETTING_MODE_MASK                0x0002 /**< \brief SyncManager mode mask*/
-S#define SM_SETTING_MODE_THREE_BUFFER_VALUE  0x0000 /**< \brief SyncManager 3Buffer mode value*/
-S#define SM_SETTING_MODE_ONE_BUFFER_VALUE    0x0002 /**< \brief SyncManager 1Buffer mode value*/
-S#define SM_SETTING_DIRECTION_MASK           0x000C /**< \brief SyncManager direction mask*/
-S#define SM_SETTING_DIRECTION_READ_VALUE     0x0000 /**< \brief SyncManager read direction*/
-S#define SM_SETTING_DIRECTION_WRITE_VALUE    0x0004 /**< \brief SyncManager write direction*/
-S#define SM_SETTING_WATCHDOG_VALUE           0x0040 /**< \brief SyncManager watchdog value*/
-S
-S/*SyncManger status (0x0805) access*/
-S#define SM_STATUS_MBX_BUFFER_FULL           0x0800 /**< \brief Indicates in one buffer mode if buffer was completely written*/
-S
-S/*Defines to access :
-S* - SM Active register 0x0806
-S* - SM PDI Control register 0x0807
-S*
-S* all defines are based on 0x0806
-S*/
-S
-S/*SyncManger active (0x0806) access*/
-S#define SM_SETTING_ACTIVATE_OFFSET          1 /**< \brief Offset to value of register 0x0806*/
-S#define SM_SETTING_ENABLE_VALUE             0x0001 /**< \brief SyncManager enable*/
-S#define SM_SETTING_REPAET_REQ_MASK          0x0002 /**< \brief SyncManager Repeat request*/
-S#define SM_SETTING_REPEAT_REQ_SHIFT         0 /**< \brief SyncManager Repeat request shift*/
-S
-S/*SyncManger PDI Control (0x0807) access*/
-S#define SM_SETTING_PDI_DISABLE              0x0100  /**< \brief Bit0 of register 0x0807 (if 1 SM is disabled from PDI)*/
-S#define SM_SETTING_REPEAT_ACK               0x0200 /**< \brief Bit1 of register 0x0807*/
-S/*ET9300 Project Handler :(#if ESC_16BIT_ACCESS #else) lines 303 to 354 deleted*/
-S}STRUCT_PACKED_END
-STSYNCMAN;
-S
-S
-S/*ET9300 Project Handler :(#if FC1100_HW) lines 361 to 363 deleted*/
-S
-N#endif //_ESC_H_
-N/** @}*/
-L 50 ".\etherCAT\ecatslv.h" 2
-N#include "9252_HW.h"
-L 1 ".\etherCAT\9252_HW.h" 1
-N/*******************************************************************************
-N LAN9252 - Hardware Abtraction Layer header file.
-N
-N  Company:
-N    Microchip Technology Inc.
-N
-N  File Name:
-N    9252_HW.h
-N
-N  Description:
-N    This file contains the defines, function protypes for LAN9252 Hardware Abtraction Layer
-N
-N  Change History:
-N    Version		Changes
-N	0.1			Initial version.
-N	0.2			-
-N	0.3			-
-N	0.4			-
-N	1.0			-
-N	1.3			- *Re-arranged the functions. 
-N*******************************************************************************/
-N
-N/*******************************************************************************
-NCopyright (c) 2015 released Microchip Technology Inc.  All rights reserved.
-N
-NMicrochip licenses to you the right to use, modify, copy and distribute
-NSoftware only when embedded on a Microchip microcontroller or digital signal
-Ncontroller that is integrated into your product or third party product
-N(pursuant to the sublicense terms in the accompanying license agreement).
-N
-NYou should refer to the license agreement accompanying this Software for
-Nadditional information regarding your rights and obligations.
-N
-NSOFTWARE AND DOCUMENTATION ARE PROVIDED AS IS WITHOUT WARRANTY OF ANY KIND,
-NEITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF
-NMERCHANTABILITY, TITLE, NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE.
-NIN NO EVENT SHALL MICROCHIP OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER
-NCONTRACT, NEGLIGENCE, STRICT LIABILITY, CONTRIBUTION, BREACH OF WARRANTY, OR
-NOTHER LEGAL EQUITABLE THEORY ANY DIRECT OR INDIRECT DAMAGES OR EXPENSES
-NINCLUDING BUT NOT LIMITED TO ANY INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE OR
-NCONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST DATA, COST OF PROCUREMENT OF
-NSUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
-N(INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
-N *******************************************************************************/
-N
-N#ifndef _9252_HW_H_
-N#define _9252_HW_H_
-N
-N///////////////////////////////////////////////////////////////////////////////
-N// Includes
-N
-N#include  "esc.h"
-L 1 ".\etherCAT\esc.h" 1
-N/*
-N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
-N* The corresponding license agreement applies. This hint shall not be removed.
-N* https://www.beckhoff.com/media/downloads/slave-stack-code/ethercat_ssc_license.pdf
-N*/
-N
-N/**
-N * \addtogroup ESCRegister  ESC Register
-N * @{
-N */
-N
-N/**
-N\file esc.h
-N\author EthercatSSC@beckhoff.com
-N\brief EtherCAT Slave Controller related defines and Types
-N
-N\version 5.10
-N
-N<br>Changes to version V5.01:<br>
-NV5.10 ESC1: Update address register offset for 32Bit ESC access<br>
-NV5.10 ESC2: Check if defined SM settings do not exceed the available DPRAM range (in error case AL Status 0x14 is returned)<br>
-NV5.10 ESC3: Handle DC cControl register values in case of 32Bit ESC access (a Sync activation mask need to defined/used)<br>
-N<br>Changes to version - :<br>
-NV5.01 : Start file change log
-N */
-N
-N/*-----------------------------------------------------------------------------------------
-N------
-N------    Includes
-N------
-N-----------------------------------------------------------------------------------------*/
-N#include "ecat_def.h"
-N
-N#ifndef _ESC_H_
-S#define _ESC_H_
-S
-S/*-----------------------------------------------------------------------------------------
-S------
-S------    Defines and Types
-S------
-S-----------------------------------------------------------------------------------------*/
-S
-S#define SIZEOF_SM_REGISTER                      8 /**< \brief Each SyncManger has 8Byte Configuration/Status Registers*/
-S#define MAX_NO_OF_SYNC_MAN                      16/**< \brief Maximum Number of SyncManager channels supported by an ESC*/
-S
-S#define    BL_PAGE_SIZE        512
-S
-S/*---------------------------------------------
-S-    ESC Offsets (Detailed Information about the registers are located in the ESC Datasheets e.g. ET1100 Datasheet http://www.beckhoff.com/english.asp?download/ethercat_development_products.htm?id=71003127100387)
-S-----------------------------------------------*/
-S#define ESC_INFO_OFFSET                         0x0000                               /**< \brief ESC information registers startoffset*/
-S
-S#define ESC_COMM_INFO_OFFSET                    0x0004                               /**< \brief Communication information registers startoffset*/
-S
-S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 54 to 59 deleted*/
-S#define ESC_DPRAM_SIZE_OFFSET                   0x0006                              /**< \brief Register Description: Size of the supported DPRAM in KB*/
-S#define ESC_SM_CHANNELS_MASK                    0xFF00                              /**< \brief Mask based on ESC offset "ESC_COMM_INFO_OFFSET"*/
-S#define ESC_SM_CHANNELS_SHIFT                   8                                   /**< \brief Bit shift based on ESC offset "ESC_COMM_INFO_OFFSET"*/
-S#define ESC_DPRAM_SIZE_MASK                     0x00FF
-S/*ET9300 Project Handler :(#if ESC_16BIT_ACCESS #else) lines 65 to 67 deleted*/
-S
-S#define ESC_FEATURES_OFFSET                     0x0008                              /**< \brief Register indicating ESC features*/
-S#define ESC_DC_32BIT_MASK                       0x00000008                          /**< \brief register 0x0008.3 indicates if the DC Unit supports 32Bit/64Bit DC*/
-S
-S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 73 to 75 deleted*/
-S
-S#define ESC_SLAVE_ADDRESS_OFFSET                0x0010                              /**< \brief Register Description: Address used for node addressing (FPxx commands)*/
-S
-S
-S
-S#define ESC_AL_CONTROL_OFFSET                   0x0120                              /**< \brief Register Description: Initiate State Transition of the Device State Machine*/
-S#define ESC_AL_STATUS_OFFSET                    0x0130                              /**< \brief Register Description: Actual State of the Device State Machine*/
-S#define ESC_AL_STATUS_CODE_OFFSET               0x0134                              /**< \brief Register Description: AL Status Code*/
-S
-S#define ESC_RUN_LED_OVERRIDE                    0x0138                              /**< \brief Register Description: Set Ecat Run indication via ESC. (not all ESC types support this feature)*/
-S#define ESC_ERROR_LED_OVERRIDE                  0x0139                              /**< \brief Register Description: Set Ecat Error indication via ESC. (not all ESC types support this feature)*/
-S
-S#define ESC_PDI_CONTROL_OFFSET                  0x0140                              /**< \brief Register Description: Specifies the process data interface*/
-S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 89 to 91 deleted*/
-S#define ESC_DEVICE_EMULATION                    0x0100                              /**< \brief Device emulation bit*/
-S
-S#define ESC_PDI_CONFIGURATION					0x0150								/**< \brief Register Description: PDI configuration register (values defined by the ESC configuration data)*/
-S#define ESC_SYNC0_MAPPED_TO_ALEVENT				0x0800								/**< \brief bit indicating if the Sync0 event is mapped to the AL Event register*/
-S#define ESC_SYNC1_MAPPED_TO_ALEVENT				0x8000								/**< \brief bit indicating if the Sync1 event is mapped to the AL Event register*/
-S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS || ESC_16BIT_ACCESS #else) lines 99 to 103 deleted*/
-S
-S
-S#define ESC_AL_EVENTMASK_OFFSET                 0x0204                              /**< \brief Register Description: AL Event masking of the AL Event Request register Events for mapping to PDI IRQ signal*/
-S#define ESC_AL_EVENT_OFFSET                     0x0220                              /**< \brief Register Description: "Mirror" register for ESC events*/
-S
-S#define ESC_WD_DIVIDER_OFFSET                   0x0400                              /**< \brief Register Description: Number of 25 MHz tics (minus 2) that represents the basic watchdog increment. (Default value is 100us = 2498)*/
-S
-S#define ESC_PD_WD_TIME                          0x0420                              /**< \brief Register Description: Number of basic watchdog increments (Default value with Watchdog divider 100us means 100ms Watchdog)*/
-S#define ESC_PD_WD_STATE                         0x0440                              /**< \brief Register Description: Watchdog Status of Process Data (triggered by SyncManagers)*/
-S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 113 to 115 deleted*/
-S#define ESC_PD_WD_TRIGGER_MASK                  0x0001                              /**< \brief Trigger state of the process data watchdog*/
-S
-S#define ESC_EEPROM_CONFIG_OFFSET                0x0500                              /**< \brief Register Description: EEPROM Access Configuration*/
-S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 120 to 138 deleted*/
-S/*EEPROM config and access state bit mask (based on "ESC_EEPROM_CONFIG_OFFSET") - START*/
-S#define ESC_EEPROM_ASSIGN_TO_PDI_MASK           0x0001                              /**< \brief Description (0x500.0): PDI has EEPROM control*/
-S#define ESC_EEPROM_LOCKED_BY_PDI_MASK           0x0100                              /**< \brief Description (0x500.8): PDI locked EEPROM access*/
-S/*EEPROM config and access state bit mask (based on "ESC_EEPROM_CONFIG_OFFSET") - END*/
-S
-S#define ESC_EEPROM_CONTROL_OFFSET               0x0502
-S/* EEPROM command and status bit masks (based on "ESC_EEPROM_CONTROL_OFFSET") - START*/
-S#define ESC_EEPROM_SUPPORTED_READBYTES_MASK     0x0040                              /**< \brief Description (0x502.6): Supported number of EEPROM read bytes: 0-> 4 Bytes; 1 -> 8 Bytes*/
-S#define ESC_EEPROM_CMD_MASK                     0x0700                              /**< \brief Description (0x502.8:10): Command bit mask*/
-S#define ESC_EEPROM_CMD_READ_MASK                0x0100                              /**< \brief Description (0x502.8): Currently executed read command*/
-S#define ESC_EEPROM_CMD_WRITE_MASK               0x0200                              /**< \brief Description (0x502.9): Initialize Write Command*/
-S#define ESC_EEPROM_CMD_RELOAD_MASK              0x0400                              /**< \brief Description (0x502.10): Trigger EEPROM reload*/
-S#define ESC_EEPROM_ERROR_MASK                   0x7800                              /**< \brief Description : Mask all EEPROM error bits; Checksum error (0x0502.11); EEPROM not loaded (0x0502.12); Missing EEPROM Acknowledge (0x0502.13); Write Error (0x0502.14)*/
-S#define ESC_EEPROM_ERROR_CRC                    0x0800                              /**< \brief Description (0x502.11): EEPROM CRC Error*/
-S#define ESC_EEPROM_ERROR_LOAD                   0x1000                              /**< \brief Description (0x502.11): EEPROM loading status (0 = OK)*/
-S#define ESC_EEPROM_ERROR_CMD_ACK                0x2000                              /**< \brief Description (0x502.13): EEPROM Acknowledge/Command*/
-S#define ESC_EEPROM_BUSY_MASK                    0x8000                              /**< \brief Description (0x502.15): EEPROM Busy*/
-S/* EEPROM command and status bit masks (based on "ESC_EEPROM_CONTROL_OFFSET") - END*/
-S#define ESC_EEPROM_ADDRESS_OFFSET               0x0504
-S#define ESC_EEPROM_DATA_OFFSET                  0x0508
-S
-S#define ESC_SYNCMAN_REG_OFFSET                  0x0800                              /**< \brief Register Description: Start address of the SyncManager Configuration/Staus registers*/
-S#define ESC_SYNCMAN_CONTROL_OFFSET              0x0804                              /**< \brief Register Description: SyncManager Setting Register*/
-S
-S/*ET9300 Project Handler :(#if !ESC_32BIT_ACCESS && !ESC_16BIT_ACCESS) lines 164 to 166 deleted*/
-S
-S#define ESC_SYNCMAN_ACTIVE_OFFSET               0x0806                              /**< \brief Register Description: SyncManager Activation Register*/
-S
-S/*ET9300 Project Handler :(#if !ESC_32BIT_ACCESS && !ESC_16BIT_ACCESS) lines 172 to 174 deleted*/
-S
-S#define    ESC_SYSTEMTIME_OFFSET                0x0910                              /**< \brief Register Description: Local copy of the System Time*/
-S
-S#define    ESC_DC_UNIT_CONTROL_OFFSET           0x0980                              /**< \brief Register Description: Control registers for Cycle and Sync Unit (can be predefined with the "AssignActivate" Element in the device description, for further information see ETG.2000)*/
-S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 179 to 185 deleted*/
-S#define ESC_DC_SYNC_UNIT_ACTIVE_MASK            0x0100                              /**< \brief Description (0x980.8): Sync Out Unit is activated*/
-S#define ESC_DC_SYNC0_ACTIVE_MASK                0x0200                              /**< \brief Description (0x980.9): Sync0 generation is activated*/
-S#define ESC_DC_SYNC1_ACTIVE_MASK                0x0400                              /**< \brief Description (0x980.10): Sync1 generation is activated*/
-S#define ESC_DC_SYNC_UNIT_AUTO_ACTIVE_MASK       0x0800                              /**< \brief Description (0x980.11): Sync Out Unit is activated automatic when System time was written*/
-S/*ET9300 Project Handler :( #else) lines 190 to 196 deleted*/
-S
-S#define    ESC_DC_SYNC_STATUS		            0x098C                              /**< \brief Register Description: register 0x98E and 0x98F reflecting the status of Sync0 and Sync1*/
-S
-S#define ESC_DC_SYNC0_CYCLETIME_OFFSET           0x09A0                              /**< \brief Register Description: 32Bit Time between two consecutive SYNC0 pulses in ns*/
-S#define ESC_DC_SYNC1_CYCLETIME_OFFSET           0x09A4                              /**< \brief Register Description: 32Bit Time between two consecutive SYNC1 pulses in ns*/
-S
-S
-S/*ET9300 Project Handler :(#if FC1100_HW) lines 205 to 207 deleted*/
-S
-S
-S/*---------------------------------------------
-S-    Sync Manager
-S-----------------------------------------------*/
-S/** \brief SyncManager register structure*/
-Stypedef struct STRUCT_PACKED_START
-S{
-S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 217 to 259 deleted*/
-S
-S  UINT16                        PhysicalStartAddress; /**< \brief SyncManager address*/
-S  UINT16                        Length; /**< \brief SyncManager length*/
-S
-S    UINT16                        Settings[2]; /**< \brief Register values 0x0804 : 0x0807*/
-S
-S/*Defines to access :
-S* - SM Control register 0x0804
-S* - SM Status register 0x0805
-S*
-S* all defines are based on 0x0804
-S*/
-S
-S/*SyncManger control (0x0804) access*/
-S#define SM_SETTING_CONTROL_OFFSET           0 /**< \brief Offset to value of register 0x0804*/
-S#define SM_SETTING_MODE_MASK                0x0002 /**< \brief SyncManager mode mask*/
-S#define SM_SETTING_MODE_THREE_BUFFER_VALUE  0x0000 /**< \brief SyncManager 3Buffer mode value*/
-S#define SM_SETTING_MODE_ONE_BUFFER_VALUE    0x0002 /**< \brief SyncManager 1Buffer mode value*/
-S#define SM_SETTING_DIRECTION_MASK           0x000C /**< \brief SyncManager direction mask*/
-S#define SM_SETTING_DIRECTION_READ_VALUE     0x0000 /**< \brief SyncManager read direction*/
-S#define SM_SETTING_DIRECTION_WRITE_VALUE    0x0004 /**< \brief SyncManager write direction*/
-S#define SM_SETTING_WATCHDOG_VALUE           0x0040 /**< \brief SyncManager watchdog value*/
-S
-S/*SyncManger status (0x0805) access*/
-S#define SM_STATUS_MBX_BUFFER_FULL           0x0800 /**< \brief Indicates in one buffer mode if buffer was completely written*/
-S
-S/*Defines to access :
-S* - SM Active register 0x0806
-S* - SM PDI Control register 0x0807
-S*
-S* all defines are based on 0x0806
-S*/
-S
-S/*SyncManger active (0x0806) access*/
-S#define SM_SETTING_ACTIVATE_OFFSET          1 /**< \brief Offset to value of register 0x0806*/
-S#define SM_SETTING_ENABLE_VALUE             0x0001 /**< \brief SyncManager enable*/
-S#define SM_SETTING_REPAET_REQ_MASK          0x0002 /**< \brief SyncManager Repeat request*/
-S#define SM_SETTING_REPEAT_REQ_SHIFT         0 /**< \brief SyncManager Repeat request shift*/
-S
-S/*SyncManger PDI Control (0x0807) access*/
-S#define SM_SETTING_PDI_DISABLE              0x0100  /**< \brief Bit0 of register 0x0807 (if 1 SM is disabled from PDI)*/
-S#define SM_SETTING_REPEAT_ACK               0x0200 /**< \brief Bit1 of register 0x0807*/
-S/*ET9300 Project Handler :(#if ESC_16BIT_ACCESS #else) lines 303 to 354 deleted*/
-S}STRUCT_PACKED_END
-STSYNCMAN;
-S
-S
-S/*ET9300 Project Handler :(#if FC1100_HW) lines 361 to 363 deleted*/
-S
-N#endif //_ESC_H_
-N/** @}*/
 L 53 ".\etherCAT\9252_HW.h" 2
 N#include  "SPIDriver.h"
-L 1 ".\etherCAT\SPIDriver.h" 1
-N/*******************************************************************************
-N PIC32 SPI Interface Driver
-N
-N  Company:
-N    Microchip Technology Inc.
-N
-N  File Name:
-N    SPIDriver.h
-N
-N  Summary:
-N    Contains the Header File of PIC32 SPI Interface Driver
-N
-N  Description:
-N    This file contains the Header File of PIC32 SPI Interface Driver
-N	
-N  Change History:
-N    Version		Changes
-N	1.3			Initial version.
-N
-N*******************************************************************************/
-N
-N// DOM-IGNORE-BEGIN
-N/*******************************************************************************
-N Copyright (c) 2015 released Microchip Technology Inc.  All rights reserved.
-N
-N Microchip licenses to you the right to use, modify, copy and distribute
-N Software only when embedded on a Microchip microcontroller or digital signal
-N controller that is integrated into your product or third party product
-N (pursuant to the sublicense terms in the accompanying license agreement).
-N
-N You should refer to the license agreement accompanying this Software for
-N additional information regarding your rights and obligations.
-N
-N SOFTWARE AND DOCUMENTATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
-N EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF
-N MERCHANTABILITY, TITLE, NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE.
-N IN NO EVENT SHALL MICROCHIP OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER
-N CONTRACT, NEGLiPMPCE, STRICT LIABILITY, CONTRIBUTION, BREACH OF WARRANTY, OR
-N OTHER LEGAL EQUITABLE THEORY ANY DIRECT OR INDIRECT DAMAGES OR EXPENSES
-N INCLUDING BUT NOT LIMITED TO ANY INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE OR
-N CONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST DATA, COST OF PROCUREMENT OF
-N SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
-N (INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
-N *******************************************************************************/
-N// DOM-IGNORE-END
-N
-N// *****************************************************************************
-N// *****************************************************************************
-N// Section: Included Files
-N// *****************************************************************************
-N// *****************************************************************************
-N
-N
-N#ifndef SPIDRIVER_H
-N#define	SPIDRIVER_H
-N
-N#include "ecat_def.h"
-N#include "stm32f4xx_hal.h"
-N
-N#ifdef	__cplusplus
-Sextern "C" {
-N#endif
-N	// *****************************************************************************
-N	// *****************************************************************************
-N	// Section: File Scope or Global Data Types
-N	// *****************************************************************************
-N	// *****************************************************************************
-N	#define CMD_SERIAL_READ 0x03
-N	#define CMD_FAST_READ 0x0B
-N	#define CMD_DUAL_OP_READ 0x3B
-N	#define CMD_DUAL_IO_READ 0xBB
-N	#define CMD_QUAD_OP_READ 0x6B
-N	#define CMD_QUAD_IO_READ 0xEB
-N	#define CMD_SERIAL_WRITE 0x02
-N	#define CMD_DUAL_DATA_WRITE 0x32
-N	#define CMD_DUAL_ADDR_DATA_WRITE 0xB2
-N	#define CMD_QUAD_DATA_WRITE 0x62
-N	#define CMD_QUAD_ADDR_DARA_WRITE 0xE2
-N
-N	#define CMD_SERIAL_READ_DUMMY 0
-N	#define CMD_FAST_READ_DUMMY 1
-N	#define CMD_DUAL_OP_READ_DUMMY 1
-N	#define CMD_DUAL_IO_READ_DUMMY 2
-N	#define CMD_QUAD_OP_READ_DUMMY 1
-N	#define CMD_QUAD_IO_READ_DUMMY 4
-N	#define CMD_SERIAL_WRITE_DUMMY 0
-N	#define CMD_DUAL_DATA_WRITE_DUMMY 0
-N	#define CMD_DUAL_ADDR_DATA_WRITE_DUMMY 0
-N	#define CMD_QUAD_DATA_WRITE_DUMMY 0
-N	#define CMD_QUAD_ADDR_DARA_WRITE_DUMMY 0
-N
-N	#define ESC_CSR_CMD_REG		0x304
-N	#define ESC_CSR_DATA_REG	0x300
-N	#define ESC_WRITE_BYTE 		0x80
-N	#define ESC_READ_BYTE 		0xC0
-N	#define ESC_CSR_BUSY		0x80
-N
-N  
-N	#define SPIWriteByte(UINT8) SPIWrite(UINT8)
-N	#define SPIReadByte() SPIRead()
-N
-N
-N    typedef union {
-N        UINT16 Val;
-X        unsigned short Val;
-N        struct __attribute__((packed)) {
-N            UINT8 LB;
-X            unsigned char LB;
-N            UINT8 HB;
-X            unsigned char HB;
-N        } byte;
-N    } UINT16_VAL;
-N
-N    typedef union {
-N        UINT32 Val;
-X        unsigned int Val;
-N        UINT16 w[2] __attribute__((packed));
-X        unsigned short w[2] __attribute__((packed));
-N        UINT8  v[4];
-X        unsigned char  v[4];
-N        struct __attribute__((packed)) {
-N            UINT16 LW;
-X            unsigned short LW;
-N            UINT16 HW;
-X            unsigned short HW;
-N        } word;
-N        struct __attribute__((packed)) {
-N            UINT8 LB;
-X            unsigned char LB;
-N            UINT8 HB;
-X            unsigned char HB;
-N            UINT8 UB;
-X            unsigned char UB;
-N            UINT8 MB;
-X            unsigned char MB;
-N        } byte;
-N    } UINT32_VAL;
-N
-N    typedef union {
-N        UINT64 Val;
-X        unsigned long long Val;
-N        UINT16 w[4];
-X        unsigned short w[4];
-N        UINT8  v[8];
-X        unsigned char  v[8];
-N    } UINT64_VAL;
-N
-N#define SPI_BUFFER_SIZE 512u
-N
-N#define ECAT_SPI_TIMEOUT 2000u
-N		
-Nextern SPI_HandleTypeDef *EcatHspiPtr;
-Nextern UINT8 EcatSpiReadBuffer[SPI_BUFFER_SIZE];
-Xextern unsigned char EcatSpiReadBuffer[512u];
-Nextern UINT8 EcatSpiWriteBuffer[SPI_BUFFER_SIZE];
-Xextern unsigned char EcatSpiWriteBuffer[512u];
-N	// *****************************************************************************
-N	// *****************************************************************************
-N	// Section: File Scope Functions
-N	// *****************************************************************************
-N	// *****************************************************************************
-N
-N	void SPIWritePDRamRegister(UINT8 *WriteBuffer, UINT16 Address, UINT16 Count);
-X	void SPIWritePDRamRegister(unsigned char *WriteBuffer, unsigned short Address, unsigned short Count);
-N	void SPIReadPDRamRegister(UINT8 *ReadBuffer, UINT16 Address, UINT16 Count);
-X	void SPIReadPDRamRegister(unsigned char *ReadBuffer, unsigned short Address, unsigned short Count);
-N    void SPIReadRegUsingCSR(UINT8 *ReadBuffer, UINT16 Address, UINT8 Count);
-X    void SPIReadRegUsingCSR(unsigned char *ReadBuffer, unsigned short Address, unsigned char Count);
-N    void SPIWriteRegUsingCSR( UINT8 *WriteBuffer, UINT16 Address, UINT8 Count);
-X    void SPIWriteRegUsingCSR( unsigned char *WriteBuffer, unsigned short Address, unsigned char Count);
-N	void SPIWriteDWord (UINT16 Address, UINT32 Val);
-X	void SPIWriteDWord (unsigned short Address, unsigned int Val);
-N	UINT32 SPIReadDWord (UINT16 Address);
-X	unsigned int SPIReadDWord (unsigned short Address);
-N    void SPIWriteBurstMode (UINT32 Val);
-X    void SPIWriteBurstMode (unsigned int Val);
-N    UINT32 SPIReadBurstMode (void);
-X    unsigned int SPIReadBurstMode (void);
-N    void SPISendAddr (UINT16 Address);
-X    void SPISendAddr (unsigned short Address);
-N    void PDIWriteLAN9252DirectReg( UINT32 Val, UINT16 Address);
-X    void PDIWriteLAN9252DirectReg( unsigned int Val, unsigned short Address);
-N    UINT32 PDIReadLAN9252DirectReg( UINT16 Address);
-X    unsigned int PDIReadLAN9252DirectReg( unsigned short Address);
-N    void PDIReadReg(UINT8 *ReadBuffer, UINT16 Address, UINT16 Count);
-X    void PDIReadReg(unsigned char *ReadBuffer, unsigned short Address, unsigned short Count);
-N    void PDIWriteReg( UINT8 *WriteBuffer, UINT16 Address, UINT16 Count);
-X    void PDIWriteReg( unsigned char *WriteBuffer, unsigned short Address, unsigned short Count);
-N#ifdef	__cplusplus
-S}
-N#endif
-N
-N#endif	/* PMPDRIVER_H */
-N
-L 54 ".\etherCAT\9252_HW.h" 2
 N#include  "PDIDriver.h"
 L 1 ".\etherCAT\PDIDriver.h" 1
 N/*
@@ -48137,7 +47425,680 @@ N
 N#undef    PROTO
 N
 N#endif
-L 51 ".\etherCAT\ecatslv.h" 2
+L 36 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 2
+N#include "ecatappl.h"
+L 1 ".\etherCAT\ecatappl.h" 1
+N/*
+N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
+N* The corresponding license agreement applies. This hint shall not be removed.
+N* https://www.beckhoff.com/media/downloads/slave-stack-code/ethercat_ssc_license.pdf
+N*/
+N
+N/**
+N \addtogroup EcatAppl EtherCAT application
+N * @{
+N */
+N
+N/**
+N\file ecatappl.h
+N\author EthercatSSC@beckhoff.com
+N
+N\version 5.12
+N
+N<br>Changes to version V5.11:<br>
+NV5.12 EEPROM1: get read size from register 0x502.6<br>
+N<br>Changes to version V5.10:<br>
+NV5.11 ECAT10: change PROTO handling to prevent compiler errors<br>
+N<br>Changes to version V5.01:<br>
+NV5.10 ECAT13: Update Synchronisation handling (FreeRun,SM Sync, Sync0, Sync1)<br>
+N              Compare DC UINT configuration (by ESC Config data) vs. DC activation register settings<br>
+N              Update 0x1C3x entries<br>
+NV5.10 ECAT4: Update alignment macro for 8 to 15 bit alignments (16 and 32 Bit controllers)<br>
+N             Bugfix calculate LED blink frequency<br>
+N<br>Changes to version - :<br>
+NV5.01 : Start file change log
+N */
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Description
+N------
+N------    ecatappl.h
+N------
+N------    EtherCAT Slave Application
+N------                                                                                                                                                                 ------
+N-----------------------------------------------------------------------------------------*/
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Includes
+N------
+N-----------------------------------------------------------------------------------------*/
+N
+N#include "ecat_def.h"
+N
+N
+N#ifndef _ECATAPPL_H_
+N#define _ECATAPPL_H_
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Defines and Types
+N------
+N-----------------------------------------------------------------------------------------*/
+N
+N/*Set to unsigned short to handle bit entries correct*/
+N#define     BOOLEAN(x)                 UINT16 x:1 /**< \brief Macro to define BOOLEAN object entry*/
+N#define     BIT1(x)                    UINT16 x:1 /**< \brief Macro to define BIT1 object entry*/
+N#define     BIT2(x)                    UINT16 x:2 /**< \brief Macro to define BIT2 object entry*/
+N#define     BIT3(x)                    UINT16 x:3 /**< \brief Macro to define BIT3 object entry*/
+N#define     BIT4(x)                    UINT16 x:4 /**< \brief Macro to define BIT4 object entry*/
+N#define     BIT5(x)                    UINT16 x:5 /**< \brief Macro to define BIT5 object entry*/
+N#define     BIT6(x)                    UINT16 x:6 /**< \brief Macro to define BIT5 object entry*/
+N#define     BIT7(x)                    UINT16 x:7 /**< \brief Macro to define BIT6 object entry*/
+N#define     BIT8(x)                    UINT16 x:8 /**< \brief Macro to define BIT7 object entry*/
+N#define     ALIGN0(x)
+N#define     ALIGN1(x)                  UINT16 x:1; /**< \brief Macro to define ALIGN1 object entry*/
+N#define     ALIGN2(x)                  UINT16 x:2; /**< \brief Macro to define ALIGN2 object entry*/
+N#define     ALIGN3(x)                  UINT16 x:3; /**< \brief Macro to define ALIGN3 object entry*/
+N#define     ALIGN4(x)                  UINT16 x:4; /**< \brief Macro to define ALIGN4 object entry*/
+N#define     ALIGN5(x)                  UINT16 x:5; /**< \brief Macro to define ALIGN5 object entry*/
+N#define     ALIGN6(x)                  UINT16 x:6; /**< \brief Macro to define ALIGN6 object entry*/
+N#define     ALIGN7(x)                  UINT16 x:7; /**< \brief Macro to define ALIGN7 object entry*/
+N#define     ALIGN8(x)                  UINT16 x:8; /**< \brief Macro to define ALIGN8 object entry*/
+N#define     ALIGN9(x)                  UINT16 x:9; /**< \brief Macro to define ALIGN9 object entry*/
+N#define     ALIGN10(x)                 UINT16 x:10; /**< \brief Macro to define ALIGN10 object entry*/
+N#define     ALIGN11(x)                 UINT16 x:11; /**< \brief Macro to define ALIGN11 object entry*/
+N#define     ALIGN12(x)                 UINT16 x:12; /**< \brief Macro to define ALIGN12 object entry*/
+N#define     ALIGN13(x)                 UINT16 x:13; /**< \brief Macro to define ALIGN13 object entry*/
+N#define     ALIGN14(x)                 UINT16 x:14; /**< \brief Macro to define ALIGN14 object entry*/
+N#define     ALIGN15(x)                 UINT16 x:15; /**< \brief Macro to define ALIGN15 object entry*/
+N/*ET9300 Project Handler :(#if CONTROLLER_16BIT || CONTROLLER_32BIT #else) lines 85 to 121 deleted*/
+N#endif //_ECATAPPL_H_
+N
+N#if defined(_ECATAPPL_) && (_ECATAPPL_ == 1)
+X#if 0L && (_ECATAPPL_ == 1)
+S    #define PROTO
+N#else
+N    #define PROTO extern
+N#endif
+N
+N#define ESC_RD 0
+N#define ESC_WR 1
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Global Variables
+N------
+N-----------------------------------------------------------------------------------------*/
+N
+N
+N/*ET9300 Project Handler :(#if ESC_EEPROM_EMULATION) lines 138 to 140 deleted*/
+N
+NPROTO BOOL bEcatWaitForInputUpdate; /**< \brief Wait for input update*/
+Xextern unsigned char bEcatWaitForInputUpdate;  
+NPROTO BOOL bEtherCATRunLed; /**< \brief Current run LED value*/
+Xextern unsigned char bEtherCATRunLed;  
+NPROTO BOOL bEtherCATErrorLed; /**< \brief Current error LED value*/
+Xextern unsigned char bEtherCATErrorLed;  
+NPROTO BOOL bRunApplication; /**< \brief Indicates if the stack shall be running (if false the Hardware will be released)*/
+Xextern unsigned char bRunApplication;  
+N
+N
+N
+N/*ET9300 Project Handler :(#if ESC_EEPROM_EMULATION) lines 149 to 151 deleted*/
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Global Functions
+N------
+N-----------------------------------------------------------------------------------------*/
+N
+N
+N
+N
+NPROTO    void       ECAT_CheckTimer(void);
+Xextern    void       ECAT_CheckTimer(void);
+NPROTO    void       PDI_Isr(void);
+Xextern    void       PDI_Isr(void);
+NPROTO    void       Sync0_Isr(void);
+Xextern    void       Sync0_Isr(void);
+NPROTO    void       Sync1_Isr(void);
+Xextern    void       Sync1_Isr(void);
+NPROTO    void       ECAT_Application(void);
+Xextern    void       ECAT_Application(void);
+NPROTO    void       PDO_ResetOutputs(void);
+Xextern    void       PDO_ResetOutputs(void);
+NPROTO    void       PDO_ReadInputs(void);
+Xextern    void       PDO_ReadInputs(void);
+NPROTO    void       PDO_InputMapping(void);
+Xextern    void       PDO_InputMapping(void);
+N
+N/*ET9300 Project Handler :(#if UC_SET_ECAT_LED) lines 172 to 174 deleted*/
+NPROTO    void       CalcSMCycleTime(void);
+Xextern    void       CalcSMCycleTime(void);
+NPROTO    UINT16     ESC_EepromAccess(UINT32 wordaddress, UINT16 wordsize, UINT16 MBXMEM *pData, UINT8 access);
+Xextern    unsigned short     ESC_EepromAccess(unsigned int wordaddress, unsigned short wordsize, unsigned short  *pData, unsigned char access);
+NPROTO    UINT16     ESC_EepromWriteCRC(void);
+Xextern    unsigned short     ESC_EepromWriteCRC(void);
+N
+N/*ET9300 Project Handler :(#if ESC_EEPROM_EMULATION) lines 183 to 185 deleted*/
+N
+N
+N
+N#undef PROTO
+N/** @}*/
+L 37 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 2
+N#include "applInterface.h"
+L 1 ".\etherCAT\applInterface.h" 1
+N/*
+N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
+N* The corresponding license agreement applies. This hint shall not be removed.
+N* https://www.beckhoff.com/media/downloads/slave-stack-code/ethercat_ssc_license.pdf
+N*/
+N
+N/**
+N\addtogroup EcatAppl EtherCAT application
+N@{
+N*/
+N
+N/**
+N\file applInterface.h
+N\author EthercatSSC@beckhoff.com
+N\brief Definition of the application interface functions
+N
+N\version 5.13
+N
+N<br>Changes to version V5.12:<br>
+NV5.13 COE4: update default entry name handling in case of 16Bit characters, add CoE Read/write indication functions<br>
+N<br>Changes to version V5.11:<br>
+NV5.12 APPL1: add optional application function called from the main loop (after mbx and esm are executed)<br>
+NV5.12 EEPROM3: implement a store EEPROM timeout handler<br>
+NV5.12 EOE1: move icmp sample to the sampleappl,add EoE application interface functions<br>
+NV5.12 FOE1: update new interface,move the FoE sample to sampleappl,add FoE application callback functions<br>
+N<br>Changes to version - :<br>
+NV5.10.1 : Start file change log
+N*/
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Includes
+N------
+N-----------------------------------------------------------------------------------------*/
+N
+N
+N#ifndef _APPL_INTERFACE_H_
+N#define _APPL_INTERFACE_H_
+N
+N#include "ecat_def.h"
+N#include <stdlib.h>
+N#include <string.h>
+N#include "esc.h"
+L 1 ".\etherCAT\esc.h" 1
+N/*
+N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
+N* The corresponding license agreement applies. This hint shall not be removed.
+N* https://www.beckhoff.com/media/downloads/slave-stack-code/ethercat_ssc_license.pdf
+N*/
+N
+N/**
+N * \addtogroup ESCRegister  ESC Register
+N * @{
+N */
+N
+N/**
+N\file esc.h
+N\author EthercatSSC@beckhoff.com
+N\brief EtherCAT Slave Controller related defines and Types
+N
+N\version 5.10
+N
+N<br>Changes to version V5.01:<br>
+NV5.10 ESC1: Update address register offset for 32Bit ESC access<br>
+NV5.10 ESC2: Check if defined SM settings do not exceed the available DPRAM range (in error case AL Status 0x14 is returned)<br>
+NV5.10 ESC3: Handle DC cControl register values in case of 32Bit ESC access (a Sync activation mask need to defined/used)<br>
+N<br>Changes to version - :<br>
+NV5.01 : Start file change log
+N */
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Includes
+N------
+N-----------------------------------------------------------------------------------------*/
+N#include "ecat_def.h"
+N
+N#ifndef _ESC_H_
+S#define _ESC_H_
+S
+S/*-----------------------------------------------------------------------------------------
+S------
+S------    Defines and Types
+S------
+S-----------------------------------------------------------------------------------------*/
+S
+S#define SIZEOF_SM_REGISTER                      8 /**< \brief Each SyncManger has 8Byte Configuration/Status Registers*/
+S#define MAX_NO_OF_SYNC_MAN                      16/**< \brief Maximum Number of SyncManager channels supported by an ESC*/
+S
+S#define    BL_PAGE_SIZE        512
+S
+S/*---------------------------------------------
+S-    ESC Offsets (Detailed Information about the registers are located in the ESC Datasheets e.g. ET1100 Datasheet http://www.beckhoff.com/english.asp?download/ethercat_development_products.htm?id=71003127100387)
+S-----------------------------------------------*/
+S#define ESC_INFO_OFFSET                         0x0000                               /**< \brief ESC information registers startoffset*/
+S
+S#define ESC_COMM_INFO_OFFSET                    0x0004                               /**< \brief Communication information registers startoffset*/
+S
+S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 54 to 59 deleted*/
+S#define ESC_DPRAM_SIZE_OFFSET                   0x0006                              /**< \brief Register Description: Size of the supported DPRAM in KB*/
+S#define ESC_SM_CHANNELS_MASK                    0xFF00                              /**< \brief Mask based on ESC offset "ESC_COMM_INFO_OFFSET"*/
+S#define ESC_SM_CHANNELS_SHIFT                   8                                   /**< \brief Bit shift based on ESC offset "ESC_COMM_INFO_OFFSET"*/
+S#define ESC_DPRAM_SIZE_MASK                     0x00FF
+S/*ET9300 Project Handler :(#if ESC_16BIT_ACCESS #else) lines 65 to 67 deleted*/
+S
+S#define ESC_FEATURES_OFFSET                     0x0008                              /**< \brief Register indicating ESC features*/
+S#define ESC_DC_32BIT_MASK                       0x00000008                          /**< \brief register 0x0008.3 indicates if the DC Unit supports 32Bit/64Bit DC*/
+S
+S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 73 to 75 deleted*/
+S
+S#define ESC_SLAVE_ADDRESS_OFFSET                0x0010                              /**< \brief Register Description: Address used for node addressing (FPxx commands)*/
+S
+S
+S
+S#define ESC_AL_CONTROL_OFFSET                   0x0120                              /**< \brief Register Description: Initiate State Transition of the Device State Machine*/
+S#define ESC_AL_STATUS_OFFSET                    0x0130                              /**< \brief Register Description: Actual State of the Device State Machine*/
+S#define ESC_AL_STATUS_CODE_OFFSET               0x0134                              /**< \brief Register Description: AL Status Code*/
+S
+S#define ESC_RUN_LED_OVERRIDE                    0x0138                              /**< \brief Register Description: Set Ecat Run indication via ESC. (not all ESC types support this feature)*/
+S#define ESC_ERROR_LED_OVERRIDE                  0x0139                              /**< \brief Register Description: Set Ecat Error indication via ESC. (not all ESC types support this feature)*/
+S
+S#define ESC_PDI_CONTROL_OFFSET                  0x0140                              /**< \brief Register Description: Specifies the process data interface*/
+S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 89 to 91 deleted*/
+S#define ESC_DEVICE_EMULATION                    0x0100                              /**< \brief Device emulation bit*/
+S
+S#define ESC_PDI_CONFIGURATION					0x0150								/**< \brief Register Description: PDI configuration register (values defined by the ESC configuration data)*/
+S#define ESC_SYNC0_MAPPED_TO_ALEVENT				0x0800								/**< \brief bit indicating if the Sync0 event is mapped to the AL Event register*/
+S#define ESC_SYNC1_MAPPED_TO_ALEVENT				0x8000								/**< \brief bit indicating if the Sync1 event is mapped to the AL Event register*/
+S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS || ESC_16BIT_ACCESS #else) lines 99 to 103 deleted*/
+S
+S
+S#define ESC_AL_EVENTMASK_OFFSET                 0x0204                              /**< \brief Register Description: AL Event masking of the AL Event Request register Events for mapping to PDI IRQ signal*/
+S#define ESC_AL_EVENT_OFFSET                     0x0220                              /**< \brief Register Description: "Mirror" register for ESC events*/
+S
+S#define ESC_WD_DIVIDER_OFFSET                   0x0400                              /**< \brief Register Description: Number of 25 MHz tics (minus 2) that represents the basic watchdog increment. (Default value is 100us = 2498)*/
+S
+S#define ESC_PD_WD_TIME                          0x0420                              /**< \brief Register Description: Number of basic watchdog increments (Default value with Watchdog divider 100us means 100ms Watchdog)*/
+S#define ESC_PD_WD_STATE                         0x0440                              /**< \brief Register Description: Watchdog Status of Process Data (triggered by SyncManagers)*/
+S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 113 to 115 deleted*/
+S#define ESC_PD_WD_TRIGGER_MASK                  0x0001                              /**< \brief Trigger state of the process data watchdog*/
+S
+S#define ESC_EEPROM_CONFIG_OFFSET                0x0500                              /**< \brief Register Description: EEPROM Access Configuration*/
+S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 120 to 138 deleted*/
+S/*EEPROM config and access state bit mask (based on "ESC_EEPROM_CONFIG_OFFSET") - START*/
+S#define ESC_EEPROM_ASSIGN_TO_PDI_MASK           0x0001                              /**< \brief Description (0x500.0): PDI has EEPROM control*/
+S#define ESC_EEPROM_LOCKED_BY_PDI_MASK           0x0100                              /**< \brief Description (0x500.8): PDI locked EEPROM access*/
+S/*EEPROM config and access state bit mask (based on "ESC_EEPROM_CONFIG_OFFSET") - END*/
+S
+S#define ESC_EEPROM_CONTROL_OFFSET               0x0502
+S/* EEPROM command and status bit masks (based on "ESC_EEPROM_CONTROL_OFFSET") - START*/
+S#define ESC_EEPROM_SUPPORTED_READBYTES_MASK     0x0040                              /**< \brief Description (0x502.6): Supported number of EEPROM read bytes: 0-> 4 Bytes; 1 -> 8 Bytes*/
+S#define ESC_EEPROM_CMD_MASK                     0x0700                              /**< \brief Description (0x502.8:10): Command bit mask*/
+S#define ESC_EEPROM_CMD_READ_MASK                0x0100                              /**< \brief Description (0x502.8): Currently executed read command*/
+S#define ESC_EEPROM_CMD_WRITE_MASK               0x0200                              /**< \brief Description (0x502.9): Initialize Write Command*/
+S#define ESC_EEPROM_CMD_RELOAD_MASK              0x0400                              /**< \brief Description (0x502.10): Trigger EEPROM reload*/
+S#define ESC_EEPROM_ERROR_MASK                   0x7800                              /**< \brief Description : Mask all EEPROM error bits; Checksum error (0x0502.11); EEPROM not loaded (0x0502.12); Missing EEPROM Acknowledge (0x0502.13); Write Error (0x0502.14)*/
+S#define ESC_EEPROM_ERROR_CRC                    0x0800                              /**< \brief Description (0x502.11): EEPROM CRC Error*/
+S#define ESC_EEPROM_ERROR_LOAD                   0x1000                              /**< \brief Description (0x502.11): EEPROM loading status (0 = OK)*/
+S#define ESC_EEPROM_ERROR_CMD_ACK                0x2000                              /**< \brief Description (0x502.13): EEPROM Acknowledge/Command*/
+S#define ESC_EEPROM_BUSY_MASK                    0x8000                              /**< \brief Description (0x502.15): EEPROM Busy*/
+S/* EEPROM command and status bit masks (based on "ESC_EEPROM_CONTROL_OFFSET") - END*/
+S#define ESC_EEPROM_ADDRESS_OFFSET               0x0504
+S#define ESC_EEPROM_DATA_OFFSET                  0x0508
+S
+S#define ESC_SYNCMAN_REG_OFFSET                  0x0800                              /**< \brief Register Description: Start address of the SyncManager Configuration/Staus registers*/
+S#define ESC_SYNCMAN_CONTROL_OFFSET              0x0804                              /**< \brief Register Description: SyncManager Setting Register*/
+S
+S/*ET9300 Project Handler :(#if !ESC_32BIT_ACCESS && !ESC_16BIT_ACCESS) lines 164 to 166 deleted*/
+S
+S#define ESC_SYNCMAN_ACTIVE_OFFSET               0x0806                              /**< \brief Register Description: SyncManager Activation Register*/
+S
+S/*ET9300 Project Handler :(#if !ESC_32BIT_ACCESS && !ESC_16BIT_ACCESS) lines 172 to 174 deleted*/
+S
+S#define    ESC_SYSTEMTIME_OFFSET                0x0910                              /**< \brief Register Description: Local copy of the System Time*/
+S
+S#define    ESC_DC_UNIT_CONTROL_OFFSET           0x0980                              /**< \brief Register Description: Control registers for Cycle and Sync Unit (can be predefined with the "AssignActivate" Element in the device description, for further information see ETG.2000)*/
+S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 179 to 185 deleted*/
+S#define ESC_DC_SYNC_UNIT_ACTIVE_MASK            0x0100                              /**< \brief Description (0x980.8): Sync Out Unit is activated*/
+S#define ESC_DC_SYNC0_ACTIVE_MASK                0x0200                              /**< \brief Description (0x980.9): Sync0 generation is activated*/
+S#define ESC_DC_SYNC1_ACTIVE_MASK                0x0400                              /**< \brief Description (0x980.10): Sync1 generation is activated*/
+S#define ESC_DC_SYNC_UNIT_AUTO_ACTIVE_MASK       0x0800                              /**< \brief Description (0x980.11): Sync Out Unit is activated automatic when System time was written*/
+S/*ET9300 Project Handler :( #else) lines 190 to 196 deleted*/
+S
+S#define    ESC_DC_SYNC_STATUS		            0x098C                              /**< \brief Register Description: register 0x98E and 0x98F reflecting the status of Sync0 and Sync1*/
+S
+S#define ESC_DC_SYNC0_CYCLETIME_OFFSET           0x09A0                              /**< \brief Register Description: 32Bit Time between two consecutive SYNC0 pulses in ns*/
+S#define ESC_DC_SYNC1_CYCLETIME_OFFSET           0x09A4                              /**< \brief Register Description: 32Bit Time between two consecutive SYNC1 pulses in ns*/
+S
+S
+S/*ET9300 Project Handler :(#if FC1100_HW) lines 205 to 207 deleted*/
+S
+S
+S/*---------------------------------------------
+S-    Sync Manager
+S-----------------------------------------------*/
+S/** \brief SyncManager register structure*/
+Stypedef struct STRUCT_PACKED_START
+S{
+S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 217 to 259 deleted*/
+S
+S  UINT16                        PhysicalStartAddress; /**< \brief SyncManager address*/
+S  UINT16                        Length; /**< \brief SyncManager length*/
+S
+S    UINT16                        Settings[2]; /**< \brief Register values 0x0804 : 0x0807*/
+S
+S/*Defines to access :
+S* - SM Control register 0x0804
+S* - SM Status register 0x0805
+S*
+S* all defines are based on 0x0804
+S*/
+S
+S/*SyncManger control (0x0804) access*/
+S#define SM_SETTING_CONTROL_OFFSET           0 /**< \brief Offset to value of register 0x0804*/
+S#define SM_SETTING_MODE_MASK                0x0002 /**< \brief SyncManager mode mask*/
+S#define SM_SETTING_MODE_THREE_BUFFER_VALUE  0x0000 /**< \brief SyncManager 3Buffer mode value*/
+S#define SM_SETTING_MODE_ONE_BUFFER_VALUE    0x0002 /**< \brief SyncManager 1Buffer mode value*/
+S#define SM_SETTING_DIRECTION_MASK           0x000C /**< \brief SyncManager direction mask*/
+S#define SM_SETTING_DIRECTION_READ_VALUE     0x0000 /**< \brief SyncManager read direction*/
+S#define SM_SETTING_DIRECTION_WRITE_VALUE    0x0004 /**< \brief SyncManager write direction*/
+S#define SM_SETTING_WATCHDOG_VALUE           0x0040 /**< \brief SyncManager watchdog value*/
+S
+S/*SyncManger status (0x0805) access*/
+S#define SM_STATUS_MBX_BUFFER_FULL           0x0800 /**< \brief Indicates in one buffer mode if buffer was completely written*/
+S
+S/*Defines to access :
+S* - SM Active register 0x0806
+S* - SM PDI Control register 0x0807
+S*
+S* all defines are based on 0x0806
+S*/
+S
+S/*SyncManger active (0x0806) access*/
+S#define SM_SETTING_ACTIVATE_OFFSET          1 /**< \brief Offset to value of register 0x0806*/
+S#define SM_SETTING_ENABLE_VALUE             0x0001 /**< \brief SyncManager enable*/
+S#define SM_SETTING_REPAET_REQ_MASK          0x0002 /**< \brief SyncManager Repeat request*/
+S#define SM_SETTING_REPEAT_REQ_SHIFT         0 /**< \brief SyncManager Repeat request shift*/
+S
+S/*SyncManger PDI Control (0x0807) access*/
+S#define SM_SETTING_PDI_DISABLE              0x0100  /**< \brief Bit0 of register 0x0807 (if 1 SM is disabled from PDI)*/
+S#define SM_SETTING_REPEAT_ACK               0x0200 /**< \brief Bit1 of register 0x0807*/
+S/*ET9300 Project Handler :(#if ESC_16BIT_ACCESS #else) lines 303 to 354 deleted*/
+S}STRUCT_PACKED_END
+STSYNCMAN;
+S
+S
+S/*ET9300 Project Handler :(#if FC1100_HW) lines 361 to 363 deleted*/
+S
+N#endif //_ESC_H_
+N/** @}*/
+L 44 ".\etherCAT\applInterface.h" 2
+N#include "ecatslv.h"
+L 1 ".\etherCAT\ecatslv.h" 1
+N/*
+N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
+N* The corresponding license agreement applies. This hint shall not be removed.
+N* https://www.beckhoff.com/media/downloads/slave-stack-code/ethercat_ssc_license.pdf
+N*/
+N
+N/**
+N * \addtogroup ESM EtherCAT State Machine
+N * @{
+N */
+N
+N/**
+N\file ecatslv.h
+N\author EthercatSSC@beckhoff.com
+N
+N\version 5.13
+N
+N<br>Changes to version V5.12:<br>
+NV5.13 EMCY1: update emergency diagcodes for invalid sm configuration<br>
+NV5.13 ESM1: local error handling update, ECAT_StateChange triggers only transitions from Op->Any or reject/accept a pending transition<br>
+N<br>Changes to version V5.11:<br>
+NV5.12 COE4: add timestamp object (0x10F8) and update diagnosis handling<br>
+NV5.12 ECAT6: remove mailbox SyncManager if no mailbox is supported (SM0 Output, SM1 Input)<br>
+N<br>Changes to version V5.10:<br>
+NV5.11 ECAT10: change PROTO handling to prevent compiler errors<br>
+NV5.11 ECAT4: enhance SM/Sync monitoring for input/output only slaves<br>
+NV5.11 ECAT9: add new AL Status Codes (ALSTATUSCODE_FW_SII_NOT_MATCH/0x0006, ALSTATUSCODE_FW_UPDATE_FAILED / 0x0007)<br>
+NV5.11 ESM7: "add Sync define for 0x22 (""SYNCTYPE_SM2_SYNCHRON""), support value 0x22 for 0x1C33.1 (SM2 sync)"<br>
+NV5.11 HW1: "move hardware independent functions ""HW_DisableSyncManChannel()"", ""HW_EnableSyncManChannel()"", ""HW_GetSyncMan()"", ""HW_ResetALEventMask()"", ""HW_SetALEventMask()"" to ecatalv.c"<br>
+N<br>Changes to version V5.01:<br>
+NV5.10 COE1: Define one entry description for all 0x1C3x objects and change data type of SI11,12,13 to UINT16 (according ETG.1020)<br>
+NV5.10 ECAT12: Add new AL Status Codes (0x2E,0x52,0x70)<br>
+NV5.10 ECAT13: Update Synchronisation handling (FreeRun,SM Sync, Sync0, Sync1)<br>
+N              Compare DC UINT configuration (by ESC Config data) vs. DC activation register settings<br>
+N              Update 0x1C3x entries<br>
+N<br>Changes to version - :<br>
+NV5.01 : Start file change log
+N */
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Includes
+N------
+N-----------------------------------------------------------------------------------------*/
+N
+N#include "ecat_def.h"
+N
+N/*ET9300 Project Handler :(#if EL9800_HW #elif FC1100_HW #elif MCI_HW) lines 47 to 53 deleted*/
+N#include  "esc.h"
+L 1 ".\etherCAT\esc.h" 1
+N/*
+N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
+N* The corresponding license agreement applies. This hint shall not be removed.
+N* https://www.beckhoff.com/media/downloads/slave-stack-code/ethercat_ssc_license.pdf
+N*/
+N
+N/**
+N * \addtogroup ESCRegister  ESC Register
+N * @{
+N */
+N
+N/**
+N\file esc.h
+N\author EthercatSSC@beckhoff.com
+N\brief EtherCAT Slave Controller related defines and Types
+N
+N\version 5.10
+N
+N<br>Changes to version V5.01:<br>
+NV5.10 ESC1: Update address register offset for 32Bit ESC access<br>
+NV5.10 ESC2: Check if defined SM settings do not exceed the available DPRAM range (in error case AL Status 0x14 is returned)<br>
+NV5.10 ESC3: Handle DC cControl register values in case of 32Bit ESC access (a Sync activation mask need to defined/used)<br>
+N<br>Changes to version - :<br>
+NV5.01 : Start file change log
+N */
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Includes
+N------
+N-----------------------------------------------------------------------------------------*/
+N#include "ecat_def.h"
+N
+N#ifndef _ESC_H_
+S#define _ESC_H_
+S
+S/*-----------------------------------------------------------------------------------------
+S------
+S------    Defines and Types
+S------
+S-----------------------------------------------------------------------------------------*/
+S
+S#define SIZEOF_SM_REGISTER                      8 /**< \brief Each SyncManger has 8Byte Configuration/Status Registers*/
+S#define MAX_NO_OF_SYNC_MAN                      16/**< \brief Maximum Number of SyncManager channels supported by an ESC*/
+S
+S#define    BL_PAGE_SIZE        512
+S
+S/*---------------------------------------------
+S-    ESC Offsets (Detailed Information about the registers are located in the ESC Datasheets e.g. ET1100 Datasheet http://www.beckhoff.com/english.asp?download/ethercat_development_products.htm?id=71003127100387)
+S-----------------------------------------------*/
+S#define ESC_INFO_OFFSET                         0x0000                               /**< \brief ESC information registers startoffset*/
+S
+S#define ESC_COMM_INFO_OFFSET                    0x0004                               /**< \brief Communication information registers startoffset*/
+S
+S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 54 to 59 deleted*/
+S#define ESC_DPRAM_SIZE_OFFSET                   0x0006                              /**< \brief Register Description: Size of the supported DPRAM in KB*/
+S#define ESC_SM_CHANNELS_MASK                    0xFF00                              /**< \brief Mask based on ESC offset "ESC_COMM_INFO_OFFSET"*/
+S#define ESC_SM_CHANNELS_SHIFT                   8                                   /**< \brief Bit shift based on ESC offset "ESC_COMM_INFO_OFFSET"*/
+S#define ESC_DPRAM_SIZE_MASK                     0x00FF
+S/*ET9300 Project Handler :(#if ESC_16BIT_ACCESS #else) lines 65 to 67 deleted*/
+S
+S#define ESC_FEATURES_OFFSET                     0x0008                              /**< \brief Register indicating ESC features*/
+S#define ESC_DC_32BIT_MASK                       0x00000008                          /**< \brief register 0x0008.3 indicates if the DC Unit supports 32Bit/64Bit DC*/
+S
+S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 73 to 75 deleted*/
+S
+S#define ESC_SLAVE_ADDRESS_OFFSET                0x0010                              /**< \brief Register Description: Address used for node addressing (FPxx commands)*/
+S
+S
+S
+S#define ESC_AL_CONTROL_OFFSET                   0x0120                              /**< \brief Register Description: Initiate State Transition of the Device State Machine*/
+S#define ESC_AL_STATUS_OFFSET                    0x0130                              /**< \brief Register Description: Actual State of the Device State Machine*/
+S#define ESC_AL_STATUS_CODE_OFFSET               0x0134                              /**< \brief Register Description: AL Status Code*/
+S
+S#define ESC_RUN_LED_OVERRIDE                    0x0138                              /**< \brief Register Description: Set Ecat Run indication via ESC. (not all ESC types support this feature)*/
+S#define ESC_ERROR_LED_OVERRIDE                  0x0139                              /**< \brief Register Description: Set Ecat Error indication via ESC. (not all ESC types support this feature)*/
+S
+S#define ESC_PDI_CONTROL_OFFSET                  0x0140                              /**< \brief Register Description: Specifies the process data interface*/
+S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 89 to 91 deleted*/
+S#define ESC_DEVICE_EMULATION                    0x0100                              /**< \brief Device emulation bit*/
+S
+S#define ESC_PDI_CONFIGURATION					0x0150								/**< \brief Register Description: PDI configuration register (values defined by the ESC configuration data)*/
+S#define ESC_SYNC0_MAPPED_TO_ALEVENT				0x0800								/**< \brief bit indicating if the Sync0 event is mapped to the AL Event register*/
+S#define ESC_SYNC1_MAPPED_TO_ALEVENT				0x8000								/**< \brief bit indicating if the Sync1 event is mapped to the AL Event register*/
+S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS || ESC_16BIT_ACCESS #else) lines 99 to 103 deleted*/
+S
+S
+S#define ESC_AL_EVENTMASK_OFFSET                 0x0204                              /**< \brief Register Description: AL Event masking of the AL Event Request register Events for mapping to PDI IRQ signal*/
+S#define ESC_AL_EVENT_OFFSET                     0x0220                              /**< \brief Register Description: "Mirror" register for ESC events*/
+S
+S#define ESC_WD_DIVIDER_OFFSET                   0x0400                              /**< \brief Register Description: Number of 25 MHz tics (minus 2) that represents the basic watchdog increment. (Default value is 100us = 2498)*/
+S
+S#define ESC_PD_WD_TIME                          0x0420                              /**< \brief Register Description: Number of basic watchdog increments (Default value with Watchdog divider 100us means 100ms Watchdog)*/
+S#define ESC_PD_WD_STATE                         0x0440                              /**< \brief Register Description: Watchdog Status of Process Data (triggered by SyncManagers)*/
+S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 113 to 115 deleted*/
+S#define ESC_PD_WD_TRIGGER_MASK                  0x0001                              /**< \brief Trigger state of the process data watchdog*/
+S
+S#define ESC_EEPROM_CONFIG_OFFSET                0x0500                              /**< \brief Register Description: EEPROM Access Configuration*/
+S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 120 to 138 deleted*/
+S/*EEPROM config and access state bit mask (based on "ESC_EEPROM_CONFIG_OFFSET") - START*/
+S#define ESC_EEPROM_ASSIGN_TO_PDI_MASK           0x0001                              /**< \brief Description (0x500.0): PDI has EEPROM control*/
+S#define ESC_EEPROM_LOCKED_BY_PDI_MASK           0x0100                              /**< \brief Description (0x500.8): PDI locked EEPROM access*/
+S/*EEPROM config and access state bit mask (based on "ESC_EEPROM_CONFIG_OFFSET") - END*/
+S
+S#define ESC_EEPROM_CONTROL_OFFSET               0x0502
+S/* EEPROM command and status bit masks (based on "ESC_EEPROM_CONTROL_OFFSET") - START*/
+S#define ESC_EEPROM_SUPPORTED_READBYTES_MASK     0x0040                              /**< \brief Description (0x502.6): Supported number of EEPROM read bytes: 0-> 4 Bytes; 1 -> 8 Bytes*/
+S#define ESC_EEPROM_CMD_MASK                     0x0700                              /**< \brief Description (0x502.8:10): Command bit mask*/
+S#define ESC_EEPROM_CMD_READ_MASK                0x0100                              /**< \brief Description (0x502.8): Currently executed read command*/
+S#define ESC_EEPROM_CMD_WRITE_MASK               0x0200                              /**< \brief Description (0x502.9): Initialize Write Command*/
+S#define ESC_EEPROM_CMD_RELOAD_MASK              0x0400                              /**< \brief Description (0x502.10): Trigger EEPROM reload*/
+S#define ESC_EEPROM_ERROR_MASK                   0x7800                              /**< \brief Description : Mask all EEPROM error bits; Checksum error (0x0502.11); EEPROM not loaded (0x0502.12); Missing EEPROM Acknowledge (0x0502.13); Write Error (0x0502.14)*/
+S#define ESC_EEPROM_ERROR_CRC                    0x0800                              /**< \brief Description (0x502.11): EEPROM CRC Error*/
+S#define ESC_EEPROM_ERROR_LOAD                   0x1000                              /**< \brief Description (0x502.11): EEPROM loading status (0 = OK)*/
+S#define ESC_EEPROM_ERROR_CMD_ACK                0x2000                              /**< \brief Description (0x502.13): EEPROM Acknowledge/Command*/
+S#define ESC_EEPROM_BUSY_MASK                    0x8000                              /**< \brief Description (0x502.15): EEPROM Busy*/
+S/* EEPROM command and status bit masks (based on "ESC_EEPROM_CONTROL_OFFSET") - END*/
+S#define ESC_EEPROM_ADDRESS_OFFSET               0x0504
+S#define ESC_EEPROM_DATA_OFFSET                  0x0508
+S
+S#define ESC_SYNCMAN_REG_OFFSET                  0x0800                              /**< \brief Register Description: Start address of the SyncManager Configuration/Staus registers*/
+S#define ESC_SYNCMAN_CONTROL_OFFSET              0x0804                              /**< \brief Register Description: SyncManager Setting Register*/
+S
+S/*ET9300 Project Handler :(#if !ESC_32BIT_ACCESS && !ESC_16BIT_ACCESS) lines 164 to 166 deleted*/
+S
+S#define ESC_SYNCMAN_ACTIVE_OFFSET               0x0806                              /**< \brief Register Description: SyncManager Activation Register*/
+S
+S/*ET9300 Project Handler :(#if !ESC_32BIT_ACCESS && !ESC_16BIT_ACCESS) lines 172 to 174 deleted*/
+S
+S#define    ESC_SYSTEMTIME_OFFSET                0x0910                              /**< \brief Register Description: Local copy of the System Time*/
+S
+S#define    ESC_DC_UNIT_CONTROL_OFFSET           0x0980                              /**< \brief Register Description: Control registers for Cycle and Sync Unit (can be predefined with the "AssignActivate" Element in the device description, for further information see ETG.2000)*/
+S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 179 to 185 deleted*/
+S#define ESC_DC_SYNC_UNIT_ACTIVE_MASK            0x0100                              /**< \brief Description (0x980.8): Sync Out Unit is activated*/
+S#define ESC_DC_SYNC0_ACTIVE_MASK                0x0200                              /**< \brief Description (0x980.9): Sync0 generation is activated*/
+S#define ESC_DC_SYNC1_ACTIVE_MASK                0x0400                              /**< \brief Description (0x980.10): Sync1 generation is activated*/
+S#define ESC_DC_SYNC_UNIT_AUTO_ACTIVE_MASK       0x0800                              /**< \brief Description (0x980.11): Sync Out Unit is activated automatic when System time was written*/
+S/*ET9300 Project Handler :( #else) lines 190 to 196 deleted*/
+S
+S#define    ESC_DC_SYNC_STATUS		            0x098C                              /**< \brief Register Description: register 0x98E and 0x98F reflecting the status of Sync0 and Sync1*/
+S
+S#define ESC_DC_SYNC0_CYCLETIME_OFFSET           0x09A0                              /**< \brief Register Description: 32Bit Time between two consecutive SYNC0 pulses in ns*/
+S#define ESC_DC_SYNC1_CYCLETIME_OFFSET           0x09A4                              /**< \brief Register Description: 32Bit Time between two consecutive SYNC1 pulses in ns*/
+S
+S
+S/*ET9300 Project Handler :(#if FC1100_HW) lines 205 to 207 deleted*/
+S
+S
+S/*---------------------------------------------
+S-    Sync Manager
+S-----------------------------------------------*/
+S/** \brief SyncManager register structure*/
+Stypedef struct STRUCT_PACKED_START
+S{
+S/*ET9300 Project Handler :(#if ESC_32BIT_ACCESS) lines 217 to 259 deleted*/
+S
+S  UINT16                        PhysicalStartAddress; /**< \brief SyncManager address*/
+S  UINT16                        Length; /**< \brief SyncManager length*/
+S
+S    UINT16                        Settings[2]; /**< \brief Register values 0x0804 : 0x0807*/
+S
+S/*Defines to access :
+S* - SM Control register 0x0804
+S* - SM Status register 0x0805
+S*
+S* all defines are based on 0x0804
+S*/
+S
+S/*SyncManger control (0x0804) access*/
+S#define SM_SETTING_CONTROL_OFFSET           0 /**< \brief Offset to value of register 0x0804*/
+S#define SM_SETTING_MODE_MASK                0x0002 /**< \brief SyncManager mode mask*/
+S#define SM_SETTING_MODE_THREE_BUFFER_VALUE  0x0000 /**< \brief SyncManager 3Buffer mode value*/
+S#define SM_SETTING_MODE_ONE_BUFFER_VALUE    0x0002 /**< \brief SyncManager 1Buffer mode value*/
+S#define SM_SETTING_DIRECTION_MASK           0x000C /**< \brief SyncManager direction mask*/
+S#define SM_SETTING_DIRECTION_READ_VALUE     0x0000 /**< \brief SyncManager read direction*/
+S#define SM_SETTING_DIRECTION_WRITE_VALUE    0x0004 /**< \brief SyncManager write direction*/
+S#define SM_SETTING_WATCHDOG_VALUE           0x0040 /**< \brief SyncManager watchdog value*/
+S
+S/*SyncManger status (0x0805) access*/
+S#define SM_STATUS_MBX_BUFFER_FULL           0x0800 /**< \brief Indicates in one buffer mode if buffer was completely written*/
+S
+S/*Defines to access :
+S* - SM Active register 0x0806
+S* - SM PDI Control register 0x0807
+S*
+S* all defines are based on 0x0806
+S*/
+S
+S/*SyncManger active (0x0806) access*/
+S#define SM_SETTING_ACTIVATE_OFFSET          1 /**< \brief Offset to value of register 0x0806*/
+S#define SM_SETTING_ENABLE_VALUE             0x0001 /**< \brief SyncManager enable*/
+S#define SM_SETTING_REPAET_REQ_MASK          0x0002 /**< \brief SyncManager Repeat request*/
+S#define SM_SETTING_REPEAT_REQ_SHIFT         0 /**< \brief SyncManager Repeat request shift*/
+S
+S/*SyncManger PDI Control (0x0807) access*/
+S#define SM_SETTING_PDI_DISABLE              0x0100  /**< \brief Bit0 of register 0x0807 (if 1 SM is disabled from PDI)*/
+S#define SM_SETTING_REPEAT_ACK               0x0200 /**< \brief Bit1 of register 0x0807*/
+S/*ET9300 Project Handler :(#if ESC_16BIT_ACCESS #else) lines 303 to 354 deleted*/
+S}STRUCT_PACKED_END
+STSYNCMAN;
+S
+S
+S/*ET9300 Project Handler :(#if FC1100_HW) lines 361 to 363 deleted*/
+S
+N#endif //_ESC_H_
+N/** @}*/
+L 50 ".\etherCAT\ecatslv.h" 2
+N#include "9252_HW.h"
 N
 N#ifndef _ECATSLV_H_
 N#define _ECATSLV_H_
@@ -50129,41 +50090,41 @@ N#include "ecat_def.h"
 N
 N
 N#ifndef _ECATAPPL_H_
-N#define _ECATAPPL_H_
-N
-N/*-----------------------------------------------------------------------------------------
-N------
-N------    Defines and Types
-N------
-N-----------------------------------------------------------------------------------------*/
-N
-N/*Set to unsigned short to handle bit entries correct*/
-N#define     BOOLEAN(x)                 UINT16 x:1 /**< \brief Macro to define BOOLEAN object entry*/
-N#define     BIT1(x)                    UINT16 x:1 /**< \brief Macro to define BIT1 object entry*/
-N#define     BIT2(x)                    UINT16 x:2 /**< \brief Macro to define BIT2 object entry*/
-N#define     BIT3(x)                    UINT16 x:3 /**< \brief Macro to define BIT3 object entry*/
-N#define     BIT4(x)                    UINT16 x:4 /**< \brief Macro to define BIT4 object entry*/
-N#define     BIT5(x)                    UINT16 x:5 /**< \brief Macro to define BIT5 object entry*/
-N#define     BIT6(x)                    UINT16 x:6 /**< \brief Macro to define BIT5 object entry*/
-N#define     BIT7(x)                    UINT16 x:7 /**< \brief Macro to define BIT6 object entry*/
-N#define     BIT8(x)                    UINT16 x:8 /**< \brief Macro to define BIT7 object entry*/
-N#define     ALIGN0(x)
-N#define     ALIGN1(x)                  UINT16 x:1; /**< \brief Macro to define ALIGN1 object entry*/
-N#define     ALIGN2(x)                  UINT16 x:2; /**< \brief Macro to define ALIGN2 object entry*/
-N#define     ALIGN3(x)                  UINT16 x:3; /**< \brief Macro to define ALIGN3 object entry*/
-N#define     ALIGN4(x)                  UINT16 x:4; /**< \brief Macro to define ALIGN4 object entry*/
-N#define     ALIGN5(x)                  UINT16 x:5; /**< \brief Macro to define ALIGN5 object entry*/
-N#define     ALIGN6(x)                  UINT16 x:6; /**< \brief Macro to define ALIGN6 object entry*/
-N#define     ALIGN7(x)                  UINT16 x:7; /**< \brief Macro to define ALIGN7 object entry*/
-N#define     ALIGN8(x)                  UINT16 x:8; /**< \brief Macro to define ALIGN8 object entry*/
-N#define     ALIGN9(x)                  UINT16 x:9; /**< \brief Macro to define ALIGN9 object entry*/
-N#define     ALIGN10(x)                 UINT16 x:10; /**< \brief Macro to define ALIGN10 object entry*/
-N#define     ALIGN11(x)                 UINT16 x:11; /**< \brief Macro to define ALIGN11 object entry*/
-N#define     ALIGN12(x)                 UINT16 x:12; /**< \brief Macro to define ALIGN12 object entry*/
-N#define     ALIGN13(x)                 UINT16 x:13; /**< \brief Macro to define ALIGN13 object entry*/
-N#define     ALIGN14(x)                 UINT16 x:14; /**< \brief Macro to define ALIGN14 object entry*/
-N#define     ALIGN15(x)                 UINT16 x:15; /**< \brief Macro to define ALIGN15 object entry*/
-N/*ET9300 Project Handler :(#if CONTROLLER_16BIT || CONTROLLER_32BIT #else) lines 85 to 121 deleted*/
+S#define _ECATAPPL_H_
+S
+S/*-----------------------------------------------------------------------------------------
+S------
+S------    Defines and Types
+S------
+S-----------------------------------------------------------------------------------------*/
+S
+S/*Set to unsigned short to handle bit entries correct*/
+S#define     BOOLEAN(x)                 UINT16 x:1 /**< \brief Macro to define BOOLEAN object entry*/
+S#define     BIT1(x)                    UINT16 x:1 /**< \brief Macro to define BIT1 object entry*/
+S#define     BIT2(x)                    UINT16 x:2 /**< \brief Macro to define BIT2 object entry*/
+S#define     BIT3(x)                    UINT16 x:3 /**< \brief Macro to define BIT3 object entry*/
+S#define     BIT4(x)                    UINT16 x:4 /**< \brief Macro to define BIT4 object entry*/
+S#define     BIT5(x)                    UINT16 x:5 /**< \brief Macro to define BIT5 object entry*/
+S#define     BIT6(x)                    UINT16 x:6 /**< \brief Macro to define BIT5 object entry*/
+S#define     BIT7(x)                    UINT16 x:7 /**< \brief Macro to define BIT6 object entry*/
+S#define     BIT8(x)                    UINT16 x:8 /**< \brief Macro to define BIT7 object entry*/
+S#define     ALIGN0(x)
+S#define     ALIGN1(x)                  UINT16 x:1; /**< \brief Macro to define ALIGN1 object entry*/
+S#define     ALIGN2(x)                  UINT16 x:2; /**< \brief Macro to define ALIGN2 object entry*/
+S#define     ALIGN3(x)                  UINT16 x:3; /**< \brief Macro to define ALIGN3 object entry*/
+S#define     ALIGN4(x)                  UINT16 x:4; /**< \brief Macro to define ALIGN4 object entry*/
+S#define     ALIGN5(x)                  UINT16 x:5; /**< \brief Macro to define ALIGN5 object entry*/
+S#define     ALIGN6(x)                  UINT16 x:6; /**< \brief Macro to define ALIGN6 object entry*/
+S#define     ALIGN7(x)                  UINT16 x:7; /**< \brief Macro to define ALIGN7 object entry*/
+S#define     ALIGN8(x)                  UINT16 x:8; /**< \brief Macro to define ALIGN8 object entry*/
+S#define     ALIGN9(x)                  UINT16 x:9; /**< \brief Macro to define ALIGN9 object entry*/
+S#define     ALIGN10(x)                 UINT16 x:10; /**< \brief Macro to define ALIGN10 object entry*/
+S#define     ALIGN11(x)                 UINT16 x:11; /**< \brief Macro to define ALIGN11 object entry*/
+S#define     ALIGN12(x)                 UINT16 x:12; /**< \brief Macro to define ALIGN12 object entry*/
+S#define     ALIGN13(x)                 UINT16 x:13; /**< \brief Macro to define ALIGN13 object entry*/
+S#define     ALIGN14(x)                 UINT16 x:14; /**< \brief Macro to define ALIGN14 object entry*/
+S#define     ALIGN15(x)                 UINT16 x:15; /**< \brief Macro to define ALIGN15 object entry*/
+S/*ET9300 Project Handler :(#if CONTROLLER_16BIT || CONTROLLER_32BIT #else) lines 85 to 121 deleted*/
 N#endif //_ECATAPPL_H_
 N
 N#if defined(_ECATAPPL_) && (_ECATAPPL_ == 1)
@@ -50566,6 +50527,858 @@ N
 N/*ET9300 Project Handler :(#if EOE_SUPPORTED) lines 348 to 361 deleted*/
 N
 N#undef PROTO
+L 38 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 2
+N#include "ADS1115Driver.h"
+L 1 ".\Power\ADS1115Driver.h" 1
+N/**
+N  ******************************************************************************
+N  * @file    ADS1115Driver.h
+N  * @author  Xi Liang
+N  * @brief   ADS1115 I2C module driver.
+N  *         
+N  @verbatim
+N  ******************************************************************************
+N  */
+N#ifndef __ADS1115DRIVER_H
+N#define __ADS1115DRIVER_H
+N
+N
+N#include "stm32f4xx_hal.h"
+N#include "data_def.h"
+N#include "TemperatureDriver.h"
+L 1 ".\Power\TemperatureDriver.h" 1
+N#ifndef __TEMPERATUREDRIVER_H
+N#define __TEMPERATUREDRIVER_H
+N
+N
+N
+N#include "stm32f4xx_hal.h"
+N#include "data_def.h"
+N
+N
+Nuint8_t look_up_table(uint16_t *a,uint8_t ArrayLong,uint16_t data);
+Nfloat num_to_temperature(uint8_t num);
+Nvoid save_ntc_data(uint16_t data);			//直插
+Nvoid save_ntc2_data(uint16_t data);		//smd
+N
+N
+N
+N#endif
+L 17 ".\Power\ADS1115Driver.h" 2
+N
+N
+N#define ADS1115_Voltage_48V
+N
+N#define ADS1115_I2C_TIMEOUT_IN_MS 500u
+N
+N//Warning! 7 bits ADDR should must be shifted to the left
+N//ADDR PIN ->GND
+N/*1001000y*/
+N#define ADS1115_ADDR_0  (72u << 1)
+N
+N//ADDR PIN ->VDD
+N/*1001001y*/
+N#define ADS1115_ADDR_1  (73u << 1)
+N
+N//ADDR PIN ->SDA
+N/*1001010Y*/
+N#define ADS1115_ADDR_2  (74u << 1)
+N
+N//ADDR PIN ->SCL
+N/*1001011Y*/
+N#define ADS1115_ADDR_3  (75u << 1)
+N
+N#define ADS1115_CONVERSION_REG      0x00	//Convertion register
+N#define ADS1115_CONFIG_REG          0x01	//Config register
+N#define ADS1115_Lo_THRESH_REG       0x02	//Lo_thresh register
+N#define ADS1115_Ho_THRESH_REG       0x03	//Hi_thresh register
+N
+N#define ADS1115_CONFIG_REG_OS_NO_EFFECT 0u
+N#define ADS1115_CONFIG_REG_OS_START_SINGLE_CONVERSION ((uint16_t)1u << 15u)
+N
+N#define ADS1115_CONFIG_REG_MUX_AIN0_AIN1 0u
+N#define ADS1115_CONFIG_REG_MUX_AIN0_AIN3 ((uint16_t)1u << 12u)
+N#define ADS1115_CONFIG_REG_MUX_AIN1_AIN3 ((uint16_t)2u << 12u)
+N#define ADS1115_CONFIG_REG_MUX_AIN2_AIN3 ((uint16_t)3u << 12u)
+N#define ADS1115_CONFIG_REG_MUX_AIN0_GND ((uint16_t)4u << 12u)
+N#define ADS1115_CONFIG_REG_MUX_AIN1_GND ((uint16_t)5u << 12u)
+N#define ADS1115_CONFIG_REG_MUX_AIN2_GND ((uint16_t)6u << 12u)
+N#define ADS1115_CONFIG_REG_MUX_AIN3_GND ((uint16_t)7u << 12u)
+N
+N#define ADS1115_CONFIG_REG_FSR_6p114	(0u)
+N#define ADS1115_CONFIG_REG_FSR_4p096	((uint16_t)1u << 9u)
+N#define ADS1115_CONFIG_REG_FSR_2p048	((uint16_t)2u << 9u)
+N#define ADS1115_CONFIG_REG_FSR_1p024	((uint16_t)3u << 9u)
+N#define ADS1115_CONFIG_REG_FSR_0p512	((uint16_t)4u << 9u)
+N#define ADS1115_CONFIG_REG_FSR_0p256_1	((uint16_t)5u << 9u)
+N#define ADS1115_CONFIG_REG_FSR_0p256_2	((uint16_t)6u << 9u)
+N#define ADS1115_CONFIG_REG_FSR_0p256_3	((uint16_t)7u << 9u)
+N
+N#define ADS1115_CONFIG_REG_MODE_CONTINUOUS	(0u)
+N#define ADS1115_CONFIG_REG_MODE_SINGLE_SHOT	((uint16_t)(1u) << 8u)
+N
+N#define ADS1115_CONFIG_REG_DR_SPS_8	(0u)
+N#define ADS1115_CONFIG_REG_DR_SPS_16	((uint16_t)1u << 5u)
+N#define ADS1115_CONFIG_REG_DR_SPS_32	((uint16_t)2u << 5u)
+N#define ADS1115_CONFIG_REG_DR_SPS_64	((uint16_t)3u << 5u)
+N#define ADS1115_CONFIG_REG_DR_SPS_128	((uint16_t)4u << 5u)
+N#define ADS1115_CONFIG_REG_DR_SPS_250	((uint16_t)5u << 5u)
+N#define ADS1115_CONFIG_REG_DR_SPS_475	((uint16_t)6u << 5u)
+N#define ADS1115_CONFIG_REG_DR_SPS_860	((uint16_t)7u << 5u)
+N
+N#define ADS1115_CONFIG_REG_COMP_MODE_TRANDITIONAL 0u
+N#define ADS1115_CONFIG_REG_COMP_MODE_WINDOW ((uint16_t)(1) << 4u)
+N
+N#define ADS1115_CONFIG_REG_COMP_POL_ACT_LOW (0u)
+N#define ADS1115_CONFIG_REG_COMP_POL_ACT_HIGH ((uint16_t)(1) << 3u)
+N
+N#define ADS1115_CONFIG_REG_COMP_QUE_ONE 0u
+N#define ADS1115_CONFIG_REG_COMP_QUE_TWO (1u)
+N#define ADS1115_CONFIG_REG_COMP_QUE_FOUR (2u)
+N#define ADS1115_CONFIG_REG_COMP_QUE_DISABLE (3u)
+N
+N
+N#define ADC_Accuracy 		32768   //定义ADC精度，ADS1115单端输入时15位
+N
+Nextern I2C_HandleTypeDef * I2C_Ptr_48V_NTC;
+Nextern I2C_HandleTypeDef * I2C_Ptr_24V;
+Nextern I2C_HandleTypeDef * I2C_Ptr_AI;
+N
+Ntypedef union
+N{
+N	struct 
+N	{
+N		uint16_t COMP_QUE 		:2;
+N		uint16_t COMP_LAT 		:1;
+N		uint16_t COMP_POL 		:1;
+N		uint16_t COMP_MODE  	:1;
+N		uint16_t DR         	:3;
+N		uint16_t MODE     		:1;
+N		uint16_t PGA        	:3;
+N		uint16_t MUX        	:3;
+N		uint16_t OS         	:1;
+N	}BIT;
+N	uint16_t ALL;
+N}ADS1115_CFG;
+N
+Ntypedef struct tag_ADS1115_DRIVER
+N{
+N	I2C_HandleTypeDef * I2C_Handle;
+N	uint8_t ADDR;
+N	ADS1115_CFG ConfigRegData;
+N	int16_t SampleValue;
+N	uint32_t *StartConversionTimerPtr;
+N	uint32_t ConversionTime;
+N	uint32_t ConfigErrorCnt;
+N	uint32_t ConversionErrorCnt;
+N	int16_t SampleValueMax;
+N	int16_t SampleValueMin;
+N	uint8_t SampleBuffer[2u];
+N	HAL_StatusTypeDef ConfigResult;
+N	HAL_StatusTypeDef ConversionTransmitResult;
+N	HAL_StatusTypeDef ConversionReceiveResult;	
+N}ADS1115_DRIVER;
+N
+Nextern ADS1115_DRIVER ADS1115_NTC;
+Nextern ADS1115_DRIVER ADS1115_Voltage48V;
+Nextern ADS1115_DRIVER ADS1115_Current48V;
+Nextern ADS1115_DRIVER ADS1115_Voltage24V;
+Nextern ADS1115_DRIVER ADS1115_Current24V;
+Nextern ADS1115_DRIVER ADS1115_AnalogVoltageInput0;
+Nextern ADS1115_DRIVER ADS1115_AnalogVoltageInput1;
+Nextern ADS1115_DRIVER ADS1115_AnalogCurrentInput0;
+Nextern ADS1115_DRIVER ADS1115_AnalogCurrentInput1;
+Nvoid ADS1115_Driver_Initilization(void);
+Nvoid ADS1115_Driver_MainLoop(void);
+N
+N#endif
+L 39 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 2
+N#include "Command.h"
+L 1 ".\Power\Command.h" 1
+N/**
+N  ******************************************************************************
+N  * @file    Command.h
+N  * @author  Xi Liang/Liu Gui Qing
+N  * @brief   Power Command module driver.
+N  *         
+N  @verbatim
+N  ******************************************************************************
+N  */
+N	
+N#ifndef __COMMAND_H
+S#define __COMMAND_H
+S
+S
+S#include "stm32f4xx_hal.h"
+S#include "data_def.h"
+S#include "PowerMenu.h"
+S
+S#define POWER_COMMAND_TXRX_BUFFER_SIZE 32u
+S
+S#define POWER_COMMAND_HEADER_SIZE (4u)
+S#define POWER_COMMAND_END_SIZE (4u)
+S#define POWER_COMMAND_CMD_SIZE (1u)
+S#define POWER_COMMAND_LENGTH_SIZE (1u)
+S#define POWER_COMMAND_INFO_MAX_SIZE (16u)
+S#define POWER_COMMAND_CRC_SIZE (2u)
+S//#define POWER_COMMAND_DMA_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + \
+S																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+S																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+X
+S																	
+S#define POWER_COMMAND_MAX_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + \
+S																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+S																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+X#define POWER_COMMAND_MAX_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + 																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+S
+S#define SOI 0xFFAAAAFFu
+S#define EOI 0xEE5555EEu
+S
+S#define SM2SU_PERIODIC_TRANSMIT_IN_MS 500u
+S#define SM2SU_PERIODIC_TRANSMIT_TIMEOUT_IN_MS 1000u
+S#define POWER_COMMAND_TRANSMIT_TIMEOUT_IN_MS 500u
+S
+Stypedef struct tag_POWER_COMMAND_PROTOCOL
+S{
+S		uint8_t HEADER[POWER_COMMAND_HEADER_SIZE];
+S		uint8_t CMD;
+S		uint8_t LENGTH;
+S		uint8_t INFO[POWER_COMMAND_INFO_MAX_SIZE];	
+S		uint16_t CRC16;
+S		uint8_t END[POWER_COMMAND_END_SIZE];
+S}POWER_COMMAND_PROTOCOL;
+S
+Stypedef union 
+S{
+S		uint8_t ByteAccess[POWER_COMMAND_MAX_SIZE];
+S		uint16_t WordAccess[POWER_COMMAND_MAX_SIZE >> 1];
+S		uint32_t	LongAccess[POWER_COMMAND_MAX_SIZE >> 2];
+S		POWER_COMMAND_PROTOCOL  ContentDefAccess;
+S}POWER_COMMAND;
+S
+Stypedef struct tag_POWER_COMMAND_RECEIVED 
+S{
+S	uint8_t RequireCode;
+S	POWER_COMMAND PowerCommand;
+S	
+S	
+S}POWER_COMMAND_RECEIVED;
+S
+Stypedef void (*SM2SU_REQ_CALL)(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
+S
+Stypedef struct	tag_SM2SU_REQ_DPCH{
+S	uint8_t	SM2SU_REQ_CD;
+S	SM2SU_REQ_CALL	pFunc;
+S	uint16_t InfoLength;
+S} SM2SU_REQ_DPCH;
+S
+Stypedef uint8_t (*SU2SM_REQ_CALL)(POWER_COMMAND_RECEIVED *pData);
+S
+Stypedef struct	tag_SU2SM_REQ_DPCH{
+S	uint8_t	SU2SM_REQ_CD;
+S	SU2SM_REQ_CALL	pFunc;
+S} SU2SM_REQ_DPCH;
+S
+S//	SM->SU
+S//	require code used by Power_Command_Transmit()
+S#define SM2SU_REQ_CD_PERIODIC_TRANSMISSION 1u
+S#define SM2SU_REQ_CD_REPLY_CONTROL_COMMAND 2u
+S#define SM2SU_REQ_CD_POWER_OFF_REQUIRE 3u
+S#define SM2SU_REQ_CD_REPLY_POWER_OFF_COMMAND 4u
+S#define SM2SU_REQ_CD_REPLY_REBOOT_COMMAND 5u
+S#define SM2SU_REQ_CD_COMPULSORY_POWER_OFF_COMMAND 6u
+S#define SM2SU_REQ_MAX 6u
+S
+S//	SU->SM
+S//	require code used by Power_Command_Receive()
+S#define SU2SM_REQ_CD_PERIODIC_TRANSMISSION_COMMAND 1u
+S#define SU2SM_REQ_CD_CONTROL_COMMAND 2u
+S#define SU2SM_REQ_CD_REPLY_POWER_OFF_REQUIRE 3u
+S#define SU2SM_REQ_CD_POWER_OFF_COMMAND 4u
+S#define SU2SM_REQ_CD_REBOOT_COMMAND 5u
+S#define SU2SM_REQ_CD_REPLY_COMPULSORY_POWER_OFF_COMMAND 6u
+S#define SU2SM_REQ_MAX 6u
+S
+S
+Sextern POWER_COMMAND_RECEIVED PowerCommandReceived;
+Sextern uint8_t PowerCommandRxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
+Sextern uint8_t PowerCommandTxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
+S
+Sextern UART_HandleTypeDef * Uart_HandlePtr;
+Sextern DMA_HandleTypeDef * Udma_UartRx_HandlePtr;
+Sextern DMA_HandleTypeDef * Udma_Uarttx_HandlePtr;
+S
+SHAL_StatusTypeDef Power_Command_Transmit(uint8_t ReqCode);
+Svoid Power_Command_Initilization(void);
+Svoid Power_Command_Main_Loop(void);
+Svoid SU2SM_RxIdleEventCallback(UART_HandleTypeDef *huart, uint16_t Size);
+S
+N#endif
+L 40 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 2
+N/* USER CODE END Includes */
+N
+N/* Exported types ------------------------------------------------------------*/
+N/* USER CODE BEGIN ET */
+N
+N/* USER CODE END ET */
+N
+N/* Exported constants --------------------------------------------------------*/
+N/* USER CODE BEGIN EC */
+N
+N/* USER CODE END EC */
+N
+N/* Exported macro ------------------------------------------------------------*/
+N/* USER CODE BEGIN EM */
+N
+N/* USER CODE END EM */
+N
+N/* Exported functions prototypes ---------------------------------------------*/
+Nvoid Error_Handler(void);
+N
+N/* USER CODE BEGIN EFP */
+N
+N/* USER CODE END EFP */
+N
+N/* Private defines -----------------------------------------------------------*/
+N#define SYNC0_Pin GPIO_PIN_2
+N#define SYNC0_GPIO_Port GPIOE
+N#define SYNC0_EXTI_IRQn EXTI2_IRQn
+N#define SYNC1_Pin GPIO_PIN_3
+N#define SYNC1_GPIO_Port GPIOE
+N#define SYNC1_EXTI_IRQn EXTI3_IRQn
+N#define AI_IU_SW1_Pin GPIO_PIN_6
+N#define AI_IU_SW1_GPIO_Port GPIOE
+N#define V24V_OUT4_Pin GPIO_PIN_2
+N#define V24V_OUT4_GPIO_Port GPIOF
+N#define LED6_Pin GPIO_PIN_3
+N#define LED6_GPIO_Port GPIOF
+N#define PHY_RESET_Pin GPIO_PIN_4
+N#define PHY_RESET_GPIO_Port GPIOF
+N#define ET_RESETN_Pin GPIO_PIN_5
+N#define ET_RESETN_GPIO_Port GPIOF
+N#define LED3_Pin GPIO_PIN_8
+N#define LED3_GPIO_Port GPIOF
+N#define LED4_Pin GPIO_PIN_9
+N#define LED4_GPIO_Port GPIOF
+N#define LED5_Pin GPIO_PIN_10
+N#define LED5_GPIO_Port GPIOF
+N#define IRQ_Pin GPIO_PIN_1
+N#define IRQ_GPIO_Port GPIOA
+N#define IRQ_EXTI_IRQn EXTI1_IRQn
+N#define RS485_RE_Pin GPIO_PIN_4
+N#define RS485_RE_GPIO_Port GPIOA
+N#define LED2_Pin GPIO_PIN_4
+N#define LED2_GPIO_Port GPIOC
+N#define LED1_Pin GPIO_PIN_5
+N#define LED1_GPIO_Port GPIOC
+N#define AI_IU_SW2_Pin GPIO_PIN_1
+N#define AI_IU_SW2_GPIO_Port GPIOB
+N#define SAFE_48V_SWITCH_Pin GPIO_PIN_11
+N#define SAFE_48V_SWITCH_GPIO_Port GPIOF
+N#define POWER24V_ON_Pin GPIO_PIN_12
+N#define POWER24V_ON_GPIO_Port GPIOF
+N#define ES_SHUTDOWN_Pin GPIO_PIN_13
+N#define ES_SHUTDOWN_GPIO_Port GPIOF
+N#define ACPower_OK_Pin GPIO_PIN_1
+N#define ACPower_OK_GPIO_Port GPIOG
+N#define ST_OUT_24_Pin GPIO_PIN_10
+N#define ST_OUT_24_GPIO_Port GPIOE
+N#define ST_OUT_23_Pin GPIO_PIN_11
+N#define ST_OUT_23_GPIO_Port GPIOE
+N#define ST_OUT_22_Pin GPIO_PIN_12
+N#define ST_OUT_22_GPIO_Port GPIOE
+N#define ST_OUT_20_Pin GPIO_PIN_13
+N#define ST_OUT_20_GPIO_Port GPIOE
+N#define ST_OUT_21_Pin GPIO_PIN_14
+N#define ST_OUT_21_GPIO_Port GPIOE
+N#define POWEROFF_REMOTEIN_Pin GPIO_PIN_15
+N#define POWEROFF_REMOTEIN_GPIO_Port GPIOE
+N#define ST_OUT_19_Pin GPIO_PIN_12
+N#define ST_OUT_19_GPIO_Port GPIOB
+N#define ST_OUT_18_Pin GPIO_PIN_13
+N#define ST_OUT_18_GPIO_Port GPIOB
+N#define ST_OUT_17_Pin GPIO_PIN_14
+N#define ST_OUT_17_GPIO_Port GPIOB
+N#define ST_OUT_8_Pin GPIO_PIN_15
+N#define ST_OUT_8_GPIO_Port GPIOB
+N#define ST_OUT_7_Pin GPIO_PIN_8
+N#define ST_OUT_7_GPIO_Port GPIOD
+N#define ST_OUT_6_Pin GPIO_PIN_9
+N#define ST_OUT_6_GPIO_Port GPIOD
+N#define ST_OUT_5_Pin GPIO_PIN_10
+N#define ST_OUT_5_GPIO_Port GPIOD
+N#define ST_IN_23_Pin GPIO_PIN_11
+N#define ST_IN_23_GPIO_Port GPIOD
+N#define ST_IN_22_Pin GPIO_PIN_12
+N#define ST_IN_22_GPIO_Port GPIOD
+N#define ST_IN_21_Pin GPIO_PIN_13
+N#define ST_IN_21_GPIO_Port GPIOD
+N#define ST_IN_24_Pin GPIO_PIN_14
+N#define ST_IN_24_GPIO_Port GPIOD
+N#define ST_IN_20_Pin GPIO_PIN_15
+N#define ST_IN_20_GPIO_Port GPIOD
+N#define ST_IN_19_Pin GPIO_PIN_2
+N#define ST_IN_19_GPIO_Port GPIOG
+N#define ST_IN_18_Pin GPIO_PIN_3
+N#define ST_IN_18_GPIO_Port GPIOG
+N#define LAN9252_CS_Pin GPIO_PIN_4
+N#define LAN9252_CS_GPIO_Port GPIOG
+N#define ST_IN_17_Pin GPIO_PIN_5
+N#define ST_IN_17_GPIO_Port GPIOG
+N#define ST_OUT_4_Pin GPIO_PIN_6
+N#define ST_OUT_4_GPIO_Port GPIOG
+N#define ST_OUT_3_Pin GPIO_PIN_7
+N#define ST_OUT_3_GPIO_Port GPIOG
+N#define ST_OUT_2_Pin GPIO_PIN_8
+N#define ST_OUT_2_GPIO_Port GPIOG
+N#define ST_OUT_1_Pin GPIO_PIN_8
+N#define ST_OUT_1_GPIO_Port GPIOC
+N#define ST_IN_8_Pin GPIO_PIN_6
+N#define ST_IN_8_GPIO_Port GPIOD
+N#define ST_IN_7_Pin GPIO_PIN_7
+N#define ST_IN_7_GPIO_Port GPIOD
+N#define ST_IN_6_Pin GPIO_PIN_9
+N#define ST_IN_6_GPIO_Port GPIOG
+N#define ST_IN_5_Pin GPIO_PIN_10
+N#define ST_IN_5_GPIO_Port GPIOG
+N#define ST_IN_1_Pin GPIO_PIN_11
+N#define ST_IN_1_GPIO_Port GPIOG
+N#define ST_IN_2_Pin GPIO_PIN_12
+N#define ST_IN_2_GPIO_Port GPIOG
+N#define ST_IN_3_Pin GPIO_PIN_13
+N#define ST_IN_3_GPIO_Port GPIOG
+N#define ST_IN_4_Pin GPIO_PIN_14
+N#define ST_IN_4_GPIO_Port GPIOG
+N#define POWERON_REMOTEIN_Pin GPIO_PIN_8
+N#define POWERON_REMOTEIN_GPIO_Port GPIOB
+N#define V24V_OUT1_Pin GPIO_PIN_9
+N#define V24V_OUT1_GPIO_Port GPIOB
+N#define POWERON_KEYIN_Pin GPIO_PIN_0
+N#define POWERON_KEYIN_GPIO_Port GPIOE
+N#define OC_PROTECT_Pin GPIO_PIN_1
+N#define OC_PROTECT_GPIO_Port GPIOE
+N/* USER CODE BEGIN Private defines */
+N
+N/* USER CODE END Private defines */
+N
+N#ifdef __cplusplus
+S}
+N#endif
+N
+N#endif /* __MAIN_H */
+L 17 "Power\PowerMenu.h" 2
+N#include "ADS1115Driver.h"
+N#include "Command.h"
+N
+N
+N
+N
+Nvoid close_all_dr_save_state(void);
+Nvoid first_open_dr_save_state(void);
+Nvoid Reload_State_All_Value(void);
+Nvoid Reload_Config_All_Value(void);
+Nvoid work_mode_operation(void);
+Nstatic void PowerOnCharge(void);
+Nvoid force_shutdown(uint8_t nxt_mode);
+Nvoid softwarepoweroff_mode_operation(void);
+Nvoid shutdown_mode_operation(void);
+N
+N
+N
+N#endif
+L 18 "Power\Command.h" 2
+N
+N#define POWER_COMMAND_TXRX_BUFFER_SIZE 32u
+N
+N#define POWER_COMMAND_HEADER_SIZE (4u)
+N#define POWER_COMMAND_END_SIZE (4u)
+N#define POWER_COMMAND_CMD_SIZE (1u)
+N#define POWER_COMMAND_LENGTH_SIZE (1u)
+N#define POWER_COMMAND_INFO_MAX_SIZE (16u)
+N#define POWER_COMMAND_CRC_SIZE (2u)
+N//#define POWER_COMMAND_DMA_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + \
+N																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+N																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+X
+N																	
+N#define POWER_COMMAND_MAX_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + \
+N																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+N																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+X#define POWER_COMMAND_MAX_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + 																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+N
+N#define SOI 0xFFAAAAFFu
+N#define EOI 0xEE5555EEu
+N
+N#define SM2SU_PERIODIC_TRANSMIT_IN_MS 500u
+N#define SM2SU_PERIODIC_TRANSMIT_TIMEOUT_IN_MS 1000u
+N#define POWER_COMMAND_TRANSMIT_TIMEOUT_IN_MS 500u
+N
+Ntypedef struct tag_POWER_COMMAND_PROTOCOL
+N{
+N		uint8_t HEADER[POWER_COMMAND_HEADER_SIZE];
+X		uint8_t HEADER[(4u)];
+N		uint8_t CMD;
+N		uint8_t LENGTH;
+N		uint8_t INFO[POWER_COMMAND_INFO_MAX_SIZE];	
+X		uint8_t INFO[(16u)];	
+N		uint16_t CRC16;
+N		uint8_t END[POWER_COMMAND_END_SIZE];
+X		uint8_t END[(4u)];
+N}POWER_COMMAND_PROTOCOL;
+N
+Ntypedef union 
+N{
+N		uint8_t ByteAccess[POWER_COMMAND_MAX_SIZE];
+X		uint8_t ByteAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u))];
+N		uint16_t WordAccess[POWER_COMMAND_MAX_SIZE >> 1];
+X		uint16_t WordAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u)) >> 1];
+N		uint32_t	LongAccess[POWER_COMMAND_MAX_SIZE >> 2];
+X		uint32_t	LongAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u)) >> 2];
+N		POWER_COMMAND_PROTOCOL  ContentDefAccess;
+N}POWER_COMMAND;
+N
+Ntypedef struct tag_POWER_COMMAND_RECEIVED 
+N{
+N	uint8_t RequireCode;
+N	POWER_COMMAND PowerCommand;
+N	
+N	
+N}POWER_COMMAND_RECEIVED;
+N
+Ntypedef void (*SM2SU_REQ_CALL)(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
+N
+Ntypedef struct	tag_SM2SU_REQ_DPCH{
+N	uint8_t	SM2SU_REQ_CD;
+N	SM2SU_REQ_CALL	pFunc;
+N	uint16_t InfoLength;
+N} SM2SU_REQ_DPCH;
+N
+Ntypedef uint8_t (*SU2SM_REQ_CALL)(POWER_COMMAND_RECEIVED *pData);
+N
+Ntypedef struct	tag_SU2SM_REQ_DPCH{
+N	uint8_t	SU2SM_REQ_CD;
+N	SU2SM_REQ_CALL	pFunc;
+N} SU2SM_REQ_DPCH;
+N
+N//	SM->SU
+N//	require code used by Power_Command_Transmit()
+N#define SM2SU_REQ_CD_PERIODIC_TRANSMISSION 1u
+N#define SM2SU_REQ_CD_REPLY_CONTROL_COMMAND 2u
+N#define SM2SU_REQ_CD_POWER_OFF_REQUIRE 3u
+N#define SM2SU_REQ_CD_REPLY_POWER_OFF_COMMAND 4u
+N#define SM2SU_REQ_CD_REPLY_REBOOT_COMMAND 5u
+N#define SM2SU_REQ_CD_COMPULSORY_POWER_OFF_COMMAND 6u
+N#define SM2SU_REQ_MAX 6u
+N
+N//	SU->SM
+N//	require code used by Power_Command_Receive()
+N#define SU2SM_REQ_CD_PERIODIC_TRANSMISSION_COMMAND 1u
+N#define SU2SM_REQ_CD_CONTROL_COMMAND 2u
+N#define SU2SM_REQ_CD_REPLY_POWER_OFF_REQUIRE 3u
+N#define SU2SM_REQ_CD_POWER_OFF_COMMAND 4u
+N#define SU2SM_REQ_CD_REBOOT_COMMAND 5u
+N#define SU2SM_REQ_CD_REPLY_COMPULSORY_POWER_OFF_COMMAND 6u
+N#define SU2SM_REQ_MAX 6u
+N
+N
+Nextern POWER_COMMAND_RECEIVED PowerCommandReceived;
+Nextern uint8_t PowerCommandRxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
+Xextern uint8_t PowerCommandRxBuffer[32u];
+Nextern uint8_t PowerCommandTxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
+Xextern uint8_t PowerCommandTxBuffer[32u];
+N
+Nextern UART_HandleTypeDef * Uart_HandlePtr;
+Nextern DMA_HandleTypeDef * Udma_UartRx_HandlePtr;
+Nextern DMA_HandleTypeDef * Udma_Uarttx_HandlePtr;
+N
+NHAL_StatusTypeDef Power_Command_Transmit(uint8_t ReqCode);
+Nvoid Power_Command_Initilization(void);
+Nvoid Power_Command_Main_Loop(void);
+Nvoid SU2SM_RxIdleEventCallback(UART_HandleTypeDef *huart, uint16_t Size);
+N
+N#endif
+L 11 "Power\Command.c" 2
+N#include "ADS1115Driver.h"
+N#include "applInterface.h"
+L 1 ".\etherCAT\applInterface.h" 1
+N/*
+N* This source file is part of the EtherCAT Slave Stack Code licensed by Beckhoff Automation GmbH & Co KG, 33415 Verl, Germany.
+N* The corresponding license agreement applies. This hint shall not be removed.
+N* https://www.beckhoff.com/media/downloads/slave-stack-code/ethercat_ssc_license.pdf
+N*/
+N
+N/**
+N\addtogroup EcatAppl EtherCAT application
+N@{
+N*/
+N
+N/**
+N\file applInterface.h
+N\author EthercatSSC@beckhoff.com
+N\brief Definition of the application interface functions
+N
+N\version 5.13
+N
+N<br>Changes to version V5.12:<br>
+NV5.13 COE4: update default entry name handling in case of 16Bit characters, add CoE Read/write indication functions<br>
+N<br>Changes to version V5.11:<br>
+NV5.12 APPL1: add optional application function called from the main loop (after mbx and esm are executed)<br>
+NV5.12 EEPROM3: implement a store EEPROM timeout handler<br>
+NV5.12 EOE1: move icmp sample to the sampleappl,add EoE application interface functions<br>
+NV5.12 FOE1: update new interface,move the FoE sample to sampleappl,add FoE application callback functions<br>
+N<br>Changes to version - :<br>
+NV5.10.1 : Start file change log
+N*/
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Includes
+N------
+N-----------------------------------------------------------------------------------------*/
+N
+N
+N#ifndef _APPL_INTERFACE_H_
+S#define _APPL_INTERFACE_H_
+S
+S#include "ecat_def.h"
+S#include <stdlib.h>
+S#include <string.h>
+S#include "esc.h"
+S#include "ecatslv.h"
+S#include "objdef.h"
+S#include "ecatappl.h"
+S
+S/*ET9300 Project Handler :(#if DIAGNOSIS_SUPPORTED) lines 49 to 51 deleted*/
+S
+S
+S/*ET9300 Project Handler :(#if EOE_SUPPORTED) lines 54 to 56 deleted*/
+S
+S#include "foeappl.h"
+S
+N#endif /*#ifndef _APPL_INTERFACE_H_*/
+N
+N#if defined(_APPL_INTERFACE_) && (_APPL_INTERFACE_ == 1)
+X#if 0L && (_APPL_INTERFACE_ == 1)
+S   #define PROTO
+N#else
+N    #define PROTO extern
+N#endif
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Function pointer which are used to call optional functions from the application
+N------
+N-----------------------------------------------------------------------------------------*/
+N
+N/*ET9300 Project Handler :(#if ESC_EEPROM_EMULATION) lines 76 to 122 deleted*/
+N
+N
+N/*ET9300 Project Handler :(#if EOE_SUPPORTED) lines 125 to 152 deleted*/
+N
+N
+N
+N/////////////////////////////////////////////////////////////////////////////////////////
+N/**
+N\param     pName         Pointer to the name of the file (the pointer is null if the function is called due to a previous busy state)
+N\param     nameSize      Length of the file name (the value is 0 if the function is called due to a previous busy state)
+N\param     password      Password for the file read (the value is 0 if the function is called due to a previous busy state)
+N\param     maxBlockSize  Maximum size of a data block (copied to pData)
+N\param     pData         Destination pointer for the first FoE fragment
+N                        
+N
+N
+N\return                  block size:
+N                            < FOE_MAXBUSY-101    (0x7F95)
+N                         busy:
+N                            FOE_MAXBUSY-100 (0%)    (0x7FFA - 0x64)
+N                            ...
+N                            FOE_MAXBUSY (100%) (0x7FFA)
+N                         error:
+N                            ECAT_FOE_ERRCODE_NOTDEFINED (0x8000)
+N                            ECAT_FOE_ERRCODE_NOTFOUND (0x8001)
+N                            ECAT_FOE_ERRCODE_ACCESS    (0x8002)
+N                            ECAT_FOE_ERRCODE_DISKFULL (0x8003)
+N                            ECAT_FOE_ERRCODE_ILLEGAL (0x8004)
+N                            ECAT_FOE_ERRCODE_EXISTS    (0x8006)
+N                            ECAT_FOE_ERRCODE_NOUSER    (0x8007)
+N
+N\brief    The function is called when a file read request was received. The Foe fragments shall always have the length of "maxBlockSize" till the last file fragment.
+N\brief    In case that the file size is a multiple of "maxBlockSize" 0 shall be returned after the last fragment.
+N\brief	   The function pointer is reset in MainInit() so it shall be set afterwards
+N*////////////////////////////////////////////////////////////////////////////////////////
+NPROTO UINT16 (*pAPPL_FoeRead)(UINT16 MBXMEM * pName, UINT16 nameSize, UINT32 password, UINT16 maxBlockSize, UINT16 *pData);
+Xextern unsigned short (*pAPPL_FoeRead)(unsigned short  * pName, unsigned short nameSize, unsigned int password, unsigned short maxBlockSize, unsigned short *pData);
+N
+N
+N/////////////////////////////////////////////////////////////////////////////////////////
+N/**
+N\param     offset        File offset which shall be transmitted next
+N\param     maxBlockSize  Maximum size of a data block (copied to pData)
+N\param     pData         Destination pointer for the next foe fragment
+N
+N
+N
+N\return                  block size:
+N                            < FOE_MAXBUSY-101    (0x7F95)
+N                        busy:
+N                            FOE_MAXBUSY-100 (0%)    (0x7FFA - 0x64)
+N                            ...
+N                            FOE_MAXBUSY (100%) (0x7FFA)
+N                        error:
+N                            ECAT_FOE_ERRCODE_NOTDEFINED (0x8000)
+N                            ECAT_FOE_ERRCODE_NOTFOUND (0x8001)
+N                            ECAT_FOE_ERRCODE_ACCESS    (0x8002)
+N                            ECAT_FOE_ERRCODE_DISKFULL (0x8003)
+N                            ECAT_FOE_ERRCODE_ILLEGAL (0x8004)
+N                            ECAT_FOE_ERRCODE_EXISTS    (0x8006)
+N                            ECAT_FOE_ERRCODE_NOUSER    (0x8007)
+N
+N\brief    The function is called to transmit FoE read data 2 .. n (the slave received an acknowledge on a previous accepted file read request). The Foe fragments shall always have the length of "maxBlockSize" till the last file fragment.
+N\brief    In case that the file size is a multiple of "maxBlockSize" 0 shall be returned after the last fragment.
+N\brief	   The function pointer is reset in MainInit() so it shall be set afterwards
+N*////////////////////////////////////////////////////////////////////////////////////////
+NPROTO UINT16(*pAPPL_FoeReadData)(UINT32 offset, UINT16 maxBlockSize, UINT16 *pData);
+Xextern unsigned short(*pAPPL_FoeReadData)(unsigned int offset, unsigned short maxBlockSize, unsigned short *pData);
+N
+N
+N/////////////////////////////////////////////////////////////////////////////////////////
+N/**
+N\param     errorCode     Error code send by the EtherCAT master
+N
+N
+N\brief    The function is called when the master has send an FoE Abort.
+N\brief	   The function pointer is reset in MainInit() so it shall be set afterwards
+N*////////////////////////////////////////////////////////////////////////////////////////
+NPROTO void(*pAPPL_FoeError)(UINT32 errorCode);
+Xextern void(*pAPPL_FoeError)(unsigned int errorCode);
+N
+N
+N
+N/////////////////////////////////////////////////////////////////////////////////////////
+N/**
+N\param     pName         Pointer to the name of the file
+N\param     nameSize      Length of the file name
+N\param     password      Password for the file read
+N
+N\return                 okay, or an error code
+N                        0 (okay)
+N                        ECAT_FOE_ERRCODE_NOTDEFINED (0x8000)
+N                        ECAT_FOE_ERRCODE_NOTFOUND (0x8001)
+N                        ECAT_FOE_ERRCODE_ACCESS    (0x8002)
+N                        ECAT_FOE_ERRCODE_DISKFULL (0x8003)
+N                        ECAT_FOE_ERRCODE_ILLEGAL (0x8004)
+N                        ECAT_FOE_ERRCODE_EXISTS    (0x8006)
+N                        ECAT_FOE_ERRCODE_NOUSER    (0x8007)
+N
+N\brief    This function is called on a received FoE write request.
+N\brief    (no busy response shall be returned by this function. If the slave requires some time to handle the incoming data the function pAPPL_FoeData() shall return a busy)
+N\brief	   The function pointer is reset in MainInit() so it shall be set afterwards
+N*////////////////////////////////////////////////////////////////////////////////////////
+NPROTO UINT16 (*pAPPL_FoeWrite)(UINT16 MBXMEM * pName, UINT16 nameSize, UINT32 password);
+Xextern unsigned short (*pAPPL_FoeWrite)(unsigned short  * pName, unsigned short nameSize, unsigned int password);
+N
+N
+N/////////////////////////////////////////////////////////////////////////////////////////
+N/**
+N\param     pData            Received file data
+N\param 	   Size             Length of received file data
+N\param 	   bDataFollowing   TRUE if more FoE Data requests are following
+N
+N\return                     okay, busy or an error code
+N                            0 (okay)
+N                            FOE_MAXBUSY-100 (0%)    (0x7FFa - 100)
+N                            FOE_MAXBUSY (100%) (0x7FFA)
+N                            ECAT_FOE_ERRCODE_NOTDEFINED (0x8000)
+N                            ECAT_FOE_ERRCODE_ACCESS    (0x8002)
+N                            ECAT_FOE_ERRCODE_DISKFULL (0x8003)
+N                            ECAT_FOE_ERRCODE_ILLEGAL (0x8004)
+N                            ECAT_FOE_ERRCODE_NOUSER    (0x8007)
+N
+N\brief    This function is called on a FoE Data request
+N\brief	   The function pointer is reset in MainInit() so it shall be set afterwards
+N*////////////////////////////////////////////////////////////////////////////////////////
+NPROTO UINT16(*pAPPL_FoeWriteData)(UINT16 MBXMEM * pData, UINT16 Size, BOOL bDataFollowing);
+Xextern unsigned short(*pAPPL_FoeWriteData)(unsigned short  * pData, unsigned short Size, unsigned char bDataFollowing);
+N
+N/* ECATCHANGE_START(V5.13) COE4*/
+N/////////////////////////////////////////////////////////////////////////////////////////
+N/**
+N\param     Index            Index of the object to be read
+N\param     Subindex         Subindex of the object entry to be read
+N\param     CompleteAccess   Indicates if the object is read with complete access
+N
+N\brief    The function is called before an object/entry is read
+N*////////////////////////////////////////////////////////////////////////////////////////
+NPROTO void(*pAPPL_CoeReadInd)(UINT16 Index, UINT8 Subindex, BOOL CompleteAccess);
+Xextern void(*pAPPL_CoeReadInd)(unsigned short Index, unsigned char Subindex, unsigned char CompleteAccess);
+N
+N/////////////////////////////////////////////////////////////////////////////////////////
+N/**
+N\param     Index            Index of the object which was written
+N\param     Subindex         Subindex of the object entry which was written
+N\param     CompleteAccess   Indicates if the object was written with complete access
+N
+N\brief    The function is called after an object/entry was successfully written
+N*////////////////////////////////////////////////////////////////////////////////////////
+NPROTO void(*pAPPL_CoeWriteInd)(UINT16 Index, UINT8 Subindex, BOOL CompleteAccess);
+Xextern void(*pAPPL_CoeWriteInd)(unsigned short Index, unsigned char Subindex, unsigned char CompleteAccess);
+N
+N/* ECATCHANGE_END(V5.13) COE4*/
+N/////////////////////////////////////////////////////////////////////////////////////////
+N/**
+N\brief    This function is called by the SSC from the main loop
+N\brief	   The function pointer is reset in MainInit() so it shall be set afterwards
+N*////////////////////////////////////////////////////////////////////////////////////////
+NPROTO void(*pAPPL_MainLoop)();
+Xextern void(*pAPPL_MainLoop)();
+N
+N/*-----------------------------------------------------------------------------------------
+N------
+N------    Functions provided by the SSC to be called from the application
+N------
+N-----------------------------------------------------------------------------------------*/
+N
+N
+N/////////////////////////////////////////////////////////////////////////////////////////
+N/**
+N\return   0 if successful or greater 0 in case of an error
+N
+N\brief    Initialize the generic slave stack.
+N\brief    This function should be called after the platform including operating system and
+N\brief    ESC is ready to use.
+N*////////////////////////////////////////////////////////////////////////////////////////
+NPROTO UINT16 MainInit(void);
+Xextern unsigned short MainInit(void);
+N
+N
+N/////////////////////////////////////////////////////////////////////////////////////////
+N/**
+N\brief    This function handles the low priority function like EtherCAT state machine
+N\brief    handling, mailbox protocols and if no synchronization is enabled also the
+N\brief    application.
+N\brief    This function shall be called cyclically from the application.
+N*////////////////////////////////////////////////////////////////////////////////////////
+NPROTO void MainLoop(void);
+Xextern void MainLoop(void);
+N
+N
+N/////////////////////////////////////////////////////////////////////////////////////////
+N/**
+N\param    alStatus       requested AL Status 
+N\param    alStatusCode   requested AL Status Code
+N
+N\brief    This function shall be called by the application to trigger state transition in case
+N\brief    of an application error or to complete a pending transition.
+N\brief    If the function was called due to an error it shall be again if the error is gone.
+N\brief    NOTE: state requests to a higher state than the current state are not allowed.
+N*////////////////////////////////////////////////////////////////////////////////////////
+NPROTO void ECAT_StateChange(UINT8 alStatus, UINT16 alStatusCode);
+Xextern void ECAT_StateChange(unsigned char alStatus, unsigned short alStatusCode);
+N
+N
+N/*ET9300 Project Handler :(#if EOE_SUPPORTED) lines 348 to 361 deleted*/
+N
+N#undef PROTO
 L 13 "Power\Command.c" 2
 N#include "Crc16.h"
 L 1 ".\CRC\Crc16.h" 1
@@ -50646,12 +51459,20 @@ N
 NUART_HandleTypeDef * Uart_HandlePtr;
 NDMA_HandleTypeDef * Udma_UartRx_HandlePtr;
 NDMA_HandleTypeDef * Udma_Uarttx_HandlePtr;
+NPOWER_COMMAND_RECEIVED PowerCommandReceived;
 N
 Nstatic uint32_t PeriodicTransmissionTime = 0u;
 Nstatic BOOL PeriodicTransmissionTimeout = FALSE;
 Xstatic unsigned char PeriodicTransmissionTimeout = 0;
 Nstatic uint16_t PwrCmdTxSize = 0u;
-N
+Nstatic BOOL Power_Command_Receive_Idle_Detected = FALSE;
+Xstatic unsigned char Power_Command_Receive_Idle_Detected = 0;
+Nstatic BOOL Power_Command_Receive_Buffer_Full =  FALSE;
+Xstatic unsigned char Power_Command_Receive_Buffer_Full =  0;
+Nstatic BOOL Power_Command_Receive_Length_Error_Detected = FALSE;		
+Xstatic unsigned char Power_Command_Receive_Length_Error_Detected = 0;		
+Nstatic BOOL Power_Command_ReceiveToIdle_Restart_Error = FALSE;				
+Xstatic unsigned char Power_Command_ReceiveToIdle_Restart_Error = 0;				
 Nstatic void SM2SU_Req_Call_Periodic_Transmission(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
 Nstatic void SM2SU_Req_Call_Reply_Control_Command(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
 Nstatic void SM2SU_Req_Call_Power_Off_Require(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
@@ -50659,6 +51480,54 @@ Nstatic void SM2SU_Req_Call_Reply_Power_Off_Command(uint8_t ReqCd, uint8_t *pDat
 Nstatic void SM2SU_Req_Call_Reply_Reboot_Command(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
 Nstatic void SM2SU_Req_Call_Compulsory_Power_Off_Command(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
 Nstatic void SM2SU_Req_Call_Encapsulation_Func(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
+Nstatic void Power_Command_Receive(uint8_t * pData, uint16_t Size);
+Nstatic uint8_t SU2SM_Req_Call_Reply_Periodic_Transmission(POWER_COMMAND_RECEIVED *pData);
+Nstatic uint8_t SU2SM_Req_Call_Control_Command(POWER_COMMAND_RECEIVED *pData);
+Nstatic uint8_t SU2SM_Req_Call_Reply_Power_Off_Require(POWER_COMMAND_RECEIVED *pData);
+Nstatic uint8_t SU2SM_Req_Call_Power_Off_Command(POWER_COMMAND_RECEIVED *pData);
+Nstatic uint8_t SU2SM_Req_Call_Reboot_Command(POWER_COMMAND_RECEIVED *pData);
+Nstatic uint8_t SU2SM_Req_Call_Reply_Compulsory_Power_Off_Command(POWER_COMMAND_RECEIVED *pData);
+N
+Nconst static SU2SM_REQ_DPCH strPwrCmdRxReqMap[SU2SM_REQ_MAX]=
+Xconst static SU2SM_REQ_DPCH strPwrCmdRxReqMap[6u]=
+N{
+N	{
+N		SU2SM_REQ_CD_PERIODIC_TRANSMISSION_COMMAND, 
+X		1u, 
+N		SU2SM_Req_Call_Reply_Periodic_Transmission, 
+N	},
+N	
+N	{
+N		SU2SM_REQ_CD_CONTROL_COMMAND, 
+X		2u, 
+N		SU2SM_Req_Call_Control_Command, 
+N	},
+N	
+N	{
+N		SU2SM_REQ_CD_REPLY_POWER_OFF_REQUIRE, 
+X		3u, 
+N		SU2SM_Req_Call_Reply_Power_Off_Require,
+N	},
+N	
+N	{
+N		SU2SM_REQ_CD_POWER_OFF_COMMAND, 
+X		4u, 
+N		SU2SM_Req_Call_Power_Off_Command, 
+N	},
+N	
+N	{
+N		SU2SM_REQ_CD_REBOOT_COMMAND,
+X		5u,
+N		SU2SM_Req_Call_Reboot_Command,
+N	},
+N	
+N	{
+N		SU2SM_REQ_CD_REPLY_COMPULSORY_POWER_OFF_COMMAND, 
+X		6u, 
+N		SU2SM_Req_Call_Reply_Compulsory_Power_Off_Command, 
+N	},
+N};
+N
 Nconst static SM2SU_REQ_DPCH strPwrCmdTxReqMap[SM2SU_REQ_MAX]=
 Xconst static SM2SU_REQ_DPCH strPwrCmdTxReqMap[6u]=
 N{
@@ -50713,7 +51582,7 @@ N};
 N
 Nvoid Power_Command_Initilization(void)
 N{
-N
+N  Uart_HandlePtr->RxEventCallback= SU2SM_RxIdleEventCallback;
 N}
 N
 NHAL_StatusTypeDef Power_Command_Transmit(uint8_t ReqCode)
@@ -50738,6 +51607,18 @@ N{
 N	uint32_t nowTime;
 N	uint32_t elapseTime;
 N	HAL_StatusTypeDef TransmitResult;
+N	uint32_t i;
+N	
+N	for(i=0u; i<(uint32_t)SU2SM_REQ_MAX;i++){
+X	for(i=0u; i<(uint32_t)6u;i++){
+N		if(PowerCommandReceived.RequireCode == strPwrCmdRxReqMap[i].SU2SM_REQ_CD){
+N			if(strPwrCmdRxReqMap[i].pFunc(&PowerCommandReceived) != 0u)
+N			{
+N				memset((uint8_t *)&PowerCommandReceived,0u, sizeof(PowerCommandReceived));
+N			}
+N			break;
+N		}
+N	}
 N	
 N	nowTime = HAL_GetTick();
 N	elapseTime = nowTime - PeriodicTransmissionTime;
@@ -50761,6 +51642,179 @@ N	else
 N	{
 N		//no statement
 N	}
+N}
+N
+Nstatic void Power_Command_Receive(uint8_t * pData, uint16_t Size)
+N{
+N		BOOL CommandReceived = FALSE;
+X		unsigned char CommandReceived = 0;
+N		uint16_t crc16;
+N		uint16_t InfoLength;
+N
+N		if(Power_Command_Receive_Buffer_Full == TRUE)
+X		if(Power_Command_Receive_Buffer_Full == 1)
+N		{
+N			CommandReceived = TRUE;
+X			CommandReceived = 1;
+N		}
+N		if(Power_Command_Receive_Idle_Detected == TRUE)
+X		if(Power_Command_Receive_Idle_Detected == 1)
+N		{
+N			CommandReceived = TRUE;
+X			CommandReceived = 1;
+N			Power_Command_Receive_Idle_Detected = FALSE;
+X			Power_Command_Receive_Idle_Detected = 0;
+N		}
+N		
+N		if (CommandReceived == TRUE)
+X		if (CommandReceived == 1)
+N		{
+N			if((pData[0u] != 0xFFu) || \
+N				(pData[1u] != 0xAAu) || \
+N				(pData[2u] != 0xAAu) || \
+N				(pData[3u] != 0xFFu))
+X			if((pData[0u] != 0xFFu) || 				(pData[1u] != 0xAAu) || 				(pData[2u] != 0xAAu) || 				(pData[3u] != 0xFFu))
+N			{
+N				return;
+N			}
+N			InfoLength = pData[5u];
+N			if(InfoLength > POWER_COMMAND_MAX_SIZE)
+X			if(InfoLength > ((4u) + (4u) + (1u) + (1u) + (16u) + (2u)))
+N			{
+N				return;
+N			}
+N			//CCITT-CRC16
+N			crc16 = CRC16_CCITT(pData, (POWER_COMMAND_HEADER_SIZE + \
+N																POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+N																InfoLength));
+X			crc16 = CRC16_CCITT(pData, ((4u) + 																(1u) + (1u) + 																InfoLength));
+N			if((pData[POWER_COMMAND_HEADER_SIZE + \
+N					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+N					InfoLength] != (uint8_t)(crc16 & 0xff)) 	|| \
+N					(pData[POWER_COMMAND_HEADER_SIZE + \
+N					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+N					InfoLength + 1u] != (uint8_t)((crc16 >> 8)& 0xff)))		
+X			if((pData[(4u) + 					(1u) + (1u) + 					InfoLength] != (uint8_t)(crc16 & 0xff)) 	|| 					(pData[(4u) + 					(1u) + (1u) + 					InfoLength + 1u] != (uint8_t)((crc16 >> 8)& 0xff)))		
+N			{
+N				return;
+N			}						
+N			switch(pData[4u])
+N			{
+N				case 0u:
+N					return;	
+N					break;
+N				case 1u:
+N					if(InfoLength != 0u)
+N					{
+N						return;
+N					}
+N					break;
+N				case 2u:
+N					if(InfoLength != 2u)
+N					{
+N						return;
+N					}
+N					break;
+N				case 3u:
+N				case 4u:
+N				case 5u:
+N				case 6u:
+N					if(InfoLength != 1u)
+N					{
+N						return;
+N					}
+N					break;					
+N				default:
+N					return;
+N					break;
+N			}
+N			//EOI
+N			if((pData[POWER_COMMAND_HEADER_SIZE + \
+N					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+N					InfoLength + POWER_COMMAND_CRC_SIZE] != 0xEEu) || \
+N				(pData[POWER_COMMAND_HEADER_SIZE + \
+N					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+N					InfoLength + POWER_COMMAND_CRC_SIZE + 1u] != 0x55u) || \
+N				(pData[POWER_COMMAND_HEADER_SIZE + \
+N					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+N					InfoLength + POWER_COMMAND_CRC_SIZE + 2u] != 0x55u) || \
+N				(pData[POWER_COMMAND_HEADER_SIZE + \
+N					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+N					InfoLength + POWER_COMMAND_CRC_SIZE + 3u] != 0xEEu))
+X			if((pData[(4u) + 					(1u) + (1u) + 					InfoLength + (2u)] != 0xEEu) || 				(pData[(4u) + 					(1u) + (1u) + 					InfoLength + (2u) + 1u] != 0x55u) || 				(pData[(4u) + 					(1u) + (1u) + 					InfoLength + (2u) + 2u] != 0x55u) || 				(pData[(4u) + 					(1u) + (1u) + 					InfoLength + (2u) + 3u] != 0xEEu))
+N			{
+N				return;
+N			}
+N			PowerCommandReceived.RequireCode = pData[4u];
+N			memcpy(PowerCommandReceived.PowerCommand.ContentDefAccess.HEADER, pData, POWER_COMMAND_HEADER_SIZE + \
+N																																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE);
+X			memcpy(PowerCommandReceived.PowerCommand.ContentDefAccess.HEADER, pData, (4u) + 																																	(1u) + (1u));
+N			PowerCommandReceived.PowerCommand.ContentDefAccess.CRC16 = crc16;
+N			memcpy(PowerCommandReceived.PowerCommand.ContentDefAccess.INFO, &pData[POWER_COMMAND_HEADER_SIZE + \
+N																																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE], InfoLength);
+X			memcpy(PowerCommandReceived.PowerCommand.ContentDefAccess.INFO, &pData[(4u) + 																																	(1u) + (1u)], InfoLength);
+N			memcpy(PowerCommandReceived.PowerCommand.ContentDefAccess.END, &pData[POWER_COMMAND_HEADER_SIZE + \
+N																																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+N																																	InfoLength + POWER_COMMAND_CRC_SIZE],4u);
+X			memcpy(PowerCommandReceived.PowerCommand.ContentDefAccess.END, &pData[(4u) + 																																	(1u) + (1u) + 																																	InfoLength + (2u)],4u);
+N		}
+N}
+N
+Nstatic uint8_t SU2SM_Req_Call_Reply_Periodic_Transmission(POWER_COMMAND_RECEIVED *pData)
+N{
+N	//TODO
+N	return 1u;
+N}
+N
+Nstatic uint8_t SU2SM_Req_Call_Control_Command(POWER_COMMAND_RECEIVED *pData)
+N{
+N		//TODO
+N	return 1u;
+N}
+N
+N
+Nstatic uint8_t SU2SM_Req_Call_Reply_Power_Off_Require(POWER_COMMAND_RECEIVED *pData)
+N{
+N		//TODO
+N		return 1u;
+N}
+N
+N
+Nstatic uint8_t SU2SM_Req_Call_Power_Off_Command(POWER_COMMAND_RECEIVED *pData)
+N{
+N  	//TODO
+N	if((power_manage.work_mode == POWER_STATUS_48VNOSTART) || (power_manage.work_mode == POWER_STATUS_48VSTART))
+N	{
+N	  power_manage.work_mode = POWER_STATUS_SOFTWAREPOWEROFF;
+N	}
+N	 
+N		return 1u;
+N}
+N
+N
+Nstatic uint8_t SU2SM_Req_Call_Reboot_Command(POWER_COMMAND_RECEIVED *pData)
+N{
+N		//TODO
+N		HAL_StatusTypeDef TransmitResult;
+N	
+N	  TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_REPLY_REBOOT_COMMAND);
+X	  TransmitResult = Power_Command_Transmit((uint8_t)5u);
+N		if(TransmitResult == HAL_OK)
+N		{
+N			HAL_Delay(5000);
+N			force_shutdown(POWER_STATUS_IDLE);
+N			HAL_Delay(1000);
+N			power_manage.work_mode = POWER_STATUS_POWERON;
+N		}
+N	
+N		return 1u;
+N}
+N
+N
+Nstatic uint8_t SU2SM_Req_Call_Reply_Compulsory_Power_Off_Command(POWER_COMMAND_RECEIVED *pData)
+N{
+N		//TODO
+N		return 1u;
 N}
 N
 Nstatic void SM2SU_Req_Call_Encapsulation_Func(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
@@ -50833,13 +51887,20 @@ N	else
 N	{
 N		//TODO
 N		//INFO
-N		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = ;
-N		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 1u] = ;
+N		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = power_manage.p_state_l.VAL;
+X		pData[(4u) + (1u) + (1u)] = power_manage.p_state_l.VAL;
+N		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 1u] = power_manage.p_state_h.VAL;
+X		pData[(4u) + (1u) + (1u) + 1u] = power_manage.p_state_h.VAL;
+N		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 2u] = power_manage.p_breakdown_l.VAL;
+X		pData[(4u) + (1u) + (1u) + 2u] = power_manage.p_breakdown_l.VAL;
+N		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 3u] = power_manage.p_breakdown_h.VAL;
+X		pData[(4u) + (1u) + (1u) + 3u] = power_manage.p_breakdown_h.VAL;
 N		
 N		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
 N	}
 N}
 N
+N/* RC暂不需要该指令 */
 Nstatic void SM2SU_Req_Call_Reply_Control_Command(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
 N{
 N	if(ReqCd != SM2SU_REQ_CD_REPLY_CONTROL_COMMAND)
@@ -50853,8 +51914,8 @@ N	else
 N	{
 N		//TODO
 N		//INFO
-N		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = ;
-N		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 1u] = ;
+N//		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = ;
+N//		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 1u] = ;
 N		
 N		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
 N	}
@@ -50873,8 +51934,8 @@ N	else
 N	{
 N		//TODO
 N		//INFO
-N		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = ;
-N		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 1u] = ;
+N		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = 0x01;
+X		pData[(4u) + (1u) + (1u)] = 0x01;
 N		
 N		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
 N	}
@@ -50893,8 +51954,8 @@ N	else
 N	{
 N		//TODO
 N		//INFO
-N		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = ;
-N		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 1u] = ;
+N		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = 0x01;
+X		pData[(4u) + (1u) + (1u)] = 0x01;
 N		
 N		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
 N	}
@@ -50913,8 +51974,8 @@ N	else
 N	{
 N		//TODO
 N		//INFO
-N		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = ;
-N		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 1u] = ;
+N		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = 0x01;
+X		pData[(4u) + (1u) + (1u)] = 0x01;
 N		
 N		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
 N	}
@@ -50938,4 +51999,46 @@ N		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LE
 N		
 N		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
 N	}
+N}
+N
+Nvoid SU2SM_RxIdleEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+N{
+N		uint16_t i;
+N		uint16_t length;
+N    if (huart->RxXferCount == 0U)
+N    {
+N				//called in UART_Receive_IT()
+N				//Buffer Full
+N			Power_Command_Receive_Buffer_Full = TRUE;
+X			Power_Command_Receive_Buffer_Full = 1;
+N		}
+N		else
+N		{
+N				//Called in HAL_UART_IRQHandler()
+N				//IDLE event detected
+N			Power_Command_Receive_Idle_Detected = TRUE;
+X			Power_Command_Receive_Idle_Detected = 1;
+N		}
+N		if(Size > POWER_COMMAND_MAX_SIZE)
+X		if(Size > ((4u) + (4u) + (1u) + (1u) + (16u) + (2u)))
+N		{
+N			Power_Command_Receive_Length_Error_Detected = TRUE;
+X			Power_Command_Receive_Length_Error_Detected = 1;
+N			length = POWER_COMMAND_MAX_SIZE;				
+X			length = ((4u) + (4u) + (1u) + (1u) + (16u) + (2u));				
+N		}
+N		else
+N		{
+N			length = Size;
+N		}
+N		Power_Command_Receive(PowerCommandRxBuffer,length);
+N		memset(PowerCommandRxBuffer,0u, POWER_COMMAND_TXRX_BUFFER_SIZE);
+X		memset(PowerCommandRxBuffer,0u, 32u);
+N		//reset Buffer Countern and Pointer 
+N		if (HAL_UARTEx_ReceiveToIdle_IT(huart, PowerCommandRxBuffer, POWER_COMMAND_TXRX_BUFFER_SIZE) != HAL_OK)
+X		if (HAL_UARTEx_ReceiveToIdle_IT(huart, PowerCommandRxBuffer, 32u) != HAL_OK)
+N		{
+N				Power_Command_ReceiveToIdle_Restart_Error = TRUE;				
+X				Power_Command_ReceiveToIdle_Restart_Error = 1;				
+N		}	
 N}

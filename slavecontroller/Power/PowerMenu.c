@@ -12,10 +12,9 @@
 
 
 extern POWER_MANAGE_PACKED power_manage;
+extern UART_HandleTypeDef huart1;
 
 uint8_t sampling_flag = 1;  //默认电阻接入电路，需要检测热量
-
-
 
 
 
@@ -84,7 +83,6 @@ static void PowerOnCharge(void)
 					if(elapse >= 1500u)
 					{
 						SAFE_48V_SWITCH_ON_STATE = 2u;
-						HAL_GPIO_WritePin(OC_PROTECT_GPIO_Port, OC_PROTECT_Pin, GPIO_PIN_SET);
 					}
 				break;
 			case 2u:
@@ -103,8 +101,129 @@ static void PowerOnCharge(void)
 		}
 }
 
+static uint32_t SAFE_48V_SWITCH_OFF_TIMER = 0u;
+static uint8_t SAFE_48V_SWITCH_OFF_STATE = 0u;
+static void PowerAccessCharge(void)
+{
+		uint32_t now = 0u;
+		uint32_t elapse = 0u;
+		if(HAL_GPIO_ReadPin(SAFE_48V_SWITCH_GPIO_Port,SAFE_48V_SWITCH_Pin) == GPIO_PIN_RESET)
+		{
+			SAFE_48V_SWITCH_OFF_STATE = 0u;
+		}
+		
+		switch(SAFE_48V_SWITCH_OFF_STATE)
+		{
+			case 1u:
+					HAL_GPIO_WritePin(OC_PROTECT_GPIO_Port, OC_PROTECT_Pin, GPIO_PIN_SET);
+					now = HAL_GetTick();
+					elapse = now - SAFE_48V_SWITCH_OFF_TIMER;
+					if(elapse >= 100u)
+					{
+						SAFE_48V_SWITCH_OFF_STATE = 2u;
+					}
+				break;
+			case 2u:
+					HAL_GPIO_WritePin(OC_PROTECT_GPIO_Port, OC_PROTECT_Pin, GPIO_PIN_RESET);
+			    power_manage.work_mode = POWER_STATUS_48VNOSTART;
+				break;
+			case 0u:
+			default:
+					HAL_GPIO_WritePin(OC_PROTECT_GPIO_Port, OC_PROTECT_Pin, GPIO_PIN_SET);
+					if(HAL_GPIO_ReadPin(SAFE_48V_SWITCH_GPIO_Port,SAFE_48V_SWITCH_Pin) == GPIO_PIN_SET)
+					{
+							SAFE_48V_SWITCH_OFF_STATE = 1u;
+							SAFE_48V_SWITCH_OFF_TIMER = HAL_GetTick();
+					}
+				break;
+		}
+}
+
+void shutdown_mode_operation(void)
+{
+	HAL_StatusTypeDef TransmitResult;
+	uint32_t ShutdownnowTime;
+	uint32_t ShutdownelapseTime;
+	static uint8_t ShutdownState = 0u;
+	static uint32_t ShutdownTime = 0u;
+	
+	switch(ShutdownState)
+	{
+		case 0u:	
+		  TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_POWER_OFF_REQUIRE);
+	    if(TransmitResult == HAL_OK)
+			{
+				ShutdownTime = HAL_GetTick();
+				ShutdownState = 1u;
+			}
+			break;
+		case 1u:
+			ShutdownnowTime = HAL_GetTick();
+	    ShutdownelapseTime = ShutdownnowTime - ShutdownTime; 
+		  if(ShutdownelapseTime >= 5000)
+		  {
+			  force_shutdown(POWER_STATUS_IDLE);
+				ShutdownState = 0u;
+		  }		
+			break;
+		default:
+			break;		
+	}
+}
+
+void softwarepoweroff_mode_operation(void)
+{
+	HAL_StatusTypeDef TransmitResult;
+	uint32_t softwarepoweroffnowTime;
+	uint32_t softwarepoweroffelapseTime;
+	static uint8_t softwarepoweroffState = 0u;
+	static uint32_t softwarepoweroffTime = 0u;
+	
+	switch(softwarepoweroffState)
+	{
+		case 0u:	
+		  TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_REPLY_POWER_OFF_COMMAND);
+	    if(TransmitResult == HAL_OK)
+			{
+				softwarepoweroffTime = HAL_GetTick();
+				softwarepoweroffState = 1u;
+			}
+			break;
+		case 1u:
+			softwarepoweroffnowTime = HAL_GetTick();
+	    softwarepoweroffelapseTime = softwarepoweroffnowTime - softwarepoweroffTime; 
+		  if(softwarepoweroffelapseTime >= 5000)
+		  {
+			  force_shutdown(POWER_STATUS_IDLE);
+				softwarepoweroffState = 0u;
+		  }		
+			break;
+		default:
+			break;		
+	}
+}
+
 void work_mode_operation(void)
 {
+	
+	if(power_manage.AI_SW1 == 1) /* 电压 */
+	{
+		HAL_GPIO_WritePin(AI_IU_SW1_GPIO_Port, AI_IU_SW1_Pin, GPIO_PIN_RESET);
+	}
+	else if(power_manage.AI_SW1 == 0) /* 电流 */
+	{
+	  HAL_GPIO_WritePin(AI_IU_SW1_GPIO_Port, AI_IU_SW1_Pin, GPIO_PIN_SET);
+	}
+	
+	if(power_manage.AI_SW2 == 1)
+	{
+		HAL_GPIO_WritePin(AI_IU_SW2_GPIO_Port, AI_IU_SW2_Pin, GPIO_PIN_RESET);
+	}
+	else if(power_manage.AI_SW2 == 0)
+	{
+	  HAL_GPIO_WritePin(AI_IU_SW2_GPIO_Port, AI_IU_SW2_Pin, GPIO_PIN_SET);
+	}
+	
 	switch(power_manage.work_mode)
 	{
 		case POWER_STATUS_IDLE:
@@ -117,15 +236,17 @@ void work_mode_operation(void)
 	    power_manage.work_mode = POWER_STATUS_48VNOSTART;
 		  break;
 		case POWER_STATUS_48VNOSTART:
-			Power_Command_Main_Loop();
+		  PowerOnCharge();
 			break;
 		case POWER_STATUS_48VSTART:
-			Power_Command_Main_Loop();
+		  PowerAccessCharge();
 			break;
 		case POWER_STATUS_SHUTDWON:
-			force_shutdown(POWER_STATUS_IDLE);
+      shutdown_mode_operation();
 	    break;
-
+		case POWER_STATUS_SOFTWAREPOWEROFF:
+      softwarepoweroff_mode_operation();
+			break;
 		default:
 			break;	
 	}

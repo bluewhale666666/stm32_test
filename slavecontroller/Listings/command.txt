@@ -2,539 +2,1099 @@
 ; commandline ArmCC [--c99 --list --split_sections --debug -c --asm --interleave -o.\objects\command.o --asm_dir=.\Listings\ --list_dir=.\Listings\ --depend=.\objects\command.d --cpu=Cortex-M4.fp --apcs=interwork -O0 --diag_suppress=9931 -I.\etherCAT -I.\Power -I.\CRC -IC:\Users\LENOVO\Desktop\slavecontroller\RTE -IC:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx -IC:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc -ID:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include -ID:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include -ID:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\STM32F4xx_HAL_Driver\Inc -ISTCubeGenerated\Inc -D__UVISION_VERSION=520 -D_RTE_ -DSTM32F407xx --omf_browse=.\objects\command.crf Power\Command.c]
                           THUMB
 
-                          AREA ||i.Power_Command_Initilization||, CODE, READONLY, ALIGN=1
+                          AREA ||i.Power_Command_Initilization||, CODE, READONLY, ALIGN=2
 
                   Power_Command_Initilization PROC
-;;;78     
-;;;79     void Power_Command_Initilization(void)
-000000  4770              BX       lr
-;;;80     {
-;;;81     
-;;;82     }
-;;;83     
+;;;123    
+;;;124    void Power_Command_Initilization(void)
+000000  4802              LDR      r0,|L1.12|
+;;;125    {
+;;;126      Uart_HandlePtr->RxEventCallback= SU2SM_RxIdleEventCallback;
+000002  4903              LDR      r1,|L1.16|
+000004  6809              LDR      r1,[r1,#0]  ; Uart_HandlePtr
+000006  6688              STR      r0,[r1,#0x68]
+;;;127    }
+000008  4770              BX       lr
+;;;128    
                           ENDP
 
+00000a  0000              DCW      0x0000
+                  |L1.12|
+                          DCD      SU2SM_RxIdleEventCallback
+                  |L1.16|
+                          DCD      Uart_HandlePtr
 
                           AREA ||i.Power_Command_Main_Loop||, CODE, READONLY, ALIGN=2
 
                   Power_Command_Main_Loop PROC
-;;;98     
-;;;99     void Power_Command_Main_Loop(void)
-000000  b570              PUSH     {r4-r6,lr}
-;;;100    {
-;;;101    	uint32_t nowTime;
-;;;102    	uint32_t elapseTime;
-;;;103    	HAL_StatusTypeDef TransmitResult;
-;;;104    	
-;;;105    	nowTime = HAL_GetTick();
-000002  f7fffffe          BL       HAL_GetTick
-000006  4606              MOV      r6,r0
-;;;106    	elapseTime = nowTime - PeriodicTransmissionTime;
-000008  480b              LDR      r0,|L2.56|
-00000a  6800              LDR      r0,[r0,#0]  ; PeriodicTransmissionTime
-00000c  1a35              SUBS     r5,r6,r0
-;;;107    	if (elapseTime >= SM2SU_PERIODIC_TRANSMIT_IN_MS)
-00000e  f5b57ffa          CMP      r5,#0x1f4
-000012  d309              BCC      |L2.40|
-;;;108    	{
-;;;109    		TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_PERIODIC_TRANSMISSION);
-000014  2001              MOVS     r0,#1
-000016  f7fffffe          BL       Power_Command_Transmit
-00001a  4604              MOV      r4,r0
-;;;110    		if(TransmitResult == HAL_OK)
-00001c  b954              CBNZ     r4,|L2.52|
-;;;111    		{
-;;;112    			PeriodicTransmissionTime = HAL_GetTick();
-00001e  f7fffffe          BL       HAL_GetTick
-000022  4905              LDR      r1,|L2.56|
-000024  6008              STR      r0,[r1,#0]  ; PeriodicTransmissionTime
-000026  e005              B        |L2.52|
-                  |L2.40|
-;;;113    		}
-;;;114    	}
-;;;115    	else if(elapseTime >= SM2SU_PERIODIC_TRANSMIT_TIMEOUT_IN_MS)
-000028  f5b57f7a          CMP      r5,#0x3e8
-00002c  d302              BCC      |L2.52|
-;;;116    	{
-;;;117    		PeriodicTransmissionTimeout = TRUE;
-00002e  2001              MOVS     r0,#1
-000030  4902              LDR      r1,|L2.60|
-000032  7008              STRB     r0,[r1,#0]
+;;;143    
+;;;144    void Power_Command_Main_Loop(void)
+000000  e92d41f0          PUSH     {r4-r8,lr}
+;;;145    {
+;;;146    	uint32_t nowTime;
+;;;147    	uint32_t elapseTime;
+;;;148    	HAL_StatusTypeDef TransmitResult;
+;;;149    	uint32_t i;
+;;;150    	
+;;;151    	for(i=0u; i<(uint32_t)SU2SM_REQ_MAX;i++){
+000004  2400              MOVS     r4,#0
+000006  e013              B        |L2.48|
+                  |L2.8|
+;;;152    		if(PowerCommandReceived.RequireCode == strPwrCmdRxReqMap[i].SU2SM_REQ_CD){
+000008  4818              LDR      r0,|L2.108|
+00000a  7800              LDRB     r0,[r0,#0]  ; PowerCommandReceived
+00000c  4918              LDR      r1,|L2.112|
+00000e  f8111034          LDRB     r1,[r1,r4,LSL #3]
+000012  4288              CMP      r0,r1
+000014  d10b              BNE      |L2.46|
+;;;153    			if(strPwrCmdRxReqMap[i].pFunc(&PowerCommandReceived) != 0u)
+000016  4816              LDR      r0,|L2.112|
+000018  eb0000c4          ADD      r0,r0,r4,LSL #3
+00001c  6841              LDR      r1,[r0,#4]
+00001e  4813              LDR      r0,|L2.108|
+000020  4788              BLX      r1
+000022  b118              CBZ      r0,|L2.44|
+;;;154    			{
+;;;155    				memset((uint8_t *)&PowerCommandReceived,0u, sizeof(PowerCommandReceived));
+000024  2120              MOVS     r1,#0x20
+000026  4811              LDR      r0,|L2.108|
+000028  f7fffffe          BL       __aeabi_memclr4
+                  |L2.44|
+;;;156    			}
+;;;157    			break;
+00002c  e002              B        |L2.52|
+                  |L2.46|
+00002e  1c64              ADDS     r4,r4,#1              ;151
+                  |L2.48|
+000030  2c06              CMP      r4,#6                 ;151
+000032  d3e9              BCC      |L2.8|
                   |L2.52|
-;;;118    	}
-;;;119    	else
-;;;120    	{
-;;;121    		//no statement
-;;;122    	}
-;;;123    }
-000034  bd70              POP      {r4-r6,pc}
-;;;124    
+000034  bf00              NOP      
+;;;158    		}
+;;;159    	}
+;;;160    	
+;;;161    	nowTime = HAL_GetTick();
+000036  f7fffffe          BL       HAL_GetTick
+00003a  4605              MOV      r5,r0
+;;;162    	elapseTime = nowTime - PeriodicTransmissionTime;
+00003c  480d              LDR      r0,|L2.116|
+00003e  6800              LDR      r0,[r0,#0]  ; PeriodicTransmissionTime
+000040  1a2e              SUBS     r6,r5,r0
+;;;163    	if (elapseTime >= SM2SU_PERIODIC_TRANSMIT_IN_MS)
+000042  f5b67ffa          CMP      r6,#0x1f4
+000046  d309              BCC      |L2.92|
+;;;164    	{
+;;;165    		TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_PERIODIC_TRANSMISSION);
+000048  2001              MOVS     r0,#1
+00004a  f7fffffe          BL       Power_Command_Transmit
+00004e  4607              MOV      r7,r0
+;;;166    		if(TransmitResult == HAL_OK)
+000050  b957              CBNZ     r7,|L2.104|
+;;;167    		{
+;;;168    			PeriodicTransmissionTime = HAL_GetTick();
+000052  f7fffffe          BL       HAL_GetTick
+000056  4907              LDR      r1,|L2.116|
+000058  6008              STR      r0,[r1,#0]  ; PeriodicTransmissionTime
+00005a  e005              B        |L2.104|
+                  |L2.92|
+;;;169    		}
+;;;170    	}
+;;;171    	else if(elapseTime >= SM2SU_PERIODIC_TRANSMIT_TIMEOUT_IN_MS)
+00005c  f5b67f7a          CMP      r6,#0x3e8
+000060  d302              BCC      |L2.104|
+;;;172    	{
+;;;173    		PeriodicTransmissionTimeout = TRUE;
+000062  2001              MOVS     r0,#1
+000064  4904              LDR      r1,|L2.120|
+000066  7008              STRB     r0,[r1,#0]
+                  |L2.104|
+;;;174    	}
+;;;175    	else
+;;;176    	{
+;;;177    		//no statement
+;;;178    	}
+;;;179    }
+000068  e8bd81f0          POP      {r4-r8,pc}
+;;;180    
                           ENDP
 
-000036  0000              DCW      0x0000
-                  |L2.56|
+                  |L2.108|
+                          DCD      PowerCommandReceived
+                  |L2.112|
+                          DCD      strPwrCmdRxReqMap
+                  |L2.116|
                           DCD      PeriodicTransmissionTime
-                  |L2.60|
+                  |L2.120|
                           DCD      PeriodicTransmissionTimeout
+
+                          AREA ||i.Power_Command_Receive||, CODE, READONLY, ALIGN=2
+
+                  Power_Command_Receive PROC
+;;;180    
+;;;181    static void Power_Command_Receive(uint8_t * pData, uint16_t Size)
+000000  e92d41f0          PUSH     {r4-r8,lr}
+;;;182    {
+000004  4604              MOV      r4,r0
+000006  4688              MOV      r8,r1
+;;;183    		BOOL CommandReceived = FALSE;
+000008  2700              MOVS     r7,#0
+;;;184    		uint16_t crc16;
+;;;185    		uint16_t InfoLength;
+;;;186    
+;;;187    		if(Power_Command_Receive_Buffer_Full == TRUE)
+00000a  483b              LDR      r0,|L3.248|
+00000c  7800              LDRB     r0,[r0,#0]  ; Power_Command_Receive_Buffer_Full
+00000e  2801              CMP      r0,#1
+000010  d100              BNE      |L3.20|
+;;;188    		{
+;;;189    			CommandReceived = TRUE;
+000012  2701              MOVS     r7,#1
+                  |L3.20|
+;;;190    		}
+;;;191    		if(Power_Command_Receive_Idle_Detected == TRUE)
+000014  4839              LDR      r0,|L3.252|
+000016  7800              LDRB     r0,[r0,#0]  ; Power_Command_Receive_Idle_Detected
+000018  2801              CMP      r0,#1
+00001a  d103              BNE      |L3.36|
+;;;192    		{
+;;;193    			CommandReceived = TRUE;
+00001c  2701              MOVS     r7,#1
+;;;194    			Power_Command_Receive_Idle_Detected = FALSE;
+00001e  2000              MOVS     r0,#0
+000020  4936              LDR      r1,|L3.252|
+000022  7008              STRB     r0,[r1,#0]
+                  |L3.36|
+;;;195    		}
+;;;196    		
+;;;197    		if (CommandReceived == TRUE)
+000024  2f01              CMP      r7,#1
+000026  d165              BNE      |L3.244|
+;;;198    		{
+;;;199    			if((pData[0u] != 0xFFu) || \
+000028  7820              LDRB     r0,[r4,#0]
+00002a  28ff              CMP      r0,#0xff
+00002c  d108              BNE      |L3.64|
+;;;200    				(pData[1u] != 0xAAu) || \
+00002e  7860              LDRB     r0,[r4,#1]
+000030  28aa              CMP      r0,#0xaa
+000032  d105              BNE      |L3.64|
+;;;201    				(pData[2u] != 0xAAu) || \
+000034  78a0              LDRB     r0,[r4,#2]
+000036  28aa              CMP      r0,#0xaa
+000038  d102              BNE      |L3.64|
+;;;202    				(pData[3u] != 0xFFu))
+00003a  78e0              LDRB     r0,[r4,#3]
+00003c  28ff              CMP      r0,#0xff
+00003e  d001              BEQ      |L3.68|
+                  |L3.64|
+;;;203    			{
+;;;204    				return;
+;;;205    			}
+;;;206    			InfoLength = pData[5u];
+;;;207    			if(InfoLength > POWER_COMMAND_MAX_SIZE)
+;;;208    			{
+;;;209    				return;
+;;;210    			}
+;;;211    			//CCITT-CRC16
+;;;212    			crc16 = CRC16_CCITT(pData, (POWER_COMMAND_HEADER_SIZE + \
+;;;213    																POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+;;;214    																InfoLength));
+;;;215    			if((pData[POWER_COMMAND_HEADER_SIZE + \
+;;;216    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+;;;217    					InfoLength] != (uint8_t)(crc16 & 0xff)) 	|| \
+;;;218    					(pData[POWER_COMMAND_HEADER_SIZE + \
+;;;219    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+;;;220    					InfoLength + 1u] != (uint8_t)((crc16 >> 8)& 0xff)))		
+;;;221    			{
+;;;222    				return;
+;;;223    			}						
+;;;224    			switch(pData[4u])
+;;;225    			{
+;;;226    				case 0u:
+;;;227    					return;	
+;;;228    					break;
+;;;229    				case 1u:
+;;;230    					if(InfoLength != 0u)
+;;;231    					{
+;;;232    						return;
+;;;233    					}
+;;;234    					break;
+;;;235    				case 2u:
+;;;236    					if(InfoLength != 2u)
+;;;237    					{
+;;;238    						return;
+;;;239    					}
+;;;240    					break;
+;;;241    				case 3u:
+;;;242    				case 4u:
+;;;243    				case 5u:
+;;;244    				case 6u:
+;;;245    					if(InfoLength != 1u)
+;;;246    					{
+;;;247    						return;
+;;;248    					}
+;;;249    					break;					
+;;;250    				default:
+;;;251    					return;
+;;;252    					break;
+;;;253    			}
+;;;254    			//EOI
+;;;255    			if((pData[POWER_COMMAND_HEADER_SIZE + \
+;;;256    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+;;;257    					InfoLength + POWER_COMMAND_CRC_SIZE] != 0xEEu) || \
+;;;258    				(pData[POWER_COMMAND_HEADER_SIZE + \
+;;;259    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+;;;260    					InfoLength + POWER_COMMAND_CRC_SIZE + 1u] != 0x55u) || \
+;;;261    				(pData[POWER_COMMAND_HEADER_SIZE + \
+;;;262    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+;;;263    					InfoLength + POWER_COMMAND_CRC_SIZE + 2u] != 0x55u) || \
+;;;264    				(pData[POWER_COMMAND_HEADER_SIZE + \
+;;;265    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+;;;266    					InfoLength + POWER_COMMAND_CRC_SIZE + 3u] != 0xEEu))
+;;;267    			{
+;;;268    				return;
+;;;269    			}
+;;;270    			PowerCommandReceived.RequireCode = pData[4u];
+;;;271    			memcpy(PowerCommandReceived.PowerCommand.ContentDefAccess.HEADER, pData, POWER_COMMAND_HEADER_SIZE + \
+;;;272    																																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE);
+;;;273    			PowerCommandReceived.PowerCommand.ContentDefAccess.CRC16 = crc16;
+;;;274    			memcpy(PowerCommandReceived.PowerCommand.ContentDefAccess.INFO, &pData[POWER_COMMAND_HEADER_SIZE + \
+;;;275    																																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE], InfoLength);
+;;;276    			memcpy(PowerCommandReceived.PowerCommand.ContentDefAccess.END, &pData[POWER_COMMAND_HEADER_SIZE + \
+;;;277    																																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+;;;278    																																	InfoLength + POWER_COMMAND_CRC_SIZE],4u);
+;;;279    		}
+;;;280    }
+000040  e8bd81f0          POP      {r4-r8,pc}
+                  |L3.68|
+000044  7965              LDRB     r5,[r4,#5]            ;206
+000046  2d1c              CMP      r5,#0x1c              ;207
+000048  d900              BLS      |L3.76|
+00004a  e7f9              B        |L3.64|
+                  |L3.76|
+00004c  1da8              ADDS     r0,r5,#6              ;212
+00004e  b2c1              UXTB     r1,r0                 ;212
+000050  4620              MOV      r0,r4                 ;212
+000052  f7fffffe          BL       CRC16_CCITT
+000056  4606              MOV      r6,r0                 ;212
+000058  1da8              ADDS     r0,r5,#6              ;215
+00005a  5c20              LDRB     r0,[r4,r0]            ;215
+00005c  b2f1              UXTB     r1,r6                 ;215
+00005e  4288              CMP      r0,r1                 ;215
+000060  d104              BNE      |L3.108|
+000062  1de8              ADDS     r0,r5,#7              ;218
+000064  5c20              LDRB     r0,[r4,r0]            ;218
+000066  ebb02f16          CMP      r0,r6,LSR #8          ;218
+00006a  d000              BEQ      |L3.110|
+                  |L3.108|
+00006c  e7e8              B        |L3.64|
+                  |L3.110|
+00006e  7920              LDRB     r0,[r4,#4]            ;224
+000070  2807              CMP      r0,#7                 ;224
+000072  d214              BCS      |L3.158|
+000074  e8dff000          TBB      [pc,r0]               ;224
+000078  0405080c          DCB      0x04,0x05,0x08,0x0c
+00007c  0d0e0f00          DCB      0x0d,0x0e,0x0f,0x00
+000080  e7de              B        |L3.64|
+000082  b105              CBZ      r5,|L3.134|
+000084  e7dc              B        |L3.64|
+                  |L3.134|
+000086  e00b              B        |L3.160|
+000088  2d02              CMP      r5,#2                 ;236
+00008a  d000              BEQ      |L3.142|
+00008c  e7d8              B        |L3.64|
+                  |L3.142|
+00008e  e007              B        |L3.160|
+000090  bf00              NOP                            ;242
+000092  bf00              NOP                            ;243
+000094  bf00              NOP                            ;244
+000096  2d01              CMP      r5,#1                 ;245
+000098  d000              BEQ      |L3.156|
+00009a  e7d1              B        |L3.64|
+                  |L3.156|
+00009c  e000              B        |L3.160|
+                  |L3.158|
+00009e  e7cf              B        |L3.64|
+                  |L3.160|
+0000a0  bf00              NOP                            ;228
+0000a2  f1050008          ADD      r0,r5,#8              ;255
+0000a6  5c20              LDRB     r0,[r4,r0]            ;255
+0000a8  28ee              CMP      r0,#0xee              ;255
+0000aa  d10e              BNE      |L3.202|
+0000ac  f1050009          ADD      r0,r5,#9              ;258
+0000b0  5c20              LDRB     r0,[r4,r0]            ;258
+0000b2  2855              CMP      r0,#0x55              ;258
+0000b4  d109              BNE      |L3.202|
+0000b6  f105000a          ADD      r0,r5,#0xa            ;261
+0000ba  5c20              LDRB     r0,[r4,r0]            ;261
+0000bc  2855              CMP      r0,#0x55              ;261
+0000be  d104              BNE      |L3.202|
+0000c0  f105000b          ADD      r0,r5,#0xb            ;264
+0000c4  5c20              LDRB     r0,[r4,r0]            ;264
+0000c6  28ee              CMP      r0,#0xee              ;264
+0000c8  d000              BEQ      |L3.204|
+                  |L3.202|
+0000ca  e7b9              B        |L3.64|
+                  |L3.204|
+0000cc  7920              LDRB     r0,[r4,#4]            ;270
+0000ce  490c              LDR      r1,|L3.256|
+0000d0  7008              STRB     r0,[r1,#0]            ;270
+0000d2  4608              MOV      r0,r1                 ;271
+0000d4  6821              LDR      r1,[r4,#0]            ;271
+0000d6  6041              STR      r1,[r0,#4]            ;271  ; PowerCommandReceived
+0000d8  88a1              LDRH     r1,[r4,#4]            ;271
+0000da  8101              STRH     r1,[r0,#8]            ;271
+0000dc  8346              STRH     r6,[r0,#0x1a]         ;273
+0000de  462a              MOV      r2,r5                 ;274
+0000e0  1da1              ADDS     r1,r4,#6              ;274
+0000e2  300a              ADDS     r0,r0,#0xa            ;274
+0000e4  f7fffffe          BL       __aeabi_memcpy
+0000e8  f1050008          ADD      r0,r5,#8              ;276
+0000ec  1901              ADDS     r1,r0,r4              ;276
+0000ee  4804              LDR      r0,|L3.256|
+0000f0  6809              LDR      r1,[r1,#0]            ;276
+0000f2  61c1              STR      r1,[r0,#0x1c]         ;276
+                  |L3.244|
+0000f4  bf00              NOP      
+0000f6  e7a3              B        |L3.64|
+;;;281    
+                          ENDP
+
+                  |L3.248|
+                          DCD      Power_Command_Receive_Buffer_Full
+                  |L3.252|
+                          DCD      Power_Command_Receive_Idle_Detected
+                  |L3.256|
+                          DCD      PowerCommandReceived
 
                           AREA ||i.Power_Command_Transmit||, CODE, READONLY, ALIGN=2
 
                   Power_Command_Transmit PROC
-;;;83     
-;;;84     HAL_StatusTypeDef Power_Command_Transmit(uint8_t ReqCode)
+;;;128    
+;;;129    HAL_StatusTypeDef Power_Command_Transmit(uint8_t ReqCode)
 000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;85     {
+;;;130    {
 000004  4605              MOV      r5,r0
-;;;86     	HAL_StatusTypeDef ans = HAL_ERROR;
+;;;131    	HAL_StatusTypeDef ans = HAL_ERROR;
 000006  2601              MOVS     r6,#1
-;;;87     	uint32_t i;
-;;;88     	
-;;;89     	for(i=0u; i<(uint32_t)SM2SU_REQ_MAX;i++){
+;;;132    	uint32_t i;
+;;;133    	
+;;;134    	for(i=0u; i<(uint32_t)SM2SU_REQ_MAX;i++){
 000008  2400              MOVS     r4,#0
-00000a  e020              B        |L3.78|
-                  |L3.12|
-;;;90     		if(ReqCode == strPwrCmdTxReqMap[i].SM2SU_REQ_CD){
+00000a  e020              B        |L4.78|
+                  |L4.12|
+;;;135    		if(ReqCode == strPwrCmdTxReqMap[i].SM2SU_REQ_CD){
 00000c  eb040044          ADD      r0,r4,r4,LSL #1
-000010  4912              LDR      r1,|L3.92|
+000010  4912              LDR      r1,|L4.92|
 000012  f8110020          LDRB     r0,[r1,r0,LSL #2]
 000016  42a8              CMP      r0,r5
-000018  d118              BNE      |L3.76|
-;;;91     			strPwrCmdTxReqMap[i].pFunc(ReqCode,PowerCommandTxBuffer, &PwrCmdTxSize, strPwrCmdTxReqMap[i].InfoLength);
+000018  d118              BNE      |L4.76|
+;;;136    			strPwrCmdTxReqMap[i].pFunc(ReqCode,PowerCommandTxBuffer, &PwrCmdTxSize, strPwrCmdTxReqMap[i].InfoLength);
 00001a  eb040044          ADD      r0,r4,r4,LSL #1
 00001e  eb010080          ADD      r0,r1,r0,LSL #2
 000022  8903              LDRH     r3,[r0,#8]
 000024  eb040044          ADD      r0,r4,r4,LSL #1
 000028  eb010080          ADD      r0,r1,r0,LSL #2
-00002c  4a0c              LDR      r2,|L3.96|
-00002e  490d              LDR      r1,|L3.100|
+00002c  4a0c              LDR      r2,|L4.96|
+00002e  490d              LDR      r1,|L4.100|
 000030  6847              LDR      r7,[r0,#4]
 000032  4628              MOV      r0,r5
 000034  47b8              BLX      r7
-;;;92     			ans = HAL_UART_Transmit(Uart_HandlePtr, PowerCommandTxBuffer, PwrCmdTxSize, (uint32_t)POWER_COMMAND_TRANSMIT_TIMEOUT_IN_MS);
+;;;137    			ans = HAL_UART_Transmit(Uart_HandlePtr, PowerCommandTxBuffer, PwrCmdTxSize, (uint32_t)POWER_COMMAND_TRANSMIT_TIMEOUT_IN_MS);
 000036  f44f73fa          MOV      r3,#0x1f4
-00003a  4809              LDR      r0,|L3.96|
+00003a  4809              LDR      r0,|L4.96|
 00003c  8802              LDRH     r2,[r0,#0]  ; PwrCmdTxSize
-00003e  4909              LDR      r1,|L3.100|
-000040  4809              LDR      r0,|L3.104|
+00003e  4909              LDR      r1,|L4.100|
+000040  4809              LDR      r0,|L4.104|
 000042  6800              LDR      r0,[r0,#0]  ; Uart_HandlePtr
 000044  f7fffffe          BL       HAL_UART_Transmit
 000048  4606              MOV      r6,r0
-;;;93     			break;
-00004a  e002              B        |L3.82|
-                  |L3.76|
-00004c  1c64              ADDS     r4,r4,#1              ;89
-                  |L3.78|
-00004e  2c06              CMP      r4,#6                 ;89
-000050  d3dc              BCC      |L3.12|
-                  |L3.82|
+;;;138    			break;
+00004a  e002              B        |L4.82|
+                  |L4.76|
+00004c  1c64              ADDS     r4,r4,#1              ;134
+                  |L4.78|
+00004e  2c06              CMP      r4,#6                 ;134
+000050  d3dc              BCC      |L4.12|
+                  |L4.82|
 000052  bf00              NOP      
-;;;94     		}
-;;;95     	}
-;;;96     	return(ans);
+;;;139    		}
+;;;140    	}
+;;;141    	return(ans);
 000054  4630              MOV      r0,r6
-;;;97     }
+;;;142    }
 000056  e8bd81f0          POP      {r4-r8,pc}
-;;;98     
+;;;143    
                           ENDP
 
 00005a  0000              DCW      0x0000
-                  |L3.92|
+                  |L4.92|
                           DCD      strPwrCmdTxReqMap
-                  |L3.96|
+                  |L4.96|
                           DCD      PwrCmdTxSize
-                  |L3.100|
+                  |L4.100|
                           DCD      PowerCommandTxBuffer
-                  |L3.104|
+                  |L4.104|
                           DCD      Uart_HandlePtr
 
                           AREA ||i.SM2SU_Req_Call_Compulsory_Power_Off_Command||, CODE, READONLY, ALIGN=1
 
                   SM2SU_Req_Call_Compulsory_Power_Off_Command PROC
-;;;261    
-;;;262    static void SM2SU_Req_Call_Compulsory_Power_Off_Command(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
+;;;474    
+;;;475    static void SM2SU_Req_Call_Compulsory_Power_Off_Command(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
 000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;263    {
+;;;476    {
 000004  4604              MOV      r4,r0
 000006  460d              MOV      r5,r1
 000008  4616              MOV      r6,r2
 00000a  461f              MOV      r7,r3
-;;;264    	if(ReqCd != SM2SU_REQ_CD_COMPULSORY_POWER_OFF_COMMAND)
+;;;477    	if(ReqCd != SM2SU_REQ_CD_COMPULSORY_POWER_OFF_COMMAND)
 00000c  2c06              CMP      r4,#6
-00000e  d003              BEQ      |L4.24|
-;;;265    	{
-;;;266    		*(pData) = NULL;
+00000e  d003              BEQ      |L5.24|
+;;;478    	{
+;;;479    		*(pData) = NULL;
 000010  2000              MOVS     r0,#0
 000012  7028              STRB     r0,[r5,#0]
-;;;267    		*(pSize) = 0u;
+;;;480    		*(pSize) = 0u;
 000014  8030              STRH     r0,[r6,#0]
-000016  e005              B        |L4.36|
-                  |L4.24|
-;;;268    	}
-;;;269    	else
-;;;270    	{
-;;;271    		//TODO
-;;;272    		//INFO
-;;;273    		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = ;
-;;;274    		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 1u] = ;
-;;;275    		
-;;;276    		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
+000016  e005              B        |L5.36|
+                  |L5.24|
+;;;481    	}
+;;;482    	else
+;;;483    	{
+;;;484    		//TODO
+;;;485    		//INFO
+;;;486    		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = ;
+;;;487    		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 1u] = ;
+;;;488    		
+;;;489    		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
 000018  463b              MOV      r3,r7
 00001a  4632              MOV      r2,r6
 00001c  4629              MOV      r1,r5
 00001e  4620              MOV      r0,r4
 000020  f7fffffe          BL       SM2SU_Req_Call_Encapsulation_Func
-                  |L4.36|
-;;;277    	}
-;;;278    }
+                  |L5.36|
+;;;490    	}
+;;;491    }
 000024  e8bd81f0          POP      {r4-r8,pc}
+;;;492    
                           ENDP
 
 
                           AREA ||i.SM2SU_Req_Call_Encapsulation_Func||, CODE, READONLY, ALIGN=1
 
                   SM2SU_Req_Call_Encapsulation_Func PROC
-;;;124    
-;;;125    static void SM2SU_Req_Call_Encapsulation_Func(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
+;;;337    
+;;;338    static void SM2SU_Req_Call_Encapsulation_Func(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
 000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;126    {
+;;;339    {
 000004  4606              MOV      r6,r0
 000006  460c              MOV      r4,r1
 000008  4617              MOV      r7,r2
 00000a  461d              MOV      r5,r3
-;;;127    		uint16_t crc16;
-;;;128    	
-;;;129    		*(pSize) = (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + \
+;;;340    		uint16_t crc16;
+;;;341    	
+;;;342    		*(pSize) = (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + \
 00000c  f105000c          ADD      r0,r5,#0xc
 000010  8038              STRH     r0,[r7,#0]
-;;;130    																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
-;;;131    																	InfoLength + POWER_COMMAND_CRC_SIZE);
-;;;132    		//SOI
-;;;133    		pData[0u] = 0xFFu;
+;;;343    																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+;;;344    																	InfoLength + POWER_COMMAND_CRC_SIZE);
+;;;345    		//SOI
+;;;346    		pData[0u] = 0xFFu;
 000012  20ff              MOVS     r0,#0xff
 000014  7020              STRB     r0,[r4,#0]
-;;;134    		pData[1u] = 0xAAu;
+;;;347    		pData[1u] = 0xAAu;
 000016  20aa              MOVS     r0,#0xaa
 000018  7060              STRB     r0,[r4,#1]
-;;;135    		pData[2u] = 0xAAu;
+;;;348    		pData[2u] = 0xAAu;
 00001a  70a0              STRB     r0,[r4,#2]
-;;;136    		pData[3u] = 0xFFu;
+;;;349    		pData[3u] = 0xFFu;
 00001c  20ff              MOVS     r0,#0xff
 00001e  70e0              STRB     r0,[r4,#3]
-;;;137    		//CMD
-;;;138    		pData[POWER_COMMAND_HEADER_SIZE] = ReqCd;
+;;;350    		//CMD
+;;;351    		pData[POWER_COMMAND_HEADER_SIZE] = ReqCd;
 000020  7126              STRB     r6,[r4,#4]
-;;;139    		//LENGTH
-;;;140    		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE] = InfoLength;
+;;;352    		//LENGTH
+;;;353    		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE] = InfoLength;
 000022  7165              STRB     r5,[r4,#5]
-;;;141    
-;;;142    		//INFO
-;;;143    		//updated in corresponding function
-;;;144    	
-;;;145    		//CCITT-CRC16
-;;;146    		crc16 = CRC16_CCITT(pData, (POWER_COMMAND_HEADER_SIZE + \
+;;;354    
+;;;355    		//INFO
+;;;356    		//updated in corresponding function
+;;;357    	
+;;;358    		//CCITT-CRC16
+;;;359    		crc16 = CRC16_CCITT(pData, (POWER_COMMAND_HEADER_SIZE + \
 000024  1da8              ADDS     r0,r5,#6
 000026  b2c1              UXTB     r1,r0
 000028  4620              MOV      r0,r4
 00002a  f7fffffe          BL       CRC16_CCITT
 00002e  4680              MOV      r8,r0
-;;;147    																POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
-;;;148    																InfoLength));
-;;;149    		pData[POWER_COMMAND_HEADER_SIZE + \
+;;;360    																POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+;;;361    																InfoLength));
+;;;362    		pData[POWER_COMMAND_HEADER_SIZE + \
 000030  1da8              ADDS     r0,r5,#6
 000032  f8048000          STRB     r8,[r4,r0]
-;;;150    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
-;;;151    					InfoLength] = (uint8_t)(crc16 & 0xff); 	
-;;;152    		pData[POWER_COMMAND_HEADER_SIZE + \
+;;;363    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+;;;364    					InfoLength] = (uint8_t)(crc16 & 0xff); 	
+;;;365    		pData[POWER_COMMAND_HEADER_SIZE + \
 000036  ea4f2118          LSR      r1,r8,#8
 00003a  1de8              ADDS     r0,r5,#7
 00003c  5421              STRB     r1,[r4,r0]
-;;;153    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
-;;;154    					InfoLength + 1u] = (uint8_t)((crc16 >> 8)& 0xff);
-;;;155    	
-;;;156    		//EOI
-;;;157    		pData[POWER_COMMAND_HEADER_SIZE + \
+;;;366    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+;;;367    					InfoLength + 1u] = (uint8_t)((crc16 >> 8)& 0xff);
+;;;368    	
+;;;369    		//EOI
+;;;370    		pData[POWER_COMMAND_HEADER_SIZE + \
 00003e  21ee              MOVS     r1,#0xee
 000040  1c40              ADDS     r0,r0,#1
 000042  5421              STRB     r1,[r4,r0]
-;;;158    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
-;;;159    					InfoLength + POWER_COMMAND_CRC_SIZE] = 0xEEu;
-;;;160    		pData[POWER_COMMAND_HEADER_SIZE + \
+;;;371    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+;;;372    					InfoLength + POWER_COMMAND_CRC_SIZE] = 0xEEu;
+;;;373    		pData[POWER_COMMAND_HEADER_SIZE + \
 000044  2155              MOVS     r1,#0x55
 000046  1c40              ADDS     r0,r0,#1
 000048  5421              STRB     r1,[r4,r0]
-;;;161    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
-;;;162    					InfoLength + POWER_COMMAND_CRC_SIZE + 1u] = 0x55u;
-;;;163    		pData[POWER_COMMAND_HEADER_SIZE + \
+;;;374    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+;;;375    					InfoLength + POWER_COMMAND_CRC_SIZE + 1u] = 0x55u;
+;;;376    		pData[POWER_COMMAND_HEADER_SIZE + \
 00004a  1c40              ADDS     r0,r0,#1
 00004c  5421              STRB     r1,[r4,r0]
-;;;164    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
-;;;165    					InfoLength + POWER_COMMAND_CRC_SIZE + 2u] = 0x55u;
-;;;166    		pData[POWER_COMMAND_HEADER_SIZE + \
+;;;377    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+;;;378    					InfoLength + POWER_COMMAND_CRC_SIZE + 2u] = 0x55u;
+;;;379    		pData[POWER_COMMAND_HEADER_SIZE + \
 00004e  21ee              MOVS     r1,#0xee
 000050  1c40              ADDS     r0,r0,#1
 000052  5421              STRB     r1,[r4,r0]
-;;;167    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
-;;;168    					InfoLength + POWER_COMMAND_CRC_SIZE + 3u] = 0xEEu;
-;;;169    }
+;;;380    					POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+;;;381    					InfoLength + POWER_COMMAND_CRC_SIZE + 3u] = 0xEEu;
+;;;382    }
 000054  e8bd81f0          POP      {r4-r8,pc}
-;;;170    
+;;;383    
                           ENDP
 
 
-                          AREA ||i.SM2SU_Req_Call_Periodic_Transmission||, CODE, READONLY, ALIGN=1
+                          AREA ||i.SM2SU_Req_Call_Periodic_Transmission||, CODE, READONLY, ALIGN=2
 
                   SM2SU_Req_Call_Periodic_Transmission PROC
-;;;171    
-;;;172    static void SM2SU_Req_Call_Periodic_Transmission(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
+;;;384    
+;;;385    static void SM2SU_Req_Call_Periodic_Transmission(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
 000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;173    {
-000004  4604              MOV      r4,r0
-000006  460d              MOV      r5,r1
+;;;386    {
+000004  4605              MOV      r5,r0
+000006  460c              MOV      r4,r1
 000008  4616              MOV      r6,r2
 00000a  461f              MOV      r7,r3
-;;;174    	if(ReqCd != SM2SU_REQ_CD_PERIODIC_TRANSMISSION)
-00000c  2c01              CMP      r4,#1
-00000e  d003              BEQ      |L6.24|
-;;;175    	{
-;;;176    		*(pData) = NULL;
+;;;387    	if(ReqCd != SM2SU_REQ_CD_PERIODIC_TRANSMISSION)
+00000c  2d01              CMP      r5,#1
+00000e  d003              BEQ      |L7.24|
+;;;388    	{
+;;;389    		*(pData) = NULL;
 000010  2000              MOVS     r0,#0
-000012  7028              STRB     r0,[r5,#0]
-;;;177    		*(pSize) = 0u;
+000012  7020              STRB     r0,[r4,#0]
+;;;390    		*(pSize) = 0u;
 000014  8030              STRH     r0,[r6,#0]
-000016  e005              B        |L6.36|
-                  |L6.24|
-;;;178    	}
-;;;179    	else
-;;;180    	{
-;;;181    		//TODO
-;;;182    		//INFO
-;;;183    		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = ;
-;;;184    		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 1u] = ;
-;;;185    		
-;;;186    		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
-000018  463b              MOV      r3,r7
-00001a  4632              MOV      r2,r6
-00001c  4629              MOV      r1,r5
-00001e  4620              MOV      r0,r4
-000020  f7fffffe          BL       SM2SU_Req_Call_Encapsulation_Func
-                  |L6.36|
-;;;187    	}
-;;;188    }
-000024  e8bd81f0          POP      {r4-r8,pc}
-;;;189    
+000016  e011              B        |L7.60|
+                  |L7.24|
+;;;391    	}
+;;;392    	else
+;;;393    	{
+;;;394    		//TODO
+;;;395    		//INFO
+;;;396    		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = power_manage.p_state_l.VAL;
+000018  4809              LDR      r0,|L7.64|
+00001a  7dc0              LDRB     r0,[r0,#0x17]  ; power_manage
+00001c  71a0              STRB     r0,[r4,#6]
+;;;397    		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 1u] = power_manage.p_state_h.VAL;
+00001e  4808              LDR      r0,|L7.64|
+000020  7d80              LDRB     r0,[r0,#0x16]  ; power_manage
+000022  71e0              STRB     r0,[r4,#7]
+;;;398    		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 2u] = power_manage.p_breakdown_l.VAL;
+000024  4806              LDR      r0,|L7.64|
+000026  7e40              LDRB     r0,[r0,#0x19]  ; power_manage
+000028  7220              STRB     r0,[r4,#8]
+;;;399    		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 3u] = power_manage.p_breakdown_h.VAL;
+00002a  4805              LDR      r0,|L7.64|
+00002c  7e00              LDRB     r0,[r0,#0x18]  ; power_manage
+00002e  7260              STRB     r0,[r4,#9]
+;;;400    		
+;;;401    		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
+000030  463b              MOV      r3,r7
+000032  4632              MOV      r2,r6
+000034  4621              MOV      r1,r4
+000036  4628              MOV      r0,r5
+000038  f7fffffe          BL       SM2SU_Req_Call_Encapsulation_Func
+                  |L7.60|
+;;;402    	}
+;;;403    }
+00003c  e8bd81f0          POP      {r4-r8,pc}
+;;;404    
                           ENDP
 
+                  |L7.64|
+                          DCD      power_manage
 
                           AREA ||i.SM2SU_Req_Call_Power_Off_Require||, CODE, READONLY, ALIGN=1
 
                   SM2SU_Req_Call_Power_Off_Require PROC
-;;;207    
-;;;208    static void SM2SU_Req_Call_Power_Off_Require(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
+;;;423    
+;;;424    static void SM2SU_Req_Call_Power_Off_Require(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
 000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;209    {
-000004  4604              MOV      r4,r0
-000006  460d              MOV      r5,r1
+;;;425    {
+000004  4605              MOV      r5,r0
+000006  460c              MOV      r4,r1
 000008  4616              MOV      r6,r2
 00000a  461f              MOV      r7,r3
-;;;210    	if(ReqCd != SM2SU_REQ_CD_POWER_OFF_REQUIRE)
-00000c  2c03              CMP      r4,#3
-00000e  d003              BEQ      |L7.24|
-;;;211    	{
-;;;212    		*(pData) = NULL;
+;;;426    	if(ReqCd != SM2SU_REQ_CD_POWER_OFF_REQUIRE)
+00000c  2d03              CMP      r5,#3
+00000e  d003              BEQ      |L8.24|
+;;;427    	{
+;;;428    		*(pData) = NULL;
 000010  2000              MOVS     r0,#0
-000012  7028              STRB     r0,[r5,#0]
-;;;213    		*(pSize) = 0u;
+000012  7020              STRB     r0,[r4,#0]
+;;;429    		*(pSize) = 0u;
 000014  8030              STRH     r0,[r6,#0]
-000016  e005              B        |L7.36|
-                  |L7.24|
-;;;214    	}
-;;;215    	else
-;;;216    	{
-;;;217    		//TODO
-;;;218    		//INFO
-;;;219    		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = ;
-;;;220    		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 1u] = ;
-;;;221    		
-;;;222    		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
-000018  463b              MOV      r3,r7
-00001a  4632              MOV      r2,r6
-00001c  4629              MOV      r1,r5
-00001e  4620              MOV      r0,r4
-000020  f7fffffe          BL       SM2SU_Req_Call_Encapsulation_Func
-                  |L7.36|
-;;;223    	}
-;;;224    }
-000024  e8bd81f0          POP      {r4-r8,pc}
-;;;225    
+000016  e007              B        |L8.40|
+                  |L8.24|
+;;;430    	}
+;;;431    	else
+;;;432    	{
+;;;433    		//TODO
+;;;434    		//INFO
+;;;435    		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = 0x01;
+000018  2001              MOVS     r0,#1
+00001a  71a0              STRB     r0,[r4,#6]
+;;;436    		
+;;;437    		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
+00001c  463b              MOV      r3,r7
+00001e  4632              MOV      r2,r6
+000020  4621              MOV      r1,r4
+000022  4628              MOV      r0,r5
+000024  f7fffffe          BL       SM2SU_Req_Call_Encapsulation_Func
+                  |L8.40|
+;;;438    	}
+;;;439    }
+000028  e8bd81f0          POP      {r4-r8,pc}
+;;;440    
                           ENDP
 
 
                           AREA ||i.SM2SU_Req_Call_Reply_Control_Command||, CODE, READONLY, ALIGN=1
 
                   SM2SU_Req_Call_Reply_Control_Command PROC
-;;;189    
-;;;190    static void SM2SU_Req_Call_Reply_Control_Command(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
+;;;405    /* RC暂不需要该指令 */
+;;;406    static void SM2SU_Req_Call_Reply_Control_Command(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
 000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;191    {
+;;;407    {
 000004  4604              MOV      r4,r0
 000006  460d              MOV      r5,r1
 000008  4616              MOV      r6,r2
 00000a  461f              MOV      r7,r3
-;;;192    	if(ReqCd != SM2SU_REQ_CD_REPLY_CONTROL_COMMAND)
+;;;408    	if(ReqCd != SM2SU_REQ_CD_REPLY_CONTROL_COMMAND)
 00000c  2c02              CMP      r4,#2
-00000e  d003              BEQ      |L8.24|
-;;;193    	{
-;;;194    		*(pData) = NULL;
-000010  2000              MOVS     r0,#0
-000012  7028              STRB     r0,[r5,#0]
-;;;195    		*(pSize) = 0u;
-000014  8030              STRH     r0,[r6,#0]
-000016  e005              B        |L8.36|
-                  |L8.24|
-;;;196    	}
-;;;197    	else
-;;;198    	{
-;;;199    		//TODO
-;;;200    		//INFO
-;;;201    		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = ;
-;;;202    		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 1u] = ;
-;;;203    		
-;;;204    		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
-000018  463b              MOV      r3,r7
-00001a  4632              MOV      r2,r6
-00001c  4629              MOV      r1,r5
-00001e  4620              MOV      r0,r4
-000020  f7fffffe          BL       SM2SU_Req_Call_Encapsulation_Func
-                  |L8.36|
-;;;205    	}
-;;;206    }
-000024  e8bd81f0          POP      {r4-r8,pc}
-;;;207    
-                          ENDP
-
-
-                          AREA ||i.SM2SU_Req_Call_Reply_Power_Off_Command||, CODE, READONLY, ALIGN=1
-
-                  SM2SU_Req_Call_Reply_Power_Off_Command PROC
-;;;225    
-;;;226    static void SM2SU_Req_Call_Reply_Power_Off_Command(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
-000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;227    {
-000004  4604              MOV      r4,r0
-000006  460d              MOV      r5,r1
-000008  4616              MOV      r6,r2
-00000a  461f              MOV      r7,r3
-;;;228    	if(ReqCd != SM2SU_REQ_CD_REPLY_POWER_OFF_COMMAND)
-00000c  2c04              CMP      r4,#4
 00000e  d003              BEQ      |L9.24|
-;;;229    	{
-;;;230    		*(pData) = NULL;
+;;;409    	{
+;;;410    		*(pData) = NULL;
 000010  2000              MOVS     r0,#0
 000012  7028              STRB     r0,[r5,#0]
-;;;231    		*(pSize) = 0u;
+;;;411    		*(pSize) = 0u;
 000014  8030              STRH     r0,[r6,#0]
 000016  e005              B        |L9.36|
                   |L9.24|
-;;;232    	}
-;;;233    	else
-;;;234    	{
-;;;235    		//TODO
-;;;236    		//INFO
-;;;237    		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = ;
-;;;238    		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 1u] = ;
-;;;239    		
-;;;240    		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
+;;;412    	}
+;;;413    	else
+;;;414    	{
+;;;415    		//TODO
+;;;416    		//INFO
+;;;417    //		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = ;
+;;;418    //		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 1u] = ;
+;;;419    		
+;;;420    		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
 000018  463b              MOV      r3,r7
 00001a  4632              MOV      r2,r6
 00001c  4629              MOV      r1,r5
 00001e  4620              MOV      r0,r4
 000020  f7fffffe          BL       SM2SU_Req_Call_Encapsulation_Func
                   |L9.36|
-;;;241    	}
-;;;242    }
+;;;421    	}
+;;;422    }
 000024  e8bd81f0          POP      {r4-r8,pc}
-;;;243    
+;;;423    
+                          ENDP
+
+
+                          AREA ||i.SM2SU_Req_Call_Reply_Power_Off_Command||, CODE, READONLY, ALIGN=1
+
+                  SM2SU_Req_Call_Reply_Power_Off_Command PROC
+;;;440    
+;;;441    static void SM2SU_Req_Call_Reply_Power_Off_Command(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
+000000  e92d41f0          PUSH     {r4-r8,lr}
+;;;442    {
+000004  4605              MOV      r5,r0
+000006  460c              MOV      r4,r1
+000008  4616              MOV      r6,r2
+00000a  461f              MOV      r7,r3
+;;;443    	if(ReqCd != SM2SU_REQ_CD_REPLY_POWER_OFF_COMMAND)
+00000c  2d04              CMP      r5,#4
+00000e  d003              BEQ      |L10.24|
+;;;444    	{
+;;;445    		*(pData) = NULL;
+000010  2000              MOVS     r0,#0
+000012  7020              STRB     r0,[r4,#0]
+;;;446    		*(pSize) = 0u;
+000014  8030              STRH     r0,[r6,#0]
+000016  e007              B        |L10.40|
+                  |L10.24|
+;;;447    	}
+;;;448    	else
+;;;449    	{
+;;;450    		//TODO
+;;;451    		//INFO
+;;;452    		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = 0x01;
+000018  2001              MOVS     r0,#1
+00001a  71a0              STRB     r0,[r4,#6]
+;;;453    		
+;;;454    		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
+00001c  463b              MOV      r3,r7
+00001e  4632              MOV      r2,r6
+000020  4621              MOV      r1,r4
+000022  4628              MOV      r0,r5
+000024  f7fffffe          BL       SM2SU_Req_Call_Encapsulation_Func
+                  |L10.40|
+;;;455    	}
+;;;456    }
+000028  e8bd81f0          POP      {r4-r8,pc}
+;;;457    
                           ENDP
 
 
                           AREA ||i.SM2SU_Req_Call_Reply_Reboot_Command||, CODE, READONLY, ALIGN=1
 
                   SM2SU_Req_Call_Reply_Reboot_Command PROC
-;;;243    
-;;;244    static void SM2SU_Req_Call_Reply_Reboot_Command(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
+;;;457    
+;;;458    static void SM2SU_Req_Call_Reply_Reboot_Command(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
 000000  e92d41f0          PUSH     {r4-r8,lr}
-;;;245    {
-000004  4604              MOV      r4,r0
-000006  460d              MOV      r5,r1
+;;;459    {
+000004  4605              MOV      r5,r0
+000006  460c              MOV      r4,r1
 000008  4616              MOV      r6,r2
 00000a  461f              MOV      r7,r3
-;;;246    	if(ReqCd != SM2SU_REQ_CD_REPLY_REBOOT_COMMAND)
-00000c  2c05              CMP      r4,#5
-00000e  d003              BEQ      |L10.24|
-;;;247    	{
-;;;248    		*(pData) = NULL;
+;;;460    	if(ReqCd != SM2SU_REQ_CD_REPLY_REBOOT_COMMAND)
+00000c  2d05              CMP      r5,#5
+00000e  d003              BEQ      |L11.24|
+;;;461    	{
+;;;462    		*(pData) = NULL;
 000010  2000              MOVS     r0,#0
-000012  7028              STRB     r0,[r5,#0]
-;;;249    		*(pSize) = 0u;
+000012  7020              STRB     r0,[r4,#0]
+;;;463    		*(pSize) = 0u;
 000014  8030              STRH     r0,[r6,#0]
-000016  e005              B        |L10.36|
-                  |L10.24|
-;;;250    	}
-;;;251    	else
-;;;252    	{
-;;;253    		//TODO
-;;;254    		//INFO
-;;;255    		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = ;
-;;;256    		//pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 1u] = ;
-;;;257    		
-;;;258    		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
-000018  463b              MOV      r3,r7
-00001a  4632              MOV      r2,r6
-00001c  4629              MOV      r1,r5
-00001e  4620              MOV      r0,r4
-000020  f7fffffe          BL       SM2SU_Req_Call_Encapsulation_Func
-                  |L10.36|
-;;;259    	}
-;;;260    }
-000024  e8bd81f0          POP      {r4-r8,pc}
-;;;261    
+000016  e007              B        |L11.40|
+                  |L11.24|
+;;;464    	}
+;;;465    	else
+;;;466    	{
+;;;467    		//TODO
+;;;468    		//INFO
+;;;469    		pData[POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE] = 0x01;
+000018  2001              MOVS     r0,#1
+00001a  71a0              STRB     r0,[r4,#6]
+;;;470    		
+;;;471    		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
+00001c  463b              MOV      r3,r7
+00001e  4632              MOV      r2,r6
+000020  4621              MOV      r1,r4
+000022  4628              MOV      r0,r5
+000024  f7fffffe          BL       SM2SU_Req_Call_Encapsulation_Func
+                  |L11.40|
+;;;472    	}
+;;;473    }
+000028  e8bd81f0          POP      {r4-r8,pc}
+;;;474    
                           ENDP
 
 
-                          AREA ||.bss||, DATA, NOINIT, ALIGN=0
+                          AREA ||i.SU2SM_Req_Call_Control_Command||, CODE, READONLY, ALIGN=1
+
+                  SU2SM_Req_Call_Control_Command PROC
+;;;287    
+;;;288    static uint8_t SU2SM_Req_Call_Control_Command(POWER_COMMAND_RECEIVED *pData)
+000000  4601              MOV      r1,r0
+;;;289    {
+;;;290    		//TODO
+;;;291    	return 1u;
+000002  2001              MOVS     r0,#1
+;;;292    }
+000004  4770              BX       lr
+;;;293    
+                          ENDP
+
+
+                          AREA ||i.SU2SM_Req_Call_Power_Off_Command||, CODE, READONLY, ALIGN=2
+
+                  SU2SM_Req_Call_Power_Off_Command PROC
+;;;301    
+;;;302    static uint8_t SU2SM_Req_Call_Power_Off_Command(POWER_COMMAND_RECEIVED *pData)
+000000  4601              MOV      r1,r0
+;;;303    {
+;;;304      	//TODO
+;;;305    	if((power_manage.work_mode == POWER_STATUS_48VNOSTART) || (power_manage.work_mode == POWER_STATUS_48VSTART))
+000002  4806              LDR      r0,|L13.28|
+000004  7880              LDRB     r0,[r0,#2]  ; power_manage
+000006  2802              CMP      r0,#2
+000008  d003              BEQ      |L13.18|
+00000a  4804              LDR      r0,|L13.28|
+00000c  7880              LDRB     r0,[r0,#2]  ; power_manage
+00000e  2803              CMP      r0,#3
+000010  d102              BNE      |L13.24|
+                  |L13.18|
+;;;306    	{
+;;;307    	  power_manage.work_mode = POWER_STATUS_SOFTWAREPOWEROFF;
+000012  2005              MOVS     r0,#5
+000014  4a01              LDR      r2,|L13.28|
+000016  7090              STRB     r0,[r2,#2]
+                  |L13.24|
+;;;308    	}
+;;;309    	 
+;;;310    		return 1u;
+000018  2001              MOVS     r0,#1
+;;;311    }
+00001a  4770              BX       lr
+;;;312    
+                          ENDP
+
+                  |L13.28|
+                          DCD      power_manage
+
+                          AREA ||i.SU2SM_Req_Call_Reboot_Command||, CODE, READONLY, ALIGN=2
+
+                  SU2SM_Req_Call_Reboot_Command PROC
+;;;313    
+;;;314    static uint8_t SU2SM_Req_Call_Reboot_Command(POWER_COMMAND_RECEIVED *pData)
+000000  b570              PUSH     {r4-r6,lr}
+;;;315    {
+000002  4605              MOV      r5,r0
+;;;316    		//TODO
+;;;317    		HAL_StatusTypeDef TransmitResult;
+;;;318    	
+;;;319    	  TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_REPLY_REBOOT_COMMAND);
+000004  2005              MOVS     r0,#5
+000006  f7fffffe          BL       Power_Command_Transmit
+00000a  4604              MOV      r4,r0
+;;;320    		if(TransmitResult == HAL_OK)
+00000c  b96c              CBNZ     r4,|L14.42|
+;;;321    		{
+;;;322    			HAL_Delay(5000);
+00000e  f2413088          MOV      r0,#0x1388
+000012  f7fffffe          BL       HAL_Delay
+;;;323    			force_shutdown(POWER_STATUS_IDLE);
+000016  2000              MOVS     r0,#0
+000018  f7fffffe          BL       force_shutdown
+;;;324    			HAL_Delay(1000);
+00001c  f44f707a          MOV      r0,#0x3e8
+000020  f7fffffe          BL       HAL_Delay
+;;;325    			power_manage.work_mode = POWER_STATUS_POWERON;
+000024  2001              MOVS     r0,#1
+000026  4902              LDR      r1,|L14.48|
+000028  7088              STRB     r0,[r1,#2]
+                  |L14.42|
+;;;326    		}
+;;;327    	
+;;;328    		return 1u;
+00002a  2001              MOVS     r0,#1
+;;;329    }
+00002c  bd70              POP      {r4-r6,pc}
+;;;330    
+                          ENDP
+
+00002e  0000              DCW      0x0000
+                  |L14.48|
+                          DCD      power_manage
+
+                          AREA ||i.SU2SM_Req_Call_Reply_Compulsory_Power_Off_Command||, CODE, READONLY, ALIGN=1
+
+                  SU2SM_Req_Call_Reply_Compulsory_Power_Off_Command PROC
+;;;331    
+;;;332    static uint8_t SU2SM_Req_Call_Reply_Compulsory_Power_Off_Command(POWER_COMMAND_RECEIVED *pData)
+000000  4601              MOV      r1,r0
+;;;333    {
+;;;334    		//TODO
+;;;335    		return 1u;
+000002  2001              MOVS     r0,#1
+;;;336    }
+000004  4770              BX       lr
+;;;337    
+                          ENDP
+
+
+                          AREA ||i.SU2SM_Req_Call_Reply_Periodic_Transmission||, CODE, READONLY, ALIGN=1
+
+                  SU2SM_Req_Call_Reply_Periodic_Transmission PROC
+;;;281    
+;;;282    static uint8_t SU2SM_Req_Call_Reply_Periodic_Transmission(POWER_COMMAND_RECEIVED *pData)
+000000  4601              MOV      r1,r0
+;;;283    {
+;;;284    	//TODO
+;;;285    	return 1u;
+000002  2001              MOVS     r0,#1
+;;;286    }
+000004  4770              BX       lr
+;;;287    
+                          ENDP
+
+
+                          AREA ||i.SU2SM_Req_Call_Reply_Power_Off_Require||, CODE, READONLY, ALIGN=1
+
+                  SU2SM_Req_Call_Reply_Power_Off_Require PROC
+;;;294    
+;;;295    static uint8_t SU2SM_Req_Call_Reply_Power_Off_Require(POWER_COMMAND_RECEIVED *pData)
+000000  4601              MOV      r1,r0
+;;;296    {
+;;;297    		//TODO
+;;;298    		return 1u;
+000002  2001              MOVS     r0,#1
+;;;299    }
+000004  4770              BX       lr
+;;;300    
+                          ENDP
+
+
+                          AREA ||i.SU2SM_RxIdleEventCallback||, CODE, READONLY, ALIGN=2
+
+                  SU2SM_RxIdleEventCallback PROC
+;;;492    
+;;;493    void SU2SM_RxIdleEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+000000  b570              PUSH     {r4-r6,lr}
+;;;494    {
+000002  4606              MOV      r6,r0
+000004  460c              MOV      r4,r1
+;;;495    		uint16_t i;
+;;;496    		uint16_t length;
+;;;497        if (huart->RxXferCount == 0U)
+000006  8df0              LDRH     r0,[r6,#0x2e]
+000008  b918              CBNZ     r0,|L18.18|
+;;;498        {
+;;;499    				//called in UART_Receive_IT()
+;;;500    				//Buffer Full
+;;;501    			Power_Command_Receive_Buffer_Full = TRUE;
+00000a  2001              MOVS     r0,#1
+00000c  490f              LDR      r1,|L18.76|
+00000e  7008              STRB     r0,[r1,#0]
+000010  e002              B        |L18.24|
+                  |L18.18|
+;;;502    		}
+;;;503    		else
+;;;504    		{
+;;;505    				//Called in HAL_UART_IRQHandler()
+;;;506    				//IDLE event detected
+;;;507    			Power_Command_Receive_Idle_Detected = TRUE;
+000012  2001              MOVS     r0,#1
+000014  490e              LDR      r1,|L18.80|
+000016  7008              STRB     r0,[r1,#0]
+                  |L18.24|
+;;;508    		}
+;;;509    		if(Size > POWER_COMMAND_MAX_SIZE)
+000018  2c1c              CMP      r4,#0x1c
+00001a  d904              BLS      |L18.38|
+;;;510    		{
+;;;511    			Power_Command_Receive_Length_Error_Detected = TRUE;
+00001c  2001              MOVS     r0,#1
+00001e  490d              LDR      r1,|L18.84|
+000020  7008              STRB     r0,[r1,#0]
+;;;512    			length = POWER_COMMAND_MAX_SIZE;				
+000022  251c              MOVS     r5,#0x1c
+000024  e000              B        |L18.40|
+                  |L18.38|
+;;;513    		}
+;;;514    		else
+;;;515    		{
+;;;516    			length = Size;
+000026  4625              MOV      r5,r4
+                  |L18.40|
+;;;517    		}
+;;;518    		Power_Command_Receive(PowerCommandRxBuffer,length);
+000028  4629              MOV      r1,r5
+00002a  480b              LDR      r0,|L18.88|
+00002c  f7fffffe          BL       Power_Command_Receive
+;;;519    		memset(PowerCommandRxBuffer,0u, POWER_COMMAND_TXRX_BUFFER_SIZE);
+000030  2120              MOVS     r1,#0x20
+000032  4809              LDR      r0,|L18.88|
+000034  f7fffffe          BL       __aeabi_memclr4
+;;;520    		//reset Buffer Countern and Pointer 
+;;;521    		if (HAL_UARTEx_ReceiveToIdle_IT(huart, PowerCommandRxBuffer, POWER_COMMAND_TXRX_BUFFER_SIZE) != HAL_OK)
+000038  2220              MOVS     r2,#0x20
+00003a  4907              LDR      r1,|L18.88|
+00003c  4630              MOV      r0,r6
+00003e  f7fffffe          BL       HAL_UARTEx_ReceiveToIdle_IT
+000042  b110              CBZ      r0,|L18.74|
+;;;522    		{
+;;;523    				Power_Command_ReceiveToIdle_Restart_Error = TRUE;				
+000044  2001              MOVS     r0,#1
+000046  4905              LDR      r1,|L18.92|
+000048  7008              STRB     r0,[r1,#0]
+                  |L18.74|
+;;;524    		}	
+;;;525    }
+00004a  bd70              POP      {r4-r6,pc}
+                          ENDP
+
+                  |L18.76|
+                          DCD      Power_Command_Receive_Buffer_Full
+                  |L18.80|
+                          DCD      Power_Command_Receive_Idle_Detected
+                  |L18.84|
+                          DCD      Power_Command_Receive_Length_Error_Detected
+                  |L18.88|
+                          DCD      PowerCommandRxBuffer
+                  |L18.92|
+                          DCD      Power_Command_ReceiveToIdle_Restart_Error
+
+                          AREA ||.bss||, DATA, NOINIT, ALIGN=2
 
                   PowerCommandRxBuffer
                           %        32
                   PowerCommandTxBuffer
                           %        32
+                  PowerCommandReceived
+                          %        32
 
                           AREA ||.constdata||, DATA, READONLY, ALIGN=2
 
-                  strPwrCmdTxReqMap
+                  strPwrCmdRxReqMap
 000000  01000000          DCB      0x01,0x00,0x00,0x00
+                          DCD      SU2SM_Req_Call_Reply_Periodic_Transmission
+000008  02000000          DCB      0x02,0x00,0x00,0x00
+                          DCD      SU2SM_Req_Call_Control_Command
+000010  03000000          DCB      0x03,0x00,0x00,0x00
+                          DCD      SU2SM_Req_Call_Reply_Power_Off_Require
+000018  04000000          DCB      0x04,0x00,0x00,0x00
+                          DCD      SU2SM_Req_Call_Power_Off_Command
+000020  05000000          DCB      0x05,0x00,0x00,0x00
+                          DCD      SU2SM_Req_Call_Reboot_Command
+000028  06000000          DCB      0x06,0x00,0x00,0x00
+                          DCD      SU2SM_Req_Call_Reply_Compulsory_Power_Off_Command
+                  strPwrCmdTxReqMap
+000030  01000000          DCB      0x01,0x00,0x00,0x00
                           DCD      SM2SU_Req_Call_Periodic_Transmission
-000008  0010              DCW      0x0010
-00000a  0000              DCB      0x00,0x00
-00000c  02000000          DCB      0x02,0x00,0x00,0x00
-                          DCD      SM2SU_Req_Call_Reply_Control_Command
-000014  0002              DCW      0x0002
-000016  0000              DCB      0x00,0x00
-000018  03000000          DCB      0x03,0x00,0x00,0x00
-                          DCD      SM2SU_Req_Call_Power_Off_Require
-000020  0001              DCW      0x0001
-000022  0000              DCB      0x00,0x00
-000024  04000000          DCB      0x04,0x00,0x00,0x00
-                          DCD      SM2SU_Req_Call_Reply_Power_Off_Command
-00002c  0001              DCW      0x0001
-00002e  0000              DCB      0x00,0x00
-000030  05000000          DCB      0x05,0x00,0x00,0x00
-                          DCD      SM2SU_Req_Call_Reply_Reboot_Command
-000038  0001              DCW      0x0001
+000038  0010              DCW      0x0010
 00003a  0000              DCB      0x00,0x00
-00003c  06000000          DCB      0x06,0x00,0x00,0x00
-                          DCD      SM2SU_Req_Call_Compulsory_Power_Off_Command
-000044  0001              DCW      0x0001
+00003c  02000000          DCB      0x02,0x00,0x00,0x00
+                          DCD      SM2SU_Req_Call_Reply_Control_Command
+000044  0002              DCW      0x0002
 000046  0000              DCB      0x00,0x00
+000048  03000000          DCB      0x03,0x00,0x00,0x00
+                          DCD      SM2SU_Req_Call_Power_Off_Require
+000050  0001              DCW      0x0001
+000052  0000              DCB      0x00,0x00
+000054  04000000          DCB      0x04,0x00,0x00,0x00
+                          DCD      SM2SU_Req_Call_Reply_Power_Off_Command
+00005c  0001              DCW      0x0001
+00005e  0000              DCB      0x00,0x00
+000060  05000000          DCB      0x05,0x00,0x00,0x00
+                          DCD      SM2SU_Req_Call_Reply_Reboot_Command
+000068  0001              DCW      0x0001
+00006a  0000              DCB      0x00,0x00
+00006c  06000000          DCB      0x06,0x00,0x00,0x00
+                          DCD      SM2SU_Req_Call_Compulsory_Power_Off_Command
+000074  0001              DCW      0x0001
+000076  0000              DCB      0x00,0x00
 
                           AREA ||.data||, DATA, ALIGN=2
 
@@ -679,6 +1239,14 @@
 000210  0000              DCB      0x00,0x00
                   PwrCmdTxSize
 000212  0000              DCW      0x0000
+                  Power_Command_Receive_Idle_Detected
+000214  00                DCB      0x00
+                  Power_Command_Receive_Buffer_Full
+000215  00                DCB      0x00
+                  Power_Command_Receive_Length_Error_Detected
+000216  00                DCB      0x00
+                  Power_Command_ReceiveToIdle_Restart_Error
+000217  00                DCB      0x00
 
 ;*** Start embedded assembler ***
 

@@ -487,7 +487,7 @@ N#define  USE_HAL_SPDIFRX_REGISTER_CALLBACKS     0U /* SPDIFRX register callback
 N#define  USE_HAL_SMBUS_REGISTER_CALLBACKS       0U /* SMBUS register callback disabled     */
 N#define  USE_HAL_SPI_REGISTER_CALLBACKS         0U /* SPI register callback disabled       */
 N#define  USE_HAL_TIM_REGISTER_CALLBACKS         0U /* TIM register callback disabled       */
-N#define  USE_HAL_UART_REGISTER_CALLBACKS        0U /* UART register callback disabled      */
+N#define  USE_HAL_UART_REGISTER_CALLBACKS        1U /* UART register callback enabled      */
 N#define  USE_HAL_USART_REGISTER_CALLBACKS       0U /* USART register callback disabled     */
 N#define  USE_HAL_WWDG_REGISTER_CALLBACKS        0U /* WWDG register callback disabled      */
 N
@@ -42949,52 +42949,52 @@ N  __IO uint32_t                 ErrorCode;        /*!< UART Error code         
 X  volatile uint32_t                 ErrorCode;         
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S  void (* TxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);        /*!< UART Tx Half Complete Callback        */
-S  void (* TxCpltCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Tx Complete Callback             */
-S  void (* RxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);        /*!< UART Rx Half Complete Callback        */
-S  void (* RxCpltCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Rx Complete Callback             */
-S  void (* ErrorCallback)(struct __UART_HandleTypeDef *huart);             /*!< UART Error Callback                   */
-S  void (* AbortCpltCallback)(struct __UART_HandleTypeDef *huart);         /*!< UART Abort Complete Callback          */
-S  void (* AbortTransmitCpltCallback)(struct __UART_HandleTypeDef *huart); /*!< UART Abort Transmit Complete Callback */
-S  void (* AbortReceiveCpltCallback)(struct __UART_HandleTypeDef *huart);  /*!< UART Abort Receive Complete Callback  */
-S  void (* WakeupCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Wakeup Callback                  */
-S  void (* RxEventCallback)(struct __UART_HandleTypeDef *huart, uint16_t Pos); /*!< UART Reception Event Callback     */
-S
-S  void (* MspInitCallback)(struct __UART_HandleTypeDef *huart);           /*!< UART Msp Init callback                */
-S  void (* MspDeInitCallback)(struct __UART_HandleTypeDef *huart);         /*!< UART Msp DeInit callback              */
+X#if (1U == 1)
+N  void (* TxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);        /*!< UART Tx Half Complete Callback        */
+N  void (* TxCpltCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Tx Complete Callback             */
+N  void (* RxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);        /*!< UART Rx Half Complete Callback        */
+N  void (* RxCpltCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Rx Complete Callback             */
+N  void (* ErrorCallback)(struct __UART_HandleTypeDef *huart);             /*!< UART Error Callback                   */
+N  void (* AbortCpltCallback)(struct __UART_HandleTypeDef *huart);         /*!< UART Abort Complete Callback          */
+N  void (* AbortTransmitCpltCallback)(struct __UART_HandleTypeDef *huart); /*!< UART Abort Transmit Complete Callback */
+N  void (* AbortReceiveCpltCallback)(struct __UART_HandleTypeDef *huart);  /*!< UART Abort Receive Complete Callback  */
+N  void (* WakeupCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Wakeup Callback                  */
+N  void (* RxEventCallback)(struct __UART_HandleTypeDef *huart, uint16_t Pos); /*!< UART Reception Event Callback     */
+N
+N  void (* MspInitCallback)(struct __UART_HandleTypeDef *huart);           /*!< UART Msp Init callback                */
+N  void (* MspDeInitCallback)(struct __UART_HandleTypeDef *huart);         /*!< UART Msp DeInit callback              */
 N#endif  /* USE_HAL_UART_REGISTER_CALLBACKS */
 N
 N} UART_HandleTypeDef;
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S/**
-S  * @brief  HAL UART Callback ID enumeration definition
-S  */
-Stypedef enum
-S{
-S  HAL_UART_TX_HALFCOMPLETE_CB_ID         = 0x00U,    /*!< UART Tx Half Complete Callback ID        */
-S  HAL_UART_TX_COMPLETE_CB_ID             = 0x01U,    /*!< UART Tx Complete Callback ID             */
-S  HAL_UART_RX_HALFCOMPLETE_CB_ID         = 0x02U,    /*!< UART Rx Half Complete Callback ID        */
-S  HAL_UART_RX_COMPLETE_CB_ID             = 0x03U,    /*!< UART Rx Complete Callback ID             */
-S  HAL_UART_ERROR_CB_ID                   = 0x04U,    /*!< UART Error Callback ID                   */
-S  HAL_UART_ABORT_COMPLETE_CB_ID          = 0x05U,    /*!< UART Abort Complete Callback ID          */
-S  HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID = 0x06U,    /*!< UART Abort Transmit Complete Callback ID */
-S  HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID  = 0x07U,    /*!< UART Abort Receive Complete Callback ID  */
-S  HAL_UART_WAKEUP_CB_ID                  = 0x08U,    /*!< UART Wakeup Callback ID                  */
-S
-S  HAL_UART_MSPINIT_CB_ID                 = 0x0BU,    /*!< UART MspInit callback ID                 */
-S  HAL_UART_MSPDEINIT_CB_ID               = 0x0CU     /*!< UART MspDeInit callback ID               */
-S
-S} HAL_UART_CallbackIDTypeDef;
-S
-S/**
-S  * @brief  HAL UART Callback pointer definition
-S  */
-Stypedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer to an UART callback function */
-Stypedef  void (*pUART_RxEventCallbackTypeDef)(struct __UART_HandleTypeDef *huart, uint16_t Pos);   /*!< pointer to a UART Rx Event specific callback function */
-S
+X#if (1U == 1)
+N/**
+N  * @brief  HAL UART Callback ID enumeration definition
+N  */
+Ntypedef enum
+N{
+N  HAL_UART_TX_HALFCOMPLETE_CB_ID         = 0x00U,    /*!< UART Tx Half Complete Callback ID        */
+N  HAL_UART_TX_COMPLETE_CB_ID             = 0x01U,    /*!< UART Tx Complete Callback ID             */
+N  HAL_UART_RX_HALFCOMPLETE_CB_ID         = 0x02U,    /*!< UART Rx Half Complete Callback ID        */
+N  HAL_UART_RX_COMPLETE_CB_ID             = 0x03U,    /*!< UART Rx Complete Callback ID             */
+N  HAL_UART_ERROR_CB_ID                   = 0x04U,    /*!< UART Error Callback ID                   */
+N  HAL_UART_ABORT_COMPLETE_CB_ID          = 0x05U,    /*!< UART Abort Complete Callback ID          */
+N  HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID = 0x06U,    /*!< UART Abort Transmit Complete Callback ID */
+N  HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID  = 0x07U,    /*!< UART Abort Receive Complete Callback ID  */
+N  HAL_UART_WAKEUP_CB_ID                  = 0x08U,    /*!< UART Wakeup Callback ID                  */
+N
+N  HAL_UART_MSPINIT_CB_ID                 = 0x0BU,    /*!< UART MspInit callback ID                 */
+N  HAL_UART_MSPDEINIT_CB_ID               = 0x0CU     /*!< UART MspDeInit callback ID               */
+N
+N} HAL_UART_CallbackIDTypeDef;
+N
+N/**
+N  * @brief  HAL UART Callback pointer definition
+N  */
+Ntypedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer to an UART callback function */
+Ntypedef  void (*pUART_RxEventCallbackTypeDef)(struct __UART_HandleTypeDef *huart, uint16_t Pos);   /*!< pointer to a UART Rx Event specific callback function */
+N
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N
 N/**
@@ -43016,8 +43016,8 @@ N#define HAL_UART_ERROR_FE                0x00000004U   /*!< Frame error        
 N#define HAL_UART_ERROR_ORE               0x00000008U   /*!< Overrun error       */
 N#define HAL_UART_ERROR_DMA               0x00000010U   /*!< DMA transfer error  */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S#define  HAL_UART_ERROR_INVALID_CALLBACK 0x00000020U   /*!< Invalid Callback error  */
+X#if (1U == 1)
+N#define  HAL_UART_ERROR_INVALID_CALLBACK 0x00000020U   /*!< Invalid Callback error  */
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N/**
 N  * @}
@@ -43176,19 +43176,19 @@ N  *         (USART,UART availability and x,y values depending on device).
 N  * @retval None
 N  */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                   \
-S                                                       (__HANDLE__)->gState = HAL_UART_STATE_RESET;      \
-S                                                       (__HANDLE__)->RxState = HAL_UART_STATE_RESET;     \
-S                                                       (__HANDLE__)->MspInitCallback = NULL;             \
-S                                                       (__HANDLE__)->MspDeInitCallback = NULL;           \
-S                                                     } while(0U)
-X#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                                                                          (__HANDLE__)->gState = HAL_UART_STATE_RESET;                                                             (__HANDLE__)->RxState = HAL_UART_STATE_RESET;                                                            (__HANDLE__)->MspInitCallback = NULL;                                                                    (__HANDLE__)->MspDeInitCallback = NULL;                                                                } while(0U)
-N#else
+X#if (1U == 1)
 N#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                   \
 N                                                       (__HANDLE__)->gState = HAL_UART_STATE_RESET;      \
 N                                                       (__HANDLE__)->RxState = HAL_UART_STATE_RESET;     \
+N                                                       (__HANDLE__)->MspInitCallback = NULL;             \
+N                                                       (__HANDLE__)->MspDeInitCallback = NULL;           \
 N                                                     } while(0U)
+X#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                                                                          (__HANDLE__)->gState = HAL_UART_STATE_RESET;                                                             (__HANDLE__)->RxState = HAL_UART_STATE_RESET;                                                            (__HANDLE__)->MspInitCallback = NULL;                                                                    (__HANDLE__)->MspDeInitCallback = NULL;                                                                } while(0U)
+N#else
+S#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                   \
+S                                                       (__HANDLE__)->gState = HAL_UART_STATE_RESET;      \
+S                                                       (__HANDLE__)->RxState = HAL_UART_STATE_RESET;     \
+S                                                     } while(0U)
 X#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                                                                          (__HANDLE__)->gState = HAL_UART_STATE_RESET;                                                             (__HANDLE__)->RxState = HAL_UART_STATE_RESET;                                                          } while(0U)
 N#endif /*USE_HAL_UART_REGISTER_CALLBACKS */
 N
@@ -43484,13 +43484,13 @@ Nvoid HAL_UART_MspDeInit(UART_HandleTypeDef *huart);
 N
 N/* Callbacks Register/UnRegister functions  ***********************************/
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-SHAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
-S                                            pUART_CallbackTypeDef pCallback);
-SHAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID);
-S
-SHAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback);
-SHAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart);
+X#if (1U == 1)
+NHAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
+N                                            pUART_CallbackTypeDef pCallback);
+NHAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID);
+N
+NHAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback);
+NHAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N
 N/**
@@ -44073,8 +44073,8 @@ N  * @{
 N  */
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-Svoid UART_InitCallbacksToDefault(UART_HandleTypeDef *huart);
+X#if (1U == 1)
+Nvoid UART_InitCallbacksToDefault(UART_HandleTypeDef *huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 Nstatic void UART_EndTxTransfer(UART_HandleTypeDef *huart);
 Nstatic void UART_EndRxTransfer(UART_HandleTypeDef *huart);
@@ -44182,19 +44182,20 @@ N    /* Allocate lock resource and initialize it */
 N    huart->Lock = HAL_UNLOCKED;
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S    UART_InitCallbacksToDefault(huart);
-S
-S    if (huart->MspInitCallback == NULL)
-S    {
-S      huart->MspInitCallback = HAL_UART_MspInit;
-S    }
-S
-S    /* Init the low level hardware */
-S    huart->MspInitCallback(huart);
+X#if (1U == 1)
+N    UART_InitCallbacksToDefault(huart);
+N
+N    if (huart->MspInitCallback == NULL)
+X    if (huart->MspInitCallback == 0)
+N    {
+N      huart->MspInitCallback = HAL_UART_MspInit;
+N    }
+N
+N    /* Init the low level hardware */
+N    huart->MspInitCallback(huart);
 N#else
-N    /* Init the low level hardware : GPIO, CLOCK */
-N    HAL_UART_MspInit(huart);
+S    /* Init the low level hardware : GPIO, CLOCK */
+S    HAL_UART_MspInit(huart);
 N#endif /* (USE_HAL_UART_REGISTER_CALLBACKS) */
 N  }
 N
@@ -44258,19 +44259,20 @@ N    /* Allocate lock resource and initialize it */
 N    huart->Lock = HAL_UNLOCKED;
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S    UART_InitCallbacksToDefault(huart);
-S
-S    if (huart->MspInitCallback == NULL)
-S    {
-S      huart->MspInitCallback = HAL_UART_MspInit;
-S    }
-S
-S    /* Init the low level hardware */
-S    huart->MspInitCallback(huart);
+X#if (1U == 1)
+N    UART_InitCallbacksToDefault(huart);
+N
+N    if (huart->MspInitCallback == NULL)
+X    if (huart->MspInitCallback == 0)
+N    {
+N      huart->MspInitCallback = HAL_UART_MspInit;
+N    }
+N
+N    /* Init the low level hardware */
+N    huart->MspInitCallback(huart);
 N#else
-N    /* Init the low level hardware : GPIO, CLOCK */
-N    HAL_UART_MspInit(huart);
+S    /* Init the low level hardware : GPIO, CLOCK */
+S    HAL_UART_MspInit(huart);
 N#endif /* (USE_HAL_UART_REGISTER_CALLBACKS) */
 N  }
 N
@@ -44346,19 +44348,20 @@ N    /* Allocate lock resource and initialize it */
 N    huart->Lock = HAL_UNLOCKED;
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S    UART_InitCallbacksToDefault(huart);
-S
-S    if (huart->MspInitCallback == NULL)
-S    {
-S      huart->MspInitCallback = HAL_UART_MspInit;
-S    }
-S
-S    /* Init the low level hardware */
-S    huart->MspInitCallback(huart);
+X#if (1U == 1)
+N    UART_InitCallbacksToDefault(huart);
+N
+N    if (huart->MspInitCallback == NULL)
+X    if (huart->MspInitCallback == 0)
+N    {
+N      huart->MspInitCallback = HAL_UART_MspInit;
+N    }
+N
+N    /* Init the low level hardware */
+N    huart->MspInitCallback(huart);
 N#else
-N    /* Init the low level hardware : GPIO, CLOCK */
-N    HAL_UART_MspInit(huart);
+S    /* Init the low level hardware : GPIO, CLOCK */
+S    HAL_UART_MspInit(huart);
 N#endif /* (USE_HAL_UART_REGISTER_CALLBACKS) */
 N  }
 N
@@ -44443,19 +44446,20 @@ N    /* Allocate lock resource and initialize it */
 N    huart->Lock = HAL_UNLOCKED;
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S    UART_InitCallbacksToDefault(huart);
-S
-S    if (huart->MspInitCallback == NULL)
-S    {
-S      huart->MspInitCallback = HAL_UART_MspInit;
-S    }
-S
-S    /* Init the low level hardware */
-S    huart->MspInitCallback(huart);
+X#if (1U == 1)
+N    UART_InitCallbacksToDefault(huart);
+N
+N    if (huart->MspInitCallback == NULL)
+X    if (huart->MspInitCallback == 0)
+N    {
+N      huart->MspInitCallback = HAL_UART_MspInit;
+N    }
+N
+N    /* Init the low level hardware */
+N    huart->MspInitCallback(huart);
 N#else
-N    /* Init the low level hardware : GPIO, CLOCK */
-N    HAL_UART_MspInit(huart);
+S    /* Init the low level hardware : GPIO, CLOCK */
+S    HAL_UART_MspInit(huart);
 N#endif /* (USE_HAL_UART_REGISTER_CALLBACKS) */
 N  }
 N
@@ -44527,16 +44531,17 @@ N  __HAL_UART_DISABLE(huart);
 X  ((huart)->Instance ->CR1 &= ~(0x1UL << (13U)));
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S  if (huart->MspDeInitCallback == NULL)
-S  {
-S    huart->MspDeInitCallback = HAL_UART_MspDeInit;
-S  }
-S  /* DeInit the low level hardware */
-S  huart->MspDeInitCallback(huart);
-N#else
+X#if (1U == 1)
+N  if (huart->MspDeInitCallback == NULL)
+X  if (huart->MspDeInitCallback == 0)
+N  {
+N    huart->MspDeInitCallback = HAL_UART_MspDeInit;
+N  }
 N  /* DeInit the low level hardware */
-N  HAL_UART_MspDeInit(huart);
+N  huart->MspDeInitCallback(huart);
+N#else
+S  /* DeInit the low level hardware */
+S  HAL_UART_MspDeInit(huart);
 N#endif /* (USE_HAL_UART_REGISTER_CALLBACKS) */
 N
 N  huart->ErrorCode = HAL_UART_ERROR_NONE;
@@ -44586,310 +44591,330 @@ N   */
 N}
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S/**
-S  * @brief  Register a User UART Callback
-S  *         To be used instead of the weak predefined callback
-S  * @param  huart uart handle
-S  * @param  CallbackID ID of the callback to be registered
-S  *         This parameter can be one of the following values:
-S  *           @arg @ref HAL_UART_TX_HALFCOMPLETE_CB_ID Tx Half Complete Callback ID
-S  *           @arg @ref HAL_UART_TX_COMPLETE_CB_ID Tx Complete Callback ID
-S  *           @arg @ref HAL_UART_RX_HALFCOMPLETE_CB_ID Rx Half Complete Callback ID
-S  *           @arg @ref HAL_UART_RX_COMPLETE_CB_ID Rx Complete Callback ID
-S  *           @arg @ref HAL_UART_ERROR_CB_ID Error Callback ID
-S  *           @arg @ref HAL_UART_ABORT_COMPLETE_CB_ID Abort Complete Callback ID
-S  *           @arg @ref HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID Abort Transmit Complete Callback ID
-S  *           @arg @ref HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID Abort Receive Complete Callback ID
-S  *           @arg @ref HAL_UART_MSPINIT_CB_ID MspInit Callback ID
-S  *           @arg @ref HAL_UART_MSPDEINIT_CB_ID MspDeInit Callback ID
-S  * @param  pCallback pointer to the Callback function
-S  * @retval HAL status
-S  */
-SHAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
-S                                            pUART_CallbackTypeDef pCallback)
-S{
-S  HAL_StatusTypeDef status = HAL_OK;
-S
-S  if (pCallback == NULL)
-S  {
-S    /* Update the error code */
-S    huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
-S
-S    return HAL_ERROR;
-S  }
-S  /* Process locked */
-S  __HAL_LOCK(huart);
-S
-S  if (huart->gState == HAL_UART_STATE_READY)
-S  {
-S    switch (CallbackID)
-S    {
-S      case HAL_UART_TX_HALFCOMPLETE_CB_ID :
-S        huart->TxHalfCpltCallback = pCallback;
-S        break;
-S
-S      case HAL_UART_TX_COMPLETE_CB_ID :
-S        huart->TxCpltCallback = pCallback;
-S        break;
-S
-S      case HAL_UART_RX_HALFCOMPLETE_CB_ID :
-S        huart->RxHalfCpltCallback = pCallback;
-S        break;
-S
-S      case HAL_UART_RX_COMPLETE_CB_ID :
-S        huart->RxCpltCallback = pCallback;
-S        break;
-S
-S      case HAL_UART_ERROR_CB_ID :
-S        huart->ErrorCallback = pCallback;
-S        break;
-S
-S      case HAL_UART_ABORT_COMPLETE_CB_ID :
-S        huart->AbortCpltCallback = pCallback;
-S        break;
-S
-S      case HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID :
-S        huart->AbortTransmitCpltCallback = pCallback;
-S        break;
-S
-S      case HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID :
-S        huart->AbortReceiveCpltCallback = pCallback;
-S        break;
-S
-S      case HAL_UART_MSPINIT_CB_ID :
-S        huart->MspInitCallback = pCallback;
-S        break;
-S
-S      case HAL_UART_MSPDEINIT_CB_ID :
-S        huart->MspDeInitCallback = pCallback;
-S        break;
-S
-S      default :
-S        /* Update the error code */
-S        huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
-S
-S        /* Return error status */
-S        status =  HAL_ERROR;
-S        break;
-S    }
-S  }
-S  else if (huart->gState == HAL_UART_STATE_RESET)
-S  {
-S    switch (CallbackID)
-S    {
-S      case HAL_UART_MSPINIT_CB_ID :
-S        huart->MspInitCallback = pCallback;
-S        break;
-S
-S      case HAL_UART_MSPDEINIT_CB_ID :
-S        huart->MspDeInitCallback = pCallback;
-S        break;
-S
-S      default :
-S        /* Update the error code */
-S        huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
-S
-S        /* Return error status */
-S        status =  HAL_ERROR;
-S        break;
-S    }
-S  }
-S  else
-S  {
-S    /* Update the error code */
-S    huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
-S
-S    /* Return error status */
-S    status =  HAL_ERROR;
-S  }
-S
-S  /* Release Lock */
-S  __HAL_UNLOCK(huart);
-S
-S  return status;
-S}
-S
-S/**
-S  * @brief  Unregister an UART Callback
-S  *         UART callaback is redirected to the weak predefined callback
-S  * @param  huart uart handle
-S  * @param  CallbackID ID of the callback to be unregistered
-S  *         This parameter can be one of the following values:
-S  *           @arg @ref HAL_UART_TX_HALFCOMPLETE_CB_ID Tx Half Complete Callback ID
-S  *           @arg @ref HAL_UART_TX_COMPLETE_CB_ID Tx Complete Callback ID
-S  *           @arg @ref HAL_UART_RX_HALFCOMPLETE_CB_ID Rx Half Complete Callback ID
-S  *           @arg @ref HAL_UART_RX_COMPLETE_CB_ID Rx Complete Callback ID
-S  *           @arg @ref HAL_UART_ERROR_CB_ID Error Callback ID
-S  *           @arg @ref HAL_UART_ABORT_COMPLETE_CB_ID Abort Complete Callback ID
-S  *           @arg @ref HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID Abort Transmit Complete Callback ID
-S  *           @arg @ref HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID Abort Receive Complete Callback ID
-S  *           @arg @ref HAL_UART_MSPINIT_CB_ID MspInit Callback ID
-S  *           @arg @ref HAL_UART_MSPDEINIT_CB_ID MspDeInit Callback ID
-S  * @retval HAL status
-S  */
-SHAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID)
-S{
-S  HAL_StatusTypeDef status = HAL_OK;
-S
-S  /* Process locked */
-S  __HAL_LOCK(huart);
-S
-S  if (HAL_UART_STATE_READY == huart->gState)
-S  {
-S    switch (CallbackID)
-S    {
-S      case HAL_UART_TX_HALFCOMPLETE_CB_ID :
-S        huart->TxHalfCpltCallback = HAL_UART_TxHalfCpltCallback;               /* Legacy weak  TxHalfCpltCallback       */
-S        break;
-S
-S      case HAL_UART_TX_COMPLETE_CB_ID :
-S        huart->TxCpltCallback = HAL_UART_TxCpltCallback;                       /* Legacy weak TxCpltCallback            */
-S        break;
-S
-S      case HAL_UART_RX_HALFCOMPLETE_CB_ID :
-S        huart->RxHalfCpltCallback = HAL_UART_RxHalfCpltCallback;               /* Legacy weak RxHalfCpltCallback        */
-S        break;
-S
-S      case HAL_UART_RX_COMPLETE_CB_ID :
-S        huart->RxCpltCallback = HAL_UART_RxCpltCallback;                       /* Legacy weak RxCpltCallback            */
-S        break;
-S
-S      case HAL_UART_ERROR_CB_ID :
-S        huart->ErrorCallback = HAL_UART_ErrorCallback;                         /* Legacy weak ErrorCallback             */
-S        break;
-S
-S      case HAL_UART_ABORT_COMPLETE_CB_ID :
-S        huart->AbortCpltCallback = HAL_UART_AbortCpltCallback;                 /* Legacy weak AbortCpltCallback         */
-S        break;
-S
-S      case HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID :
-S        huart->AbortTransmitCpltCallback = HAL_UART_AbortTransmitCpltCallback; /* Legacy weak AbortTransmitCpltCallback */
-S        break;
-S
-S      case HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID :
-S        huart->AbortReceiveCpltCallback = HAL_UART_AbortReceiveCpltCallback;   /* Legacy weak AbortReceiveCpltCallback  */
-S        break;
-S
-S      case HAL_UART_MSPINIT_CB_ID :
-S        huart->MspInitCallback = HAL_UART_MspInit;                             /* Legacy weak MspInitCallback           */
-S        break;
-S
-S      case HAL_UART_MSPDEINIT_CB_ID :
-S        huart->MspDeInitCallback = HAL_UART_MspDeInit;                         /* Legacy weak MspDeInitCallback         */
-S        break;
-S
-S      default :
-S        /* Update the error code */
-S        huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
-S
-S        /* Return error status */
-S        status =  HAL_ERROR;
-S        break;
-S    }
-S  }
-S  else if (HAL_UART_STATE_RESET == huart->gState)
-S  {
-S    switch (CallbackID)
-S    {
-S      case HAL_UART_MSPINIT_CB_ID :
-S        huart->MspInitCallback = HAL_UART_MspInit;
-S        break;
-S
-S      case HAL_UART_MSPDEINIT_CB_ID :
-S        huart->MspDeInitCallback = HAL_UART_MspDeInit;
-S        break;
-S
-S      default :
-S        /* Update the error code */
-S        huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
-S
-S        /* Return error status */
-S        status =  HAL_ERROR;
-S        break;
-S    }
-S  }
-S  else
-S  {
-S    /* Update the error code */
-S    huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
-S
-S    /* Return error status */
-S    status =  HAL_ERROR;
-S  }
-S
-S  /* Release Lock */
-S  __HAL_UNLOCK(huart);
-S
-S  return status;
-S}
-S
-S/**
-S  * @brief  Register a User UART Rx Event Callback
-S  *         To be used instead of the weak predefined callback
-S  * @param  huart     Uart handle
-S  * @param  pCallback Pointer to the Rx Event Callback function
-S  * @retval HAL status
-S  */
-SHAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback)
-S{
-S  HAL_StatusTypeDef status = HAL_OK;
-S
-S  if (pCallback == NULL)
-S  {
-S    huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
-S
-S    return HAL_ERROR;
-S  }
-S
-S  /* Process locked */
-S  __HAL_LOCK(huart);
-S
-S  if (huart->gState == HAL_UART_STATE_READY)
-S  {
-S    huart->RxEventCallback = pCallback;
-S  }
-S  else
-S  {
-S    huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
-S
-S    status =  HAL_ERROR;
-S  }
-S
-S  /* Release Lock */
-S  __HAL_UNLOCK(huart);
-S
-S  return status;
-S}
-S
-S/**
-S  * @brief  UnRegister the UART Rx Event Callback
-S  *         UART Rx Event Callback is redirected to the weak HAL_UARTEx_RxEventCallback() predefined callback
-S  * @param  huart     Uart handle
-S  * @retval HAL status
-S  */
-SHAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart)
-S{
-S  HAL_StatusTypeDef status = HAL_OK;
-S
-S  /* Process locked */
-S  __HAL_LOCK(huart);
-S
-S  if (huart->gState == HAL_UART_STATE_READY)
-S  {
-S    huart->RxEventCallback = HAL_UARTEx_RxEventCallback; /* Legacy weak UART Rx Event Callback  */
-S  }
-S  else
-S  {
-S    huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
-S
-S    status =  HAL_ERROR;
-S  }
-S
-S  /* Release Lock */
-S  __HAL_UNLOCK(huart);
-S  return status;
-S}
+X#if (1U == 1)
+N/**
+N  * @brief  Register a User UART Callback
+N  *         To be used instead of the weak predefined callback
+N  * @param  huart uart handle
+N  * @param  CallbackID ID of the callback to be registered
+N  *         This parameter can be one of the following values:
+N  *           @arg @ref HAL_UART_TX_HALFCOMPLETE_CB_ID Tx Half Complete Callback ID
+N  *           @arg @ref HAL_UART_TX_COMPLETE_CB_ID Tx Complete Callback ID
+N  *           @arg @ref HAL_UART_RX_HALFCOMPLETE_CB_ID Rx Half Complete Callback ID
+N  *           @arg @ref HAL_UART_RX_COMPLETE_CB_ID Rx Complete Callback ID
+N  *           @arg @ref HAL_UART_ERROR_CB_ID Error Callback ID
+N  *           @arg @ref HAL_UART_ABORT_COMPLETE_CB_ID Abort Complete Callback ID
+N  *           @arg @ref HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID Abort Transmit Complete Callback ID
+N  *           @arg @ref HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID Abort Receive Complete Callback ID
+N  *           @arg @ref HAL_UART_MSPINIT_CB_ID MspInit Callback ID
+N  *           @arg @ref HAL_UART_MSPDEINIT_CB_ID MspDeInit Callback ID
+N  * @param  pCallback pointer to the Callback function
+N  * @retval HAL status
+N  */
+NHAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
+N                                            pUART_CallbackTypeDef pCallback)
+N{
+N  HAL_StatusTypeDef status = HAL_OK;
+N
+N  if (pCallback == NULL)
+X  if (pCallback == 0)
+N  {
+N    /* Update the error code */
+N    huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+X    huart->ErrorCode |= 0x00000020U;
+N
+N    return HAL_ERROR;
+N  }
+N  /* Process locked */
+N  __HAL_LOCK(huart);
+X  do{ if((huart)->Lock == HAL_LOCKED) { return HAL_BUSY; } else { (huart)->Lock = HAL_LOCKED; } }while (0U);
+N
+N  if (huart->gState == HAL_UART_STATE_READY)
+N  {
+N    switch (CallbackID)
+N    {
+N      case HAL_UART_TX_HALFCOMPLETE_CB_ID :
+N        huart->TxHalfCpltCallback = pCallback;
+N        break;
+N
+N      case HAL_UART_TX_COMPLETE_CB_ID :
+N        huart->TxCpltCallback = pCallback;
+N        break;
+N
+N      case HAL_UART_RX_HALFCOMPLETE_CB_ID :
+N        huart->RxHalfCpltCallback = pCallback;
+N        break;
+N
+N      case HAL_UART_RX_COMPLETE_CB_ID :
+N        huart->RxCpltCallback = pCallback;
+N        break;
+N
+N      case HAL_UART_ERROR_CB_ID :
+N        huart->ErrorCallback = pCallback;
+N        break;
+N
+N      case HAL_UART_ABORT_COMPLETE_CB_ID :
+N        huart->AbortCpltCallback = pCallback;
+N        break;
+N
+N      case HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID :
+N        huart->AbortTransmitCpltCallback = pCallback;
+N        break;
+N
+N      case HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID :
+N        huart->AbortReceiveCpltCallback = pCallback;
+N        break;
+N
+N      case HAL_UART_MSPINIT_CB_ID :
+N        huart->MspInitCallback = pCallback;
+N        break;
+N
+N      case HAL_UART_MSPDEINIT_CB_ID :
+N        huart->MspDeInitCallback = pCallback;
+N        break;
+N
+N      default :
+N        /* Update the error code */
+N        huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+X        huart->ErrorCode |= 0x00000020U;
+N
+N        /* Return error status */
+N        status =  HAL_ERROR;
+N        break;
+N    }
+N  }
+N  else if (huart->gState == HAL_UART_STATE_RESET)
+N  {
+N    switch (CallbackID)
+N    {
+N      case HAL_UART_MSPINIT_CB_ID :
+N        huart->MspInitCallback = pCallback;
+N        break;
+N
+N      case HAL_UART_MSPDEINIT_CB_ID :
+N        huart->MspDeInitCallback = pCallback;
+N        break;
+N
+N      default :
+N        /* Update the error code */
+N        huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+X        huart->ErrorCode |= 0x00000020U;
+N
+N        /* Return error status */
+N        status =  HAL_ERROR;
+N        break;
+N    }
+N  }
+N  else
+N  {
+N    /* Update the error code */
+N    huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+X    huart->ErrorCode |= 0x00000020U;
+N
+N    /* Return error status */
+N    status =  HAL_ERROR;
+N  }
+N
+N  /* Release Lock */
+N  __HAL_UNLOCK(huart);
+X  do{ (huart)->Lock = HAL_UNLOCKED; }while (0U);
+N
+N  return status;
+N}
+N
+N/**
+N  * @brief  Unregister an UART Callback
+N  *         UART callaback is redirected to the weak predefined callback
+N  * @param  huart uart handle
+N  * @param  CallbackID ID of the callback to be unregistered
+N  *         This parameter can be one of the following values:
+N  *           @arg @ref HAL_UART_TX_HALFCOMPLETE_CB_ID Tx Half Complete Callback ID
+N  *           @arg @ref HAL_UART_TX_COMPLETE_CB_ID Tx Complete Callback ID
+N  *           @arg @ref HAL_UART_RX_HALFCOMPLETE_CB_ID Rx Half Complete Callback ID
+N  *           @arg @ref HAL_UART_RX_COMPLETE_CB_ID Rx Complete Callback ID
+N  *           @arg @ref HAL_UART_ERROR_CB_ID Error Callback ID
+N  *           @arg @ref HAL_UART_ABORT_COMPLETE_CB_ID Abort Complete Callback ID
+N  *           @arg @ref HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID Abort Transmit Complete Callback ID
+N  *           @arg @ref HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID Abort Receive Complete Callback ID
+N  *           @arg @ref HAL_UART_MSPINIT_CB_ID MspInit Callback ID
+N  *           @arg @ref HAL_UART_MSPDEINIT_CB_ID MspDeInit Callback ID
+N  * @retval HAL status
+N  */
+NHAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID)
+N{
+N  HAL_StatusTypeDef status = HAL_OK;
+N
+N  /* Process locked */
+N  __HAL_LOCK(huart);
+X  do{ if((huart)->Lock == HAL_LOCKED) { return HAL_BUSY; } else { (huart)->Lock = HAL_LOCKED; } }while (0U);
+N
+N  if (HAL_UART_STATE_READY == huart->gState)
+N  {
+N    switch (CallbackID)
+N    {
+N      case HAL_UART_TX_HALFCOMPLETE_CB_ID :
+N        huart->TxHalfCpltCallback = HAL_UART_TxHalfCpltCallback;               /* Legacy weak  TxHalfCpltCallback       */
+N        break;
+N
+N      case HAL_UART_TX_COMPLETE_CB_ID :
+N        huart->TxCpltCallback = HAL_UART_TxCpltCallback;                       /* Legacy weak TxCpltCallback            */
+N        break;
+N
+N      case HAL_UART_RX_HALFCOMPLETE_CB_ID :
+N        huart->RxHalfCpltCallback = HAL_UART_RxHalfCpltCallback;               /* Legacy weak RxHalfCpltCallback        */
+N        break;
+N
+N      case HAL_UART_RX_COMPLETE_CB_ID :
+N        huart->RxCpltCallback = HAL_UART_RxCpltCallback;                       /* Legacy weak RxCpltCallback            */
+N        break;
+N
+N      case HAL_UART_ERROR_CB_ID :
+N        huart->ErrorCallback = HAL_UART_ErrorCallback;                         /* Legacy weak ErrorCallback             */
+N        break;
+N
+N      case HAL_UART_ABORT_COMPLETE_CB_ID :
+N        huart->AbortCpltCallback = HAL_UART_AbortCpltCallback;                 /* Legacy weak AbortCpltCallback         */
+N        break;
+N
+N      case HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID :
+N        huart->AbortTransmitCpltCallback = HAL_UART_AbortTransmitCpltCallback; /* Legacy weak AbortTransmitCpltCallback */
+N        break;
+N
+N      case HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID :
+N        huart->AbortReceiveCpltCallback = HAL_UART_AbortReceiveCpltCallback;   /* Legacy weak AbortReceiveCpltCallback  */
+N        break;
+N
+N      case HAL_UART_MSPINIT_CB_ID :
+N        huart->MspInitCallback = HAL_UART_MspInit;                             /* Legacy weak MspInitCallback           */
+N        break;
+N
+N      case HAL_UART_MSPDEINIT_CB_ID :
+N        huart->MspDeInitCallback = HAL_UART_MspDeInit;                         /* Legacy weak MspDeInitCallback         */
+N        break;
+N
+N      default :
+N        /* Update the error code */
+N        huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+X        huart->ErrorCode |= 0x00000020U;
+N
+N        /* Return error status */
+N        status =  HAL_ERROR;
+N        break;
+N    }
+N  }
+N  else if (HAL_UART_STATE_RESET == huart->gState)
+N  {
+N    switch (CallbackID)
+N    {
+N      case HAL_UART_MSPINIT_CB_ID :
+N        huart->MspInitCallback = HAL_UART_MspInit;
+N        break;
+N
+N      case HAL_UART_MSPDEINIT_CB_ID :
+N        huart->MspDeInitCallback = HAL_UART_MspDeInit;
+N        break;
+N
+N      default :
+N        /* Update the error code */
+N        huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+X        huart->ErrorCode |= 0x00000020U;
+N
+N        /* Return error status */
+N        status =  HAL_ERROR;
+N        break;
+N    }
+N  }
+N  else
+N  {
+N    /* Update the error code */
+N    huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+X    huart->ErrorCode |= 0x00000020U;
+N
+N    /* Return error status */
+N    status =  HAL_ERROR;
+N  }
+N
+N  /* Release Lock */
+N  __HAL_UNLOCK(huart);
+X  do{ (huart)->Lock = HAL_UNLOCKED; }while (0U);
+N
+N  return status;
+N}
+N
+N/**
+N  * @brief  Register a User UART Rx Event Callback
+N  *         To be used instead of the weak predefined callback
+N  * @param  huart     Uart handle
+N  * @param  pCallback Pointer to the Rx Event Callback function
+N  * @retval HAL status
+N  */
+NHAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback)
+N{
+N  HAL_StatusTypeDef status = HAL_OK;
+N
+N  if (pCallback == NULL)
+X  if (pCallback == 0)
+N  {
+N    huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+X    huart->ErrorCode |= 0x00000020U;
+N
+N    return HAL_ERROR;
+N  }
+N
+N  /* Process locked */
+N  __HAL_LOCK(huart);
+X  do{ if((huart)->Lock == HAL_LOCKED) { return HAL_BUSY; } else { (huart)->Lock = HAL_LOCKED; } }while (0U);
+N
+N  if (huart->gState == HAL_UART_STATE_READY)
+N  {
+N    huart->RxEventCallback = pCallback;
+N  }
+N  else
+N  {
+N    huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+X    huart->ErrorCode |= 0x00000020U;
+N
+N    status =  HAL_ERROR;
+N  }
+N
+N  /* Release Lock */
+N  __HAL_UNLOCK(huart);
+X  do{ (huart)->Lock = HAL_UNLOCKED; }while (0U);
+N
+N  return status;
+N}
+N
+N/**
+N  * @brief  UnRegister the UART Rx Event Callback
+N  *         UART Rx Event Callback is redirected to the weak HAL_UARTEx_RxEventCallback() predefined callback
+N  * @param  huart     Uart handle
+N  * @retval HAL status
+N  */
+NHAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart)
+N{
+N  HAL_StatusTypeDef status = HAL_OK;
+N
+N  /* Process locked */
+N  __HAL_LOCK(huart);
+X  do{ if((huart)->Lock == HAL_LOCKED) { return HAL_BUSY; } else { (huart)->Lock = HAL_LOCKED; } }while (0U);
+N
+N  if (huart->gState == HAL_UART_STATE_READY)
+N  {
+N    huart->RxEventCallback = HAL_UARTEx_RxEventCallback; /* Legacy weak UART Rx Event Callback  */
+N  }
+N  else
+N  {
+N    huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+X    huart->ErrorCode |= 0x00000020U;
+N
+N    status =  HAL_ERROR;
+N  }
+N
+N  /* Release Lock */
+N  __HAL_UNLOCK(huart);
+X  do{ (huart)->Lock = HAL_UNLOCKED; }while (0U);
+N  return status;
+N}
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N
 N/**
@@ -46171,12 +46196,12 @@ X    huart->ReceptionType = (0x00000000U);
 N
 N    /* As no DMA to be aborted, call directly user Abort complete callback */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S    /* Call registered Abort complete callback */
-S    huart->AbortCpltCallback(huart);
+X#if (1U == 1)
+N    /* Call registered Abort complete callback */
+N    huart->AbortCpltCallback(huart);
 N#else
-N    /* Call legacy weak Abort complete callback */
-N    HAL_UART_AbortCpltCallback(huart);
+S    /* Call legacy weak Abort complete callback */
+S    HAL_UART_AbortCpltCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N  }
 N
@@ -46235,12 +46260,12 @@ N      huart->gState = HAL_UART_STATE_READY;
 N
 N      /* As no DMA to be aborted, call directly user Abort complete callback */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S      /* Call registered Abort Transmit Complete Callback */
-S      huart->AbortTransmitCpltCallback(huart);
+X#if (1U == 1)
+N      /* Call registered Abort Transmit Complete Callback */
+N      huart->AbortTransmitCpltCallback(huart);
 N#else
-N      /* Call legacy weak Abort Transmit Complete Callback */
-N      HAL_UART_AbortTransmitCpltCallback(huart);
+S      /* Call legacy weak Abort Transmit Complete Callback */
+S      HAL_UART_AbortTransmitCpltCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N    }
 N  }
@@ -46254,12 +46279,12 @@ N    huart->gState = HAL_UART_STATE_READY;
 N
 N    /* As no DMA to be aborted, call directly user Abort complete callback */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S    /* Call registered Abort Transmit Complete Callback */
-S    huart->AbortTransmitCpltCallback(huart);
+X#if (1U == 1)
+N    /* Call registered Abort Transmit Complete Callback */
+N    huart->AbortTransmitCpltCallback(huart);
 N#else
-N    /* Call legacy weak Abort Transmit Complete Callback */
-N    HAL_UART_AbortTransmitCpltCallback(huart);
+S    /* Call legacy weak Abort Transmit Complete Callback */
+S    HAL_UART_AbortTransmitCpltCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N  }
 N
@@ -46330,12 +46355,12 @@ X      huart->ReceptionType = (0x00000000U);
 N
 N      /* As no DMA to be aborted, call directly user Abort complete callback */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S      /* Call registered Abort Receive Complete Callback */
-S      huart->AbortReceiveCpltCallback(huart);
+X#if (1U == 1)
+N      /* Call registered Abort Receive Complete Callback */
+N      huart->AbortReceiveCpltCallback(huart);
 N#else
-N      /* Call legacy weak Abort Receive Complete Callback */
-N      HAL_UART_AbortReceiveCpltCallback(huart);
+S      /* Call legacy weak Abort Receive Complete Callback */
+S      HAL_UART_AbortReceiveCpltCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N    }
 N  }
@@ -46351,12 +46376,12 @@ X    huart->ReceptionType = (0x00000000U);
 N
 N    /* As no DMA to be aborted, call directly user Abort complete callback */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S    /* Call registered Abort Receive Complete Callback */
-S    huart->AbortReceiveCpltCallback(huart);
+X#if (1U == 1)
+N    /* Call registered Abort Receive Complete Callback */
+N    huart->AbortReceiveCpltCallback(huart);
 N#else
-N    /* Call legacy weak Abort Receive Complete Callback */
-N    HAL_UART_AbortReceiveCpltCallback(huart);
+S    /* Call legacy weak Abort Receive Complete Callback */
+S    HAL_UART_AbortReceiveCpltCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N  }
 N
@@ -46481,12 +46506,12 @@ N          else
 N          {
 N            /* Call user error callback */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S            /*Call registered error callback*/
-S            huart->ErrorCallback(huart);
+X#if (1U == 1)
+N            /*Call registered error callback*/
+N            huart->ErrorCallback(huart);
 N#else
-N            /*Call legacy weak error callback*/
-N            HAL_UART_ErrorCallback(huart);
+S            /*Call legacy weak error callback*/
+S            HAL_UART_ErrorCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N          }
 N        }
@@ -46494,12 +46519,12 @@ N        else
 N        {
 N          /* Call user error callback */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S          /*Call registered error callback*/
-S          huart->ErrorCallback(huart);
+X#if (1U == 1)
+N          /*Call registered error callback*/
+N          huart->ErrorCallback(huart);
 N#else
-N          /*Call legacy weak error callback*/
-N          HAL_UART_ErrorCallback(huart);
+S          /*Call legacy weak error callback*/
+S          HAL_UART_ErrorCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N        }
 N      }
@@ -46508,12 +46533,12 @@ N      {
 N        /* Non Blocking error : transfer could go on.
 N           Error is notified to user through user error callback */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S        /*Call registered error callback*/
-S        huart->ErrorCallback(huart);
+X#if (1U == 1)
+N        /*Call registered error callback*/
+N        huart->ErrorCallback(huart);
 N#else
-N        /*Call legacy weak error callback*/
-N        HAL_UART_ErrorCallback(huart);
+S        /*Call legacy weak error callback*/
+S        HAL_UART_ErrorCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N
 N        huart->ErrorCode = HAL_UART_ERROR_NONE;
@@ -46578,12 +46603,12 @@ N          /* Last bytes received, so no need as the abort is immediate */
 N          (void)HAL_DMA_Abort(huart->hdmarx);
 N        }
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S        /*Call registered Rx Event callback*/
-S        huart->RxEventCallback(huart, (huart->RxXferSize - huart->RxXferCount));
+X#if (1U == 1)
+N        /*Call registered Rx Event callback*/
+N        huart->RxEventCallback(huart, (huart->RxXferSize - huart->RxXferCount));
 N#else
-N        /*Call legacy weak Rx Event callback*/
-N        HAL_UARTEx_RxEventCallback(huart, (huart->RxXferSize - huart->RxXferCount));
+S        /*Call legacy weak Rx Event callback*/
+S        HAL_UARTEx_RxEventCallback(huart, (huart->RxXferSize - huart->RxXferCount));
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N      }
 N      return;
@@ -46613,12 +46638,12 @@ N
 N        ATOMIC_CLEAR_BIT(huart->Instance->CR1, USART_CR1_IDLEIE);
 X        do { uint32_t val; do { val = _Pragma("push") _Pragma("diag_suppress 3731") ((uint32_t ) __ldrex((volatile uint32_t *)&(huart->Instance ->CR1))) _Pragma("pop") & ~((0x1UL << (4U))); } while ((_Pragma("push") _Pragma("diag_suppress 3731") __strex(val, (volatile uint32_t *)&(huart->Instance ->CR1)) _Pragma("pop")) != 0U); } while(0);
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S        /*Call registered Rx complete callback*/
-S        huart->RxEventCallback(huart, nb_rx_data);
+X#if (1U == 1)
+N        /*Call registered Rx complete callback*/
+N        huart->RxEventCallback(huart, nb_rx_data);
 N#else
-N        /*Call legacy weak Rx Event callback*/
-N        HAL_UARTEx_RxEventCallback(huart, nb_rx_data);
+S        /*Call legacy weak Rx Event callback*/
+S        HAL_UARTEx_RxEventCallback(huart, nb_rx_data);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N      }
 N      return;
@@ -47052,21 +47077,21 @@ N  * @param  huart UART handle.
 N  * @retval none
 N  */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-Svoid UART_InitCallbacksToDefault(UART_HandleTypeDef *huart)
-S{
-S  /* Init the UART Callback settings */
-S  huart->TxHalfCpltCallback        = HAL_UART_TxHalfCpltCallback;        /* Legacy weak TxHalfCpltCallback        */
-S  huart->TxCpltCallback            = HAL_UART_TxCpltCallback;            /* Legacy weak TxCpltCallback            */
-S  huart->RxHalfCpltCallback        = HAL_UART_RxHalfCpltCallback;        /* Legacy weak RxHalfCpltCallback        */
-S  huart->RxCpltCallback            = HAL_UART_RxCpltCallback;            /* Legacy weak RxCpltCallback            */
-S  huart->ErrorCallback             = HAL_UART_ErrorCallback;             /* Legacy weak ErrorCallback             */
-S  huart->AbortCpltCallback         = HAL_UART_AbortCpltCallback;         /* Legacy weak AbortCpltCallback         */
-S  huart->AbortTransmitCpltCallback = HAL_UART_AbortTransmitCpltCallback; /* Legacy weak AbortTransmitCpltCallback */
-S  huart->AbortReceiveCpltCallback  = HAL_UART_AbortReceiveCpltCallback;  /* Legacy weak AbortReceiveCpltCallback  */
-S  huart->RxEventCallback           = HAL_UARTEx_RxEventCallback;         /* Legacy weak RxEventCallback           */
-S
-S}
+X#if (1U == 1)
+Nvoid UART_InitCallbacksToDefault(UART_HandleTypeDef *huart)
+N{
+N  /* Init the UART Callback settings */
+N  huart->TxHalfCpltCallback        = HAL_UART_TxHalfCpltCallback;        /* Legacy weak TxHalfCpltCallback        */
+N  huart->TxCpltCallback            = HAL_UART_TxCpltCallback;            /* Legacy weak TxCpltCallback            */
+N  huart->RxHalfCpltCallback        = HAL_UART_RxHalfCpltCallback;        /* Legacy weak RxHalfCpltCallback        */
+N  huart->RxCpltCallback            = HAL_UART_RxCpltCallback;            /* Legacy weak RxCpltCallback            */
+N  huart->ErrorCallback             = HAL_UART_ErrorCallback;             /* Legacy weak ErrorCallback             */
+N  huart->AbortCpltCallback         = HAL_UART_AbortCpltCallback;         /* Legacy weak AbortCpltCallback         */
+N  huart->AbortTransmitCpltCallback = HAL_UART_AbortTransmitCpltCallback; /* Legacy weak AbortTransmitCpltCallback */
+N  huart->AbortReceiveCpltCallback  = HAL_UART_AbortReceiveCpltCallback;  /* Legacy weak AbortReceiveCpltCallback  */
+N  huart->RxEventCallback           = HAL_UARTEx_RxEventCallback;         /* Legacy weak RxEventCallback           */
+N
+N}
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N
 N/**
@@ -47098,12 +47123,12 @@ N  /* DMA Circular mode */
 N  else
 N  {
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S    /*Call registered Tx complete callback*/
-S    huart->TxCpltCallback(huart);
+X#if (1U == 1)
+N    /*Call registered Tx complete callback*/
+N    huart->TxCpltCallback(huart);
 N#else
-N    /*Call legacy weak Tx complete callback*/
-N    HAL_UART_TxCpltCallback(huart);
+S    /*Call legacy weak Tx complete callback*/
+S    HAL_UART_TxCpltCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N  }
 N}
@@ -47119,12 +47144,12 @@ N{
 N  UART_HandleTypeDef *huart = (UART_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S  /*Call registered Tx complete callback*/
-S  huart->TxHalfCpltCallback(huart);
+X#if (1U == 1)
+N  /*Call registered Tx complete callback*/
+N  huart->TxHalfCpltCallback(huart);
 N#else
-N  /*Call legacy weak Tx complete callback*/
-N  HAL_UART_TxHalfCpltCallback(huart);
+S  /*Call legacy weak Tx complete callback*/
+S  HAL_UART_TxHalfCpltCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N}
 N
@@ -47172,24 +47197,24 @@ N  if (huart->ReceptionType == HAL_UART_RECEPTION_TOIDLE)
 X  if (huart->ReceptionType == (0x00000001U))
 N  {
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S    /*Call registered Rx Event callback*/
-S    huart->RxEventCallback(huart, huart->RxXferSize);
+X#if (1U == 1)
+N    /*Call registered Rx Event callback*/
+N    huart->RxEventCallback(huart, huart->RxXferSize);
 N#else
-N    /*Call legacy weak Rx Event callback*/
-N    HAL_UARTEx_RxEventCallback(huart, huart->RxXferSize);
+S    /*Call legacy weak Rx Event callback*/
+S    HAL_UARTEx_RxEventCallback(huart, huart->RxXferSize);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N  }
 N  else
 N  {
 N    /* In other cases : use Rx Complete callback */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S    /*Call registered Rx complete callback*/
-S    huart->RxCpltCallback(huart);
+X#if (1U == 1)
+N    /*Call registered Rx complete callback*/
+N    huart->RxCpltCallback(huart);
 N#else
-N    /*Call legacy weak Rx complete callback*/
-N    HAL_UART_RxCpltCallback(huart);
+S    /*Call legacy weak Rx complete callback*/
+S    HAL_UART_RxCpltCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N  }
 N}
@@ -47210,24 +47235,24 @@ N  if (huart->ReceptionType == HAL_UART_RECEPTION_TOIDLE)
 X  if (huart->ReceptionType == (0x00000001U))
 N  {
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S    /*Call registered Rx Event callback*/
-S    huart->RxEventCallback(huart, huart->RxXferSize / 2U);
+X#if (1U == 1)
+N    /*Call registered Rx Event callback*/
+N    huart->RxEventCallback(huart, huart->RxXferSize / 2U);
 N#else
-N    /*Call legacy weak Rx Event callback*/
-N    HAL_UARTEx_RxEventCallback(huart, huart->RxXferSize / 2U);
+S    /*Call legacy weak Rx Event callback*/
+S    HAL_UARTEx_RxEventCallback(huart, huart->RxXferSize / 2U);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N  }
 N  else
 N  {
 N    /* In other cases : use Rx Half Complete callback */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S    /*Call registered Rx Half complete callback*/
-S    huart->RxHalfCpltCallback(huart);
+X#if (1U == 1)
+N    /*Call registered Rx Half complete callback*/
+N    huart->RxHalfCpltCallback(huart);
 N#else
-N    /*Call legacy weak Rx Half complete callback*/
-N    HAL_UART_RxHalfCpltCallback(huart);
+S    /*Call legacy weak Rx Half complete callback*/
+S    HAL_UART_RxHalfCpltCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N  }
 N}
@@ -47264,12 +47289,12 @@ N
 N  huart->ErrorCode |= HAL_UART_ERROR_DMA;
 X  huart->ErrorCode |= 0x00000010U;
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S  /*Call registered error callback*/
-S  huart->ErrorCallback(huart);
+X#if (1U == 1)
+N  /*Call registered error callback*/
+N  huart->ErrorCallback(huart);
 N#else
-N  /*Call legacy weak error callback*/
-N  HAL_UART_ErrorCallback(huart);
+S  /*Call legacy weak error callback*/
+S  HAL_UART_ErrorCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N}
 N
@@ -47475,12 +47500,12 @@ N  huart->RxXferCount = 0x00U;
 N  huart->TxXferCount = 0x00U;
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S  /*Call registered error callback*/
-S  huart->ErrorCallback(huart);
+X#if (1U == 1)
+N  /*Call registered error callback*/
+N  huart->ErrorCallback(huart);
 N#else
-N  /*Call legacy weak error callback*/
-N  HAL_UART_ErrorCallback(huart);
+S  /*Call legacy weak error callback*/
+S  HAL_UART_ErrorCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N}
 N
@@ -47527,12 +47552,12 @@ X  huart->ReceptionType = (0x00000000U);
 N
 N  /* Call user Abort complete callback */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S  /* Call registered Abort complete callback */
-S  huart->AbortCpltCallback(huart);
+X#if (1U == 1)
+N  /* Call registered Abort complete callback */
+N  huart->AbortCpltCallback(huart);
 N#else
-N  /* Call legacy weak Abort complete callback */
-N  HAL_UART_AbortCpltCallback(huart);
+S  /* Call legacy weak Abort complete callback */
+S  HAL_UART_AbortCpltCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N}
 N
@@ -47579,12 +47604,12 @@ X  huart->ReceptionType = (0x00000000U);
 N
 N  /* Call user Abort complete callback */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S  /* Call registered Abort complete callback */
-S  huart->AbortCpltCallback(huart);
+X#if (1U == 1)
+N  /* Call registered Abort complete callback */
+N  huart->AbortCpltCallback(huart);
 N#else
-N  /* Call legacy weak Abort complete callback */
-N  HAL_UART_AbortCpltCallback(huart);
+S  /* Call legacy weak Abort complete callback */
+S  HAL_UART_AbortCpltCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N}
 N
@@ -47608,12 +47633,12 @@ N  huart->gState = HAL_UART_STATE_READY;
 N
 N  /* Call user Abort complete callback */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S  /* Call registered Abort Transmit Complete Callback */
-S  huart->AbortTransmitCpltCallback(huart);
+X#if (1U == 1)
+N  /* Call registered Abort Transmit Complete Callback */
+N  huart->AbortTransmitCpltCallback(huart);
 N#else
-N  /* Call legacy weak Abort Transmit Complete Callback */
-N  HAL_UART_AbortTransmitCpltCallback(huart);
+S  /* Call legacy weak Abort Transmit Complete Callback */
+S  HAL_UART_AbortTransmitCpltCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N}
 N
@@ -47639,12 +47664,12 @@ X  huart->ReceptionType = (0x00000000U);
 N
 N  /* Call user Abort complete callback */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S  /* Call registered Abort Receive Complete Callback */
-S  huart->AbortReceiveCpltCallback(huart);
+X#if (1U == 1)
+N  /* Call registered Abort Receive Complete Callback */
+N  huart->AbortReceiveCpltCallback(huart);
 N#else
-N  /* Call legacy weak Abort Receive Complete Callback */
-N  HAL_UART_AbortReceiveCpltCallback(huart);
+S  /* Call legacy weak Abort Receive Complete Callback */
+S  HAL_UART_AbortReceiveCpltCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N}
 N
@@ -47707,12 +47732,12 @@ N  /* Tx process is ended, restore huart->gState to Ready */
 N  huart->gState = HAL_UART_STATE_READY;
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S  /*Call registered Tx complete callback*/
-S  huart->TxCpltCallback(huart);
+X#if (1U == 1)
+N  /*Call registered Tx complete callback*/
+N  huart->TxCpltCallback(huart);
 N#else
-N  /*Call legacy weak Tx complete callback*/
-N  HAL_UART_TxCpltCallback(huart);
+S  /*Call legacy weak Tx complete callback*/
+S  HAL_UART_TxCpltCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N
 N  return HAL_OK;
@@ -47799,24 +47824,24 @@ X          do{ volatile uint32_t tmpreg = 0x00U; tmpreg = (huart)->Instance ->SR
 N        }
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S        /*Call registered Rx Event callback*/
-S        huart->RxEventCallback(huart, huart->RxXferSize);
+X#if (1U == 1)
+N        /*Call registered Rx Event callback*/
+N        huart->RxEventCallback(huart, huart->RxXferSize);
 N#else
-N        /*Call legacy weak Rx Event callback*/
-N        HAL_UARTEx_RxEventCallback(huart, huart->RxXferSize);
+S        /*Call legacy weak Rx Event callback*/
+S        HAL_UARTEx_RxEventCallback(huart, huart->RxXferSize);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N      }
 N      else
 N      {
 N        /* Standard reception API called */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S        /*Call registered Rx complete callback*/
-S        huart->RxCpltCallback(huart);
+X#if (1U == 1)
+N        /*Call registered Rx complete callback*/
+N        huart->RxCpltCallback(huart);
 N#else
-N        /*Call legacy weak Rx complete callback*/
-N        HAL_UART_RxCpltCallback(huart);
+S        /*Call legacy weak Rx complete callback*/
+S        HAL_UART_RxCpltCallback(huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N      }
 N

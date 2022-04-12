@@ -16869,11 +16869,52 @@ typedef struct __UART_HandleTypeDef
 
   volatile uint32_t                 ErrorCode;         
 
-#line 200 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+  void (* TxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);         
+  void (* TxCpltCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* RxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);         
+  void (* RxCpltCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* ErrorCallback)(struct __UART_HandleTypeDef *huart);              
+  void (* AbortCpltCallback)(struct __UART_HandleTypeDef *huart);          
+  void (* AbortTransmitCpltCallback)(struct __UART_HandleTypeDef *huart);  
+  void (* AbortReceiveCpltCallback)(struct __UART_HandleTypeDef *huart);   
+  void (* WakeupCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* RxEventCallback)(struct __UART_HandleTypeDef *huart, uint16_t Pos);  
+
+  void (* MspInitCallback)(struct __UART_HandleTypeDef *huart);            
+  void (* MspDeInitCallback)(struct __UART_HandleTypeDef *huart);          
+
 
 } UART_HandleTypeDef;
 
-#line 231 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+
+
+ 
+typedef enum
+{
+  HAL_UART_TX_HALFCOMPLETE_CB_ID         = 0x00U,     
+  HAL_UART_TX_COMPLETE_CB_ID             = 0x01U,     
+  HAL_UART_RX_HALFCOMPLETE_CB_ID         = 0x02U,     
+  HAL_UART_RX_COMPLETE_CB_ID             = 0x03U,     
+  HAL_UART_ERROR_CB_ID                   = 0x04U,     
+  HAL_UART_ABORT_COMPLETE_CB_ID          = 0x05U,     
+  HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID = 0x06U,     
+  HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID  = 0x07U,     
+  HAL_UART_WAKEUP_CB_ID                  = 0x08U,     
+
+  HAL_UART_MSPINIT_CB_ID                 = 0x0BU,     
+  HAL_UART_MSPDEINIT_CB_ID               = 0x0CU      
+
+} HAL_UART_CallbackIDTypeDef;
+
+
+
+ 
+typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);   
+typedef  void (*pUART_RxEventCallbackTypeDef)(struct __UART_HandleTypeDef *huart, uint16_t Pos);    
+
+
 
 
 
@@ -17313,7 +17354,14 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart);
 void HAL_UART_MspDeInit(UART_HandleTypeDef *huart);
 
  
-#line 713 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+HAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
+                                            pUART_CallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID);
+
+HAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart);
+
 
 
 
@@ -22604,45 +22652,6 @@ extern void ECAT_StateChange(unsigned char alStatus, unsigned short alStatusCode
  
 
 #line 38 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
-
- 
-
- 
- 
-
- 
-
- 
- 
-
- 
-
- 
- 
-
- 
-
- 
-void Error_Handler(void);
-
- 
-
- 
-
- 
-#line 181 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
- 
-
- 
-
-
-
-
-
-#line 21 "RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Src\\main.c"
-
- 
- 
 #line 1 ".\\Power\\ADS1115Driver.h"
 
 
@@ -22751,6 +22760,9 @@ typedef struct
 	uint16_t ai2_u;
 	uint16_t ai2_i;
 	
+	uint8_t AI_SW1;
+	uint8_t AI_SW2;
+	
 	STATE_INFORMATION_H p_state_h;
 	STATE_INFORMATION_L p_state_l;
 	FAULT_INFORMATION_H p_breakdown_h;
@@ -22764,9 +22776,8 @@ typedef enum
 	POWER_STATUS_POWERON,
 	POWER_STATUS_48VNOSTART,
 	POWER_STATUS_48VSTART,
-	POWER_STATUS_REMOTEOFF,
-	POWER_STATUS_POWEROFF,
 	POWER_STATUS_SHUTDWON,
+	POWER_STATUS_SOFTWAREPOWEROFF,
 	POWER_STATUS_FAULT,
 }POWER_STATUS_TYPE;
 
@@ -22896,7 +22907,7 @@ extern ADS1115_DRIVER ADS1115_AnalogCurrentInput1;
 void ADS1115_Driver_Initilization(void);
 void ADS1115_Driver_MainLoop(void);
 
-#line 25 "RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Src\\main.c"
+#line 39 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
 #line 1 ".\\Power\\Command.h"
 
 
@@ -22913,11 +22924,8 @@ void ADS1115_Driver_MainLoop(void);
 
 
 #line 16 ".\\Power\\Command.h"
-
-
-
-#line 28 ".\\Power\\Command.h"
-
+#line 17 ".\\Power\\Command.h"
+#line 1 ".\\Power\\PowerMenu.h"
 
 
 
@@ -22925,21 +22933,84 @@ void ADS1115_Driver_MainLoop(void);
 
 
 
-typedef void (*SM2SU_REQ_CALL)(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
 
-typedef struct	tag_SM2SU_REQ_DPCH{
-	uint8_t	SM2SU_REQ_CD;
-	SM2SU_REQ_CALL	pFunc;
-	uint16_t InfoLength;
-} SM2SU_REQ_DPCH;
+ 
+	
 
 
 
-#line 53 ".\\Power\\Command.h"
+
+#line 16 ".\\Power\\PowerMenu.h"
+#line 1 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+ 
 
 
 
-#line 63 ".\\Power\\Command.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+ 
+#line 17 ".\\Power\\PowerMenu.h"
+#line 18 ".\\Power\\PowerMenu.h"
+#line 1 ".\\Power\\Command.h"
+
+
+
+
+
+
+
+
+ 
+	
+#line 19 ".\\Power\\PowerMenu.h"
+
+
+
+
+void close_all_dr_save_state(void);
+void first_open_dr_save_state(void);
+void Reload_State_All_Value(void);
+void Reload_Config_All_Value(void);
+void work_mode_operation(void);
+static void PowerOnCharge(void);
+void force_shutdown(uint8_t nxt_mode);
+void softwarepoweroff_mode_operation(void);
+void shutdown_mode_operation(void);
+
+
+
+#line 18 ".\\Power\\Command.h"
+
+
+
+#line 27 ".\\Power\\Command.h"
+
+
+
+																	
+
+
+
+
+
+
+
+
+
 
 
 typedef struct tag_POWER_COMMAND_PROTOCOL
@@ -22960,6 +23031,39 @@ typedef union
 		POWER_COMMAND_PROTOCOL  ContentDefAccess;
 }POWER_COMMAND;
 
+typedef struct tag_POWER_COMMAND_RECEIVED 
+{
+	uint8_t RequireCode;
+	POWER_COMMAND PowerCommand;
+	
+	
+}POWER_COMMAND_RECEIVED;
+
+typedef void (*SM2SU_REQ_CALL)(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
+
+typedef struct	tag_SM2SU_REQ_DPCH{
+	uint8_t	SM2SU_REQ_CD;
+	SM2SU_REQ_CALL	pFunc;
+	uint16_t InfoLength;
+} SM2SU_REQ_DPCH;
+
+typedef uint8_t (*SU2SM_REQ_CALL)(POWER_COMMAND_RECEIVED *pData);
+
+typedef struct	tag_SU2SM_REQ_DPCH{
+	uint8_t	SU2SM_REQ_CD;
+	SU2SM_REQ_CALL	pFunc;
+} SU2SM_REQ_DPCH;
+
+
+
+#line 92 ".\\Power\\Command.h"
+
+
+
+#line 102 ".\\Power\\Command.h"
+
+
+extern POWER_COMMAND_RECEIVED PowerCommandReceived;
 extern uint8_t PowerCommandRxBuffer[32u];
 extern uint8_t PowerCommandTxBuffer[32u];
 
@@ -22970,10 +23074,48 @@ extern DMA_HandleTypeDef * Udma_Uarttx_HandlePtr;
 HAL_StatusTypeDef Power_Command_Transmit(uint8_t ReqCode);
 void Power_Command_Initilization(void);
 void Power_Command_Main_Loop(void);
+void SU2SM_RxIdleEventCallback(UART_HandleTypeDef *huart, uint16_t Size);
+
+#line 40 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+ 
+
+ 
+ 
+
+ 
+
+ 
+ 
+
+ 
+
+ 
+ 
+
+ 
+
+ 
+void Error_Handler(void);
+
+ 
+
+ 
+
+ 
+#line 182 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+ 
+
+ 
 
 
 
 
+
+#line 21 "RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Src\\main.c"
+
+ 
+ 
+#line 25 "RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Src\\main.c"
 #line 26 "RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Src\\main.c"
 #line 1 ".\\Power\\KeyIn.h"
 
@@ -22992,6 +23134,7 @@ void Power_Command_Main_Loop(void);
 void PowerOnKeyInState(void);
 void PowerOnRemoteKeyInState(void);
 void PowerOffKeyInState(void);
+void PowerOffREMOTEKeyInState(void);
 void KeyScan(uint8_t mode);
 
 
@@ -23000,38 +23143,6 @@ void KeyScan(uint8_t mode);
 
 
 #line 27 "RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Src\\main.c"
-#line 1 ".\\Power\\PowerMenu.h"
-
-
-
-
-
-
-
-
- 
-	
-
-
-
-
-#line 16 ".\\Power\\PowerMenu.h"
-#line 17 ".\\Power\\PowerMenu.h"
-#line 18 ".\\Power\\PowerMenu.h"
-#line 19 ".\\Power\\PowerMenu.h"
-
-
-
-
-void close_all_dr_save_state(void);
-void first_open_dr_save_state(void);
-void Reload_State_All_Value(void);
-void Reload_Config_All_Value(void);
-void work_mode_operation(void);
-static void PowerOnCharge(void);
-
-
-
 #line 28 "RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Src\\main.c"
 #line 29 "RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Src\\main.c"
 
@@ -23062,7 +23173,6 @@ SPI_HandleTypeDef hspi3;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
-DMA_HandleTypeDef hdma_usart1_rx;
 
  
 
@@ -23077,7 +23187,6 @@ static void MX_I2C1_Init(void);
 static void MX_I2C2_Init(void);
 static void MX_I2C3_Init(void);
 static void MX_USART1_UART_Init(void);
-static void MX_DMA_Init(void);
 static void MX_USART2_UART_Init(void);
  
 
@@ -23122,10 +23231,9 @@ int main(void)
   MX_SPI3_Init();
   MX_CAN1_Init();
   MX_I2C1_Init();
-  MX_I2C2_Init() ;
+  MX_I2C2_Init();
   MX_I2C3_Init();
   MX_USART1_UART_Init();
-  MX_DMA_Init();
   MX_USART2_UART_Init();
    
     EcatHspiPtr = &hspi3;
@@ -23133,7 +23241,6 @@ int main(void)
 		I2C_Ptr_48V_NTC = &hi2c3;
 		I2C_Ptr_AI = &hi2c2;
 		Uart_HandlePtr = &huart1;
-		Udma_UartRx_HandlePtr = &hdma_usart1_rx;
 
 
 
@@ -23142,9 +23249,13 @@ int main(void)
 
 
 
-		
+
+		if (HAL_UARTEx_ReceiveToIdle_IT(&huart1, PowerCommandRxBuffer, 32u) != HAL_OK)
+		{
+			Error_Handler();		
+		}	
 		ADS1115_Driver_Initilization();
-
+		Power_Command_Initilization();
    
 
    
@@ -23152,10 +23263,10 @@ int main(void)
   while (1)
   {
 
-
+	  work_mode_operation();
 		ADS1115_Driver_MainLoop();
-		work_mode_operation();
 		KeyScan(power_manage.work_mode);
+		Power_Command_Main_Loop();
 		
 		
      
@@ -23419,10 +23530,7 @@ static void MX_USART1_UART_Init(void)
     Error_Handler();
   }
    
-  if (HAL_UARTEx_ReceiveToIdle_DMA(&huart1, PowerCommandRxBuffer, ((4u) + (4u) + (1u) + (1u) + (16u) + (2u))) != HAL_OK)
-	{
-    Error_Handler();		
-	}		
+
    
 
 }
@@ -23462,17 +23570,6 @@ static void MX_USART2_UART_Init(void)
 
 
 
- 
-static void MX_DMA_Init(void)
-{
-
-   
-  do { volatile uint32_t tmpreg = 0x00U; ((((RCC_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x3800UL))->AHB1ENR) |= ((0x1UL << (22U)))); tmpreg = ((((RCC_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x3800UL))->AHB1ENR) & ((0x1UL << (22U)))); (void)tmpreg; } while(0U);
-
-}
-
-
-
 
 
  
@@ -23494,11 +23591,11 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1000UL)), ((uint16_t)0x0040)|((uint16_t)0x0002), GPIO_PIN_RESET);
 
    
-  HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1400UL)), ((uint16_t)0x0004)|((uint16_t)0x1000)|((uint16_t)0x2000), GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1400UL)), ((uint16_t)0x0004)|((uint16_t)0x1000), GPIO_PIN_RESET);
 
    
   HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1400UL)), ((uint16_t)0x0008)|((uint16_t)0x0010)|((uint16_t)0x0020)|((uint16_t)0x0100)
-                          |((uint16_t)0x0200)|((uint16_t)0x0400), GPIO_PIN_SET);
+                          |((uint16_t)0x0200)|((uint16_t)0x0400)|((uint16_t)0x2000), GPIO_PIN_SET);
 
    
   HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x0000UL)), ((uint16_t)0x0010), GPIO_PIN_SET);
@@ -23699,5 +23796,5 @@ void Error_Handler(void)
    
 }
 
-#line 710 "RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Src\\main.c"
+#line 696 "RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Src\\main.c"
 

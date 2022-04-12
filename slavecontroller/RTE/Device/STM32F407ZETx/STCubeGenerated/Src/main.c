@@ -54,7 +54,6 @@ SPI_HandleTypeDef hspi3;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
-DMA_HandleTypeDef hdma_usart1_rx;
 
 /* USER CODE BEGIN PV */
 
@@ -69,7 +68,6 @@ static void MX_I2C1_Init(void);
 static void MX_I2C2_Init(void);
 static void MX_I2C3_Init(void);
 static void MX_USART1_UART_Init(void);
-static void MX_DMA_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -114,10 +112,9 @@ int main(void)
   MX_SPI3_Init();
   MX_CAN1_Init();
   MX_I2C1_Init();
-  MX_I2C2_Init() ;
+  MX_I2C2_Init();
   MX_I2C3_Init();
   MX_USART1_UART_Init();
-  MX_DMA_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
     EcatHspiPtr = &hspi3;
@@ -125,7 +122,7 @@ int main(void)
 		I2C_Ptr_48V_NTC = &hi2c3;
 		I2C_Ptr_AI = &hi2c2;
 		Uart_HandlePtr = &huart1;
-		Udma_UartRx_HandlePtr = &hdma_usart1_rx;
+//		Udma_UartRx_HandlePtr = &hdma_usart1_rx;
 //		Udma_Uarttx_HandlePtr = &hdma_usart1_tx;
 //    LAN9252_Init();
 //    MainInit();
@@ -134,9 +131,12 @@ int main(void)
 //		HAL_GPIO_WritePin(OC_PROTECT_GPIO_Port, OC_PROTECT_Pin, GPIO_PIN_RESET);
 //		HAL_GPIO_WritePin(V24V_OUT1_GPIO_Port, V24V_OUT1_Pin, GPIO_PIN_SET);
 //		HAL_GPIO_WritePin(ES_SHUTDOWN_GPIO_Port, ES_SHUTDOWN_Pin, GPIO_PIN_SET);		
-		
+		if (HAL_UARTEx_ReceiveToIdle_IT(&huart1, PowerCommandRxBuffer, POWER_COMMAND_TXRX_BUFFER_SIZE) != HAL_OK)
+		{
+			Error_Handler();		
+		}	
 		ADS1115_Driver_Initilization();
-//		Power_Command_Initilization();
+		Power_Command_Initilization();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -144,10 +144,10 @@ int main(void)
   while (1)
   {
 //		MainLoop();
-
+	  work_mode_operation();
 		ADS1115_Driver_MainLoop();
-		work_mode_operation();
 		KeyScan(power_manage.work_mode);
+		Power_Command_Main_Loop();
 		
 		
     /* USER CODE END WHILE */
@@ -411,10 +411,7 @@ static void MX_USART1_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART1_Init 2 */
-  if (HAL_UARTEx_ReceiveToIdle_DMA(&huart1, PowerCommandRxBuffer, POWER_COMMAND_DMA_SIZE) != HAL_OK)
-	{
-    Error_Handler();		
-	}		
+
   /* USER CODE END USART1_Init 2 */
 
 }
@@ -453,17 +450,6 @@ static void MX_USART2_UART_Init(void)
 }
 
 /**
-  * Enable DMA controller clock
-  */
-static void MX_DMA_Init(void)
-{
-
-  /* DMA controller clock enable */
-  __HAL_RCC_DMA2_CLK_ENABLE();
-
-}
-
-/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -486,11 +472,11 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOE, AI_IU_SW1_Pin|OC_PROTECT_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOF, V24V_OUT4_Pin|POWER24V_ON_Pin|ES_SHUTDOWN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOF, V24V_OUT4_Pin|POWER24V_ON_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOF, LED6_Pin|PHY_RESET_Pin|ET_RESETN_Pin|LED3_Pin
-                          |LED4_Pin|LED5_Pin, GPIO_PIN_SET);
+                          |LED4_Pin|LED5_Pin|ES_SHUTDOWN_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(RS485_RE_GPIO_Port, RS485_RE_Pin, GPIO_PIN_SET);
@@ -576,11 +562,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(SAFE_48V_SWITCH_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : ACPower_OK_Pin ST_IN_19_Pin ST_IN_18_Pin ST_IN_1_Pin
-                           ST_IN_6_Pin ST_IN_5_Pin ST_IN_1G11_Pin ST_IN_2_Pin
+  /*Configure GPIO pins : ACPower_OK_Pin ST_IN_19_Pin ST_IN_18_Pin ST_IN_17_Pin
+                           ST_IN_6_Pin ST_IN_5_Pin ST_IN_1_Pin ST_IN_2_Pin
                            ST_IN_3_Pin ST_IN_4_Pin */
-  GPIO_InitStruct.Pin = ACPower_OK_Pin|ST_IN_19_Pin|ST_IN_18_Pin|ST_IN_1_Pin
-                          |ST_IN_6_Pin|ST_IN_5_Pin|ST_IN_1G11_Pin|ST_IN_2_Pin
+  GPIO_InitStruct.Pin = ACPower_OK_Pin|ST_IN_19_Pin|ST_IN_18_Pin|ST_IN_17_Pin
+                          |ST_IN_6_Pin|ST_IN_5_Pin|ST_IN_1_Pin|ST_IN_2_Pin
                           |ST_IN_3_Pin|ST_IN_4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;

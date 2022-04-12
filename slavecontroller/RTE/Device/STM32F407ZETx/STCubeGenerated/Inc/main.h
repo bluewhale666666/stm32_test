@@ -35,7 +35,8 @@ extern "C" {
 #include "9252_HW.h"
 #include "ecatappl.h"
 #include "applInterface.h"
-
+#include "ADS1115Driver.h"
+#include "Command.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -144,8 +145,8 @@ void Error_Handler(void);
 #define ST_IN_18_GPIO_Port GPIOG
 #define LAN9252_CS_Pin GPIO_PIN_4
 #define LAN9252_CS_GPIO_Port GPIOG
-#define ST_IN_1_Pin GPIO_PIN_5
-#define ST_IN_1_GPIO_Port GPIOG
+#define ST_IN_17_Pin GPIO_PIN_5
+#define ST_IN_17_GPIO_Port GPIOG
 #define ST_OUT_4_Pin GPIO_PIN_6
 #define ST_OUT_4_GPIO_Port GPIOG
 #define ST_OUT_3_Pin GPIO_PIN_7
@@ -162,8 +163,8 @@ void Error_Handler(void);
 #define ST_IN_6_GPIO_Port GPIOG
 #define ST_IN_5_Pin GPIO_PIN_10
 #define ST_IN_5_GPIO_Port GPIOG
-#define ST_IN_1G11_Pin GPIO_PIN_11
-#define ST_IN_1G11_GPIO_Port GPIOG
+#define ST_IN_1_Pin GPIO_PIN_11
+#define ST_IN_1_GPIO_Port GPIOG
 #define ST_IN_2_Pin GPIO_PIN_12
 #define ST_IN_2_GPIO_Port GPIOG
 #define ST_IN_3_Pin GPIO_PIN_13

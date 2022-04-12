@@ -180,6 +180,60 @@ void PowerOffKeyInState(void)
 	}
 }
 
+uint32_t POWEROFFREMOTE_KEYIN_TIMER = 0u;
+uint8_t POWEROFFREMOTE_KEYIN_STATE = 0u;
+void PowerOffREMOTEKeyInState(void)
+{
+	uint32_t now = 0u;
+	static uint32_t elapse = 0u;	
+	
+	switch(POWEROFFREMOTE_KEYIN_STATE)
+	{
+		case 0u: 
+			if(HAL_GPIO_ReadPin(POWEROFF_REMOTEIN_GPIO_Port,POWEROFF_REMOTEIN_Pin) == GPIO_PIN_RESET)
+			{
+				POWEROFFREMOTE_KEYIN_STATE = 1u;
+				POWEROFFREMOTE_KEYIN_TIMER = HAL_GetTick();
+			}
+			break;
+		case 1u:
+			if(HAL_GPIO_ReadPin(POWEROFF_REMOTEIN_GPIO_Port,POWEROFF_REMOTEIN_Pin) == GPIO_PIN_RESET)
+			{
+				now = HAL_GetTick();
+		  	elapse = now - POWEROFFREMOTE_KEYIN_TIMER;
+				POWEROFFREMOTE_KEYIN_STATE = 2u;
+			}
+			else
+			{
+			  POWEROFFREMOTE_KEYIN_STATE = 0u;
+			}
+			break;
+		case 2u:
+			if(elapse >= 3000u)
+			{
+			  POWEROFFREMOTE_KEYIN_STATE = 3u;
+			}
+			else
+			{
+			  POWEROFFREMOTE_KEYIN_STATE = 1u;
+			}
+			break;
+		case 3u:
+		  if(HAL_GPIO_ReadPin(POWEROFF_REMOTEIN_GPIO_Port,POWEROFF_REMOTEIN_Pin) == GPIO_PIN_SET)
+			{
+				power_manage.work_mode = POWER_STATUS_SHUTDWON;
+				POWEROFFREMOTE_KEYIN_STATE = 0u;
+			}
+			else
+			{
+			  POWEROFFREMOTE_KEYIN_STATE = 2u;
+			}
+			break;	
+		default:
+			break;
+	}
+}
+
 
 void KeyScan(uint8_t mode)
 {
@@ -193,6 +247,7 @@ void KeyScan(uint8_t mode)
 		case POWER_STATUS_48VNOSTART: 
 		case POWER_STATUS_48VSTART:
 			 PowerOffKeyInState();
+		   PowerOffREMOTEKeyInState();
 			break;
 		default:
 			break;

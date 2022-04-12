@@ -51,4 +51,11 @@
 .\objects\stm32f4xx_it.o: .\etherCAT\mailbox.h
 .\objects\stm32f4xx_it.o: .\etherCAT\ecatappl.h
 .\objects\stm32f4xx_it.o: .\etherCAT\foeappl.h
+.\objects\stm32f4xx_it.o: .\Power\ADS1115Driver.h
+.\objects\stm32f4xx_it.o: .\Power\data_def.h
+.\objects\stm32f4xx_it.o: .\Power\TemperatureDriver.h
+.\objects\stm32f4xx_it.o: .\Power\Command.h
+.\objects\stm32f4xx_it.o: .\Power\PowerMenu.h
+.\objects\stm32f4xx_it.o: C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h
+.\objects\stm32f4xx_it.o: .\Power\Command.h
 .\objects\stm32f4xx_it.o: C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\stm32f4xx_it.h

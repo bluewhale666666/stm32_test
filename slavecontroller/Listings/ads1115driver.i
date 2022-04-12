@@ -16843,11 +16843,52 @@ typedef struct __UART_HandleTypeDef
 
   volatile uint32_t                 ErrorCode;         
 
-#line 200 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+  void (* TxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);         
+  void (* TxCpltCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* RxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);         
+  void (* RxCpltCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* ErrorCallback)(struct __UART_HandleTypeDef *huart);              
+  void (* AbortCpltCallback)(struct __UART_HandleTypeDef *huart);          
+  void (* AbortTransmitCpltCallback)(struct __UART_HandleTypeDef *huart);  
+  void (* AbortReceiveCpltCallback)(struct __UART_HandleTypeDef *huart);   
+  void (* WakeupCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* RxEventCallback)(struct __UART_HandleTypeDef *huart, uint16_t Pos);  
+
+  void (* MspInitCallback)(struct __UART_HandleTypeDef *huart);            
+  void (* MspDeInitCallback)(struct __UART_HandleTypeDef *huart);          
+
 
 } UART_HandleTypeDef;
 
-#line 231 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+
+
+ 
+typedef enum
+{
+  HAL_UART_TX_HALFCOMPLETE_CB_ID         = 0x00U,     
+  HAL_UART_TX_COMPLETE_CB_ID             = 0x01U,     
+  HAL_UART_RX_HALFCOMPLETE_CB_ID         = 0x02U,     
+  HAL_UART_RX_COMPLETE_CB_ID             = 0x03U,     
+  HAL_UART_ERROR_CB_ID                   = 0x04U,     
+  HAL_UART_ABORT_COMPLETE_CB_ID          = 0x05U,     
+  HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID = 0x06U,     
+  HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID  = 0x07U,     
+  HAL_UART_WAKEUP_CB_ID                  = 0x08U,     
+
+  HAL_UART_MSPINIT_CB_ID                 = 0x0BU,     
+  HAL_UART_MSPDEINIT_CB_ID               = 0x0CU      
+
+} HAL_UART_CallbackIDTypeDef;
+
+
+
+ 
+typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);   
+typedef  void (*pUART_RxEventCallbackTypeDef)(struct __UART_HandleTypeDef *huart, uint16_t Pos);    
+
+
 
 
 
@@ -17287,7 +17328,14 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart);
 void HAL_UART_MspDeInit(UART_HandleTypeDef *huart);
 
  
-#line 713 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+HAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
+                                            pUART_CallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID);
+
+HAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart);
+
 
 
 
@@ -17788,6 +17836,9 @@ typedef struct
 	uint16_t ai2_u;
 	uint16_t ai2_i;
 	
+	uint8_t AI_SW1;
+	uint8_t AI_SW2;
+	
 	STATE_INFORMATION_H p_state_h;
 	STATE_INFORMATION_L p_state_l;
 	FAULT_INFORMATION_H p_breakdown_h;
@@ -17801,9 +17852,8 @@ typedef enum
 	POWER_STATUS_POWERON,
 	POWER_STATUS_48VNOSTART,
 	POWER_STATUS_48VSTART,
-	POWER_STATUS_REMOTEOFF,
-	POWER_STATUS_POWEROFF,
 	POWER_STATUS_SHUTDWON,
+	POWER_STATUS_SOFTWAREPOWEROFF,
 	POWER_STATUS_FAULT,
 }POWER_STATUS_TYPE;
 
@@ -18291,11 +18341,11 @@ void ADS1115_Driver_MainLoop(void)
 			}
 			else if(ADS1115_ChipC_Driver_Cnt == 2u)
 			{
-				save_ntc2_data(strpADC->SampleValue);
+				power_manage.dc48v_i = 409.6*strpADC->SampleValue/(0.05*32768);
 			}
 			else if(ADS1115_ChipC_Driver_Cnt == 3u)
-			{
-				power_manage.dc48v_i = 409.6*strpADC->SampleValue/(0.05*32768);
+			{				
+				save_ntc2_data(strpADC->SampleValue);
 			}
 			
 			if(ADS1115_ChipC_Driver_Cnt >= (uint8_t)3u)

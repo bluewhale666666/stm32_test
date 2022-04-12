@@ -29,6 +29,471 @@ N
 N#ifndef __DATA_DEF_H
 N#define __DATA_DEF_H
 N
+N#include <stdint.h>
+L 1 "D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h" 1
+N/* Copyright (C) ARM Ltd., 1999,2014 */
+N/* All rights reserved */
+N
+N/*
+N * RCS $Revision$
+N * Checkin $Date$
+N * Revising $Author: agrant $
+N */
+N
+N#ifndef __stdint_h
+N#define __stdint_h
+N#define __ARMCLIB_VERSION 5060009
+N
+N  #ifdef __INT64_TYPE__
+S    /* armclang predefines '__INT64_TYPE__' and '__INT64_C_SUFFIX__' */
+S    #define __INT64 __INT64_TYPE__
+N  #else
+N    /* armcc has builtin '__int64' which can be used in --strict mode */
+N    #define __INT64 __int64
+N    #define __INT64_C_SUFFIX__ ll
+N  #endif
+N  #define __PASTE2(x, y) x ## y
+N  #define __PASTE(x, y) __PASTE2(x, y)
+N  #define __INT64_C(x)  __ESCAPE__(__PASTE(x, __INT64_C_SUFFIX__))
+N  #define __UINT64_C(x)  __ESCAPE__(__PASTE(x ## u, __INT64_C_SUFFIX__))
+N  #if defined(__clang__) || (defined(__ARMCC_VERSION) && !defined(__STRICT_ANSI__))
+X  #if 0L || (1L && !0L)
+N    /* armclang and non-strict armcc allow 'long long' in system headers */
+N    #define __LONGLONG long long
+N  #else
+S    /* strict armcc has '__int64' */
+S    #define __LONGLONG __int64
+N  #endif
+N
+N  #ifndef __STDINT_DECLS
+N  #define __STDINT_DECLS
+N
+N    #undef __CLIBNS
+N
+N    #ifdef __cplusplus
+S      namespace std {
+S          #define __CLIBNS std::
+S          extern "C" {
+N    #else
+N      #define __CLIBNS
+N    #endif  /* __cplusplus */
+N
+N
+N/*
+N * 'signed' is redundant below, except for 'signed char' and if
+N * the typedef is used to declare a bitfield.
+N */
+N
+N    /* 7.18.1.1 */
+N
+N    /* exact-width signed integer types */
+Ntypedef   signed          char int8_t;
+Ntypedef   signed short     int int16_t;
+Ntypedef   signed           int int32_t;
+Ntypedef   signed       __INT64 int64_t;
+Xtypedef   signed       __int64 int64_t;
+N
+N    /* exact-width unsigned integer types */
+Ntypedef unsigned          char uint8_t;
+Ntypedef unsigned short     int uint16_t;
+Ntypedef unsigned           int uint32_t;
+Ntypedef unsigned       __INT64 uint64_t;
+Xtypedef unsigned       __int64 uint64_t;
+N
+N    /* 7.18.1.2 */
+N
+N    /* smallest type of at least n bits */
+N    /* minimum-width signed integer types */
+Ntypedef   signed          char int_least8_t;
+Ntypedef   signed short     int int_least16_t;
+Ntypedef   signed           int int_least32_t;
+Ntypedef   signed       __INT64 int_least64_t;
+Xtypedef   signed       __int64 int_least64_t;
+N
+N    /* minimum-width unsigned integer types */
+Ntypedef unsigned          char uint_least8_t;
+Ntypedef unsigned short     int uint_least16_t;
+Ntypedef unsigned           int uint_least32_t;
+Ntypedef unsigned       __INT64 uint_least64_t;
+Xtypedef unsigned       __int64 uint_least64_t;
+N
+N    /* 7.18.1.3 */
+N
+N    /* fastest minimum-width signed integer types */
+Ntypedef   signed           int int_fast8_t;
+Ntypedef   signed           int int_fast16_t;
+Ntypedef   signed           int int_fast32_t;
+Ntypedef   signed       __INT64 int_fast64_t;
+Xtypedef   signed       __int64 int_fast64_t;
+N
+N    /* fastest minimum-width unsigned integer types */
+Ntypedef unsigned           int uint_fast8_t;
+Ntypedef unsigned           int uint_fast16_t;
+Ntypedef unsigned           int uint_fast32_t;
+Ntypedef unsigned       __INT64 uint_fast64_t;
+Xtypedef unsigned       __int64 uint_fast64_t;
+N
+N    /* 7.18.1.4 integer types capable of holding object pointers */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+Stypedef   signed       __INT64 intptr_t;
+Stypedef unsigned       __INT64 uintptr_t;
+N#else
+Ntypedef   signed           int intptr_t;
+Ntypedef unsigned           int uintptr_t;
+N#endif
+N
+N    /* 7.18.1.5 greatest-width integer types */
+Ntypedef   signed     __LONGLONG intmax_t;
+Xtypedef   signed     long long intmax_t;
+Ntypedef unsigned     __LONGLONG uintmax_t;
+Xtypedef unsigned     long long uintmax_t;
+N
+N
+N#if !defined(__cplusplus) || defined(__STDC_LIMIT_MACROS)
+X#if !0L || 0L
+N
+N    /* 7.18.2.1 */
+N
+N    /* minimum values of exact-width signed integer types */
+N#define INT8_MIN                   -128
+N#define INT16_MIN                -32768
+N#define INT32_MIN          (~0x7fffffff)   /* -2147483648 is unsigned */
+N#define INT64_MIN  __INT64_C(~0x7fffffffffffffff) /* -9223372036854775808 is unsigned */
+N
+N    /* maximum values of exact-width signed integer types */
+N#define INT8_MAX                    127
+N#define INT16_MAX                 32767
+N#define INT32_MAX            2147483647
+N#define INT64_MAX  __INT64_C(9223372036854775807)
+N
+N    /* maximum values of exact-width unsigned integer types */
+N#define UINT8_MAX                   255
+N#define UINT16_MAX                65535
+N#define UINT32_MAX           4294967295u
+N#define UINT64_MAX __UINT64_C(18446744073709551615)
+N
+N    /* 7.18.2.2 */
+N
+N    /* minimum values of minimum-width signed integer types */
+N#define INT_LEAST8_MIN                   -128
+N#define INT_LEAST16_MIN                -32768
+N#define INT_LEAST32_MIN          (~0x7fffffff)
+N#define INT_LEAST64_MIN  __INT64_C(~0x7fffffffffffffff)
+N
+N    /* maximum values of minimum-width signed integer types */
+N#define INT_LEAST8_MAX                    127
+N#define INT_LEAST16_MAX                 32767
+N#define INT_LEAST32_MAX            2147483647
+N#define INT_LEAST64_MAX  __INT64_C(9223372036854775807)
+N
+N    /* maximum values of minimum-width unsigned integer types */
+N#define UINT_LEAST8_MAX                   255
+N#define UINT_LEAST16_MAX                65535
+N#define UINT_LEAST32_MAX           4294967295u
+N#define UINT_LEAST64_MAX __UINT64_C(18446744073709551615)
+N
+N    /* 7.18.2.3 */
+N
+N    /* minimum values of fastest minimum-width signed integer types */
+N#define INT_FAST8_MIN           (~0x7fffffff)
+N#define INT_FAST16_MIN          (~0x7fffffff)
+N#define INT_FAST32_MIN          (~0x7fffffff)
+N#define INT_FAST64_MIN  __INT64_C(~0x7fffffffffffffff)
+N
+N    /* maximum values of fastest minimum-width signed integer types */
+N#define INT_FAST8_MAX             2147483647
+N#define INT_FAST16_MAX            2147483647
+N#define INT_FAST32_MAX            2147483647
+N#define INT_FAST64_MAX  __INT64_C(9223372036854775807)
+N
+N    /* maximum values of fastest minimum-width unsigned integer types */
+N#define UINT_FAST8_MAX            4294967295u
+N#define UINT_FAST16_MAX           4294967295u
+N#define UINT_FAST32_MAX           4294967295u
+N#define UINT_FAST64_MAX __UINT64_C(18446744073709551615)
+N
+N    /* 7.18.2.4 */
+N
+N    /* minimum value of pointer-holding signed integer type */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define INTPTR_MIN INT64_MIN
+N#else
+N#define INTPTR_MIN INT32_MIN
+N#endif
+N
+N    /* maximum value of pointer-holding signed integer type */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define INTPTR_MAX INT64_MAX
+N#else
+N#define INTPTR_MAX INT32_MAX
+N#endif
+N
+N    /* maximum value of pointer-holding unsigned integer type */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define UINTPTR_MAX UINT64_MAX
+N#else
+N#define UINTPTR_MAX UINT32_MAX
+N#endif
+N
+N    /* 7.18.2.5 */
+N
+N    /* minimum value of greatest-width signed integer type */
+N#define INTMAX_MIN  __ESCAPE__(~0x7fffffffffffffffll)
+N
+N    /* maximum value of greatest-width signed integer type */
+N#define INTMAX_MAX  __ESCAPE__(9223372036854775807ll)
+N
+N    /* maximum value of greatest-width unsigned integer type */
+N#define UINTMAX_MAX __ESCAPE__(18446744073709551615ull)
+N
+N    /* 7.18.3 */
+N
+N    /* limits of ptrdiff_t */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define PTRDIFF_MIN INT64_MIN
+S#define PTRDIFF_MAX INT64_MAX
+N#else
+N#define PTRDIFF_MIN INT32_MIN
+N#define PTRDIFF_MAX INT32_MAX
+N#endif
+N
+N    /* limits of sig_atomic_t */
+N#define SIG_ATOMIC_MIN (~0x7fffffff)
+N#define SIG_ATOMIC_MAX   2147483647
+N
+N    /* limit of size_t */
+N#if __sizeof_ptr == 8
+X#if 4 == 8
+S#define SIZE_MAX UINT64_MAX
+N#else
+N#define SIZE_MAX UINT32_MAX
+N#endif
+N
+N    /* limits of wchar_t */
+N    /* NB we have to undef and redef because they're defined in both
+N     * stdint.h and wchar.h */
+N#undef WCHAR_MIN
+N#undef WCHAR_MAX
+N
+N#if defined(__WCHAR32) || (defined(__ARM_SIZEOF_WCHAR_T) && __ARM_SIZEOF_WCHAR_T == 4)
+X#if 0L || (0L && __ARM_SIZEOF_WCHAR_T == 4)
+S  #define WCHAR_MIN   0
+S  #define WCHAR_MAX   0xffffffffU
+N#else
+N  #define WCHAR_MIN   0
+N  #define WCHAR_MAX   65535
+N#endif
+N
+N    /* limits of wint_t */
+N#define WINT_MIN (~0x7fffffff)
+N#define WINT_MAX 2147483647
+N
+N#endif /* __STDC_LIMIT_MACROS */
+N
+N#if !defined(__cplusplus) || defined(__STDC_CONSTANT_MACROS)
+X#if !0L || 0L
+N
+N    /* 7.18.4.1 macros for minimum-width integer constants */
+N#define INT8_C(x)   (x)
+N#define INT16_C(x)  (x)
+N#define INT32_C(x)  (x)
+N#define INT64_C(x)  __INT64_C(x)
+N
+N#define UINT8_C(x)  (x ## u)
+N#define UINT16_C(x) (x ## u)
+N#define UINT32_C(x) (x ## u)
+N#define UINT64_C(x) __UINT64_C(x)
+N
+N    /* 7.18.4.2 macros for greatest-width integer constants */
+N#define INTMAX_C(x)  __ESCAPE__(x ## ll)
+N#define UINTMAX_C(x) __ESCAPE__(x ## ull)
+N
+N#endif /* __STDC_CONSTANT_MACROS */
+N
+N    #ifdef __cplusplus
+S         }  /* extern "C" */
+S      }  /* namespace std */
+N    #endif /* __cplusplus */
+N  #endif /* __STDINT_DECLS */
+N
+N  #ifdef __cplusplus
+S    #ifndef __STDINT_NO_EXPORTS
+S      using ::std::int8_t;
+S      using ::std::int16_t;
+S      using ::std::int32_t;
+S      using ::std::int64_t;
+S      using ::std::uint8_t;
+S      using ::std::uint16_t;
+S      using ::std::uint32_t;
+S      using ::std::uint64_t;
+S      using ::std::int_least8_t;
+S      using ::std::int_least16_t;
+S      using ::std::int_least32_t;
+S      using ::std::int_least64_t;
+S      using ::std::uint_least8_t;
+S      using ::std::uint_least16_t;
+S      using ::std::uint_least32_t;
+S      using ::std::uint_least64_t;
+S      using ::std::int_fast8_t;
+S      using ::std::int_fast16_t;
+S      using ::std::int_fast32_t;
+S      using ::std::int_fast64_t;
+S      using ::std::uint_fast8_t;
+S      using ::std::uint_fast16_t;
+S      using ::std::uint_fast32_t;
+S      using ::std::uint_fast64_t;
+S      using ::std::intptr_t;
+S      using ::std::uintptr_t;
+S      using ::std::intmax_t;
+S      using ::std::uintmax_t;
+S    #endif
+N  #endif /* __cplusplus */
+N
+N#undef __INT64
+N#undef __LONGLONG
+N
+N#endif /* __stdint_h */
+N
+N/* end of stdint.h */
+L 15 "Power\data_def.h" 2
+N
+N
+N
+Ntypedef union 
+N{
+N  struct
+N	{
+N		uint8_t SYSTEM_RUN        :1;		//系统运行
+N		uint8_t DC48_OC           :1;		//48V过流防护
+N		uint8_t DC24V1_FK_OUT     :1;   //24V反馈输出
+N		uint8_t MCON_FK_IN        :1;   //主控反馈信号输入
+N		uint8_t BIT4B             :4;
+N	}STATE_DEFINE_H;
+N	uint8_t VAL;
+N}STATE_INFORMATION_H;
+N
+Ntypedef union 
+N{
+N  struct
+N	{
+N		uint8_t DC48V_REM 	      :1;   //48v remote
+N		uint8_t DC24V1A  		      :1; 	//24v1a输出，主控
+N		uint8_t DC24V1B  		      :1; 	//24v1b输出，从站MCU
+N		uint8_t DC24V1C  		      :1; 	//24v1c输出，安全MCU
+N		uint8_t DC24V2A  		      :1; 	//24v2a输出，从站IO
+N		uint8_t DC24V2B  		      :1; 	//24v2b输出，安全IO
+N		uint8_t FAN_RUN  	        :1; 	//风扇启动
+N		uint8_t DC48V_ES_SHUTDOWN :1;   //48V异常MOS
+N	}STATE_DEFINE_L;
+N	uint8_t VAL;
+N}STATE_INFORMATION_L;
+N
+Ntypedef union			
+N{
+N	struct 
+N	{
+N		uint8_t DC24V2_OV		      :1; 	//24v2过压
+N		uint8_t DC24V2A_OC	      :1; 	//24v2A过流
+N		uint8_t DC24V2B_OC	      :1; 	//24v2B过流
+N		uint8_t MCON_FKIN		      :1; 	//主控反馈故障
+N		uint8_t RES_OVERHAET	 		:1; 	//预充电电阻过热
+N		uint8_t BIT3B				      :3; 	
+N	}FAULT_DEFINE_H;
+N	uint8_t VAL;
+N}FAULT_INFORMATION_H;
+N
+Ntypedef union			
+N{
+N	struct 
+N	{
+N		uint8_t TEMP_H	 		      :1; 	//温度过高
+N		uint8_t DC48V_UV		      :1; 	//48v欠压
+N		uint8_t DC48V_OV	       	:1; 	//48v过压
+N		uint8_t DC48V_OC		      :1; 	//48v过流
+N		uint8_t DC24V1_UV	      	:1; 	//24v1欠压
+N		uint8_t DC24V1_OV		      :1; 	//24v1过压
+N		uint8_t DC24V1_OC		      :1; 	//24v1过流
+N		uint8_t DC24V2_UV		      :1; 	//24v2欠压
+N	}FAULT_DEFINE_L;
+N	uint8_t VAL;
+N}FAULT_INFORMATION_L;
+N
+Ntypedef struct 
+N{
+N	uint16_t upload_time;  
+N	uint8_t  work_mode;
+N	
+N	uint8_t temperature;
+N	uint16_t dc48v_u;
+N	uint16_t dc48v_i;
+N	uint16_t dc24v_u;
+N	uint16_t dc24v_i;
+N	
+N	uint16_t ai1_u;
+N	uint16_t ai1_i;
+N	uint16_t ai2_u;
+N	uint16_t ai2_i;
+N	
+N	uint8_t AI_SW1;
+N	uint8_t AI_SW2;
+N	
+N	STATE_INFORMATION_H p_state_h;
+N	STATE_INFORMATION_L p_state_l;
+N	FAULT_INFORMATION_H p_breakdown_h;
+N	FAULT_INFORMATION_L p_breakdown_l;
+N}POWER_MANAGE_PACKED;
+Nextern POWER_MANAGE_PACKED power_manage;
+N
+Ntypedef enum
+N{
+N	POWER_STATUS_IDLE = 0x00u,
+N	POWER_STATUS_POWERON,
+N	POWER_STATUS_48VNOSTART,
+N	POWER_STATUS_48VSTART,
+N	POWER_STATUS_SHUTDWON,
+N	POWER_STATUS_SOFTWAREPOWEROFF,
+N	POWER_STATUS_FAULT,
+N}POWER_STATUS_TYPE;
+N
+N#endif
+N
+L 5 "Power\KeyIn.h" 2
+N#include "main.h"
+L 1 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 1
+N/* USER CODE BEGIN Header */
+N/**
+N  ******************************************************************************
+N  * @file           : main.h
+N  * @brief          : Header for main.c file.
+N  *                   This file contains the common defines of the application.
+N  ******************************************************************************
+N  * @attention
+N  *
+N  * Copyright (c) 2022 STMicroelectronics.
+N  * All rights reserved.
+N  *
+N  * This software is licensed under terms that can be found in the LICENSE file
+N  * in the root directory of this software component.
+N  * If no LICENSE file comes with this software, it is provided AS-IS.
+N  *
+N  ******************************************************************************
+N  */
+N/* USER CODE END Header */
+N
+N/* Define to prevent recursive inclusion -------------------------------------*/
+N#ifndef __MAIN_H
+N#define __MAIN_H
+N
+N#ifdef __cplusplus
+Sextern "C" {
+N#endif
+N
+N/* Includes ------------------------------------------------------------------*/
 N#include "stm32f4xx_hal.h"
 L 1 "D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h" 1
 N/**
@@ -261,7 +726,7 @@ N#define  USE_HAL_SPDIFRX_REGISTER_CALLBACKS     0U /* SPDIFRX register callback
 N#define  USE_HAL_SMBUS_REGISTER_CALLBACKS       0U /* SMBUS register callback disabled     */
 N#define  USE_HAL_SPI_REGISTER_CALLBACKS         0U /* SPI register callback disabled       */
 N#define  USE_HAL_TIM_REGISTER_CALLBACKS         0U /* TIM register callback disabled       */
-N#define  USE_HAL_UART_REGISTER_CALLBACKS        0U /* UART register callback disabled      */
+N#define  USE_HAL_UART_REGISTER_CALLBACKS        1U /* UART register callback enabled      */
 N#define  USE_HAL_USART_REGISTER_CALLBACKS       0U /* USART register callback disabled     */
 N#define  USE_HAL_WWDG_REGISTER_CALLBACKS        0U /* WWDG register callback disabled      */
 N
@@ -764,337 +1229,6 @@ N#ifndef __CORE_CM4_H_GENERIC
 N#define __CORE_CM4_H_GENERIC
 N
 N#include <stdint.h>
-L 1 "D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h" 1
-N/* Copyright (C) ARM Ltd., 1999,2014 */
-N/* All rights reserved */
-N
-N/*
-N * RCS $Revision$
-N * Checkin $Date$
-N * Revising $Author: agrant $
-N */
-N
-N#ifndef __stdint_h
-N#define __stdint_h
-N#define __ARMCLIB_VERSION 5060009
-N
-N  #ifdef __INT64_TYPE__
-S    /* armclang predefines '__INT64_TYPE__' and '__INT64_C_SUFFIX__' */
-S    #define __INT64 __INT64_TYPE__
-N  #else
-N    /* armcc has builtin '__int64' which can be used in --strict mode */
-N    #define __INT64 __int64
-N    #define __INT64_C_SUFFIX__ ll
-N  #endif
-N  #define __PASTE2(x, y) x ## y
-N  #define __PASTE(x, y) __PASTE2(x, y)
-N  #define __INT64_C(x)  __ESCAPE__(__PASTE(x, __INT64_C_SUFFIX__))
-N  #define __UINT64_C(x)  __ESCAPE__(__PASTE(x ## u, __INT64_C_SUFFIX__))
-N  #if defined(__clang__) || (defined(__ARMCC_VERSION) && !defined(__STRICT_ANSI__))
-X  #if 0L || (1L && !0L)
-N    /* armclang and non-strict armcc allow 'long long' in system headers */
-N    #define __LONGLONG long long
-N  #else
-S    /* strict armcc has '__int64' */
-S    #define __LONGLONG __int64
-N  #endif
-N
-N  #ifndef __STDINT_DECLS
-N  #define __STDINT_DECLS
-N
-N    #undef __CLIBNS
-N
-N    #ifdef __cplusplus
-S      namespace std {
-S          #define __CLIBNS std::
-S          extern "C" {
-N    #else
-N      #define __CLIBNS
-N    #endif  /* __cplusplus */
-N
-N
-N/*
-N * 'signed' is redundant below, except for 'signed char' and if
-N * the typedef is used to declare a bitfield.
-N */
-N
-N    /* 7.18.1.1 */
-N
-N    /* exact-width signed integer types */
-Ntypedef   signed          char int8_t;
-Ntypedef   signed short     int int16_t;
-Ntypedef   signed           int int32_t;
-Ntypedef   signed       __INT64 int64_t;
-Xtypedef   signed       __int64 int64_t;
-N
-N    /* exact-width unsigned integer types */
-Ntypedef unsigned          char uint8_t;
-Ntypedef unsigned short     int uint16_t;
-Ntypedef unsigned           int uint32_t;
-Ntypedef unsigned       __INT64 uint64_t;
-Xtypedef unsigned       __int64 uint64_t;
-N
-N    /* 7.18.1.2 */
-N
-N    /* smallest type of at least n bits */
-N    /* minimum-width signed integer types */
-Ntypedef   signed          char int_least8_t;
-Ntypedef   signed short     int int_least16_t;
-Ntypedef   signed           int int_least32_t;
-Ntypedef   signed       __INT64 int_least64_t;
-Xtypedef   signed       __int64 int_least64_t;
-N
-N    /* minimum-width unsigned integer types */
-Ntypedef unsigned          char uint_least8_t;
-Ntypedef unsigned short     int uint_least16_t;
-Ntypedef unsigned           int uint_least32_t;
-Ntypedef unsigned       __INT64 uint_least64_t;
-Xtypedef unsigned       __int64 uint_least64_t;
-N
-N    /* 7.18.1.3 */
-N
-N    /* fastest minimum-width signed integer types */
-Ntypedef   signed           int int_fast8_t;
-Ntypedef   signed           int int_fast16_t;
-Ntypedef   signed           int int_fast32_t;
-Ntypedef   signed       __INT64 int_fast64_t;
-Xtypedef   signed       __int64 int_fast64_t;
-N
-N    /* fastest minimum-width unsigned integer types */
-Ntypedef unsigned           int uint_fast8_t;
-Ntypedef unsigned           int uint_fast16_t;
-Ntypedef unsigned           int uint_fast32_t;
-Ntypedef unsigned       __INT64 uint_fast64_t;
-Xtypedef unsigned       __int64 uint_fast64_t;
-N
-N    /* 7.18.1.4 integer types capable of holding object pointers */
-N#if __sizeof_ptr == 8
-X#if 4 == 8
-Stypedef   signed       __INT64 intptr_t;
-Stypedef unsigned       __INT64 uintptr_t;
-N#else
-Ntypedef   signed           int intptr_t;
-Ntypedef unsigned           int uintptr_t;
-N#endif
-N
-N    /* 7.18.1.5 greatest-width integer types */
-Ntypedef   signed     __LONGLONG intmax_t;
-Xtypedef   signed     long long intmax_t;
-Ntypedef unsigned     __LONGLONG uintmax_t;
-Xtypedef unsigned     long long uintmax_t;
-N
-N
-N#if !defined(__cplusplus) || defined(__STDC_LIMIT_MACROS)
-X#if !0L || 0L
-N
-N    /* 7.18.2.1 */
-N
-N    /* minimum values of exact-width signed integer types */
-N#define INT8_MIN                   -128
-N#define INT16_MIN                -32768
-N#define INT32_MIN          (~0x7fffffff)   /* -2147483648 is unsigned */
-N#define INT64_MIN  __INT64_C(~0x7fffffffffffffff) /* -9223372036854775808 is unsigned */
-N
-N    /* maximum values of exact-width signed integer types */
-N#define INT8_MAX                    127
-N#define INT16_MAX                 32767
-N#define INT32_MAX            2147483647
-N#define INT64_MAX  __INT64_C(9223372036854775807)
-N
-N    /* maximum values of exact-width unsigned integer types */
-N#define UINT8_MAX                   255
-N#define UINT16_MAX                65535
-N#define UINT32_MAX           4294967295u
-N#define UINT64_MAX __UINT64_C(18446744073709551615)
-N
-N    /* 7.18.2.2 */
-N
-N    /* minimum values of minimum-width signed integer types */
-N#define INT_LEAST8_MIN                   -128
-N#define INT_LEAST16_MIN                -32768
-N#define INT_LEAST32_MIN          (~0x7fffffff)
-N#define INT_LEAST64_MIN  __INT64_C(~0x7fffffffffffffff)
-N
-N    /* maximum values of minimum-width signed integer types */
-N#define INT_LEAST8_MAX                    127
-N#define INT_LEAST16_MAX                 32767
-N#define INT_LEAST32_MAX            2147483647
-N#define INT_LEAST64_MAX  __INT64_C(9223372036854775807)
-N
-N    /* maximum values of minimum-width unsigned integer types */
-N#define UINT_LEAST8_MAX                   255
-N#define UINT_LEAST16_MAX                65535
-N#define UINT_LEAST32_MAX           4294967295u
-N#define UINT_LEAST64_MAX __UINT64_C(18446744073709551615)
-N
-N    /* 7.18.2.3 */
-N
-N    /* minimum values of fastest minimum-width signed integer types */
-N#define INT_FAST8_MIN           (~0x7fffffff)
-N#define INT_FAST16_MIN          (~0x7fffffff)
-N#define INT_FAST32_MIN          (~0x7fffffff)
-N#define INT_FAST64_MIN  __INT64_C(~0x7fffffffffffffff)
-N
-N    /* maximum values of fastest minimum-width signed integer types */
-N#define INT_FAST8_MAX             2147483647
-N#define INT_FAST16_MAX            2147483647
-N#define INT_FAST32_MAX            2147483647
-N#define INT_FAST64_MAX  __INT64_C(9223372036854775807)
-N
-N    /* maximum values of fastest minimum-width unsigned integer types */
-N#define UINT_FAST8_MAX            4294967295u
-N#define UINT_FAST16_MAX           4294967295u
-N#define UINT_FAST32_MAX           4294967295u
-N#define UINT_FAST64_MAX __UINT64_C(18446744073709551615)
-N
-N    /* 7.18.2.4 */
-N
-N    /* minimum value of pointer-holding signed integer type */
-N#if __sizeof_ptr == 8
-X#if 4 == 8
-S#define INTPTR_MIN INT64_MIN
-N#else
-N#define INTPTR_MIN INT32_MIN
-N#endif
-N
-N    /* maximum value of pointer-holding signed integer type */
-N#if __sizeof_ptr == 8
-X#if 4 == 8
-S#define INTPTR_MAX INT64_MAX
-N#else
-N#define INTPTR_MAX INT32_MAX
-N#endif
-N
-N    /* maximum value of pointer-holding unsigned integer type */
-N#if __sizeof_ptr == 8
-X#if 4 == 8
-S#define UINTPTR_MAX UINT64_MAX
-N#else
-N#define UINTPTR_MAX UINT32_MAX
-N#endif
-N
-N    /* 7.18.2.5 */
-N
-N    /* minimum value of greatest-width signed integer type */
-N#define INTMAX_MIN  __ESCAPE__(~0x7fffffffffffffffll)
-N
-N    /* maximum value of greatest-width signed integer type */
-N#define INTMAX_MAX  __ESCAPE__(9223372036854775807ll)
-N
-N    /* maximum value of greatest-width unsigned integer type */
-N#define UINTMAX_MAX __ESCAPE__(18446744073709551615ull)
-N
-N    /* 7.18.3 */
-N
-N    /* limits of ptrdiff_t */
-N#if __sizeof_ptr == 8
-X#if 4 == 8
-S#define PTRDIFF_MIN INT64_MIN
-S#define PTRDIFF_MAX INT64_MAX
-N#else
-N#define PTRDIFF_MIN INT32_MIN
-N#define PTRDIFF_MAX INT32_MAX
-N#endif
-N
-N    /* limits of sig_atomic_t */
-N#define SIG_ATOMIC_MIN (~0x7fffffff)
-N#define SIG_ATOMIC_MAX   2147483647
-N
-N    /* limit of size_t */
-N#if __sizeof_ptr == 8
-X#if 4 == 8
-S#define SIZE_MAX UINT64_MAX
-N#else
-N#define SIZE_MAX UINT32_MAX
-N#endif
-N
-N    /* limits of wchar_t */
-N    /* NB we have to undef and redef because they're defined in both
-N     * stdint.h and wchar.h */
-N#undef WCHAR_MIN
-N#undef WCHAR_MAX
-N
-N#if defined(__WCHAR32) || (defined(__ARM_SIZEOF_WCHAR_T) && __ARM_SIZEOF_WCHAR_T == 4)
-X#if 0L || (0L && __ARM_SIZEOF_WCHAR_T == 4)
-S  #define WCHAR_MIN   0
-S  #define WCHAR_MAX   0xffffffffU
-N#else
-N  #define WCHAR_MIN   0
-N  #define WCHAR_MAX   65535
-N#endif
-N
-N    /* limits of wint_t */
-N#define WINT_MIN (~0x7fffffff)
-N#define WINT_MAX 2147483647
-N
-N#endif /* __STDC_LIMIT_MACROS */
-N
-N#if !defined(__cplusplus) || defined(__STDC_CONSTANT_MACROS)
-X#if !0L || 0L
-N
-N    /* 7.18.4.1 macros for minimum-width integer constants */
-N#define INT8_C(x)   (x)
-N#define INT16_C(x)  (x)
-N#define INT32_C(x)  (x)
-N#define INT64_C(x)  __INT64_C(x)
-N
-N#define UINT8_C(x)  (x ## u)
-N#define UINT16_C(x) (x ## u)
-N#define UINT32_C(x) (x ## u)
-N#define UINT64_C(x) __UINT64_C(x)
-N
-N    /* 7.18.4.2 macros for greatest-width integer constants */
-N#define INTMAX_C(x)  __ESCAPE__(x ## ll)
-N#define UINTMAX_C(x) __ESCAPE__(x ## ull)
-N
-N#endif /* __STDC_CONSTANT_MACROS */
-N
-N    #ifdef __cplusplus
-S         }  /* extern "C" */
-S      }  /* namespace std */
-N    #endif /* __cplusplus */
-N  #endif /* __STDINT_DECLS */
-N
-N  #ifdef __cplusplus
-S    #ifndef __STDINT_NO_EXPORTS
-S      using ::std::int8_t;
-S      using ::std::int16_t;
-S      using ::std::int32_t;
-S      using ::std::int64_t;
-S      using ::std::uint8_t;
-S      using ::std::uint16_t;
-S      using ::std::uint32_t;
-S      using ::std::uint64_t;
-S      using ::std::int_least8_t;
-S      using ::std::int_least16_t;
-S      using ::std::int_least32_t;
-S      using ::std::int_least64_t;
-S      using ::std::uint_least8_t;
-S      using ::std::uint_least16_t;
-S      using ::std::uint_least32_t;
-S      using ::std::uint_least64_t;
-S      using ::std::int_fast8_t;
-S      using ::std::int_fast16_t;
-S      using ::std::int_fast32_t;
-S      using ::std::int_fast64_t;
-S      using ::std::uint_fast8_t;
-S      using ::std::uint_fast16_t;
-S      using ::std::uint_fast32_t;
-S      using ::std::uint_fast64_t;
-S      using ::std::intptr_t;
-S      using ::std::uintptr_t;
-S      using ::std::intmax_t;
-S      using ::std::uintmax_t;
-S    #endif
-N  #endif /* __cplusplus */
-N
-N#undef __INT64
-N#undef __LONGLONG
-N
-N#endif /* __stdint_h */
-N
-N/* end of stdint.h */
-L 45 "D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cm4.h" 2
 N
 N#ifdef __cplusplus
 S extern "C" {
@@ -42723,52 +42857,52 @@ N  __IO uint32_t                 ErrorCode;        /*!< UART Error code         
 X  volatile uint32_t                 ErrorCode;         
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S  void (* TxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);        /*!< UART Tx Half Complete Callback        */
-S  void (* TxCpltCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Tx Complete Callback             */
-S  void (* RxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);        /*!< UART Rx Half Complete Callback        */
-S  void (* RxCpltCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Rx Complete Callback             */
-S  void (* ErrorCallback)(struct __UART_HandleTypeDef *huart);             /*!< UART Error Callback                   */
-S  void (* AbortCpltCallback)(struct __UART_HandleTypeDef *huart);         /*!< UART Abort Complete Callback          */
-S  void (* AbortTransmitCpltCallback)(struct __UART_HandleTypeDef *huart); /*!< UART Abort Transmit Complete Callback */
-S  void (* AbortReceiveCpltCallback)(struct __UART_HandleTypeDef *huart);  /*!< UART Abort Receive Complete Callback  */
-S  void (* WakeupCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Wakeup Callback                  */
-S  void (* RxEventCallback)(struct __UART_HandleTypeDef *huart, uint16_t Pos); /*!< UART Reception Event Callback     */
-S
-S  void (* MspInitCallback)(struct __UART_HandleTypeDef *huart);           /*!< UART Msp Init callback                */
-S  void (* MspDeInitCallback)(struct __UART_HandleTypeDef *huart);         /*!< UART Msp DeInit callback              */
+X#if (1U == 1)
+N  void (* TxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);        /*!< UART Tx Half Complete Callback        */
+N  void (* TxCpltCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Tx Complete Callback             */
+N  void (* RxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);        /*!< UART Rx Half Complete Callback        */
+N  void (* RxCpltCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Rx Complete Callback             */
+N  void (* ErrorCallback)(struct __UART_HandleTypeDef *huart);             /*!< UART Error Callback                   */
+N  void (* AbortCpltCallback)(struct __UART_HandleTypeDef *huart);         /*!< UART Abort Complete Callback          */
+N  void (* AbortTransmitCpltCallback)(struct __UART_HandleTypeDef *huart); /*!< UART Abort Transmit Complete Callback */
+N  void (* AbortReceiveCpltCallback)(struct __UART_HandleTypeDef *huart);  /*!< UART Abort Receive Complete Callback  */
+N  void (* WakeupCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Wakeup Callback                  */
+N  void (* RxEventCallback)(struct __UART_HandleTypeDef *huart, uint16_t Pos); /*!< UART Reception Event Callback     */
+N
+N  void (* MspInitCallback)(struct __UART_HandleTypeDef *huart);           /*!< UART Msp Init callback                */
+N  void (* MspDeInitCallback)(struct __UART_HandleTypeDef *huart);         /*!< UART Msp DeInit callback              */
 N#endif  /* USE_HAL_UART_REGISTER_CALLBACKS */
 N
 N} UART_HandleTypeDef;
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S/**
-S  * @brief  HAL UART Callback ID enumeration definition
-S  */
-Stypedef enum
-S{
-S  HAL_UART_TX_HALFCOMPLETE_CB_ID         = 0x00U,    /*!< UART Tx Half Complete Callback ID        */
-S  HAL_UART_TX_COMPLETE_CB_ID             = 0x01U,    /*!< UART Tx Complete Callback ID             */
-S  HAL_UART_RX_HALFCOMPLETE_CB_ID         = 0x02U,    /*!< UART Rx Half Complete Callback ID        */
-S  HAL_UART_RX_COMPLETE_CB_ID             = 0x03U,    /*!< UART Rx Complete Callback ID             */
-S  HAL_UART_ERROR_CB_ID                   = 0x04U,    /*!< UART Error Callback ID                   */
-S  HAL_UART_ABORT_COMPLETE_CB_ID          = 0x05U,    /*!< UART Abort Complete Callback ID          */
-S  HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID = 0x06U,    /*!< UART Abort Transmit Complete Callback ID */
-S  HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID  = 0x07U,    /*!< UART Abort Receive Complete Callback ID  */
-S  HAL_UART_WAKEUP_CB_ID                  = 0x08U,    /*!< UART Wakeup Callback ID                  */
-S
-S  HAL_UART_MSPINIT_CB_ID                 = 0x0BU,    /*!< UART MspInit callback ID                 */
-S  HAL_UART_MSPDEINIT_CB_ID               = 0x0CU     /*!< UART MspDeInit callback ID               */
-S
-S} HAL_UART_CallbackIDTypeDef;
-S
-S/**
-S  * @brief  HAL UART Callback pointer definition
-S  */
-Stypedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer to an UART callback function */
-Stypedef  void (*pUART_RxEventCallbackTypeDef)(struct __UART_HandleTypeDef *huart, uint16_t Pos);   /*!< pointer to a UART Rx Event specific callback function */
-S
+X#if (1U == 1)
+N/**
+N  * @brief  HAL UART Callback ID enumeration definition
+N  */
+Ntypedef enum
+N{
+N  HAL_UART_TX_HALFCOMPLETE_CB_ID         = 0x00U,    /*!< UART Tx Half Complete Callback ID        */
+N  HAL_UART_TX_COMPLETE_CB_ID             = 0x01U,    /*!< UART Tx Complete Callback ID             */
+N  HAL_UART_RX_HALFCOMPLETE_CB_ID         = 0x02U,    /*!< UART Rx Half Complete Callback ID        */
+N  HAL_UART_RX_COMPLETE_CB_ID             = 0x03U,    /*!< UART Rx Complete Callback ID             */
+N  HAL_UART_ERROR_CB_ID                   = 0x04U,    /*!< UART Error Callback ID                   */
+N  HAL_UART_ABORT_COMPLETE_CB_ID          = 0x05U,    /*!< UART Abort Complete Callback ID          */
+N  HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID = 0x06U,    /*!< UART Abort Transmit Complete Callback ID */
+N  HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID  = 0x07U,    /*!< UART Abort Receive Complete Callback ID  */
+N  HAL_UART_WAKEUP_CB_ID                  = 0x08U,    /*!< UART Wakeup Callback ID                  */
+N
+N  HAL_UART_MSPINIT_CB_ID                 = 0x0BU,    /*!< UART MspInit callback ID                 */
+N  HAL_UART_MSPDEINIT_CB_ID               = 0x0CU     /*!< UART MspDeInit callback ID               */
+N
+N} HAL_UART_CallbackIDTypeDef;
+N
+N/**
+N  * @brief  HAL UART Callback pointer definition
+N  */
+Ntypedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer to an UART callback function */
+Ntypedef  void (*pUART_RxEventCallbackTypeDef)(struct __UART_HandleTypeDef *huart, uint16_t Pos);   /*!< pointer to a UART Rx Event specific callback function */
+N
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N
 N/**
@@ -42790,8 +42924,8 @@ N#define HAL_UART_ERROR_FE                0x00000004U   /*!< Frame error        
 N#define HAL_UART_ERROR_ORE               0x00000008U   /*!< Overrun error       */
 N#define HAL_UART_ERROR_DMA               0x00000010U   /*!< DMA transfer error  */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S#define  HAL_UART_ERROR_INVALID_CALLBACK 0x00000020U   /*!< Invalid Callback error  */
+X#if (1U == 1)
+N#define  HAL_UART_ERROR_INVALID_CALLBACK 0x00000020U   /*!< Invalid Callback error  */
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N/**
 N  * @}
@@ -42950,19 +43084,19 @@ N  *         (USART,UART availability and x,y values depending on device).
 N  * @retval None
 N  */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                   \
-S                                                       (__HANDLE__)->gState = HAL_UART_STATE_RESET;      \
-S                                                       (__HANDLE__)->RxState = HAL_UART_STATE_RESET;     \
-S                                                       (__HANDLE__)->MspInitCallback = NULL;             \
-S                                                       (__HANDLE__)->MspDeInitCallback = NULL;           \
-S                                                     } while(0U)
-X#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                                                                          (__HANDLE__)->gState = HAL_UART_STATE_RESET;                                                             (__HANDLE__)->RxState = HAL_UART_STATE_RESET;                                                            (__HANDLE__)->MspInitCallback = NULL;                                                                    (__HANDLE__)->MspDeInitCallback = NULL;                                                                } while(0U)
-N#else
+X#if (1U == 1)
 N#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                   \
 N                                                       (__HANDLE__)->gState = HAL_UART_STATE_RESET;      \
 N                                                       (__HANDLE__)->RxState = HAL_UART_STATE_RESET;     \
+N                                                       (__HANDLE__)->MspInitCallback = NULL;             \
+N                                                       (__HANDLE__)->MspDeInitCallback = NULL;           \
 N                                                     } while(0U)
+X#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                                                                          (__HANDLE__)->gState = HAL_UART_STATE_RESET;                                                             (__HANDLE__)->RxState = HAL_UART_STATE_RESET;                                                            (__HANDLE__)->MspInitCallback = NULL;                                                                    (__HANDLE__)->MspDeInitCallback = NULL;                                                                } while(0U)
+N#else
+S#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                   \
+S                                                       (__HANDLE__)->gState = HAL_UART_STATE_RESET;      \
+S                                                       (__HANDLE__)->RxState = HAL_UART_STATE_RESET;     \
+S                                                     } while(0U)
 X#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                                                                          (__HANDLE__)->gState = HAL_UART_STATE_RESET;                                                             (__HANDLE__)->RxState = HAL_UART_STATE_RESET;                                                          } while(0U)
 N#endif /*USE_HAL_UART_REGISTER_CALLBACKS */
 N
@@ -43258,13 +43392,13 @@ Nvoid HAL_UART_MspDeInit(UART_HandleTypeDef *huart);
 N
 N/* Callbacks Register/UnRegister functions  ***********************************/
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-SHAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
-S                                            pUART_CallbackTypeDef pCallback);
-SHAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID);
-S
-SHAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback);
-SHAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart);
+X#if (1U == 1)
+NHAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
+N                                            pUART_CallbackTypeDef pCallback);
+NHAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID);
+N
+NHAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback);
+NHAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N
 N/**
@@ -43819,139 +43953,7 @@ N
 N#endif /* __STM32F4xx_HAL_H */
 N
 N/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-L 15 "Power\data_def.h" 2
-N
-N
-N
-Ntypedef union 
-N{
-N  struct
-N	{
-N		uint8_t SYSTEM_RUN        :1;		//系统运行
-N		uint8_t DC48_OC           :1;		//48V过流防护
-N		uint8_t DC24V1_FK_OUT     :1;   //24V反馈输出
-N		uint8_t MCON_FK_IN        :1;   //主控反馈信号输入
-N		uint8_t BIT4B             :4;
-N	}STATE_DEFINE_H;
-N	uint8_t VAL;
-N}STATE_INFORMATION_H;
-N
-Ntypedef union 
-N{
-N  struct
-N	{
-N		uint8_t DC48V_REM 	      :1;   //48v remote
-N		uint8_t DC24V1A  		      :1; 	//24v1a输出，主控
-N		uint8_t DC24V1B  		      :1; 	//24v1b输出，从站MCU
-N		uint8_t DC24V1C  		      :1; 	//24v1c输出，安全MCU
-N		uint8_t DC24V2A  		      :1; 	//24v2a输出，从站IO
-N		uint8_t DC24V2B  		      :1; 	//24v2b输出，安全IO
-N		uint8_t FAN_RUN  	        :1; 	//风扇启动
-N		uint8_t DC48V_ES_SHUTDOWN :1;   //48V异常MOS
-N	}STATE_DEFINE_L;
-N	uint8_t VAL;
-N}STATE_INFORMATION_L;
-N
-Ntypedef union			
-N{
-N	struct 
-N	{
-N		uint8_t DC24V2_OV		      :1; 	//24v2过压
-N		uint8_t DC24V2A_OC	      :1; 	//24v2A过流
-N		uint8_t DC24V2B_OC	      :1; 	//24v2B过流
-N		uint8_t MCON_FKIN		      :1; 	//主控反馈故障
-N		uint8_t RES_OVERHAET	 		:1; 	//预充电电阻过热
-N		uint8_t BIT3B				      :3; 	
-N	}FAULT_DEFINE_H;
-N	uint8_t VAL;
-N}FAULT_INFORMATION_H;
-N
-Ntypedef union			
-N{
-N	struct 
-N	{
-N		uint8_t TEMP_H	 		      :1; 	//温度过高
-N		uint8_t DC48V_UV		      :1; 	//48v欠压
-N		uint8_t DC48V_OV	       	:1; 	//48v过压
-N		uint8_t DC48V_OC		      :1; 	//48v过流
-N		uint8_t DC24V1_UV	      	:1; 	//24v1欠压
-N		uint8_t DC24V1_OV		      :1; 	//24v1过压
-N		uint8_t DC24V1_OC		      :1; 	//24v1过流
-N		uint8_t DC24V2_UV		      :1; 	//24v2欠压
-N	}FAULT_DEFINE_L;
-N	uint8_t VAL;
-N}FAULT_INFORMATION_L;
-N
-Ntypedef struct 
-N{
-N	uint16_t upload_time;  
-N	uint8_t  work_mode;
-N	
-N	uint8_t temperature;
-N	uint16_t dc48v_u;
-N	uint16_t dc48v_i;
-N	uint16_t dc24v_u;
-N	uint16_t dc24v_i;
-N	
-N	uint16_t ai1_u;
-N	uint16_t ai1_i;
-N	uint16_t ai2_u;
-N	uint16_t ai2_i;
-N	
-N	STATE_INFORMATION_H p_state_h;
-N	STATE_INFORMATION_L p_state_l;
-N	FAULT_INFORMATION_H p_breakdown_h;
-N	FAULT_INFORMATION_L p_breakdown_l;
-N}POWER_MANAGE_PACKED;
-Nextern POWER_MANAGE_PACKED power_manage;
-N
-Ntypedef enum
-N{
-N	POWER_STATUS_IDLE = 0x00u,
-N	POWER_STATUS_POWERON,
-N	POWER_STATUS_48VNOSTART,
-N	POWER_STATUS_48VSTART,
-N	POWER_STATUS_REMOTEOFF,
-N	POWER_STATUS_POWEROFF,
-N	POWER_STATUS_SHUTDWON,
-N	POWER_STATUS_FAULT,
-N}POWER_STATUS_TYPE;
-N
-N#endif
-N
-L 5 "Power\KeyIn.h" 2
-N#include "main.h"
-L 1 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 1
-N/* USER CODE BEGIN Header */
-N/**
-N  ******************************************************************************
-N  * @file           : main.h
-N  * @brief          : Header for main.c file.
-N  *                   This file contains the common defines of the application.
-N  ******************************************************************************
-N  * @attention
-N  *
-N  * Copyright (c) 2022 STMicroelectronics.
-N  * All rights reserved.
-N  *
-N  * This software is licensed under terms that can be found in the LICENSE file
-N  * in the root directory of this software component.
-N  * If no LICENSE file comes with this software, it is provided AS-IS.
-N  *
-N  ******************************************************************************
-N  */
-N/* USER CODE END Header */
-N
-N/* Define to prevent recursive inclusion -------------------------------------*/
-N#ifndef __MAIN_H
-N#define __MAIN_H
-N
-N#ifdef __cplusplus
-Sextern "C" {
-N#endif
-N
-N/* Includes ------------------------------------------------------------------*/
-N#include "stm32f4xx_hal.h"
+L 31 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 2
 N
 N/* Private includes ----------------------------------------------------------*/
 N/* USER CODE BEGIN Includes */
@@ -50498,7 +50500,651 @@ N/*ET9300 Project Handler :(#if EOE_SUPPORTED) lines 348 to 361 deleted*/
 N
 N#undef PROTO
 L 38 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 2
+N#include "ADS1115Driver.h"
+L 1 ".\Power\ADS1115Driver.h" 1
+N/**
+N  ******************************************************************************
+N  * @file    ADS1115Driver.h
+N  * @author  Xi Liang
+N  * @brief   ADS1115 I2C module driver.
+N  *         
+N  @verbatim
+N  ******************************************************************************
+N  */
+N#ifndef __ADS1115DRIVER_H
+N#define __ADS1115DRIVER_H
 N
+N
+N#include "stm32f4xx_hal.h"
+N#include "data_def.h"
+N#include "TemperatureDriver.h"
+L 1 ".\Power\TemperatureDriver.h" 1
+N#ifndef __TEMPERATUREDRIVER_H
+N#define __TEMPERATUREDRIVER_H
+N
+N
+N
+N#include "stm32f4xx_hal.h"
+N#include "data_def.h"
+N
+N
+Nuint8_t look_up_table(uint16_t *a,uint8_t ArrayLong,uint16_t data);
+Nfloat num_to_temperature(uint8_t num);
+Nvoid save_ntc_data(uint16_t data);			//直插
+Nvoid save_ntc2_data(uint16_t data);		//smd
+N
+N
+N
+N#endif
+L 17 ".\Power\ADS1115Driver.h" 2
+N
+N
+N#define ADS1115_Voltage_48V
+N
+N#define ADS1115_I2C_TIMEOUT_IN_MS 500u
+N
+N//Warning! 7 bits ADDR should must be shifted to the left
+N//ADDR PIN ->GND
+N/*1001000y*/
+N#define ADS1115_ADDR_0  (72u << 1)
+N
+N//ADDR PIN ->VDD
+N/*1001001y*/
+N#define ADS1115_ADDR_1  (73u << 1)
+N
+N//ADDR PIN ->SDA
+N/*1001010Y*/
+N#define ADS1115_ADDR_2  (74u << 1)
+N
+N//ADDR PIN ->SCL
+N/*1001011Y*/
+N#define ADS1115_ADDR_3  (75u << 1)
+N
+N#define ADS1115_CONVERSION_REG      0x00	//Convertion register
+N#define ADS1115_CONFIG_REG          0x01	//Config register
+N#define ADS1115_Lo_THRESH_REG       0x02	//Lo_thresh register
+N#define ADS1115_Ho_THRESH_REG       0x03	//Hi_thresh register
+N
+N#define ADS1115_CONFIG_REG_OS_NO_EFFECT 0u
+N#define ADS1115_CONFIG_REG_OS_START_SINGLE_CONVERSION ((uint16_t)1u << 15u)
+N
+N#define ADS1115_CONFIG_REG_MUX_AIN0_AIN1 0u
+N#define ADS1115_CONFIG_REG_MUX_AIN0_AIN3 ((uint16_t)1u << 12u)
+N#define ADS1115_CONFIG_REG_MUX_AIN1_AIN3 ((uint16_t)2u << 12u)
+N#define ADS1115_CONFIG_REG_MUX_AIN2_AIN3 ((uint16_t)3u << 12u)
+N#define ADS1115_CONFIG_REG_MUX_AIN0_GND ((uint16_t)4u << 12u)
+N#define ADS1115_CONFIG_REG_MUX_AIN1_GND ((uint16_t)5u << 12u)
+N#define ADS1115_CONFIG_REG_MUX_AIN2_GND ((uint16_t)6u << 12u)
+N#define ADS1115_CONFIG_REG_MUX_AIN3_GND ((uint16_t)7u << 12u)
+N
+N#define ADS1115_CONFIG_REG_FSR_6p114	(0u)
+N#define ADS1115_CONFIG_REG_FSR_4p096	((uint16_t)1u << 9u)
+N#define ADS1115_CONFIG_REG_FSR_2p048	((uint16_t)2u << 9u)
+N#define ADS1115_CONFIG_REG_FSR_1p024	((uint16_t)3u << 9u)
+N#define ADS1115_CONFIG_REG_FSR_0p512	((uint16_t)4u << 9u)
+N#define ADS1115_CONFIG_REG_FSR_0p256_1	((uint16_t)5u << 9u)
+N#define ADS1115_CONFIG_REG_FSR_0p256_2	((uint16_t)6u << 9u)
+N#define ADS1115_CONFIG_REG_FSR_0p256_3	((uint16_t)7u << 9u)
+N
+N#define ADS1115_CONFIG_REG_MODE_CONTINUOUS	(0u)
+N#define ADS1115_CONFIG_REG_MODE_SINGLE_SHOT	((uint16_t)(1u) << 8u)
+N
+N#define ADS1115_CONFIG_REG_DR_SPS_8	(0u)
+N#define ADS1115_CONFIG_REG_DR_SPS_16	((uint16_t)1u << 5u)
+N#define ADS1115_CONFIG_REG_DR_SPS_32	((uint16_t)2u << 5u)
+N#define ADS1115_CONFIG_REG_DR_SPS_64	((uint16_t)3u << 5u)
+N#define ADS1115_CONFIG_REG_DR_SPS_128	((uint16_t)4u << 5u)
+N#define ADS1115_CONFIG_REG_DR_SPS_250	((uint16_t)5u << 5u)
+N#define ADS1115_CONFIG_REG_DR_SPS_475	((uint16_t)6u << 5u)
+N#define ADS1115_CONFIG_REG_DR_SPS_860	((uint16_t)7u << 5u)
+N
+N#define ADS1115_CONFIG_REG_COMP_MODE_TRANDITIONAL 0u
+N#define ADS1115_CONFIG_REG_COMP_MODE_WINDOW ((uint16_t)(1) << 4u)
+N
+N#define ADS1115_CONFIG_REG_COMP_POL_ACT_LOW (0u)
+N#define ADS1115_CONFIG_REG_COMP_POL_ACT_HIGH ((uint16_t)(1) << 3u)
+N
+N#define ADS1115_CONFIG_REG_COMP_QUE_ONE 0u
+N#define ADS1115_CONFIG_REG_COMP_QUE_TWO (1u)
+N#define ADS1115_CONFIG_REG_COMP_QUE_FOUR (2u)
+N#define ADS1115_CONFIG_REG_COMP_QUE_DISABLE (3u)
+N
+N
+N#define ADC_Accuracy 		32768   //定义ADC精度，ADS1115单端输入时15位
+N
+Nextern I2C_HandleTypeDef * I2C_Ptr_48V_NTC;
+Nextern I2C_HandleTypeDef * I2C_Ptr_24V;
+Nextern I2C_HandleTypeDef * I2C_Ptr_AI;
+N
+Ntypedef union
+N{
+N	struct 
+N	{
+N		uint16_t COMP_QUE 		:2;
+N		uint16_t COMP_LAT 		:1;
+N		uint16_t COMP_POL 		:1;
+N		uint16_t COMP_MODE  	:1;
+N		uint16_t DR         	:3;
+N		uint16_t MODE     		:1;
+N		uint16_t PGA        	:3;
+N		uint16_t MUX        	:3;
+N		uint16_t OS         	:1;
+N	}BIT;
+N	uint16_t ALL;
+N}ADS1115_CFG;
+N
+Ntypedef struct tag_ADS1115_DRIVER
+N{
+N	I2C_HandleTypeDef * I2C_Handle;
+N	uint8_t ADDR;
+N	ADS1115_CFG ConfigRegData;
+N	int16_t SampleValue;
+N	uint32_t *StartConversionTimerPtr;
+N	uint32_t ConversionTime;
+N	uint32_t ConfigErrorCnt;
+N	uint32_t ConversionErrorCnt;
+N	int16_t SampleValueMax;
+N	int16_t SampleValueMin;
+N	uint8_t SampleBuffer[2u];
+N	HAL_StatusTypeDef ConfigResult;
+N	HAL_StatusTypeDef ConversionTransmitResult;
+N	HAL_StatusTypeDef ConversionReceiveResult;	
+N}ADS1115_DRIVER;
+N
+Nextern ADS1115_DRIVER ADS1115_NTC;
+Nextern ADS1115_DRIVER ADS1115_Voltage48V;
+Nextern ADS1115_DRIVER ADS1115_Current48V;
+Nextern ADS1115_DRIVER ADS1115_Voltage24V;
+Nextern ADS1115_DRIVER ADS1115_Current24V;
+Nextern ADS1115_DRIVER ADS1115_AnalogVoltageInput0;
+Nextern ADS1115_DRIVER ADS1115_AnalogVoltageInput1;
+Nextern ADS1115_DRIVER ADS1115_AnalogCurrentInput0;
+Nextern ADS1115_DRIVER ADS1115_AnalogCurrentInput1;
+Nvoid ADS1115_Driver_Initilization(void);
+Nvoid ADS1115_Driver_MainLoop(void);
+N
+N#endif
+L 39 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 2
+N#include "Command.h"
+L 1 ".\Power\Command.h" 1
+N/**
+N  ******************************************************************************
+N  * @file    Command.h
+N  * @author  Xi Liang/Liu Gui Qing
+N  * @brief   Power Command module driver.
+N  *         
+N  @verbatim
+N  ******************************************************************************
+N  */
+N	
+N#ifndef __COMMAND_H
+N#define __COMMAND_H
+N
+N
+N#include "stm32f4xx_hal.h"
+N#include "data_def.h"
+N#include "PowerMenu.h"
+L 1 ".\Power\PowerMenu.h" 1
+N/**
+N  ******************************************************************************
+N  * @file    PowerMenu.h
+N  * @author  Xi Liang/Liu Gui Qing
+N  * @brief   Power Menu Driver.
+N  *         
+N  @verbatim
+N  ******************************************************************************
+N  */
+N	
+N#ifndef __POWERMENU_H
+N#define __POWERMENU_H
+N
+N
+N#include "data_def.h"
+N#include "main.h"
+L 1 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 1
+N/* USER CODE BEGIN Header */
+N/**
+N  ******************************************************************************
+N  * @file           : main.h
+N  * @brief          : Header for main.c file.
+N  *                   This file contains the common defines of the application.
+N  ******************************************************************************
+N  * @attention
+N  *
+N  * Copyright (c) 2022 STMicroelectronics.
+N  * All rights reserved.
+N  *
+N  * This software is licensed under terms that can be found in the LICENSE file
+N  * in the root directory of this software component.
+N  * If no LICENSE file comes with this software, it is provided AS-IS.
+N  *
+N  ******************************************************************************
+N  */
+N/* USER CODE END Header */
+N
+N/* Define to prevent recursive inclusion -------------------------------------*/
+N#ifndef __MAIN_H
+S#define __MAIN_H
+S
+S#ifdef __cplusplus
+Sextern "C" {
+S#endif
+S
+S/* Includes ------------------------------------------------------------------*/
+S#include "stm32f4xx_hal.h"
+S
+S/* Private includes ----------------------------------------------------------*/
+S/* USER CODE BEGIN Includes */
+S#include "SPIDriver.h"
+S#include "9252_HW.h"
+S#include "ecatappl.h"
+S#include "applInterface.h"
+S#include "ADS1115Driver.h"
+S#include "Command.h"
+S/* USER CODE END Includes */
+S
+S/* Exported types ------------------------------------------------------------*/
+S/* USER CODE BEGIN ET */
+S
+S/* USER CODE END ET */
+S
+S/* Exported constants --------------------------------------------------------*/
+S/* USER CODE BEGIN EC */
+S
+S/* USER CODE END EC */
+S
+S/* Exported macro ------------------------------------------------------------*/
+S/* USER CODE BEGIN EM */
+S
+S/* USER CODE END EM */
+S
+S/* Exported functions prototypes ---------------------------------------------*/
+Svoid Error_Handler(void);
+S
+S/* USER CODE BEGIN EFP */
+S
+S/* USER CODE END EFP */
+S
+S/* Private defines -----------------------------------------------------------*/
+S#define SYNC0_Pin GPIO_PIN_2
+S#define SYNC0_GPIO_Port GPIOE
+S#define SYNC0_EXTI_IRQn EXTI2_IRQn
+S#define SYNC1_Pin GPIO_PIN_3
+S#define SYNC1_GPIO_Port GPIOE
+S#define SYNC1_EXTI_IRQn EXTI3_IRQn
+S#define AI_IU_SW1_Pin GPIO_PIN_6
+S#define AI_IU_SW1_GPIO_Port GPIOE
+S#define V24V_OUT4_Pin GPIO_PIN_2
+S#define V24V_OUT4_GPIO_Port GPIOF
+S#define LED6_Pin GPIO_PIN_3
+S#define LED6_GPIO_Port GPIOF
+S#define PHY_RESET_Pin GPIO_PIN_4
+S#define PHY_RESET_GPIO_Port GPIOF
+S#define ET_RESETN_Pin GPIO_PIN_5
+S#define ET_RESETN_GPIO_Port GPIOF
+S#define LED3_Pin GPIO_PIN_8
+S#define LED3_GPIO_Port GPIOF
+S#define LED4_Pin GPIO_PIN_9
+S#define LED4_GPIO_Port GPIOF
+S#define LED5_Pin GPIO_PIN_10
+S#define LED5_GPIO_Port GPIOF
+S#define IRQ_Pin GPIO_PIN_1
+S#define IRQ_GPIO_Port GPIOA
+S#define IRQ_EXTI_IRQn EXTI1_IRQn
+S#define RS485_RE_Pin GPIO_PIN_4
+S#define RS485_RE_GPIO_Port GPIOA
+S#define LED2_Pin GPIO_PIN_4
+S#define LED2_GPIO_Port GPIOC
+S#define LED1_Pin GPIO_PIN_5
+S#define LED1_GPIO_Port GPIOC
+S#define AI_IU_SW2_Pin GPIO_PIN_1
+S#define AI_IU_SW2_GPIO_Port GPIOB
+S#define SAFE_48V_SWITCH_Pin GPIO_PIN_11
+S#define SAFE_48V_SWITCH_GPIO_Port GPIOF
+S#define POWER24V_ON_Pin GPIO_PIN_12
+S#define POWER24V_ON_GPIO_Port GPIOF
+S#define ES_SHUTDOWN_Pin GPIO_PIN_13
+S#define ES_SHUTDOWN_GPIO_Port GPIOF
+S#define ACPower_OK_Pin GPIO_PIN_1
+S#define ACPower_OK_GPIO_Port GPIOG
+S#define ST_OUT_24_Pin GPIO_PIN_10
+S#define ST_OUT_24_GPIO_Port GPIOE
+S#define ST_OUT_23_Pin GPIO_PIN_11
+S#define ST_OUT_23_GPIO_Port GPIOE
+S#define ST_OUT_22_Pin GPIO_PIN_12
+S#define ST_OUT_22_GPIO_Port GPIOE
+S#define ST_OUT_20_Pin GPIO_PIN_13
+S#define ST_OUT_20_GPIO_Port GPIOE
+S#define ST_OUT_21_Pin GPIO_PIN_14
+S#define ST_OUT_21_GPIO_Port GPIOE
+S#define POWEROFF_REMOTEIN_Pin GPIO_PIN_15
+S#define POWEROFF_REMOTEIN_GPIO_Port GPIOE
+S#define ST_OUT_19_Pin GPIO_PIN_12
+S#define ST_OUT_19_GPIO_Port GPIOB
+S#define ST_OUT_18_Pin GPIO_PIN_13
+S#define ST_OUT_18_GPIO_Port GPIOB
+S#define ST_OUT_17_Pin GPIO_PIN_14
+S#define ST_OUT_17_GPIO_Port GPIOB
+S#define ST_OUT_8_Pin GPIO_PIN_15
+S#define ST_OUT_8_GPIO_Port GPIOB
+S#define ST_OUT_7_Pin GPIO_PIN_8
+S#define ST_OUT_7_GPIO_Port GPIOD
+S#define ST_OUT_6_Pin GPIO_PIN_9
+S#define ST_OUT_6_GPIO_Port GPIOD
+S#define ST_OUT_5_Pin GPIO_PIN_10
+S#define ST_OUT_5_GPIO_Port GPIOD
+S#define ST_IN_23_Pin GPIO_PIN_11
+S#define ST_IN_23_GPIO_Port GPIOD
+S#define ST_IN_22_Pin GPIO_PIN_12
+S#define ST_IN_22_GPIO_Port GPIOD
+S#define ST_IN_21_Pin GPIO_PIN_13
+S#define ST_IN_21_GPIO_Port GPIOD
+S#define ST_IN_24_Pin GPIO_PIN_14
+S#define ST_IN_24_GPIO_Port GPIOD
+S#define ST_IN_20_Pin GPIO_PIN_15
+S#define ST_IN_20_GPIO_Port GPIOD
+S#define ST_IN_19_Pin GPIO_PIN_2
+S#define ST_IN_19_GPIO_Port GPIOG
+S#define ST_IN_18_Pin GPIO_PIN_3
+S#define ST_IN_18_GPIO_Port GPIOG
+S#define LAN9252_CS_Pin GPIO_PIN_4
+S#define LAN9252_CS_GPIO_Port GPIOG
+S#define ST_IN_17_Pin GPIO_PIN_5
+S#define ST_IN_17_GPIO_Port GPIOG
+S#define ST_OUT_4_Pin GPIO_PIN_6
+S#define ST_OUT_4_GPIO_Port GPIOG
+S#define ST_OUT_3_Pin GPIO_PIN_7
+S#define ST_OUT_3_GPIO_Port GPIOG
+S#define ST_OUT_2_Pin GPIO_PIN_8
+S#define ST_OUT_2_GPIO_Port GPIOG
+S#define ST_OUT_1_Pin GPIO_PIN_8
+S#define ST_OUT_1_GPIO_Port GPIOC
+S#define ST_IN_8_Pin GPIO_PIN_6
+S#define ST_IN_8_GPIO_Port GPIOD
+S#define ST_IN_7_Pin GPIO_PIN_7
+S#define ST_IN_7_GPIO_Port GPIOD
+S#define ST_IN_6_Pin GPIO_PIN_9
+S#define ST_IN_6_GPIO_Port GPIOG
+S#define ST_IN_5_Pin GPIO_PIN_10
+S#define ST_IN_5_GPIO_Port GPIOG
+S#define ST_IN_1_Pin GPIO_PIN_11
+S#define ST_IN_1_GPIO_Port GPIOG
+S#define ST_IN_2_Pin GPIO_PIN_12
+S#define ST_IN_2_GPIO_Port GPIOG
+S#define ST_IN_3_Pin GPIO_PIN_13
+S#define ST_IN_3_GPIO_Port GPIOG
+S#define ST_IN_4_Pin GPIO_PIN_14
+S#define ST_IN_4_GPIO_Port GPIOG
+S#define POWERON_REMOTEIN_Pin GPIO_PIN_8
+S#define POWERON_REMOTEIN_GPIO_Port GPIOB
+S#define V24V_OUT1_Pin GPIO_PIN_9
+S#define V24V_OUT1_GPIO_Port GPIOB
+S#define POWERON_KEYIN_Pin GPIO_PIN_0
+S#define POWERON_KEYIN_GPIO_Port GPIOE
+S#define OC_PROTECT_Pin GPIO_PIN_1
+S#define OC_PROTECT_GPIO_Port GPIOE
+S/* USER CODE BEGIN Private defines */
+S
+S/* USER CODE END Private defines */
+S
+S#ifdef __cplusplus
+S}
+S#endif
+S
+N#endif /* __MAIN_H */
+L 17 ".\Power\PowerMenu.h" 2
+N#include "ADS1115Driver.h"
+N#include "Command.h"
+L 1 ".\Power\Command.h" 1
+N/**
+N  ******************************************************************************
+N  * @file    Command.h
+N  * @author  Xi Liang/Liu Gui Qing
+N  * @brief   Power Command module driver.
+N  *         
+N  @verbatim
+N  ******************************************************************************
+N  */
+N	
+N#ifndef __COMMAND_H
+S#define __COMMAND_H
+S
+S
+S#include "stm32f4xx_hal.h"
+S#include "data_def.h"
+S#include "PowerMenu.h"
+S
+S#define POWER_COMMAND_TXRX_BUFFER_SIZE 32u
+S
+S#define POWER_COMMAND_HEADER_SIZE (4u)
+S#define POWER_COMMAND_END_SIZE (4u)
+S#define POWER_COMMAND_CMD_SIZE (1u)
+S#define POWER_COMMAND_LENGTH_SIZE (1u)
+S#define POWER_COMMAND_INFO_MAX_SIZE (16u)
+S#define POWER_COMMAND_CRC_SIZE (2u)
+S//#define POWER_COMMAND_DMA_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + \
+S																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+S																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+X
+S																	
+S#define POWER_COMMAND_MAX_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + \
+S																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+S																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+X#define POWER_COMMAND_MAX_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + 																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+S
+S#define SOI 0xFFAAAAFFu
+S#define EOI 0xEE5555EEu
+S
+S#define SM2SU_PERIODIC_TRANSMIT_IN_MS 500u
+S#define SM2SU_PERIODIC_TRANSMIT_TIMEOUT_IN_MS 1000u
+S#define POWER_COMMAND_TRANSMIT_TIMEOUT_IN_MS 500u
+S
+Stypedef struct tag_POWER_COMMAND_PROTOCOL
+S{
+S		uint8_t HEADER[POWER_COMMAND_HEADER_SIZE];
+S		uint8_t CMD;
+S		uint8_t LENGTH;
+S		uint8_t INFO[POWER_COMMAND_INFO_MAX_SIZE];	
+S		uint16_t CRC16;
+S		uint8_t END[POWER_COMMAND_END_SIZE];
+S}POWER_COMMAND_PROTOCOL;
+S
+Stypedef union 
+S{
+S		uint8_t ByteAccess[POWER_COMMAND_MAX_SIZE];
+S		uint16_t WordAccess[POWER_COMMAND_MAX_SIZE >> 1];
+S		uint32_t	LongAccess[POWER_COMMAND_MAX_SIZE >> 2];
+S		POWER_COMMAND_PROTOCOL  ContentDefAccess;
+S}POWER_COMMAND;
+S
+Stypedef struct tag_POWER_COMMAND_RECEIVED 
+S{
+S	uint8_t RequireCode;
+S	POWER_COMMAND PowerCommand;
+S	
+S	
+S}POWER_COMMAND_RECEIVED;
+S
+Stypedef void (*SM2SU_REQ_CALL)(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
+S
+Stypedef struct	tag_SM2SU_REQ_DPCH{
+S	uint8_t	SM2SU_REQ_CD;
+S	SM2SU_REQ_CALL	pFunc;
+S	uint16_t InfoLength;
+S} SM2SU_REQ_DPCH;
+S
+Stypedef uint8_t (*SU2SM_REQ_CALL)(POWER_COMMAND_RECEIVED *pData);
+S
+Stypedef struct	tag_SU2SM_REQ_DPCH{
+S	uint8_t	SU2SM_REQ_CD;
+S	SU2SM_REQ_CALL	pFunc;
+S} SU2SM_REQ_DPCH;
+S
+S//	SM->SU
+S//	require code used by Power_Command_Transmit()
+S#define SM2SU_REQ_CD_PERIODIC_TRANSMISSION 1u
+S#define SM2SU_REQ_CD_REPLY_CONTROL_COMMAND 2u
+S#define SM2SU_REQ_CD_POWER_OFF_REQUIRE 3u
+S#define SM2SU_REQ_CD_REPLY_POWER_OFF_COMMAND 4u
+S#define SM2SU_REQ_CD_REPLY_REBOOT_COMMAND 5u
+S#define SM2SU_REQ_CD_COMPULSORY_POWER_OFF_COMMAND 6u
+S#define SM2SU_REQ_MAX 6u
+S
+S//	SU->SM
+S//	require code used by Power_Command_Receive()
+S#define SU2SM_REQ_CD_PERIODIC_TRANSMISSION_COMMAND 1u
+S#define SU2SM_REQ_CD_CONTROL_COMMAND 2u
+S#define SU2SM_REQ_CD_REPLY_POWER_OFF_REQUIRE 3u
+S#define SU2SM_REQ_CD_POWER_OFF_COMMAND 4u
+S#define SU2SM_REQ_CD_REBOOT_COMMAND 5u
+S#define SU2SM_REQ_CD_REPLY_COMPULSORY_POWER_OFF_COMMAND 6u
+S#define SU2SM_REQ_MAX 6u
+S
+S
+Sextern POWER_COMMAND_RECEIVED PowerCommandReceived;
+Sextern uint8_t PowerCommandRxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
+Sextern uint8_t PowerCommandTxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
+S
+Sextern UART_HandleTypeDef * Uart_HandlePtr;
+Sextern DMA_HandleTypeDef * Udma_UartRx_HandlePtr;
+Sextern DMA_HandleTypeDef * Udma_Uarttx_HandlePtr;
+S
+SHAL_StatusTypeDef Power_Command_Transmit(uint8_t ReqCode);
+Svoid Power_Command_Initilization(void);
+Svoid Power_Command_Main_Loop(void);
+Svoid SU2SM_RxIdleEventCallback(UART_HandleTypeDef *huart, uint16_t Size);
+S
+N#endif
+L 19 ".\Power\PowerMenu.h" 2
+N
+N
+N
+N
+Nvoid close_all_dr_save_state(void);
+Nvoid first_open_dr_save_state(void);
+Nvoid Reload_State_All_Value(void);
+Nvoid Reload_Config_All_Value(void);
+Nvoid work_mode_operation(void);
+Nstatic void PowerOnCharge(void);
+Nvoid force_shutdown(uint8_t nxt_mode);
+Nvoid softwarepoweroff_mode_operation(void);
+Nvoid shutdown_mode_operation(void);
+N
+N
+N
+N#endif
+L 18 ".\Power\Command.h" 2
+N
+N#define POWER_COMMAND_TXRX_BUFFER_SIZE 32u
+N
+N#define POWER_COMMAND_HEADER_SIZE (4u)
+N#define POWER_COMMAND_END_SIZE (4u)
+N#define POWER_COMMAND_CMD_SIZE (1u)
+N#define POWER_COMMAND_LENGTH_SIZE (1u)
+N#define POWER_COMMAND_INFO_MAX_SIZE (16u)
+N#define POWER_COMMAND_CRC_SIZE (2u)
+N//#define POWER_COMMAND_DMA_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + \
+N																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+N																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+X
+N																	
+N#define POWER_COMMAND_MAX_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + \
+N																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+N																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+X#define POWER_COMMAND_MAX_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + 																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+N
+N#define SOI 0xFFAAAAFFu
+N#define EOI 0xEE5555EEu
+N
+N#define SM2SU_PERIODIC_TRANSMIT_IN_MS 500u
+N#define SM2SU_PERIODIC_TRANSMIT_TIMEOUT_IN_MS 1000u
+N#define POWER_COMMAND_TRANSMIT_TIMEOUT_IN_MS 500u
+N
+Ntypedef struct tag_POWER_COMMAND_PROTOCOL
+N{
+N		uint8_t HEADER[POWER_COMMAND_HEADER_SIZE];
+X		uint8_t HEADER[(4u)];
+N		uint8_t CMD;
+N		uint8_t LENGTH;
+N		uint8_t INFO[POWER_COMMAND_INFO_MAX_SIZE];	
+X		uint8_t INFO[(16u)];	
+N		uint16_t CRC16;
+N		uint8_t END[POWER_COMMAND_END_SIZE];
+X		uint8_t END[(4u)];
+N}POWER_COMMAND_PROTOCOL;
+N
+Ntypedef union 
+N{
+N		uint8_t ByteAccess[POWER_COMMAND_MAX_SIZE];
+X		uint8_t ByteAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u))];
+N		uint16_t WordAccess[POWER_COMMAND_MAX_SIZE >> 1];
+X		uint16_t WordAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u)) >> 1];
+N		uint32_t	LongAccess[POWER_COMMAND_MAX_SIZE >> 2];
+X		uint32_t	LongAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u)) >> 2];
+N		POWER_COMMAND_PROTOCOL  ContentDefAccess;
+N}POWER_COMMAND;
+N
+Ntypedef struct tag_POWER_COMMAND_RECEIVED 
+N{
+N	uint8_t RequireCode;
+N	POWER_COMMAND PowerCommand;
+N	
+N	
+N}POWER_COMMAND_RECEIVED;
+N
+Ntypedef void (*SM2SU_REQ_CALL)(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
+N
+Ntypedef struct	tag_SM2SU_REQ_DPCH{
+N	uint8_t	SM2SU_REQ_CD;
+N	SM2SU_REQ_CALL	pFunc;
+N	uint16_t InfoLength;
+N} SM2SU_REQ_DPCH;
+N
+Ntypedef uint8_t (*SU2SM_REQ_CALL)(POWER_COMMAND_RECEIVED *pData);
+N
+Ntypedef struct	tag_SU2SM_REQ_DPCH{
+N	uint8_t	SU2SM_REQ_CD;
+N	SU2SM_REQ_CALL	pFunc;
+N} SU2SM_REQ_DPCH;
+N
+N//	SM->SU
+N//	require code used by Power_Command_Transmit()
+N#define SM2SU_REQ_CD_PERIODIC_TRANSMISSION 1u
+N#define SM2SU_REQ_CD_REPLY_CONTROL_COMMAND 2u
+N#define SM2SU_REQ_CD_POWER_OFF_REQUIRE 3u
+N#define SM2SU_REQ_CD_REPLY_POWER_OFF_COMMAND 4u
+N#define SM2SU_REQ_CD_REPLY_REBOOT_COMMAND 5u
+N#define SM2SU_REQ_CD_COMPULSORY_POWER_OFF_COMMAND 6u
+N#define SM2SU_REQ_MAX 6u
+N
+N//	SU->SM
+N//	require code used by Power_Command_Receive()
+N#define SU2SM_REQ_CD_PERIODIC_TRANSMISSION_COMMAND 1u
+N#define SU2SM_REQ_CD_CONTROL_COMMAND 2u
+N#define SU2SM_REQ_CD_REPLY_POWER_OFF_REQUIRE 3u
+N#define SU2SM_REQ_CD_POWER_OFF_COMMAND 4u
+N#define SU2SM_REQ_CD_REBOOT_COMMAND 5u
+N#define SU2SM_REQ_CD_REPLY_COMPULSORY_POWER_OFF_COMMAND 6u
+N#define SU2SM_REQ_MAX 6u
+N
+N
+Nextern POWER_COMMAND_RECEIVED PowerCommandReceived;
+Nextern uint8_t PowerCommandRxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
+Xextern uint8_t PowerCommandRxBuffer[32u];
+Nextern uint8_t PowerCommandTxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
+Xextern uint8_t PowerCommandTxBuffer[32u];
+N
+Nextern UART_HandleTypeDef * Uart_HandlePtr;
+Nextern DMA_HandleTypeDef * Udma_UartRx_HandlePtr;
+Nextern DMA_HandleTypeDef * Udma_Uarttx_HandlePtr;
+N
+NHAL_StatusTypeDef Power_Command_Transmit(uint8_t ReqCode);
+Nvoid Power_Command_Initilization(void);
+Nvoid Power_Command_Main_Loop(void);
+Nvoid SU2SM_RxIdleEventCallback(UART_HandleTypeDef *huart, uint16_t Size);
+N
+N#endif
+L 40 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 2
 N/* USER CODE END Includes */
 N
 N/* Exported types ------------------------------------------------------------*/
@@ -50607,8 +51253,8 @@ N#define ST_IN_18_Pin GPIO_PIN_3
 N#define ST_IN_18_GPIO_Port GPIOG
 N#define LAN9252_CS_Pin GPIO_PIN_4
 N#define LAN9252_CS_GPIO_Port GPIOG
-N#define ST_IN_1_Pin GPIO_PIN_5
-N#define ST_IN_1_GPIO_Port GPIOG
+N#define ST_IN_17_Pin GPIO_PIN_5
+N#define ST_IN_17_GPIO_Port GPIOG
 N#define ST_OUT_4_Pin GPIO_PIN_6
 N#define ST_OUT_4_GPIO_Port GPIOG
 N#define ST_OUT_3_Pin GPIO_PIN_7
@@ -50625,8 +51271,8 @@ N#define ST_IN_6_Pin GPIO_PIN_9
 N#define ST_IN_6_GPIO_Port GPIOG
 N#define ST_IN_5_Pin GPIO_PIN_10
 N#define ST_IN_5_GPIO_Port GPIOG
-N#define ST_IN_1G11_Pin GPIO_PIN_11
-N#define ST_IN_1G11_GPIO_Port GPIOG
+N#define ST_IN_1_Pin GPIO_PIN_11
+N#define ST_IN_1_GPIO_Port GPIOG
 N#define ST_IN_2_Pin GPIO_PIN_12
 N#define ST_IN_2_GPIO_Port GPIOG
 N#define ST_IN_3_Pin GPIO_PIN_13
@@ -50662,6 +51308,7 @@ N
 Nvoid PowerOnKeyInState(void);
 Nvoid PowerOnRemoteKeyInState(void);
 Nvoid PowerOffKeyInState(void);
+Nvoid PowerOffREMOTEKeyInState(void);
 Nvoid KeyScan(uint8_t mode);
 N
 N
@@ -50851,6 +51498,63 @@ N			break;
 N	}
 N}
 N
+Nuint32_t POWEROFFREMOTE_KEYIN_TIMER = 0u;
+Nuint8_t POWEROFFREMOTE_KEYIN_STATE = 0u;
+Nvoid PowerOffREMOTEKeyInState(void)
+N{
+N	uint32_t now = 0u;
+N	static uint32_t elapse = 0u;	
+N	
+N	switch(POWEROFFREMOTE_KEYIN_STATE)
+N	{
+N		case 0u: 
+N			if(HAL_GPIO_ReadPin(POWEROFF_REMOTEIN_GPIO_Port,POWEROFF_REMOTEIN_Pin) == GPIO_PIN_RESET)
+X			if(HAL_GPIO_ReadPin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1000UL)),((uint16_t)0x8000)) == GPIO_PIN_RESET)
+N			{
+N				POWEROFFREMOTE_KEYIN_STATE = 1u;
+N				POWEROFFREMOTE_KEYIN_TIMER = HAL_GetTick();
+N			}
+N			break;
+N		case 1u:
+N			if(HAL_GPIO_ReadPin(POWEROFF_REMOTEIN_GPIO_Port,POWEROFF_REMOTEIN_Pin) == GPIO_PIN_RESET)
+X			if(HAL_GPIO_ReadPin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1000UL)),((uint16_t)0x8000)) == GPIO_PIN_RESET)
+N			{
+N				now = HAL_GetTick();
+N		  	elapse = now - POWEROFFREMOTE_KEYIN_TIMER;
+N				POWEROFFREMOTE_KEYIN_STATE = 2u;
+N			}
+N			else
+N			{
+N			  POWEROFFREMOTE_KEYIN_STATE = 0u;
+N			}
+N			break;
+N		case 2u:
+N			if(elapse >= 3000u)
+N			{
+N			  POWEROFFREMOTE_KEYIN_STATE = 3u;
+N			}
+N			else
+N			{
+N			  POWEROFFREMOTE_KEYIN_STATE = 1u;
+N			}
+N			break;
+N		case 3u:
+N		  if(HAL_GPIO_ReadPin(POWEROFF_REMOTEIN_GPIO_Port,POWEROFF_REMOTEIN_Pin) == GPIO_PIN_SET)
+X		  if(HAL_GPIO_ReadPin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1000UL)),((uint16_t)0x8000)) == GPIO_PIN_SET)
+N			{
+N				power_manage.work_mode = POWER_STATUS_SHUTDWON;
+N				POWEROFFREMOTE_KEYIN_STATE = 0u;
+N			}
+N			else
+N			{
+N			  POWEROFFREMOTE_KEYIN_STATE = 2u;
+N			}
+N			break;	
+N		default:
+N			break;
+N	}
+N}
+N
 N
 Nvoid KeyScan(uint8_t mode)
 N{
@@ -50864,6 +51568,7 @@ N		   break;
 N		case POWER_STATUS_48VNOSTART: 
 N		case POWER_STATUS_48VSTART:
 N			 PowerOffKeyInState();
+N		   PowerOffREMOTEKeyInState();
 N			break;
 N		default:
 N			break;

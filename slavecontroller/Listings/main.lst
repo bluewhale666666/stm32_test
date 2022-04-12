@@ -281,7 +281,7 @@ N#define  USE_HAL_SPDIFRX_REGISTER_CALLBACKS     0U /* SPDIFRX register callback
 N#define  USE_HAL_SMBUS_REGISTER_CALLBACKS       0U /* SMBUS register callback disabled     */
 N#define  USE_HAL_SPI_REGISTER_CALLBACKS         0U /* SPI register callback disabled       */
 N#define  USE_HAL_TIM_REGISTER_CALLBACKS         0U /* TIM register callback disabled       */
-N#define  USE_HAL_UART_REGISTER_CALLBACKS        0U /* UART register callback disabled      */
+N#define  USE_HAL_UART_REGISTER_CALLBACKS        1U /* UART register callback enabled      */
 N#define  USE_HAL_USART_REGISTER_CALLBACKS       0U /* USART register callback disabled     */
 N#define  USE_HAL_WWDG_REGISTER_CALLBACKS        0U /* WWDG register callback disabled      */
 N
@@ -42743,52 +42743,52 @@ N  __IO uint32_t                 ErrorCode;        /*!< UART Error code         
 X  volatile uint32_t                 ErrorCode;         
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S  void (* TxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);        /*!< UART Tx Half Complete Callback        */
-S  void (* TxCpltCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Tx Complete Callback             */
-S  void (* RxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);        /*!< UART Rx Half Complete Callback        */
-S  void (* RxCpltCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Rx Complete Callback             */
-S  void (* ErrorCallback)(struct __UART_HandleTypeDef *huart);             /*!< UART Error Callback                   */
-S  void (* AbortCpltCallback)(struct __UART_HandleTypeDef *huart);         /*!< UART Abort Complete Callback          */
-S  void (* AbortTransmitCpltCallback)(struct __UART_HandleTypeDef *huart); /*!< UART Abort Transmit Complete Callback */
-S  void (* AbortReceiveCpltCallback)(struct __UART_HandleTypeDef *huart);  /*!< UART Abort Receive Complete Callback  */
-S  void (* WakeupCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Wakeup Callback                  */
-S  void (* RxEventCallback)(struct __UART_HandleTypeDef *huart, uint16_t Pos); /*!< UART Reception Event Callback     */
-S
-S  void (* MspInitCallback)(struct __UART_HandleTypeDef *huart);           /*!< UART Msp Init callback                */
-S  void (* MspDeInitCallback)(struct __UART_HandleTypeDef *huart);         /*!< UART Msp DeInit callback              */
+X#if (1U == 1)
+N  void (* TxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);        /*!< UART Tx Half Complete Callback        */
+N  void (* TxCpltCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Tx Complete Callback             */
+N  void (* RxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);        /*!< UART Rx Half Complete Callback        */
+N  void (* RxCpltCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Rx Complete Callback             */
+N  void (* ErrorCallback)(struct __UART_HandleTypeDef *huart);             /*!< UART Error Callback                   */
+N  void (* AbortCpltCallback)(struct __UART_HandleTypeDef *huart);         /*!< UART Abort Complete Callback          */
+N  void (* AbortTransmitCpltCallback)(struct __UART_HandleTypeDef *huart); /*!< UART Abort Transmit Complete Callback */
+N  void (* AbortReceiveCpltCallback)(struct __UART_HandleTypeDef *huart);  /*!< UART Abort Receive Complete Callback  */
+N  void (* WakeupCallback)(struct __UART_HandleTypeDef *huart);            /*!< UART Wakeup Callback                  */
+N  void (* RxEventCallback)(struct __UART_HandleTypeDef *huart, uint16_t Pos); /*!< UART Reception Event Callback     */
+N
+N  void (* MspInitCallback)(struct __UART_HandleTypeDef *huart);           /*!< UART Msp Init callback                */
+N  void (* MspDeInitCallback)(struct __UART_HandleTypeDef *huart);         /*!< UART Msp DeInit callback              */
 N#endif  /* USE_HAL_UART_REGISTER_CALLBACKS */
 N
 N} UART_HandleTypeDef;
 N
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S/**
-S  * @brief  HAL UART Callback ID enumeration definition
-S  */
-Stypedef enum
-S{
-S  HAL_UART_TX_HALFCOMPLETE_CB_ID         = 0x00U,    /*!< UART Tx Half Complete Callback ID        */
-S  HAL_UART_TX_COMPLETE_CB_ID             = 0x01U,    /*!< UART Tx Complete Callback ID             */
-S  HAL_UART_RX_HALFCOMPLETE_CB_ID         = 0x02U,    /*!< UART Rx Half Complete Callback ID        */
-S  HAL_UART_RX_COMPLETE_CB_ID             = 0x03U,    /*!< UART Rx Complete Callback ID             */
-S  HAL_UART_ERROR_CB_ID                   = 0x04U,    /*!< UART Error Callback ID                   */
-S  HAL_UART_ABORT_COMPLETE_CB_ID          = 0x05U,    /*!< UART Abort Complete Callback ID          */
-S  HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID = 0x06U,    /*!< UART Abort Transmit Complete Callback ID */
-S  HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID  = 0x07U,    /*!< UART Abort Receive Complete Callback ID  */
-S  HAL_UART_WAKEUP_CB_ID                  = 0x08U,    /*!< UART Wakeup Callback ID                  */
-S
-S  HAL_UART_MSPINIT_CB_ID                 = 0x0BU,    /*!< UART MspInit callback ID                 */
-S  HAL_UART_MSPDEINIT_CB_ID               = 0x0CU     /*!< UART MspDeInit callback ID               */
-S
-S} HAL_UART_CallbackIDTypeDef;
-S
-S/**
-S  * @brief  HAL UART Callback pointer definition
-S  */
-Stypedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer to an UART callback function */
-Stypedef  void (*pUART_RxEventCallbackTypeDef)(struct __UART_HandleTypeDef *huart, uint16_t Pos);   /*!< pointer to a UART Rx Event specific callback function */
-S
+X#if (1U == 1)
+N/**
+N  * @brief  HAL UART Callback ID enumeration definition
+N  */
+Ntypedef enum
+N{
+N  HAL_UART_TX_HALFCOMPLETE_CB_ID         = 0x00U,    /*!< UART Tx Half Complete Callback ID        */
+N  HAL_UART_TX_COMPLETE_CB_ID             = 0x01U,    /*!< UART Tx Complete Callback ID             */
+N  HAL_UART_RX_HALFCOMPLETE_CB_ID         = 0x02U,    /*!< UART Rx Half Complete Callback ID        */
+N  HAL_UART_RX_COMPLETE_CB_ID             = 0x03U,    /*!< UART Rx Complete Callback ID             */
+N  HAL_UART_ERROR_CB_ID                   = 0x04U,    /*!< UART Error Callback ID                   */
+N  HAL_UART_ABORT_COMPLETE_CB_ID          = 0x05U,    /*!< UART Abort Complete Callback ID          */
+N  HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID = 0x06U,    /*!< UART Abort Transmit Complete Callback ID */
+N  HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID  = 0x07U,    /*!< UART Abort Receive Complete Callback ID  */
+N  HAL_UART_WAKEUP_CB_ID                  = 0x08U,    /*!< UART Wakeup Callback ID                  */
+N
+N  HAL_UART_MSPINIT_CB_ID                 = 0x0BU,    /*!< UART MspInit callback ID                 */
+N  HAL_UART_MSPDEINIT_CB_ID               = 0x0CU     /*!< UART MspDeInit callback ID               */
+N
+N} HAL_UART_CallbackIDTypeDef;
+N
+N/**
+N  * @brief  HAL UART Callback pointer definition
+N  */
+Ntypedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);  /*!< pointer to an UART callback function */
+Ntypedef  void (*pUART_RxEventCallbackTypeDef)(struct __UART_HandleTypeDef *huart, uint16_t Pos);   /*!< pointer to a UART Rx Event specific callback function */
+N
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N
 N/**
@@ -42810,8 +42810,8 @@ N#define HAL_UART_ERROR_FE                0x00000004U   /*!< Frame error        
 N#define HAL_UART_ERROR_ORE               0x00000008U   /*!< Overrun error       */
 N#define HAL_UART_ERROR_DMA               0x00000010U   /*!< DMA transfer error  */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S#define  HAL_UART_ERROR_INVALID_CALLBACK 0x00000020U   /*!< Invalid Callback error  */
+X#if (1U == 1)
+N#define  HAL_UART_ERROR_INVALID_CALLBACK 0x00000020U   /*!< Invalid Callback error  */
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N/**
 N  * @}
@@ -42970,19 +42970,19 @@ N  *         (USART,UART availability and x,y values depending on device).
 N  * @retval None
 N  */
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-S#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                   \
-S                                                       (__HANDLE__)->gState = HAL_UART_STATE_RESET;      \
-S                                                       (__HANDLE__)->RxState = HAL_UART_STATE_RESET;     \
-S                                                       (__HANDLE__)->MspInitCallback = NULL;             \
-S                                                       (__HANDLE__)->MspDeInitCallback = NULL;           \
-S                                                     } while(0U)
-X#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                                                                          (__HANDLE__)->gState = HAL_UART_STATE_RESET;                                                             (__HANDLE__)->RxState = HAL_UART_STATE_RESET;                                                            (__HANDLE__)->MspInitCallback = NULL;                                                                    (__HANDLE__)->MspDeInitCallback = NULL;                                                                } while(0U)
-N#else
+X#if (1U == 1)
 N#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                   \
 N                                                       (__HANDLE__)->gState = HAL_UART_STATE_RESET;      \
 N                                                       (__HANDLE__)->RxState = HAL_UART_STATE_RESET;     \
+N                                                       (__HANDLE__)->MspInitCallback = NULL;             \
+N                                                       (__HANDLE__)->MspDeInitCallback = NULL;           \
 N                                                     } while(0U)
+X#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                                                                          (__HANDLE__)->gState = HAL_UART_STATE_RESET;                                                             (__HANDLE__)->RxState = HAL_UART_STATE_RESET;                                                            (__HANDLE__)->MspInitCallback = NULL;                                                                    (__HANDLE__)->MspDeInitCallback = NULL;                                                                } while(0U)
+N#else
+S#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                   \
+S                                                       (__HANDLE__)->gState = HAL_UART_STATE_RESET;      \
+S                                                       (__HANDLE__)->RxState = HAL_UART_STATE_RESET;     \
+S                                                     } while(0U)
 X#define __HAL_UART_RESET_HANDLE_STATE(__HANDLE__)  do{                                                                                                          (__HANDLE__)->gState = HAL_UART_STATE_RESET;                                                             (__HANDLE__)->RxState = HAL_UART_STATE_RESET;                                                          } while(0U)
 N#endif /*USE_HAL_UART_REGISTER_CALLBACKS */
 N
@@ -43278,13 +43278,13 @@ Nvoid HAL_UART_MspDeInit(UART_HandleTypeDef *huart);
 N
 N/* Callbacks Register/UnRegister functions  ***********************************/
 N#if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
-X#if (0U == 1)
-SHAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
-S                                            pUART_CallbackTypeDef pCallback);
-SHAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID);
-S
-SHAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback);
-SHAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart);
+X#if (1U == 1)
+NHAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
+N                                            pUART_CallbackTypeDef pCallback);
+NHAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID);
+N
+NHAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback);
+NHAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart);
 N#endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 N
 N/**
@@ -50386,162 +50386,6 @@ N/*ET9300 Project Handler :(#if EOE_SUPPORTED) lines 348 to 361 deleted*/
 N
 N#undef PROTO
 L 38 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 2
-N
-N/* USER CODE END Includes */
-N
-N/* Exported types ------------------------------------------------------------*/
-N/* USER CODE BEGIN ET */
-N
-N/* USER CODE END ET */
-N
-N/* Exported constants --------------------------------------------------------*/
-N/* USER CODE BEGIN EC */
-N
-N/* USER CODE END EC */
-N
-N/* Exported macro ------------------------------------------------------------*/
-N/* USER CODE BEGIN EM */
-N
-N/* USER CODE END EM */
-N
-N/* Exported functions prototypes ---------------------------------------------*/
-Nvoid Error_Handler(void);
-N
-N/* USER CODE BEGIN EFP */
-N
-N/* USER CODE END EFP */
-N
-N/* Private defines -----------------------------------------------------------*/
-N#define SYNC0_Pin GPIO_PIN_2
-N#define SYNC0_GPIO_Port GPIOE
-N#define SYNC0_EXTI_IRQn EXTI2_IRQn
-N#define SYNC1_Pin GPIO_PIN_3
-N#define SYNC1_GPIO_Port GPIOE
-N#define SYNC1_EXTI_IRQn EXTI3_IRQn
-N#define AI_IU_SW1_Pin GPIO_PIN_6
-N#define AI_IU_SW1_GPIO_Port GPIOE
-N#define V24V_OUT4_Pin GPIO_PIN_2
-N#define V24V_OUT4_GPIO_Port GPIOF
-N#define LED6_Pin GPIO_PIN_3
-N#define LED6_GPIO_Port GPIOF
-N#define PHY_RESET_Pin GPIO_PIN_4
-N#define PHY_RESET_GPIO_Port GPIOF
-N#define ET_RESETN_Pin GPIO_PIN_5
-N#define ET_RESETN_GPIO_Port GPIOF
-N#define LED3_Pin GPIO_PIN_8
-N#define LED3_GPIO_Port GPIOF
-N#define LED4_Pin GPIO_PIN_9
-N#define LED4_GPIO_Port GPIOF
-N#define LED5_Pin GPIO_PIN_10
-N#define LED5_GPIO_Port GPIOF
-N#define IRQ_Pin GPIO_PIN_1
-N#define IRQ_GPIO_Port GPIOA
-N#define IRQ_EXTI_IRQn EXTI1_IRQn
-N#define RS485_RE_Pin GPIO_PIN_4
-N#define RS485_RE_GPIO_Port GPIOA
-N#define LED2_Pin GPIO_PIN_4
-N#define LED2_GPIO_Port GPIOC
-N#define LED1_Pin GPIO_PIN_5
-N#define LED1_GPIO_Port GPIOC
-N#define AI_IU_SW2_Pin GPIO_PIN_1
-N#define AI_IU_SW2_GPIO_Port GPIOB
-N#define SAFE_48V_SWITCH_Pin GPIO_PIN_11
-N#define SAFE_48V_SWITCH_GPIO_Port GPIOF
-N#define POWER24V_ON_Pin GPIO_PIN_12
-N#define POWER24V_ON_GPIO_Port GPIOF
-N#define ES_SHUTDOWN_Pin GPIO_PIN_13
-N#define ES_SHUTDOWN_GPIO_Port GPIOF
-N#define ACPower_OK_Pin GPIO_PIN_1
-N#define ACPower_OK_GPIO_Port GPIOG
-N#define ST_OUT_24_Pin GPIO_PIN_10
-N#define ST_OUT_24_GPIO_Port GPIOE
-N#define ST_OUT_23_Pin GPIO_PIN_11
-N#define ST_OUT_23_GPIO_Port GPIOE
-N#define ST_OUT_22_Pin GPIO_PIN_12
-N#define ST_OUT_22_GPIO_Port GPIOE
-N#define ST_OUT_20_Pin GPIO_PIN_13
-N#define ST_OUT_20_GPIO_Port GPIOE
-N#define ST_OUT_21_Pin GPIO_PIN_14
-N#define ST_OUT_21_GPIO_Port GPIOE
-N#define POWEROFF_REMOTEIN_Pin GPIO_PIN_15
-N#define POWEROFF_REMOTEIN_GPIO_Port GPIOE
-N#define ST_OUT_19_Pin GPIO_PIN_12
-N#define ST_OUT_19_GPIO_Port GPIOB
-N#define ST_OUT_18_Pin GPIO_PIN_13
-N#define ST_OUT_18_GPIO_Port GPIOB
-N#define ST_OUT_17_Pin GPIO_PIN_14
-N#define ST_OUT_17_GPIO_Port GPIOB
-N#define ST_OUT_8_Pin GPIO_PIN_15
-N#define ST_OUT_8_GPIO_Port GPIOB
-N#define ST_OUT_7_Pin GPIO_PIN_8
-N#define ST_OUT_7_GPIO_Port GPIOD
-N#define ST_OUT_6_Pin GPIO_PIN_9
-N#define ST_OUT_6_GPIO_Port GPIOD
-N#define ST_OUT_5_Pin GPIO_PIN_10
-N#define ST_OUT_5_GPIO_Port GPIOD
-N#define ST_IN_23_Pin GPIO_PIN_11
-N#define ST_IN_23_GPIO_Port GPIOD
-N#define ST_IN_22_Pin GPIO_PIN_12
-N#define ST_IN_22_GPIO_Port GPIOD
-N#define ST_IN_21_Pin GPIO_PIN_13
-N#define ST_IN_21_GPIO_Port GPIOD
-N#define ST_IN_24_Pin GPIO_PIN_14
-N#define ST_IN_24_GPIO_Port GPIOD
-N#define ST_IN_20_Pin GPIO_PIN_15
-N#define ST_IN_20_GPIO_Port GPIOD
-N#define ST_IN_19_Pin GPIO_PIN_2
-N#define ST_IN_19_GPIO_Port GPIOG
-N#define ST_IN_18_Pin GPIO_PIN_3
-N#define ST_IN_18_GPIO_Port GPIOG
-N#define LAN9252_CS_Pin GPIO_PIN_4
-N#define LAN9252_CS_GPIO_Port GPIOG
-N#define ST_IN_1_Pin GPIO_PIN_5
-N#define ST_IN_1_GPIO_Port GPIOG
-N#define ST_OUT_4_Pin GPIO_PIN_6
-N#define ST_OUT_4_GPIO_Port GPIOG
-N#define ST_OUT_3_Pin GPIO_PIN_7
-N#define ST_OUT_3_GPIO_Port GPIOG
-N#define ST_OUT_2_Pin GPIO_PIN_8
-N#define ST_OUT_2_GPIO_Port GPIOG
-N#define ST_OUT_1_Pin GPIO_PIN_8
-N#define ST_OUT_1_GPIO_Port GPIOC
-N#define ST_IN_8_Pin GPIO_PIN_6
-N#define ST_IN_8_GPIO_Port GPIOD
-N#define ST_IN_7_Pin GPIO_PIN_7
-N#define ST_IN_7_GPIO_Port GPIOD
-N#define ST_IN_6_Pin GPIO_PIN_9
-N#define ST_IN_6_GPIO_Port GPIOG
-N#define ST_IN_5_Pin GPIO_PIN_10
-N#define ST_IN_5_GPIO_Port GPIOG
-N#define ST_IN_1G11_Pin GPIO_PIN_11
-N#define ST_IN_1G11_GPIO_Port GPIOG
-N#define ST_IN_2_Pin GPIO_PIN_12
-N#define ST_IN_2_GPIO_Port GPIOG
-N#define ST_IN_3_Pin GPIO_PIN_13
-N#define ST_IN_3_GPIO_Port GPIOG
-N#define ST_IN_4_Pin GPIO_PIN_14
-N#define ST_IN_4_GPIO_Port GPIOG
-N#define POWERON_REMOTEIN_Pin GPIO_PIN_8
-N#define POWERON_REMOTEIN_GPIO_Port GPIOB
-N#define V24V_OUT1_Pin GPIO_PIN_9
-N#define V24V_OUT1_GPIO_Port GPIOB
-N#define POWERON_KEYIN_Pin GPIO_PIN_0
-N#define POWERON_KEYIN_GPIO_Port GPIOE
-N#define OC_PROTECT_Pin GPIO_PIN_1
-N#define OC_PROTECT_GPIO_Port GPIOE
-N/* USER CODE BEGIN Private defines */
-N
-N/* USER CODE END Private defines */
-N
-N#ifdef __cplusplus
-S}
-N#endif
-N
-N#endif /* __MAIN_H */
-L 21 "RTE\Device\STM32F407ZETx\STCubeGenerated\Src\main.c" 2
-N
-N/* Private includes ----------------------------------------------------------*/
-N/* USER CODE BEGIN Includes */
 N#include "ADS1115Driver.h"
 L 1 ".\Power\ADS1115Driver.h" 1
 N/**
@@ -50573,7 +50417,7 @@ N
 N#ifndef __DATA_DEF_H
 N#define __DATA_DEF_H
 N
-N#include "stm32f4xx_hal.h"
+N#include <stdint.h>
 N
 N
 N
@@ -50652,6 +50496,9 @@ N	uint16_t ai1_i;
 N	uint16_t ai2_u;
 N	uint16_t ai2_i;
 N	
+N	uint8_t AI_SW1;
+N	uint8_t AI_SW2;
+N	
 N	STATE_INFORMATION_H p_state_h;
 N	STATE_INFORMATION_L p_state_l;
 N	FAULT_INFORMATION_H p_breakdown_h;
@@ -50665,9 +50512,8 @@ N	POWER_STATUS_IDLE = 0x00u,
 N	POWER_STATUS_POWERON,
 N	POWER_STATUS_48VNOSTART,
 N	POWER_STATUS_48VSTART,
-N	POWER_STATUS_REMOTEOFF,
-N	POWER_STATUS_POWEROFF,
 N	POWER_STATUS_SHUTDWON,
+N	POWER_STATUS_SOFTWAREPOWEROFF,
 N	POWER_STATUS_FAULT,
 N}POWER_STATUS_TYPE;
 N
@@ -50821,7 +50667,7 @@ Nvoid ADS1115_Driver_Initilization(void);
 Nvoid ADS1115_Driver_MainLoop(void);
 N
 N#endif
-L 25 "RTE\Device\STM32F407ZETx\STCubeGenerated\Src\main.c" 2
+L 39 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 2
 N#include "Command.h"
 L 1 ".\Power\Command.h" 1
 N/**
@@ -50839,6 +50685,358 @@ N#define __COMMAND_H
 N
 N
 N#include "stm32f4xx_hal.h"
+N#include "data_def.h"
+N#include "PowerMenu.h"
+L 1 ".\Power\PowerMenu.h" 1
+N/**
+N  ******************************************************************************
+N  * @file    PowerMenu.h
+N  * @author  Xi Liang/Liu Gui Qing
+N  * @brief   Power Menu Driver.
+N  *         
+N  @verbatim
+N  ******************************************************************************
+N  */
+N	
+N#ifndef __POWERMENU_H
+N#define __POWERMENU_H
+N
+N
+N#include "data_def.h"
+N#include "main.h"
+L 1 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 1
+N/* USER CODE BEGIN Header */
+N/**
+N  ******************************************************************************
+N  * @file           : main.h
+N  * @brief          : Header for main.c file.
+N  *                   This file contains the common defines of the application.
+N  ******************************************************************************
+N  * @attention
+N  *
+N  * Copyright (c) 2022 STMicroelectronics.
+N  * All rights reserved.
+N  *
+N  * This software is licensed under terms that can be found in the LICENSE file
+N  * in the root directory of this software component.
+N  * If no LICENSE file comes with this software, it is provided AS-IS.
+N  *
+N  ******************************************************************************
+N  */
+N/* USER CODE END Header */
+N
+N/* Define to prevent recursive inclusion -------------------------------------*/
+N#ifndef __MAIN_H
+S#define __MAIN_H
+S
+S#ifdef __cplusplus
+Sextern "C" {
+S#endif
+S
+S/* Includes ------------------------------------------------------------------*/
+S#include "stm32f4xx_hal.h"
+S
+S/* Private includes ----------------------------------------------------------*/
+S/* USER CODE BEGIN Includes */
+S#include "SPIDriver.h"
+S#include "9252_HW.h"
+S#include "ecatappl.h"
+S#include "applInterface.h"
+S#include "ADS1115Driver.h"
+S#include "Command.h"
+S/* USER CODE END Includes */
+S
+S/* Exported types ------------------------------------------------------------*/
+S/* USER CODE BEGIN ET */
+S
+S/* USER CODE END ET */
+S
+S/* Exported constants --------------------------------------------------------*/
+S/* USER CODE BEGIN EC */
+S
+S/* USER CODE END EC */
+S
+S/* Exported macro ------------------------------------------------------------*/
+S/* USER CODE BEGIN EM */
+S
+S/* USER CODE END EM */
+S
+S/* Exported functions prototypes ---------------------------------------------*/
+Svoid Error_Handler(void);
+S
+S/* USER CODE BEGIN EFP */
+S
+S/* USER CODE END EFP */
+S
+S/* Private defines -----------------------------------------------------------*/
+S#define SYNC0_Pin GPIO_PIN_2
+S#define SYNC0_GPIO_Port GPIOE
+S#define SYNC0_EXTI_IRQn EXTI2_IRQn
+S#define SYNC1_Pin GPIO_PIN_3
+S#define SYNC1_GPIO_Port GPIOE
+S#define SYNC1_EXTI_IRQn EXTI3_IRQn
+S#define AI_IU_SW1_Pin GPIO_PIN_6
+S#define AI_IU_SW1_GPIO_Port GPIOE
+S#define V24V_OUT4_Pin GPIO_PIN_2
+S#define V24V_OUT4_GPIO_Port GPIOF
+S#define LED6_Pin GPIO_PIN_3
+S#define LED6_GPIO_Port GPIOF
+S#define PHY_RESET_Pin GPIO_PIN_4
+S#define PHY_RESET_GPIO_Port GPIOF
+S#define ET_RESETN_Pin GPIO_PIN_5
+S#define ET_RESETN_GPIO_Port GPIOF
+S#define LED3_Pin GPIO_PIN_8
+S#define LED3_GPIO_Port GPIOF
+S#define LED4_Pin GPIO_PIN_9
+S#define LED4_GPIO_Port GPIOF
+S#define LED5_Pin GPIO_PIN_10
+S#define LED5_GPIO_Port GPIOF
+S#define IRQ_Pin GPIO_PIN_1
+S#define IRQ_GPIO_Port GPIOA
+S#define IRQ_EXTI_IRQn EXTI1_IRQn
+S#define RS485_RE_Pin GPIO_PIN_4
+S#define RS485_RE_GPIO_Port GPIOA
+S#define LED2_Pin GPIO_PIN_4
+S#define LED2_GPIO_Port GPIOC
+S#define LED1_Pin GPIO_PIN_5
+S#define LED1_GPIO_Port GPIOC
+S#define AI_IU_SW2_Pin GPIO_PIN_1
+S#define AI_IU_SW2_GPIO_Port GPIOB
+S#define SAFE_48V_SWITCH_Pin GPIO_PIN_11
+S#define SAFE_48V_SWITCH_GPIO_Port GPIOF
+S#define POWER24V_ON_Pin GPIO_PIN_12
+S#define POWER24V_ON_GPIO_Port GPIOF
+S#define ES_SHUTDOWN_Pin GPIO_PIN_13
+S#define ES_SHUTDOWN_GPIO_Port GPIOF
+S#define ACPower_OK_Pin GPIO_PIN_1
+S#define ACPower_OK_GPIO_Port GPIOG
+S#define ST_OUT_24_Pin GPIO_PIN_10
+S#define ST_OUT_24_GPIO_Port GPIOE
+S#define ST_OUT_23_Pin GPIO_PIN_11
+S#define ST_OUT_23_GPIO_Port GPIOE
+S#define ST_OUT_22_Pin GPIO_PIN_12
+S#define ST_OUT_22_GPIO_Port GPIOE
+S#define ST_OUT_20_Pin GPIO_PIN_13
+S#define ST_OUT_20_GPIO_Port GPIOE
+S#define ST_OUT_21_Pin GPIO_PIN_14
+S#define ST_OUT_21_GPIO_Port GPIOE
+S#define POWEROFF_REMOTEIN_Pin GPIO_PIN_15
+S#define POWEROFF_REMOTEIN_GPIO_Port GPIOE
+S#define ST_OUT_19_Pin GPIO_PIN_12
+S#define ST_OUT_19_GPIO_Port GPIOB
+S#define ST_OUT_18_Pin GPIO_PIN_13
+S#define ST_OUT_18_GPIO_Port GPIOB
+S#define ST_OUT_17_Pin GPIO_PIN_14
+S#define ST_OUT_17_GPIO_Port GPIOB
+S#define ST_OUT_8_Pin GPIO_PIN_15
+S#define ST_OUT_8_GPIO_Port GPIOB
+S#define ST_OUT_7_Pin GPIO_PIN_8
+S#define ST_OUT_7_GPIO_Port GPIOD
+S#define ST_OUT_6_Pin GPIO_PIN_9
+S#define ST_OUT_6_GPIO_Port GPIOD
+S#define ST_OUT_5_Pin GPIO_PIN_10
+S#define ST_OUT_5_GPIO_Port GPIOD
+S#define ST_IN_23_Pin GPIO_PIN_11
+S#define ST_IN_23_GPIO_Port GPIOD
+S#define ST_IN_22_Pin GPIO_PIN_12
+S#define ST_IN_22_GPIO_Port GPIOD
+S#define ST_IN_21_Pin GPIO_PIN_13
+S#define ST_IN_21_GPIO_Port GPIOD
+S#define ST_IN_24_Pin GPIO_PIN_14
+S#define ST_IN_24_GPIO_Port GPIOD
+S#define ST_IN_20_Pin GPIO_PIN_15
+S#define ST_IN_20_GPIO_Port GPIOD
+S#define ST_IN_19_Pin GPIO_PIN_2
+S#define ST_IN_19_GPIO_Port GPIOG
+S#define ST_IN_18_Pin GPIO_PIN_3
+S#define ST_IN_18_GPIO_Port GPIOG
+S#define LAN9252_CS_Pin GPIO_PIN_4
+S#define LAN9252_CS_GPIO_Port GPIOG
+S#define ST_IN_17_Pin GPIO_PIN_5
+S#define ST_IN_17_GPIO_Port GPIOG
+S#define ST_OUT_4_Pin GPIO_PIN_6
+S#define ST_OUT_4_GPIO_Port GPIOG
+S#define ST_OUT_3_Pin GPIO_PIN_7
+S#define ST_OUT_3_GPIO_Port GPIOG
+S#define ST_OUT_2_Pin GPIO_PIN_8
+S#define ST_OUT_2_GPIO_Port GPIOG
+S#define ST_OUT_1_Pin GPIO_PIN_8
+S#define ST_OUT_1_GPIO_Port GPIOC
+S#define ST_IN_8_Pin GPIO_PIN_6
+S#define ST_IN_8_GPIO_Port GPIOD
+S#define ST_IN_7_Pin GPIO_PIN_7
+S#define ST_IN_7_GPIO_Port GPIOD
+S#define ST_IN_6_Pin GPIO_PIN_9
+S#define ST_IN_6_GPIO_Port GPIOG
+S#define ST_IN_5_Pin GPIO_PIN_10
+S#define ST_IN_5_GPIO_Port GPIOG
+S#define ST_IN_1_Pin GPIO_PIN_11
+S#define ST_IN_1_GPIO_Port GPIOG
+S#define ST_IN_2_Pin GPIO_PIN_12
+S#define ST_IN_2_GPIO_Port GPIOG
+S#define ST_IN_3_Pin GPIO_PIN_13
+S#define ST_IN_3_GPIO_Port GPIOG
+S#define ST_IN_4_Pin GPIO_PIN_14
+S#define ST_IN_4_GPIO_Port GPIOG
+S#define POWERON_REMOTEIN_Pin GPIO_PIN_8
+S#define POWERON_REMOTEIN_GPIO_Port GPIOB
+S#define V24V_OUT1_Pin GPIO_PIN_9
+S#define V24V_OUT1_GPIO_Port GPIOB
+S#define POWERON_KEYIN_Pin GPIO_PIN_0
+S#define POWERON_KEYIN_GPIO_Port GPIOE
+S#define OC_PROTECT_Pin GPIO_PIN_1
+S#define OC_PROTECT_GPIO_Port GPIOE
+S/* USER CODE BEGIN Private defines */
+S
+S/* USER CODE END Private defines */
+S
+S#ifdef __cplusplus
+S}
+S#endif
+S
+N#endif /* __MAIN_H */
+L 17 ".\Power\PowerMenu.h" 2
+N#include "ADS1115Driver.h"
+N#include "Command.h"
+L 1 ".\Power\Command.h" 1
+N/**
+N  ******************************************************************************
+N  * @file    Command.h
+N  * @author  Xi Liang/Liu Gui Qing
+N  * @brief   Power Command module driver.
+N  *         
+N  @verbatim
+N  ******************************************************************************
+N  */
+N	
+N#ifndef __COMMAND_H
+S#define __COMMAND_H
+S
+S
+S#include "stm32f4xx_hal.h"
+S#include "data_def.h"
+S#include "PowerMenu.h"
+S
+S#define POWER_COMMAND_TXRX_BUFFER_SIZE 32u
+S
+S#define POWER_COMMAND_HEADER_SIZE (4u)
+S#define POWER_COMMAND_END_SIZE (4u)
+S#define POWER_COMMAND_CMD_SIZE (1u)
+S#define POWER_COMMAND_LENGTH_SIZE (1u)
+S#define POWER_COMMAND_INFO_MAX_SIZE (16u)
+S#define POWER_COMMAND_CRC_SIZE (2u)
+S//#define POWER_COMMAND_DMA_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + \
+S																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+S																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+X
+S																	
+S#define POWER_COMMAND_MAX_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + \
+S																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+S																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+X#define POWER_COMMAND_MAX_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + 																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+S
+S#define SOI 0xFFAAAAFFu
+S#define EOI 0xEE5555EEu
+S
+S#define SM2SU_PERIODIC_TRANSMIT_IN_MS 500u
+S#define SM2SU_PERIODIC_TRANSMIT_TIMEOUT_IN_MS 1000u
+S#define POWER_COMMAND_TRANSMIT_TIMEOUT_IN_MS 500u
+S
+Stypedef struct tag_POWER_COMMAND_PROTOCOL
+S{
+S		uint8_t HEADER[POWER_COMMAND_HEADER_SIZE];
+S		uint8_t CMD;
+S		uint8_t LENGTH;
+S		uint8_t INFO[POWER_COMMAND_INFO_MAX_SIZE];	
+S		uint16_t CRC16;
+S		uint8_t END[POWER_COMMAND_END_SIZE];
+S}POWER_COMMAND_PROTOCOL;
+S
+Stypedef union 
+S{
+S		uint8_t ByteAccess[POWER_COMMAND_MAX_SIZE];
+S		uint16_t WordAccess[POWER_COMMAND_MAX_SIZE >> 1];
+S		uint32_t	LongAccess[POWER_COMMAND_MAX_SIZE >> 2];
+S		POWER_COMMAND_PROTOCOL  ContentDefAccess;
+S}POWER_COMMAND;
+S
+Stypedef struct tag_POWER_COMMAND_RECEIVED 
+S{
+S	uint8_t RequireCode;
+S	POWER_COMMAND PowerCommand;
+S	
+S	
+S}POWER_COMMAND_RECEIVED;
+S
+Stypedef void (*SM2SU_REQ_CALL)(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
+S
+Stypedef struct	tag_SM2SU_REQ_DPCH{
+S	uint8_t	SM2SU_REQ_CD;
+S	SM2SU_REQ_CALL	pFunc;
+S	uint16_t InfoLength;
+S} SM2SU_REQ_DPCH;
+S
+Stypedef uint8_t (*SU2SM_REQ_CALL)(POWER_COMMAND_RECEIVED *pData);
+S
+Stypedef struct	tag_SU2SM_REQ_DPCH{
+S	uint8_t	SU2SM_REQ_CD;
+S	SU2SM_REQ_CALL	pFunc;
+S} SU2SM_REQ_DPCH;
+S
+S//	SM->SU
+S//	require code used by Power_Command_Transmit()
+S#define SM2SU_REQ_CD_PERIODIC_TRANSMISSION 1u
+S#define SM2SU_REQ_CD_REPLY_CONTROL_COMMAND 2u
+S#define SM2SU_REQ_CD_POWER_OFF_REQUIRE 3u
+S#define SM2SU_REQ_CD_REPLY_POWER_OFF_COMMAND 4u
+S#define SM2SU_REQ_CD_REPLY_REBOOT_COMMAND 5u
+S#define SM2SU_REQ_CD_COMPULSORY_POWER_OFF_COMMAND 6u
+S#define SM2SU_REQ_MAX 6u
+S
+S//	SU->SM
+S//	require code used by Power_Command_Receive()
+S#define SU2SM_REQ_CD_PERIODIC_TRANSMISSION_COMMAND 1u
+S#define SU2SM_REQ_CD_CONTROL_COMMAND 2u
+S#define SU2SM_REQ_CD_REPLY_POWER_OFF_REQUIRE 3u
+S#define SU2SM_REQ_CD_POWER_OFF_COMMAND 4u
+S#define SU2SM_REQ_CD_REBOOT_COMMAND 5u
+S#define SU2SM_REQ_CD_REPLY_COMPULSORY_POWER_OFF_COMMAND 6u
+S#define SU2SM_REQ_MAX 6u
+S
+S
+Sextern POWER_COMMAND_RECEIVED PowerCommandReceived;
+Sextern uint8_t PowerCommandRxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
+Sextern uint8_t PowerCommandTxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
+S
+Sextern UART_HandleTypeDef * Uart_HandlePtr;
+Sextern DMA_HandleTypeDef * Udma_UartRx_HandlePtr;
+Sextern DMA_HandleTypeDef * Udma_Uarttx_HandlePtr;
+S
+SHAL_StatusTypeDef Power_Command_Transmit(uint8_t ReqCode);
+Svoid Power_Command_Initilization(void);
+Svoid Power_Command_Main_Loop(void);
+Svoid SU2SM_RxIdleEventCallback(UART_HandleTypeDef *huart, uint16_t Size);
+S
+N#endif
+L 19 ".\Power\PowerMenu.h" 2
+N
+N
+N
+N
+Nvoid close_all_dr_save_state(void);
+Nvoid first_open_dr_save_state(void);
+Nvoid Reload_State_All_Value(void);
+Nvoid Reload_Config_All_Value(void);
+Nvoid work_mode_operation(void);
+Nstatic void PowerOnCharge(void);
+Nvoid force_shutdown(uint8_t nxt_mode);
+Nvoid softwarepoweroff_mode_operation(void);
+Nvoid shutdown_mode_operation(void);
+N
+N
+N
+N#endif
+L 18 ".\Power\Command.h" 2
 N
 N#define POWER_COMMAND_TXRX_BUFFER_SIZE 32u
 N
@@ -50848,10 +51046,15 @@ N#define POWER_COMMAND_CMD_SIZE (1u)
 N#define POWER_COMMAND_LENGTH_SIZE (1u)
 N#define POWER_COMMAND_INFO_MAX_SIZE (16u)
 N#define POWER_COMMAND_CRC_SIZE (2u)
-N#define POWER_COMMAND_DMA_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + \
+N//#define POWER_COMMAND_DMA_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + \
 N																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
 N																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
-X#define POWER_COMMAND_DMA_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + 																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+X
+N																	
+N#define POWER_COMMAND_MAX_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + \
+N																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + \
+N																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
+X#define POWER_COMMAND_MAX_SIZE (POWER_COMMAND_HEADER_SIZE + POWER_COMMAND_END_SIZE + 																	POWER_COMMAND_CMD_SIZE + POWER_COMMAND_LENGTH_SIZE + 																	POWER_COMMAND_INFO_MAX_SIZE + POWER_COMMAND_CRC_SIZE)
 N
 N#define SOI 0xFFAAAAFFu
 N#define EOI 0xEE5555EEu
@@ -50860,6 +51063,38 @@ N#define SM2SU_PERIODIC_TRANSMIT_IN_MS 500u
 N#define SM2SU_PERIODIC_TRANSMIT_TIMEOUT_IN_MS 1000u
 N#define POWER_COMMAND_TRANSMIT_TIMEOUT_IN_MS 500u
 N
+Ntypedef struct tag_POWER_COMMAND_PROTOCOL
+N{
+N		uint8_t HEADER[POWER_COMMAND_HEADER_SIZE];
+X		uint8_t HEADER[(4u)];
+N		uint8_t CMD;
+N		uint8_t LENGTH;
+N		uint8_t INFO[POWER_COMMAND_INFO_MAX_SIZE];	
+X		uint8_t INFO[(16u)];	
+N		uint16_t CRC16;
+N		uint8_t END[POWER_COMMAND_END_SIZE];
+X		uint8_t END[(4u)];
+N}POWER_COMMAND_PROTOCOL;
+N
+Ntypedef union 
+N{
+N		uint8_t ByteAccess[POWER_COMMAND_MAX_SIZE];
+X		uint8_t ByteAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u))];
+N		uint16_t WordAccess[POWER_COMMAND_MAX_SIZE >> 1];
+X		uint16_t WordAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u)) >> 1];
+N		uint32_t	LongAccess[POWER_COMMAND_MAX_SIZE >> 2];
+X		uint32_t	LongAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u)) >> 2];
+N		POWER_COMMAND_PROTOCOL  ContentDefAccess;
+N}POWER_COMMAND;
+N
+Ntypedef struct tag_POWER_COMMAND_RECEIVED 
+N{
+N	uint8_t RequireCode;
+N	POWER_COMMAND PowerCommand;
+N	
+N	
+N}POWER_COMMAND_RECEIVED;
+N
 Ntypedef void (*SM2SU_REQ_CALL)(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
 N
 Ntypedef struct	tag_SM2SU_REQ_DPCH{
@@ -50867,6 +51102,13 @@ N	uint8_t	SM2SU_REQ_CD;
 N	SM2SU_REQ_CALL	pFunc;
 N	uint16_t InfoLength;
 N} SM2SU_REQ_DPCH;
+N
+Ntypedef uint8_t (*SU2SM_REQ_CALL)(POWER_COMMAND_RECEIVED *pData);
+N
+Ntypedef struct	tag_SU2SM_REQ_DPCH{
+N	uint8_t	SU2SM_REQ_CD;
+N	SU2SM_REQ_CALL	pFunc;
+N} SU2SM_REQ_DPCH;
 N
 N//	SM->SU
 N//	require code used by Power_Command_Transmit()
@@ -50889,30 +51131,7 @@ N#define SU2SM_REQ_CD_REPLY_COMPULSORY_POWER_OFF_COMMAND 6u
 N#define SU2SM_REQ_MAX 6u
 N
 N
-Ntypedef struct tag_POWER_COMMAND_PROTOCOL
-N{
-N		uint8_t HEADER[POWER_COMMAND_HEADER_SIZE];
-X		uint8_t HEADER[(4u)];
-N		uint8_t CMD;
-N		uint8_t LENGTH;
-N		uint8_t INFO[POWER_COMMAND_INFO_MAX_SIZE];	
-X		uint8_t INFO[(16u)];	
-N		uint16_t CRC16;
-N		uint8_t END[POWER_COMMAND_END_SIZE];
-X		uint8_t END[(4u)];
-N}POWER_COMMAND_PROTOCOL;
-N
-Ntypedef union 
-N{
-N		uint8_t ByteAccess[POWER_COMMAND_DMA_SIZE];
-X		uint8_t ByteAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u))];
-N		uint16_t WordAccess[POWER_COMMAND_DMA_SIZE >> 1];
-X		uint16_t WordAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u)) >> 1];
-N		uint32_t	LongAccess[POWER_COMMAND_DMA_SIZE >> 2];
-X		uint32_t	LongAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u)) >> 2];
-N		POWER_COMMAND_PROTOCOL  ContentDefAccess;
-N}POWER_COMMAND;
-N
+Nextern POWER_COMMAND_RECEIVED PowerCommandReceived;
 Nextern uint8_t PowerCommandRxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
 Xextern uint8_t PowerCommandRxBuffer[32u];
 Nextern uint8_t PowerCommandTxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
@@ -50925,11 +51144,167 @@ N
 NHAL_StatusTypeDef Power_Command_Transmit(uint8_t ReqCode);
 Nvoid Power_Command_Initilization(void);
 Nvoid Power_Command_Main_Loop(void);
+Nvoid SU2SM_RxIdleEventCallback(UART_HandleTypeDef *huart, uint16_t Size);
 N
 N#endif
+L 40 "C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h" 2
+N/* USER CODE END Includes */
 N
+N/* Exported types ------------------------------------------------------------*/
+N/* USER CODE BEGIN ET */
 N
-L 26 "RTE\Device\STM32F407ZETx\STCubeGenerated\Src\main.c" 2
+N/* USER CODE END ET */
+N
+N/* Exported constants --------------------------------------------------------*/
+N/* USER CODE BEGIN EC */
+N
+N/* USER CODE END EC */
+N
+N/* Exported macro ------------------------------------------------------------*/
+N/* USER CODE BEGIN EM */
+N
+N/* USER CODE END EM */
+N
+N/* Exported functions prototypes ---------------------------------------------*/
+Nvoid Error_Handler(void);
+N
+N/* USER CODE BEGIN EFP */
+N
+N/* USER CODE END EFP */
+N
+N/* Private defines -----------------------------------------------------------*/
+N#define SYNC0_Pin GPIO_PIN_2
+N#define SYNC0_GPIO_Port GPIOE
+N#define SYNC0_EXTI_IRQn EXTI2_IRQn
+N#define SYNC1_Pin GPIO_PIN_3
+N#define SYNC1_GPIO_Port GPIOE
+N#define SYNC1_EXTI_IRQn EXTI3_IRQn
+N#define AI_IU_SW1_Pin GPIO_PIN_6
+N#define AI_IU_SW1_GPIO_Port GPIOE
+N#define V24V_OUT4_Pin GPIO_PIN_2
+N#define V24V_OUT4_GPIO_Port GPIOF
+N#define LED6_Pin GPIO_PIN_3
+N#define LED6_GPIO_Port GPIOF
+N#define PHY_RESET_Pin GPIO_PIN_4
+N#define PHY_RESET_GPIO_Port GPIOF
+N#define ET_RESETN_Pin GPIO_PIN_5
+N#define ET_RESETN_GPIO_Port GPIOF
+N#define LED3_Pin GPIO_PIN_8
+N#define LED3_GPIO_Port GPIOF
+N#define LED4_Pin GPIO_PIN_9
+N#define LED4_GPIO_Port GPIOF
+N#define LED5_Pin GPIO_PIN_10
+N#define LED5_GPIO_Port GPIOF
+N#define IRQ_Pin GPIO_PIN_1
+N#define IRQ_GPIO_Port GPIOA
+N#define IRQ_EXTI_IRQn EXTI1_IRQn
+N#define RS485_RE_Pin GPIO_PIN_4
+N#define RS485_RE_GPIO_Port GPIOA
+N#define LED2_Pin GPIO_PIN_4
+N#define LED2_GPIO_Port GPIOC
+N#define LED1_Pin GPIO_PIN_5
+N#define LED1_GPIO_Port GPIOC
+N#define AI_IU_SW2_Pin GPIO_PIN_1
+N#define AI_IU_SW2_GPIO_Port GPIOB
+N#define SAFE_48V_SWITCH_Pin GPIO_PIN_11
+N#define SAFE_48V_SWITCH_GPIO_Port GPIOF
+N#define POWER24V_ON_Pin GPIO_PIN_12
+N#define POWER24V_ON_GPIO_Port GPIOF
+N#define ES_SHUTDOWN_Pin GPIO_PIN_13
+N#define ES_SHUTDOWN_GPIO_Port GPIOF
+N#define ACPower_OK_Pin GPIO_PIN_1
+N#define ACPower_OK_GPIO_Port GPIOG
+N#define ST_OUT_24_Pin GPIO_PIN_10
+N#define ST_OUT_24_GPIO_Port GPIOE
+N#define ST_OUT_23_Pin GPIO_PIN_11
+N#define ST_OUT_23_GPIO_Port GPIOE
+N#define ST_OUT_22_Pin GPIO_PIN_12
+N#define ST_OUT_22_GPIO_Port GPIOE
+N#define ST_OUT_20_Pin GPIO_PIN_13
+N#define ST_OUT_20_GPIO_Port GPIOE
+N#define ST_OUT_21_Pin GPIO_PIN_14
+N#define ST_OUT_21_GPIO_Port GPIOE
+N#define POWEROFF_REMOTEIN_Pin GPIO_PIN_15
+N#define POWEROFF_REMOTEIN_GPIO_Port GPIOE
+N#define ST_OUT_19_Pin GPIO_PIN_12
+N#define ST_OUT_19_GPIO_Port GPIOB
+N#define ST_OUT_18_Pin GPIO_PIN_13
+N#define ST_OUT_18_GPIO_Port GPIOB
+N#define ST_OUT_17_Pin GPIO_PIN_14
+N#define ST_OUT_17_GPIO_Port GPIOB
+N#define ST_OUT_8_Pin GPIO_PIN_15
+N#define ST_OUT_8_GPIO_Port GPIOB
+N#define ST_OUT_7_Pin GPIO_PIN_8
+N#define ST_OUT_7_GPIO_Port GPIOD
+N#define ST_OUT_6_Pin GPIO_PIN_9
+N#define ST_OUT_6_GPIO_Port GPIOD
+N#define ST_OUT_5_Pin GPIO_PIN_10
+N#define ST_OUT_5_GPIO_Port GPIOD
+N#define ST_IN_23_Pin GPIO_PIN_11
+N#define ST_IN_23_GPIO_Port GPIOD
+N#define ST_IN_22_Pin GPIO_PIN_12
+N#define ST_IN_22_GPIO_Port GPIOD
+N#define ST_IN_21_Pin GPIO_PIN_13
+N#define ST_IN_21_GPIO_Port GPIOD
+N#define ST_IN_24_Pin GPIO_PIN_14
+N#define ST_IN_24_GPIO_Port GPIOD
+N#define ST_IN_20_Pin GPIO_PIN_15
+N#define ST_IN_20_GPIO_Port GPIOD
+N#define ST_IN_19_Pin GPIO_PIN_2
+N#define ST_IN_19_GPIO_Port GPIOG
+N#define ST_IN_18_Pin GPIO_PIN_3
+N#define ST_IN_18_GPIO_Port GPIOG
+N#define LAN9252_CS_Pin GPIO_PIN_4
+N#define LAN9252_CS_GPIO_Port GPIOG
+N#define ST_IN_17_Pin GPIO_PIN_5
+N#define ST_IN_17_GPIO_Port GPIOG
+N#define ST_OUT_4_Pin GPIO_PIN_6
+N#define ST_OUT_4_GPIO_Port GPIOG
+N#define ST_OUT_3_Pin GPIO_PIN_7
+N#define ST_OUT_3_GPIO_Port GPIOG
+N#define ST_OUT_2_Pin GPIO_PIN_8
+N#define ST_OUT_2_GPIO_Port GPIOG
+N#define ST_OUT_1_Pin GPIO_PIN_8
+N#define ST_OUT_1_GPIO_Port GPIOC
+N#define ST_IN_8_Pin GPIO_PIN_6
+N#define ST_IN_8_GPIO_Port GPIOD
+N#define ST_IN_7_Pin GPIO_PIN_7
+N#define ST_IN_7_GPIO_Port GPIOD
+N#define ST_IN_6_Pin GPIO_PIN_9
+N#define ST_IN_6_GPIO_Port GPIOG
+N#define ST_IN_5_Pin GPIO_PIN_10
+N#define ST_IN_5_GPIO_Port GPIOG
+N#define ST_IN_1_Pin GPIO_PIN_11
+N#define ST_IN_1_GPIO_Port GPIOG
+N#define ST_IN_2_Pin GPIO_PIN_12
+N#define ST_IN_2_GPIO_Port GPIOG
+N#define ST_IN_3_Pin GPIO_PIN_13
+N#define ST_IN_3_GPIO_Port GPIOG
+N#define ST_IN_4_Pin GPIO_PIN_14
+N#define ST_IN_4_GPIO_Port GPIOG
+N#define POWERON_REMOTEIN_Pin GPIO_PIN_8
+N#define POWERON_REMOTEIN_GPIO_Port GPIOB
+N#define V24V_OUT1_Pin GPIO_PIN_9
+N#define V24V_OUT1_GPIO_Port GPIOB
+N#define POWERON_KEYIN_Pin GPIO_PIN_0
+N#define POWERON_KEYIN_GPIO_Port GPIOE
+N#define OC_PROTECT_Pin GPIO_PIN_1
+N#define OC_PROTECT_GPIO_Port GPIOE
+N/* USER CODE BEGIN Private defines */
+N
+N/* USER CODE END Private defines */
+N
+N#ifdef __cplusplus
+S}
+N#endif
+N
+N#endif /* __MAIN_H */
+L 21 "RTE\Device\STM32F407ZETx\STCubeGenerated\Src\main.c" 2
+N
+N/* Private includes ----------------------------------------------------------*/
+N/* USER CODE BEGIN Includes */
+N#include "ADS1115Driver.h"
+N#include "Command.h"
 N#include "KeyIn.h"
 L 1 ".\Power\KeyIn.h" 1
 N#ifndef __KEYIN_H
@@ -50948,6 +51323,7 @@ N
 Nvoid PowerOnKeyInState(void);
 Nvoid PowerOnRemoteKeyInState(void);
 Nvoid PowerOffKeyInState(void);
+Nvoid PowerOffREMOTEKeyInState(void);
 Nvoid KeyScan(uint8_t mode);
 N
 N
@@ -50958,40 +51334,6 @@ N
 N#endif
 L 27 "RTE\Device\STM32F407ZETx\STCubeGenerated\Src\main.c" 2
 N#include "PowerMenu.h"
-L 1 ".\Power\PowerMenu.h" 1
-N/**
-N  ******************************************************************************
-N  * @file    PowerMenu.h
-N  * @author  Xi Liang/Liu Gui Qing
-N  * @brief   Power Menu Driver.
-N  *         
-N  @verbatim
-N  ******************************************************************************
-N  */
-N	
-N#ifndef __POWERMENU_H
-N#define __POWERMENU_H
-N
-N
-N#include "data_def.h"
-N#include "main.h"
-N#include "ADS1115Driver.h"
-N#include "Command.h"
-N
-N
-N
-N
-Nvoid close_all_dr_save_state(void);
-Nvoid first_open_dr_save_state(void);
-Nvoid Reload_State_All_Value(void);
-Nvoid Reload_Config_All_Value(void);
-Nvoid work_mode_operation(void);
-Nstatic void PowerOnCharge(void);
-N
-N
-N
-N#endif
-L 28 "RTE\Device\STM32F407ZETx\STCubeGenerated\Src\main.c" 2
 N#include "KeyIn.h"
 N
 N/* USER CODE END Includes */
@@ -51021,7 +51363,6 @@ NSPI_HandleTypeDef hspi3;
 N
 NUART_HandleTypeDef huart1;
 NUART_HandleTypeDef huart2;
-NDMA_HandleTypeDef hdma_usart1_rx;
 N
 N/* USER CODE BEGIN PV */
 N
@@ -51036,7 +51377,6 @@ Nstatic void MX_I2C1_Init(void);
 Nstatic void MX_I2C2_Init(void);
 Nstatic void MX_I2C3_Init(void);
 Nstatic void MX_USART1_UART_Init(void);
-Nstatic void MX_DMA_Init(void);
 Nstatic void MX_USART2_UART_Init(void);
 N/* USER CODE BEGIN PFP */
 N
@@ -51081,10 +51421,9 @@ N  MX_GPIO_Init();
 N  MX_SPI3_Init();
 N  MX_CAN1_Init();
 N  MX_I2C1_Init();
-N  MX_I2C2_Init() ;
+N  MX_I2C2_Init();
 N  MX_I2C3_Init();
 N  MX_USART1_UART_Init();
-N  MX_DMA_Init();
 N  MX_USART2_UART_Init();
 N  /* USER CODE BEGIN 2 */
 N    EcatHspiPtr = &hspi3;
@@ -51092,7 +51431,7 @@ N		I2C_Ptr_24V = &hi2c1;
 N		I2C_Ptr_48V_NTC = &hi2c3;
 N		I2C_Ptr_AI = &hi2c2;
 N		Uart_HandlePtr = &huart1;
-N		Udma_UartRx_HandlePtr = &hdma_usart1_rx;
+N//		Udma_UartRx_HandlePtr = &hdma_usart1_rx;
 N//		Udma_Uarttx_HandlePtr = &hdma_usart1_tx;
 N//    LAN9252_Init();
 N//    MainInit();
@@ -51101,9 +51440,13 @@ N//		PHY_Init();
 N//		HAL_GPIO_WritePin(OC_PROTECT_GPIO_Port, OC_PROTECT_Pin, GPIO_PIN_RESET);
 N//		HAL_GPIO_WritePin(V24V_OUT1_GPIO_Port, V24V_OUT1_Pin, GPIO_PIN_SET);
 N//		HAL_GPIO_WritePin(ES_SHUTDOWN_GPIO_Port, ES_SHUTDOWN_Pin, GPIO_PIN_SET);		
-N		
+N		if (HAL_UARTEx_ReceiveToIdle_IT(&huart1, PowerCommandRxBuffer, POWER_COMMAND_TXRX_BUFFER_SIZE) != HAL_OK)
+X		if (HAL_UARTEx_ReceiveToIdle_IT(&huart1, PowerCommandRxBuffer, 32u) != HAL_OK)
+N		{
+N			Error_Handler();		
+N		}	
 N		ADS1115_Driver_Initilization();
-N//		Power_Command_Initilization();
+N		Power_Command_Initilization();
 N  /* USER CODE END 2 */
 N
 N  /* Infinite loop */
@@ -51111,10 +51454,10 @@ N  /* USER CODE BEGIN WHILE */
 N  while (1)
 N  {
 N//		MainLoop();
-N
+N	  work_mode_operation();
 N		ADS1115_Driver_MainLoop();
-N		work_mode_operation();
 N		KeyScan(power_manage.work_mode);
+N		Power_Command_Main_Loop();
 N		
 N		
 N    /* USER CODE END WHILE */
@@ -51434,11 +51777,7 @@ N  {
 N    Error_Handler();
 N  }
 N  /* USER CODE BEGIN USART1_Init 2 */
-N  if (HAL_UARTEx_ReceiveToIdle_DMA(&huart1, PowerCommandRxBuffer, POWER_COMMAND_DMA_SIZE) != HAL_OK)
-X  if (HAL_UARTEx_ReceiveToIdle_DMA(&huart1, PowerCommandRxBuffer, ((4u) + (4u) + (1u) + (1u) + (16u) + (2u))) != HAL_OK)
-N	{
-N    Error_Handler();		
-N	}		
+N
 N  /* USER CODE END USART1_Init 2 */
 N
 N}
@@ -51484,18 +51823,6 @@ N
 N}
 N
 N/**
-N  * Enable DMA controller clock
-N  */
-Nstatic void MX_DMA_Init(void)
-N{
-N
-N  /* DMA controller clock enable */
-N  __HAL_RCC_DMA2_CLK_ENABLE();
-X  do { volatile uint32_t tmpreg = 0x00U; ((((RCC_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x3800UL))->AHB1ENR) |= ((0x1UL << (22U)))); tmpreg = ((((RCC_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x3800UL))->AHB1ENR) & ((0x1UL << (22U)))); (void)tmpreg; } while(0U);
-N
-N}
-N
-N/**
 N  * @brief GPIO Initialization Function
 N  * @param None
 N  * @retval None
@@ -51527,14 +51854,14 @@ N  HAL_GPIO_WritePin(GPIOE, AI_IU_SW1_Pin|OC_PROTECT_Pin, GPIO_PIN_RESET);
 X  HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1000UL)), ((uint16_t)0x0040)|((uint16_t)0x0002), GPIO_PIN_RESET);
 N
 N  /*Configure GPIO pin Output Level */
-N  HAL_GPIO_WritePin(GPIOF, V24V_OUT4_Pin|POWER24V_ON_Pin|ES_SHUTDOWN_Pin, GPIO_PIN_RESET);
-X  HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1400UL)), ((uint16_t)0x0004)|((uint16_t)0x1000)|((uint16_t)0x2000), GPIO_PIN_RESET);
+N  HAL_GPIO_WritePin(GPIOF, V24V_OUT4_Pin|POWER24V_ON_Pin, GPIO_PIN_RESET);
+X  HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1400UL)), ((uint16_t)0x0004)|((uint16_t)0x1000), GPIO_PIN_RESET);
 N
 N  /*Configure GPIO pin Output Level */
 N  HAL_GPIO_WritePin(GPIOF, LED6_Pin|PHY_RESET_Pin|ET_RESETN_Pin|LED3_Pin
 X  HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1400UL)), ((uint16_t)0x0008)|((uint16_t)0x0010)|((uint16_t)0x0020)|((uint16_t)0x0100)
-N                          |LED4_Pin|LED5_Pin, GPIO_PIN_SET);
-X                          |((uint16_t)0x0200)|((uint16_t)0x0400), GPIO_PIN_SET);
+N                          |LED4_Pin|LED5_Pin|ES_SHUTDOWN_Pin, GPIO_PIN_SET);
+X                          |((uint16_t)0x0200)|((uint16_t)0x0400)|((uint16_t)0x2000), GPIO_PIN_SET);
 N
 N  /*Configure GPIO pin Output Level */
 N  HAL_GPIO_WritePin(RS485_RE_GPIO_Port, RS485_RE_Pin, GPIO_PIN_SET);
@@ -51671,12 +51998,12 @@ X  GPIO_InitStruct.Pull = 0x00000000U;
 N  HAL_GPIO_Init(SAFE_48V_SWITCH_GPIO_Port, &GPIO_InitStruct);
 X  HAL_GPIO_Init(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1400UL)), &GPIO_InitStruct);
 N
-N  /*Configure GPIO pins : ACPower_OK_Pin ST_IN_19_Pin ST_IN_18_Pin ST_IN_1_Pin
-N                           ST_IN_6_Pin ST_IN_5_Pin ST_IN_1G11_Pin ST_IN_2_Pin
+N  /*Configure GPIO pins : ACPower_OK_Pin ST_IN_19_Pin ST_IN_18_Pin ST_IN_17_Pin
+N                           ST_IN_6_Pin ST_IN_5_Pin ST_IN_1_Pin ST_IN_2_Pin
 N                           ST_IN_3_Pin ST_IN_4_Pin */
-N  GPIO_InitStruct.Pin = ACPower_OK_Pin|ST_IN_19_Pin|ST_IN_18_Pin|ST_IN_1_Pin
+N  GPIO_InitStruct.Pin = ACPower_OK_Pin|ST_IN_19_Pin|ST_IN_18_Pin|ST_IN_17_Pin
 X  GPIO_InitStruct.Pin = ((uint16_t)0x0002)|((uint16_t)0x0004)|((uint16_t)0x0008)|((uint16_t)0x0020)
-N                          |ST_IN_6_Pin|ST_IN_5_Pin|ST_IN_1G11_Pin|ST_IN_2_Pin
+N                          |ST_IN_6_Pin|ST_IN_5_Pin|ST_IN_1_Pin|ST_IN_2_Pin
 X                          |((uint16_t)0x0200)|((uint16_t)0x0400)|((uint16_t)0x0800)|((uint16_t)0x1000)
 N                          |ST_IN_3_Pin|ST_IN_4_Pin;
 X                          |((uint16_t)0x2000)|((uint16_t)0x4000);

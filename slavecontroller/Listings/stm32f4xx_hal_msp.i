@@ -16871,11 +16871,52 @@ typedef struct __UART_HandleTypeDef
 
   volatile uint32_t                 ErrorCode;         
 
-#line 200 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+  void (* TxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);         
+  void (* TxCpltCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* RxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);         
+  void (* RxCpltCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* ErrorCallback)(struct __UART_HandleTypeDef *huart);              
+  void (* AbortCpltCallback)(struct __UART_HandleTypeDef *huart);          
+  void (* AbortTransmitCpltCallback)(struct __UART_HandleTypeDef *huart);  
+  void (* AbortReceiveCpltCallback)(struct __UART_HandleTypeDef *huart);   
+  void (* WakeupCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* RxEventCallback)(struct __UART_HandleTypeDef *huart, uint16_t Pos);  
+
+  void (* MspInitCallback)(struct __UART_HandleTypeDef *huart);            
+  void (* MspDeInitCallback)(struct __UART_HandleTypeDef *huart);          
+
 
 } UART_HandleTypeDef;
 
-#line 231 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+
+
+ 
+typedef enum
+{
+  HAL_UART_TX_HALFCOMPLETE_CB_ID         = 0x00U,     
+  HAL_UART_TX_COMPLETE_CB_ID             = 0x01U,     
+  HAL_UART_RX_HALFCOMPLETE_CB_ID         = 0x02U,     
+  HAL_UART_RX_COMPLETE_CB_ID             = 0x03U,     
+  HAL_UART_ERROR_CB_ID                   = 0x04U,     
+  HAL_UART_ABORT_COMPLETE_CB_ID          = 0x05U,     
+  HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID = 0x06U,     
+  HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID  = 0x07U,     
+  HAL_UART_WAKEUP_CB_ID                  = 0x08U,     
+
+  HAL_UART_MSPINIT_CB_ID                 = 0x0BU,     
+  HAL_UART_MSPDEINIT_CB_ID               = 0x0CU      
+
+} HAL_UART_CallbackIDTypeDef;
+
+
+
+ 
+typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);   
+typedef  void (*pUART_RxEventCallbackTypeDef)(struct __UART_HandleTypeDef *huart, uint16_t Pos);    
+
+
 
 
 
@@ -17315,7 +17356,14 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart);
 void HAL_UART_MspDeInit(UART_HandleTypeDef *huart);
 
  
-#line 713 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+HAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
+                                            pUART_CallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID);
+
+HAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart);
+
 
 
 
@@ -22606,7 +22654,431 @@ extern void ECAT_StateChange(unsigned char alStatus, unsigned short alStatusCode
  
 
 #line 38 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+#line 1 ".\\Power\\ADS1115Driver.h"
 
+
+
+
+
+
+
+
+ 
+
+
+
+
+#line 15 ".\\Power\\ADS1115Driver.h"
+#line 1 ".\\Power\\data_def.h"
+
+
+
+
+
+
+
+
+ 
+	
+
+
+
+#line 15 ".\\Power\\data_def.h"
+
+
+
+typedef union 
+{
+  struct
+	{
+		uint8_t SYSTEM_RUN        :1;		
+		uint8_t DC48_OC           :1;		
+		uint8_t DC24V1_FK_OUT     :1;   
+		uint8_t MCON_FK_IN        :1;   
+		uint8_t BIT4B             :4;
+	}STATE_DEFINE_H;
+	uint8_t VAL;
+}STATE_INFORMATION_H;
+
+typedef union 
+{
+  struct
+	{
+		uint8_t DC48V_REM 	      :1;   
+		uint8_t DC24V1A  		      :1; 	
+		uint8_t DC24V1B  		      :1; 	
+		uint8_t DC24V1C  		      :1; 	
+		uint8_t DC24V2A  		      :1; 	
+		uint8_t DC24V2B  		      :1; 	
+		uint8_t FAN_RUN  	        :1; 	
+		uint8_t DC48V_ES_SHUTDOWN :1;   
+	}STATE_DEFINE_L;
+	uint8_t VAL;
+}STATE_INFORMATION_L;
+
+typedef union			
+{
+	struct 
+	{
+		uint8_t DC24V2_OV		      :1; 	
+		uint8_t DC24V2A_OC	      :1; 	
+		uint8_t DC24V2B_OC	      :1; 	
+		uint8_t MCON_FKIN		      :1; 	
+		uint8_t RES_OVERHAET	 		:1; 	
+		uint8_t BIT3B				      :3; 	
+	}FAULT_DEFINE_H;
+	uint8_t VAL;
+}FAULT_INFORMATION_H;
+
+typedef union			
+{
+	struct 
+	{
+		uint8_t TEMP_H	 		      :1; 	
+		uint8_t DC48V_UV		      :1; 	
+		uint8_t DC48V_OV	       	:1; 	
+		uint8_t DC48V_OC		      :1; 	
+		uint8_t DC24V1_UV	      	:1; 	
+		uint8_t DC24V1_OV		      :1; 	
+		uint8_t DC24V1_OC		      :1; 	
+		uint8_t DC24V2_UV		      :1; 	
+	}FAULT_DEFINE_L;
+	uint8_t VAL;
+}FAULT_INFORMATION_L;
+
+typedef struct 
+{
+	uint16_t upload_time;  
+	uint8_t  work_mode;
+	
+	uint8_t temperature;
+	uint16_t dc48v_u;
+	uint16_t dc48v_i;
+	uint16_t dc24v_u;
+	uint16_t dc24v_i;
+	
+	uint16_t ai1_u;
+	uint16_t ai1_i;
+	uint16_t ai2_u;
+	uint16_t ai2_i;
+	
+	uint8_t AI_SW1;
+	uint8_t AI_SW2;
+	
+	STATE_INFORMATION_H p_state_h;
+	STATE_INFORMATION_L p_state_l;
+	FAULT_INFORMATION_H p_breakdown_h;
+	FAULT_INFORMATION_L p_breakdown_l;
+}POWER_MANAGE_PACKED;
+extern POWER_MANAGE_PACKED power_manage;
+
+typedef enum
+{
+	POWER_STATUS_IDLE = 0x00u,
+	POWER_STATUS_POWERON,
+	POWER_STATUS_48VNOSTART,
+	POWER_STATUS_48VSTART,
+	POWER_STATUS_SHUTDWON,
+	POWER_STATUS_SOFTWAREPOWEROFF,
+	POWER_STATUS_FAULT,
+}POWER_STATUS_TYPE;
+
+
+
+#line 16 ".\\Power\\ADS1115Driver.h"
+#line 1 ".\\Power\\TemperatureDriver.h"
+
+
+
+
+
+#line 7 ".\\Power\\TemperatureDriver.h"
+#line 8 ".\\Power\\TemperatureDriver.h"
+
+
+uint8_t look_up_table(uint16_t *a,uint8_t ArrayLong,uint16_t data);
+float num_to_temperature(uint8_t num);
+void save_ntc_data(uint16_t data);			
+void save_ntc2_data(uint16_t data);		
+
+
+
+#line 17 ".\\Power\\ADS1115Driver.h"
+
+
+
+
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+#line 56 ".\\Power\\ADS1115Driver.h"
+
+#line 65 ".\\Power\\ADS1115Driver.h"
+
+
+
+
+#line 77 ".\\Power\\ADS1115Driver.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+extern I2C_HandleTypeDef * I2C_Ptr_48V_NTC;
+extern I2C_HandleTypeDef * I2C_Ptr_24V;
+extern I2C_HandleTypeDef * I2C_Ptr_AI;
+
+typedef union
+{
+	struct 
+	{
+		uint16_t COMP_QUE 		:2;
+		uint16_t COMP_LAT 		:1;
+		uint16_t COMP_POL 		:1;
+		uint16_t COMP_MODE  	:1;
+		uint16_t DR         	:3;
+		uint16_t MODE     		:1;
+		uint16_t PGA        	:3;
+		uint16_t MUX        	:3;
+		uint16_t OS         	:1;
+	}BIT;
+	uint16_t ALL;
+}ADS1115_CFG;
+
+typedef struct tag_ADS1115_DRIVER
+{
+	I2C_HandleTypeDef * I2C_Handle;
+	uint8_t ADDR;
+	ADS1115_CFG ConfigRegData;
+	int16_t SampleValue;
+	uint32_t *StartConversionTimerPtr;
+	uint32_t ConversionTime;
+	uint32_t ConfigErrorCnt;
+	uint32_t ConversionErrorCnt;
+	int16_t SampleValueMax;
+	int16_t SampleValueMin;
+	uint8_t SampleBuffer[2u];
+	HAL_StatusTypeDef ConfigResult;
+	HAL_StatusTypeDef ConversionTransmitResult;
+	HAL_StatusTypeDef ConversionReceiveResult;	
+}ADS1115_DRIVER;
+
+extern ADS1115_DRIVER ADS1115_NTC;
+extern ADS1115_DRIVER ADS1115_Voltage48V;
+extern ADS1115_DRIVER ADS1115_Current48V;
+extern ADS1115_DRIVER ADS1115_Voltage24V;
+extern ADS1115_DRIVER ADS1115_Current24V;
+extern ADS1115_DRIVER ADS1115_AnalogVoltageInput0;
+extern ADS1115_DRIVER ADS1115_AnalogVoltageInput1;
+extern ADS1115_DRIVER ADS1115_AnalogCurrentInput0;
+extern ADS1115_DRIVER ADS1115_AnalogCurrentInput1;
+void ADS1115_Driver_Initilization(void);
+void ADS1115_Driver_MainLoop(void);
+
+#line 39 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+#line 1 ".\\Power\\Command.h"
+
+
+
+
+
+
+
+
+ 
+	
+
+
+
+
+#line 16 ".\\Power\\Command.h"
+#line 17 ".\\Power\\Command.h"
+#line 1 ".\\Power\\PowerMenu.h"
+
+
+
+
+
+
+
+
+ 
+	
+
+
+
+
+#line 16 ".\\Power\\PowerMenu.h"
+#line 1 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+ 
+#line 17 ".\\Power\\PowerMenu.h"
+#line 18 ".\\Power\\PowerMenu.h"
+#line 1 ".\\Power\\Command.h"
+
+
+
+
+
+
+
+
+ 
+	
+#line 19 ".\\Power\\PowerMenu.h"
+
+
+
+
+void close_all_dr_save_state(void);
+void first_open_dr_save_state(void);
+void Reload_State_All_Value(void);
+void Reload_Config_All_Value(void);
+void work_mode_operation(void);
+static void PowerOnCharge(void);
+void force_shutdown(uint8_t nxt_mode);
+void softwarepoweroff_mode_operation(void);
+void shutdown_mode_operation(void);
+
+
+
+#line 18 ".\\Power\\Command.h"
+
+
+
+#line 27 ".\\Power\\Command.h"
+
+
+
+																	
+
+
+
+
+
+
+
+
+
+
+
+typedef struct tag_POWER_COMMAND_PROTOCOL
+{
+		uint8_t HEADER[(4u)];
+		uint8_t CMD;
+		uint8_t LENGTH;
+		uint8_t INFO[(16u)];	
+		uint16_t CRC16;
+		uint8_t END[(4u)];
+}POWER_COMMAND_PROTOCOL;
+
+typedef union 
+{
+		uint8_t ByteAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u))];
+		uint16_t WordAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u)) >> 1];
+		uint32_t	LongAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u)) >> 2];
+		POWER_COMMAND_PROTOCOL  ContentDefAccess;
+}POWER_COMMAND;
+
+typedef struct tag_POWER_COMMAND_RECEIVED 
+{
+	uint8_t RequireCode;
+	POWER_COMMAND PowerCommand;
+	
+	
+}POWER_COMMAND_RECEIVED;
+
+typedef void (*SM2SU_REQ_CALL)(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
+
+typedef struct	tag_SM2SU_REQ_DPCH{
+	uint8_t	SM2SU_REQ_CD;
+	SM2SU_REQ_CALL	pFunc;
+	uint16_t InfoLength;
+} SM2SU_REQ_DPCH;
+
+typedef uint8_t (*SU2SM_REQ_CALL)(POWER_COMMAND_RECEIVED *pData);
+
+typedef struct	tag_SU2SM_REQ_DPCH{
+	uint8_t	SU2SM_REQ_CD;
+	SU2SM_REQ_CALL	pFunc;
+} SU2SM_REQ_DPCH;
+
+
+
+#line 92 ".\\Power\\Command.h"
+
+
+
+#line 102 ".\\Power\\Command.h"
+
+
+extern POWER_COMMAND_RECEIVED PowerCommandReceived;
+extern uint8_t PowerCommandRxBuffer[32u];
+extern uint8_t PowerCommandTxBuffer[32u];
+
+extern UART_HandleTypeDef * Uart_HandlePtr;
+extern DMA_HandleTypeDef * Udma_UartRx_HandlePtr;
+extern DMA_HandleTypeDef * Udma_Uarttx_HandlePtr;
+
+HAL_StatusTypeDef Power_Command_Transmit(uint8_t ReqCode);
+void Power_Command_Initilization(void);
+void Power_Command_Main_Loop(void);
+void SU2SM_RxIdleEventCallback(UART_HandleTypeDef *huart, uint16_t Size);
+
+#line 40 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
  
 
  
@@ -22632,7 +23104,7 @@ void Error_Handler(void);
  
 
  
-#line 181 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+#line 182 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
  
 
  
@@ -22645,7 +23117,6 @@ void Error_Handler(void);
  
 
  
-extern DMA_HandleTypeDef hdma_usart1_rx;
 
  
  
@@ -23026,28 +23497,9 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     GPIO_InitStruct.Pin = ((uint16_t)0x0200)|((uint16_t)0x0400);
     GPIO_InitStruct.Mode = ((0x2UL << 0U) | (0x0UL << 4U));
     GPIO_InitStruct.Pull = 0x00000000U;
-    GPIO_InitStruct.Speed = 0x00000003U;
+    GPIO_InitStruct.Speed = 0x00000002U;
     GPIO_InitStruct.Alternate = ((uint8_t)0x07);
     HAL_GPIO_Init(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x0000UL)), &GPIO_InitStruct);
-
-     
-     
-    hdma_usart1_rx.Instance = ((DMA_Stream_TypeDef *) (((0x40000000UL + 0x00020000UL) + 0x6400UL) + 0x040UL));
-    hdma_usart1_rx.Init.Channel = 0x08000000U;
-    hdma_usart1_rx.Init.Direction = 0x00000000U;
-    hdma_usart1_rx.Init.PeriphInc = 0x00000000U;
-    hdma_usart1_rx.Init.MemInc = ((uint32_t)(0x1UL << (10U)));
-    hdma_usart1_rx.Init.PeriphDataAlignment = 0x00000000U;
-    hdma_usart1_rx.Init.MemDataAlignment = 0x00000000U;
-    hdma_usart1_rx.Init.Mode = 0x00000000U;
-    hdma_usart1_rx.Init.Priority = ((uint32_t)(0x3UL << (16U)));
-    hdma_usart1_rx.Init.FIFOMode = 0x00000000U;
-    if (HAL_DMA_Init(&hdma_usart1_rx) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
-    do{ (huart)->hdmarx = &(hdma_usart1_rx); (hdma_usart1_rx). Parent = (huart); } while(0U);
 
      
     HAL_NVIC_SetPriority(USART1_IRQn, 3, 1);
@@ -23107,9 +23559,6 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
 
  
     HAL_GPIO_DeInit(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x0000UL)), ((uint16_t)0x0200)|((uint16_t)0x0400));
-
-     
-    HAL_DMA_DeInit(huart->hdmarx);
 
      
     HAL_NVIC_DisableIRQ(USART1_IRQn);

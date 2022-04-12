@@ -562,36 +562,36 @@
 000274  482d              LDR      r0,|L3.812|
 000276  7800              LDRB     r0,[r0,#0]  ; ADS1115_ChipC_Driver_Cnt
 000278  2802              CMP      r0,#2
-00027a  d104              BNE      |L3.646|
+00027a  d11a              BNE      |L3.690|
 ;;;421    			{
-;;;422    				save_ntc2_data(strpADC->SampleValue);
-00027c  8921              LDRH     r1,[r4,#8]
-00027e  b288              UXTH     r0,r1
-000280  f7fffffe          BL       save_ntc2_data
-000284  e01d              B        |L3.706|
-                  |L3.646|
+;;;422    				power_manage.dc48v_i = 409.6*strpADC->SampleValue/(0.05*ADC_Accuracy);
+00027c  f9b40008          LDRSH    r0,[r4,#8]
+000280  f7fffffe          BL       __aeabi_i2d
+000284  ec410b1a          VMOV     d10,r0,r1
+000288  ed9f0b1d          VLDR     d0,|L3.768|
+00028c  ec532b10          VMOV     r2,r3,d0
+000290  f7fffffe          BL       __aeabi_dmul
+000294  ec410b19          VMOV     d9,r0,r1
+000298  ed9f0b29          VLDR     d0,|L3.832|
+00029c  ec532b10          VMOV     r2,r3,d0
+0002a0  f7fffffe          BL       __aeabi_ddiv
+0002a4  ec410b18          VMOV     d8,r0,r1
+0002a8  f7fffffe          BL       __aeabi_d2uiz
+0002ac  4913              LDR      r1,|L3.764|
+0002ae  80c8              STRH     r0,[r1,#6]
+0002b0  e007              B        |L3.706|
+                  |L3.690|
 ;;;423    			}
 ;;;424    			else if(ADS1115_ChipC_Driver_Cnt == 3u)
-000286  4829              LDR      r0,|L3.812|
-000288  7800              LDRB     r0,[r0,#0]  ; ADS1115_ChipC_Driver_Cnt
-00028a  2803              CMP      r0,#3
-00028c  d119              BNE      |L3.706|
-;;;425    			{
-;;;426    				power_manage.dc48v_i = 409.6*strpADC->SampleValue/(0.05*ADC_Accuracy);
-00028e  f9b40008          LDRSH    r0,[r4,#8]
-000292  f7fffffe          BL       __aeabi_i2d
-000296  ec410b1a          VMOV     d10,r0,r1
-00029a  ed9f0b19          VLDR     d0,|L3.768|
-00029e  ec532b10          VMOV     r2,r3,d0
-0002a2  f7fffffe          BL       __aeabi_dmul
-0002a6  ec410b19          VMOV     d9,r0,r1
-0002aa  ed9f0b25          VLDR     d0,|L3.832|
-0002ae  ec532b10          VMOV     r2,r3,d0
-0002b2  f7fffffe          BL       __aeabi_ddiv
-0002b6  ec410b18          VMOV     d8,r0,r1
-0002ba  f7fffffe          BL       __aeabi_d2uiz
-0002be  490f              LDR      r1,|L3.764|
-0002c0  80c8              STRH     r0,[r1,#6]
+0002b2  481e              LDR      r0,|L3.812|
+0002b4  7800              LDRB     r0,[r0,#0]  ; ADS1115_ChipC_Driver_Cnt
+0002b6  2803              CMP      r0,#3
+0002b8  d103              BNE      |L3.706|
+;;;425    			{				
+;;;426    				save_ntc2_data(strpADC->SampleValue);
+0002ba  8921              LDRH     r1,[r4,#8]
+0002bc  b288              UXTH     r0,r1
+0002be  f7fffffe          BL       save_ntc2_data
                   |L3.706|
 ;;;427    			}
 ;;;428    			

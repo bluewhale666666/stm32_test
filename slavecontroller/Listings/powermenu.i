@@ -38,6 +38,395 @@
 
 
 
+#line 1 "D:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
+ 
+ 
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+     
+#line 27 "D:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
+     
+
+
+
+
+
+
+
+
+
+
+
+#line 46 "D:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
+
+
+
+
+
+ 
+
+     
+
+     
+typedef   signed          char int8_t;
+typedef   signed short     int int16_t;
+typedef   signed           int int32_t;
+typedef   signed       __int64 int64_t;
+
+     
+typedef unsigned          char uint8_t;
+typedef unsigned short     int uint16_t;
+typedef unsigned           int uint32_t;
+typedef unsigned       __int64 uint64_t;
+
+     
+
+     
+     
+typedef   signed          char int_least8_t;
+typedef   signed short     int int_least16_t;
+typedef   signed           int int_least32_t;
+typedef   signed       __int64 int_least64_t;
+
+     
+typedef unsigned          char uint_least8_t;
+typedef unsigned short     int uint_least16_t;
+typedef unsigned           int uint_least32_t;
+typedef unsigned       __int64 uint_least64_t;
+
+     
+
+     
+typedef   signed           int int_fast8_t;
+typedef   signed           int int_fast16_t;
+typedef   signed           int int_fast32_t;
+typedef   signed       __int64 int_fast64_t;
+
+     
+typedef unsigned           int uint_fast8_t;
+typedef unsigned           int uint_fast16_t;
+typedef unsigned           int uint_fast32_t;
+typedef unsigned       __int64 uint_fast64_t;
+
+     
+
+
+
+
+typedef   signed           int intptr_t;
+typedef unsigned           int uintptr_t;
+
+
+     
+typedef   signed     long long intmax_t;
+typedef unsigned     long long uintmax_t;
+
+
+
+
+     
+
+     
+
+
+
+
+
+     
+
+
+
+
+
+     
+
+
+
+
+
+     
+
+     
+
+
+
+
+
+     
+
+
+
+
+
+     
+
+
+
+
+
+     
+
+     
+
+
+
+
+
+     
+
+
+
+
+
+     
+
+
+
+
+
+     
+
+     
+
+
+
+
+
+
+     
+
+
+
+
+
+
+     
+
+
+
+
+
+
+     
+
+     
+
+
+     
+
+
+     
+
+
+     
+
+     
+#line 216 "D:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
+
+     
+
+
+
+     
+
+
+
+
+
+
+     
+    
+ 
+
+
+
+#line 241 "D:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
+
+     
+
+
+
+
+
+
+
+     
+
+
+
+
+
+
+
+
+
+
+     
+
+
+
+
+
+
+
+
+
+
+
+#line 305 "D:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
+
+
+
+
+
+
+ 
+#line 15 "Power\\data_def.h"
+
+
+
+typedef union 
+{
+  struct
+	{
+		uint8_t SYSTEM_RUN        :1;		
+		uint8_t DC48_OC           :1;		
+		uint8_t DC24V1_FK_OUT     :1;   
+		uint8_t MCON_FK_IN        :1;   
+		uint8_t BIT4B             :4;
+	}STATE_DEFINE_H;
+	uint8_t VAL;
+}STATE_INFORMATION_H;
+
+typedef union 
+{
+  struct
+	{
+		uint8_t DC48V_REM 	      :1;   
+		uint8_t DC24V1A  		      :1; 	
+		uint8_t DC24V1B  		      :1; 	
+		uint8_t DC24V1C  		      :1; 	
+		uint8_t DC24V2A  		      :1; 	
+		uint8_t DC24V2B  		      :1; 	
+		uint8_t FAN_RUN  	        :1; 	
+		uint8_t DC48V_ES_SHUTDOWN :1;   
+	}STATE_DEFINE_L;
+	uint8_t VAL;
+}STATE_INFORMATION_L;
+
+typedef union			
+{
+	struct 
+	{
+		uint8_t DC24V2_OV		      :1; 	
+		uint8_t DC24V2A_OC	      :1; 	
+		uint8_t DC24V2B_OC	      :1; 	
+		uint8_t MCON_FKIN		      :1; 	
+		uint8_t RES_OVERHAET	 		:1; 	
+		uint8_t BIT3B				      :3; 	
+	}FAULT_DEFINE_H;
+	uint8_t VAL;
+}FAULT_INFORMATION_H;
+
+typedef union			
+{
+	struct 
+	{
+		uint8_t TEMP_H	 		      :1; 	
+		uint8_t DC48V_UV		      :1; 	
+		uint8_t DC48V_OV	       	:1; 	
+		uint8_t DC48V_OC		      :1; 	
+		uint8_t DC24V1_UV	      	:1; 	
+		uint8_t DC24V1_OV		      :1; 	
+		uint8_t DC24V1_OC		      :1; 	
+		uint8_t DC24V2_UV		      :1; 	
+	}FAULT_DEFINE_L;
+	uint8_t VAL;
+}FAULT_INFORMATION_L;
+
+typedef struct 
+{
+	uint16_t upload_time;  
+	uint8_t  work_mode;
+	
+	uint8_t temperature;
+	uint16_t dc48v_u;
+	uint16_t dc48v_i;
+	uint16_t dc24v_u;
+	uint16_t dc24v_i;
+	
+	uint16_t ai1_u;
+	uint16_t ai1_i;
+	uint16_t ai2_u;
+	uint16_t ai2_i;
+	
+	uint8_t AI_SW1;
+	uint8_t AI_SW2;
+	
+	STATE_INFORMATION_H p_state_h;
+	STATE_INFORMATION_L p_state_l;
+	FAULT_INFORMATION_H p_breakdown_h;
+	FAULT_INFORMATION_L p_breakdown_l;
+}POWER_MANAGE_PACKED;
+extern POWER_MANAGE_PACKED power_manage;
+
+typedef enum
+{
+	POWER_STATUS_IDLE = 0x00u,
+	POWER_STATUS_POWERON,
+	POWER_STATUS_48VNOSTART,
+	POWER_STATUS_48VSTART,
+	POWER_STATUS_SHUTDWON,
+	POWER_STATUS_SOFTWAREPOWEROFF,
+	POWER_STATUS_FAULT,
+}POWER_STATUS_TYPE;
+
+
+
+#line 16 "Power\\PowerMenu.h"
+#line 1 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+ 
+
+
+
+
+
+
+
+ 
 #line 1 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal.h"
 
 
@@ -638,262 +1027,6 @@ typedef enum
 
 
 
-#line 1 "D:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
- 
- 
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-     
-#line 27 "D:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
-     
-
-
-
-
-
-
-
-
-
-
-
-#line 46 "D:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
-
-
-
-
-
- 
-
-     
-
-     
-typedef   signed          char int8_t;
-typedef   signed short     int int16_t;
-typedef   signed           int int32_t;
-typedef   signed       __int64 int64_t;
-
-     
-typedef unsigned          char uint8_t;
-typedef unsigned short     int uint16_t;
-typedef unsigned           int uint32_t;
-typedef unsigned       __int64 uint64_t;
-
-     
-
-     
-     
-typedef   signed          char int_least8_t;
-typedef   signed short     int int_least16_t;
-typedef   signed           int int_least32_t;
-typedef   signed       __int64 int_least64_t;
-
-     
-typedef unsigned          char uint_least8_t;
-typedef unsigned short     int uint_least16_t;
-typedef unsigned           int uint_least32_t;
-typedef unsigned       __int64 uint_least64_t;
-
-     
-
-     
-typedef   signed           int int_fast8_t;
-typedef   signed           int int_fast16_t;
-typedef   signed           int int_fast32_t;
-typedef   signed       __int64 int_fast64_t;
-
-     
-typedef unsigned           int uint_fast8_t;
-typedef unsigned           int uint_fast16_t;
-typedef unsigned           int uint_fast32_t;
-typedef unsigned       __int64 uint_fast64_t;
-
-     
-
-
-
-
-typedef   signed           int intptr_t;
-typedef unsigned           int uintptr_t;
-
-
-     
-typedef   signed     long long intmax_t;
-typedef unsigned     long long uintmax_t;
-
-
-
-
-     
-
-     
-
-
-
-
-
-     
-
-
-
-
-
-     
-
-
-
-
-
-     
-
-     
-
-
-
-
-
-     
-
-
-
-
-
-     
-
-
-
-
-
-     
-
-     
-
-
-
-
-
-     
-
-
-
-
-
-     
-
-
-
-
-
-     
-
-     
-
-
-
-
-
-
-     
-
-
-
-
-
-
-     
-
-
-
-
-
-
-     
-
-     
-
-
-     
-
-
-     
-
-
-     
-
-     
-#line 216 "D:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
-
-     
-
-
-
-     
-
-
-
-
-
-
-     
-    
- 
-
-
-
-#line 241 "D:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
-
-     
-
-
-
-
-
-
-
-     
-
-
-
-
-
-
-
-
-
-
-     
-
-
-
-
-
-
-
-
-
-
-
-#line 305 "D:\\Keil_v5\\ARM\\ARMCC\\Bin\\..\\include\\stdint.h"
-
-
-
-
-
-
- 
 #line 45 "D:\\Keil_v5\\ARM\\PACK\\ARM\\CMSIS\\4.5.0\\CMSIS\\Include\\core_cm4.h"
 
 
@@ -16859,11 +16992,52 @@ typedef struct __UART_HandleTypeDef
 
   volatile uint32_t                 ErrorCode;         
 
-#line 200 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+  void (* TxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);         
+  void (* TxCpltCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* RxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);         
+  void (* RxCpltCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* ErrorCallback)(struct __UART_HandleTypeDef *huart);              
+  void (* AbortCpltCallback)(struct __UART_HandleTypeDef *huart);          
+  void (* AbortTransmitCpltCallback)(struct __UART_HandleTypeDef *huart);  
+  void (* AbortReceiveCpltCallback)(struct __UART_HandleTypeDef *huart);   
+  void (* WakeupCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* RxEventCallback)(struct __UART_HandleTypeDef *huart, uint16_t Pos);  
+
+  void (* MspInitCallback)(struct __UART_HandleTypeDef *huart);            
+  void (* MspDeInitCallback)(struct __UART_HandleTypeDef *huart);          
+
 
 } UART_HandleTypeDef;
 
-#line 231 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+
+
+ 
+typedef enum
+{
+  HAL_UART_TX_HALFCOMPLETE_CB_ID         = 0x00U,     
+  HAL_UART_TX_COMPLETE_CB_ID             = 0x01U,     
+  HAL_UART_RX_HALFCOMPLETE_CB_ID         = 0x02U,     
+  HAL_UART_RX_COMPLETE_CB_ID             = 0x03U,     
+  HAL_UART_ERROR_CB_ID                   = 0x04U,     
+  HAL_UART_ABORT_COMPLETE_CB_ID          = 0x05U,     
+  HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID = 0x06U,     
+  HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID  = 0x07U,     
+  HAL_UART_WAKEUP_CB_ID                  = 0x08U,     
+
+  HAL_UART_MSPINIT_CB_ID                 = 0x0BU,     
+  HAL_UART_MSPDEINIT_CB_ID               = 0x0CU      
+
+} HAL_UART_CallbackIDTypeDef;
+
+
+
+ 
+typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);   
+typedef  void (*pUART_RxEventCallbackTypeDef)(struct __UART_HandleTypeDef *huart, uint16_t Pos);    
+
+
 
 
 
@@ -17303,7 +17477,14 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart);
 void HAL_UART_MspDeInit(UART_HandleTypeDef *huart);
 
  
-#line 713 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+HAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
+                                            pUART_CallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID);
+
+HAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart);
+
 
 
 
@@ -17703,137 +17884,6 @@ uint32_t HAL_GetUIDw2(void);
 
   
   
-
-
-
-
-
-
- 
-#line 15 "Power\\data_def.h"
-
-
-
-typedef union 
-{
-  struct
-	{
-		uint8_t SYSTEM_RUN        :1;		
-		uint8_t DC48_OC           :1;		
-		uint8_t DC24V1_FK_OUT     :1;   
-		uint8_t MCON_FK_IN        :1;   
-		uint8_t BIT4B             :4;
-	}STATE_DEFINE_H;
-	uint8_t VAL;
-}STATE_INFORMATION_H;
-
-typedef union 
-{
-  struct
-	{
-		uint8_t DC48V_REM 	      :1;   
-		uint8_t DC24V1A  		      :1; 	
-		uint8_t DC24V1B  		      :1; 	
-		uint8_t DC24V1C  		      :1; 	
-		uint8_t DC24V2A  		      :1; 	
-		uint8_t DC24V2B  		      :1; 	
-		uint8_t FAN_RUN  	        :1; 	
-		uint8_t DC48V_ES_SHUTDOWN :1;   
-	}STATE_DEFINE_L;
-	uint8_t VAL;
-}STATE_INFORMATION_L;
-
-typedef union			
-{
-	struct 
-	{
-		uint8_t DC24V2_OV		      :1; 	
-		uint8_t DC24V2A_OC	      :1; 	
-		uint8_t DC24V2B_OC	      :1; 	
-		uint8_t MCON_FKIN		      :1; 	
-		uint8_t RES_OVERHAET	 		:1; 	
-		uint8_t BIT3B				      :3; 	
-	}FAULT_DEFINE_H;
-	uint8_t VAL;
-}FAULT_INFORMATION_H;
-
-typedef union			
-{
-	struct 
-	{
-		uint8_t TEMP_H	 		      :1; 	
-		uint8_t DC48V_UV		      :1; 	
-		uint8_t DC48V_OV	       	:1; 	
-		uint8_t DC48V_OC		      :1; 	
-		uint8_t DC24V1_UV	      	:1; 	
-		uint8_t DC24V1_OV		      :1; 	
-		uint8_t DC24V1_OC		      :1; 	
-		uint8_t DC24V2_UV		      :1; 	
-	}FAULT_DEFINE_L;
-	uint8_t VAL;
-}FAULT_INFORMATION_L;
-
-typedef struct 
-{
-	uint16_t upload_time;  
-	uint8_t  work_mode;
-	
-	uint8_t temperature;
-	uint16_t dc48v_u;
-	uint16_t dc48v_i;
-	uint16_t dc24v_u;
-	uint16_t dc24v_i;
-	
-	uint16_t ai1_u;
-	uint16_t ai1_i;
-	uint16_t ai2_u;
-	uint16_t ai2_i;
-	
-	STATE_INFORMATION_H p_state_h;
-	STATE_INFORMATION_L p_state_l;
-	FAULT_INFORMATION_H p_breakdown_h;
-	FAULT_INFORMATION_L p_breakdown_l;
-}POWER_MANAGE_PACKED;
-extern POWER_MANAGE_PACKED power_manage;
-
-typedef enum
-{
-	POWER_STATUS_IDLE = 0x00u,
-	POWER_STATUS_POWERON,
-	POWER_STATUS_48VNOSTART,
-	POWER_STATUS_48VSTART,
-	POWER_STATUS_REMOTEOFF,
-	POWER_STATUS_POWEROFF,
-	POWER_STATUS_SHUTDWON,
-	POWER_STATUS_FAULT,
-}POWER_STATUS_TYPE;
-
-
-
-#line 16 "Power\\PowerMenu.h"
-#line 1 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
- 
-
- 
-
 
 
 
@@ -22725,43 +22775,7 @@ extern void ECAT_StateChange(unsigned char alStatus, unsigned short alStatusCode
  
 
 #line 38 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
-
- 
-
- 
- 
-
- 
-
- 
- 
-
- 
-
- 
- 
-
- 
-
- 
-void Error_Handler(void);
-
- 
-
- 
-
- 
-#line 181 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
- 
-
- 
-
-
-
-
-
-#line 17 "Power\\PowerMenu.h"
-#line 1 "Power\\ADS1115Driver.h"
+#line 1 ".\\Power\\ADS1115Driver.h"
 
 
 
@@ -22775,16 +22789,16 @@ void Error_Handler(void);
 
 
 
-#line 15 "Power\\ADS1115Driver.h"
-#line 16 "Power\\ADS1115Driver.h"
-#line 1 "Power\\TemperatureDriver.h"
+#line 15 ".\\Power\\ADS1115Driver.h"
+#line 16 ".\\Power\\ADS1115Driver.h"
+#line 1 ".\\Power\\TemperatureDriver.h"
 
 
 
 
 
-#line 7 "Power\\TemperatureDriver.h"
-#line 8 "Power\\TemperatureDriver.h"
+#line 7 ".\\Power\\TemperatureDriver.h"
+#line 8 ".\\Power\\TemperatureDriver.h"
 
 
 uint8_t look_up_table(uint16_t *a,uint8_t ArrayLong,uint16_t data);
@@ -22794,7 +22808,7 @@ void save_ntc2_data(uint16_t data);
 
 
 
-#line 17 "Power\\ADS1115Driver.h"
+#line 17 ".\\Power\\ADS1115Driver.h"
 
 
 
@@ -22826,14 +22840,14 @@ void save_ntc2_data(uint16_t data);
 
 
 
-#line 56 "Power\\ADS1115Driver.h"
+#line 56 ".\\Power\\ADS1115Driver.h"
 
-#line 65 "Power\\ADS1115Driver.h"
-
-
+#line 65 ".\\Power\\ADS1115Driver.h"
 
 
-#line 77 "Power\\ADS1115Driver.h"
+
+
+#line 77 ".\\Power\\ADS1115Driver.h"
 
 
 
@@ -22900,8 +22914,8 @@ extern ADS1115_DRIVER ADS1115_AnalogCurrentInput1;
 void ADS1115_Driver_Initilization(void);
 void ADS1115_Driver_MainLoop(void);
 
-#line 18 "Power\\PowerMenu.h"
-#line 1 "Power\\Command.h"
+#line 39 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+#line 1 ".\\Power\\Command.h"
 
 
 
@@ -22916,12 +22930,9 @@ void ADS1115_Driver_MainLoop(void);
 
 
 
-#line 16 "Power\\Command.h"
-
-
-
-#line 28 "Power\\Command.h"
-
+#line 16 ".\\Power\\Command.h"
+#line 17 ".\\Power\\Command.h"
+#line 1 ".\\Power\\PowerMenu.h"
 
 
 
@@ -22929,21 +22940,27 @@ void ADS1115_Driver_MainLoop(void);
 
 
 
-typedef void (*SM2SU_REQ_CALL)(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
 
-typedef struct	tag_SM2SU_REQ_DPCH{
-	uint8_t	SM2SU_REQ_CD;
-	SM2SU_REQ_CALL	pFunc;
-	uint16_t InfoLength;
-} SM2SU_REQ_DPCH;
+ 
+	
+#line 18 ".\\Power\\Command.h"
 
 
 
-#line 53 "Power\\Command.h"
+#line 27 ".\\Power\\Command.h"
 
 
 
-#line 63 "Power\\Command.h"
+																	
+
+
+
+
+
+
+
+
+
 
 
 typedef struct tag_POWER_COMMAND_PROTOCOL
@@ -22964,6 +22981,39 @@ typedef union
 		POWER_COMMAND_PROTOCOL  ContentDefAccess;
 }POWER_COMMAND;
 
+typedef struct tag_POWER_COMMAND_RECEIVED 
+{
+	uint8_t RequireCode;
+	POWER_COMMAND PowerCommand;
+	
+	
+}POWER_COMMAND_RECEIVED;
+
+typedef void (*SM2SU_REQ_CALL)(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
+
+typedef struct	tag_SM2SU_REQ_DPCH{
+	uint8_t	SM2SU_REQ_CD;
+	SM2SU_REQ_CALL	pFunc;
+	uint16_t InfoLength;
+} SM2SU_REQ_DPCH;
+
+typedef uint8_t (*SU2SM_REQ_CALL)(POWER_COMMAND_RECEIVED *pData);
+
+typedef struct	tag_SU2SM_REQ_DPCH{
+	uint8_t	SU2SM_REQ_CD;
+	SU2SM_REQ_CALL	pFunc;
+} SU2SM_REQ_DPCH;
+
+
+
+#line 92 ".\\Power\\Command.h"
+
+
+
+#line 102 ".\\Power\\Command.h"
+
+
+extern POWER_COMMAND_RECEIVED PowerCommandReceived;
 extern uint8_t PowerCommandRxBuffer[32u];
 extern uint8_t PowerCommandTxBuffer[32u];
 
@@ -22974,10 +23024,45 @@ extern DMA_HandleTypeDef * Udma_Uarttx_HandlePtr;
 HAL_StatusTypeDef Power_Command_Transmit(uint8_t ReqCode);
 void Power_Command_Initilization(void);
 void Power_Command_Main_Loop(void);
+void SU2SM_RxIdleEventCallback(UART_HandleTypeDef *huart, uint16_t Size);
+
+#line 40 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+ 
+
+ 
+ 
+
+ 
+
+ 
+ 
+
+ 
+
+ 
+ 
+
+ 
+
+ 
+void Error_Handler(void);
+
+ 
+
+ 
+
+ 
+#line 182 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+ 
+
+ 
 
 
 
 
+
+#line 17 "Power\\PowerMenu.h"
+#line 18 "Power\\PowerMenu.h"
 #line 19 "Power\\PowerMenu.h"
 
 
@@ -22989,6 +23074,9 @@ void Reload_State_All_Value(void);
 void Reload_Config_All_Value(void);
 void work_mode_operation(void);
 static void PowerOnCharge(void);
+void force_shutdown(uint8_t nxt_mode);
+void softwarepoweroff_mode_operation(void);
+void shutdown_mode_operation(void);
 
 
 
@@ -22996,10 +23084,9 @@ static void PowerOnCharge(void);
 
 
 extern POWER_MANAGE_PACKED power_manage;
+extern UART_HandleTypeDef huart1;
 
 uint8_t sampling_flag = 1;  
-
-
 
 
 
@@ -23068,7 +23155,6 @@ static void PowerOnCharge(void)
 					if(elapse >= 1500u)
 					{
 						SAFE_48V_SWITCH_ON_STATE = 2u;
-						HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1000UL)), ((uint16_t)0x0002), GPIO_PIN_SET);
 					}
 				break;
 			case 2u:
@@ -23087,8 +23173,129 @@ static void PowerOnCharge(void)
 		}
 }
 
+static uint32_t SAFE_48V_SWITCH_OFF_TIMER = 0u;
+static uint8_t SAFE_48V_SWITCH_OFF_STATE = 0u;
+static void PowerAccessCharge(void)
+{
+		uint32_t now = 0u;
+		uint32_t elapse = 0u;
+		if(HAL_GPIO_ReadPin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1400UL)),((uint16_t)0x0800)) == GPIO_PIN_RESET)
+		{
+			SAFE_48V_SWITCH_OFF_STATE = 0u;
+		}
+		
+		switch(SAFE_48V_SWITCH_OFF_STATE)
+		{
+			case 1u:
+					HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1000UL)), ((uint16_t)0x0002), GPIO_PIN_SET);
+					now = HAL_GetTick();
+					elapse = now - SAFE_48V_SWITCH_OFF_TIMER;
+					if(elapse >= 100u)
+					{
+						SAFE_48V_SWITCH_OFF_STATE = 2u;
+					}
+				break;
+			case 2u:
+					HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1000UL)), ((uint16_t)0x0002), GPIO_PIN_RESET);
+			    power_manage.work_mode = POWER_STATUS_48VNOSTART;
+				break;
+			case 0u:
+			default:
+					HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1000UL)), ((uint16_t)0x0002), GPIO_PIN_SET);
+					if(HAL_GPIO_ReadPin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1400UL)),((uint16_t)0x0800)) == GPIO_PIN_SET)
+					{
+							SAFE_48V_SWITCH_OFF_STATE = 1u;
+							SAFE_48V_SWITCH_OFF_TIMER = HAL_GetTick();
+					}
+				break;
+		}
+}
+
+void shutdown_mode_operation(void)
+{
+	HAL_StatusTypeDef TransmitResult;
+	uint32_t ShutdownnowTime;
+	uint32_t ShutdownelapseTime;
+	static uint8_t ShutdownState = 0u;
+	static uint32_t ShutdownTime = 0u;
+	
+	switch(ShutdownState)
+	{
+		case 0u:	
+		  TransmitResult = Power_Command_Transmit((uint8_t)3u);
+	    if(TransmitResult == HAL_OK)
+			{
+				ShutdownTime = HAL_GetTick();
+				ShutdownState = 1u;
+			}
+			break;
+		case 1u:
+			ShutdownnowTime = HAL_GetTick();
+	    ShutdownelapseTime = ShutdownnowTime - ShutdownTime; 
+		  if(ShutdownelapseTime >= 5000)
+		  {
+			  force_shutdown(POWER_STATUS_IDLE);
+				ShutdownState = 0u;
+		  }		
+			break;
+		default:
+			break;		
+	}
+}
+
+void softwarepoweroff_mode_operation(void)
+{
+	HAL_StatusTypeDef TransmitResult;
+	uint32_t softwarepoweroffnowTime;
+	uint32_t softwarepoweroffelapseTime;
+	static uint8_t softwarepoweroffState = 0u;
+	static uint32_t softwarepoweroffTime = 0u;
+	
+	switch(softwarepoweroffState)
+	{
+		case 0u:	
+		  TransmitResult = Power_Command_Transmit((uint8_t)4u);
+	    if(TransmitResult == HAL_OK)
+			{
+				softwarepoweroffTime = HAL_GetTick();
+				softwarepoweroffState = 1u;
+			}
+			break;
+		case 1u:
+			softwarepoweroffnowTime = HAL_GetTick();
+	    softwarepoweroffelapseTime = softwarepoweroffnowTime - softwarepoweroffTime; 
+		  if(softwarepoweroffelapseTime >= 5000)
+		  {
+			  force_shutdown(POWER_STATUS_IDLE);
+				softwarepoweroffState = 0u;
+		  }		
+			break;
+		default:
+			break;		
+	}
+}
+
 void work_mode_operation(void)
 {
+	
+	if(power_manage.AI_SW1 == 1)  
+	{
+		HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1000UL)), ((uint16_t)0x0040), GPIO_PIN_RESET);
+	}
+	else if(power_manage.AI_SW1 == 0)  
+	{
+	  HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1000UL)), ((uint16_t)0x0040), GPIO_PIN_SET);
+	}
+	
+	if(power_manage.AI_SW2 == 1)
+	{
+		HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x0400UL)), ((uint16_t)0x0002), GPIO_PIN_RESET);
+	}
+	else if(power_manage.AI_SW2 == 0)
+	{
+	  HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x0400UL)), ((uint16_t)0x0002), GPIO_PIN_SET);
+	}
+	
 	switch(power_manage.work_mode)
 	{
 		case POWER_STATUS_IDLE:
@@ -23101,15 +23308,17 @@ void work_mode_operation(void)
 	    power_manage.work_mode = POWER_STATUS_48VNOSTART;
 		  break;
 		case POWER_STATUS_48VNOSTART:
-			Power_Command_Main_Loop();
+		  PowerOnCharge();
 			break;
 		case POWER_STATUS_48VSTART:
-			Power_Command_Main_Loop();
+		  PowerAccessCharge();
 			break;
 		case POWER_STATUS_SHUTDWON:
-			force_shutdown(POWER_STATUS_IDLE);
+      shutdown_mode_operation();
 	    break;
-
+		case POWER_STATUS_SOFTWAREPOWEROFF:
+      softwarepoweroff_mode_operation();
+			break;
 		default:
 			break;	
 	}

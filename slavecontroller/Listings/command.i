@@ -16844,11 +16844,52 @@ typedef struct __UART_HandleTypeDef
 
   volatile uint32_t                 ErrorCode;         
 
-#line 200 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+  void (* TxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);         
+  void (* TxCpltCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* RxHalfCpltCallback)(struct __UART_HandleTypeDef *huart);         
+  void (* RxCpltCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* ErrorCallback)(struct __UART_HandleTypeDef *huart);              
+  void (* AbortCpltCallback)(struct __UART_HandleTypeDef *huart);          
+  void (* AbortTransmitCpltCallback)(struct __UART_HandleTypeDef *huart);  
+  void (* AbortReceiveCpltCallback)(struct __UART_HandleTypeDef *huart);   
+  void (* WakeupCallback)(struct __UART_HandleTypeDef *huart);             
+  void (* RxEventCallback)(struct __UART_HandleTypeDef *huart, uint16_t Pos);  
+
+  void (* MspInitCallback)(struct __UART_HandleTypeDef *huart);            
+  void (* MspDeInitCallback)(struct __UART_HandleTypeDef *huart);          
+
 
 } UART_HandleTypeDef;
 
-#line 231 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+
+
+ 
+typedef enum
+{
+  HAL_UART_TX_HALFCOMPLETE_CB_ID         = 0x00U,     
+  HAL_UART_TX_COMPLETE_CB_ID             = 0x01U,     
+  HAL_UART_RX_HALFCOMPLETE_CB_ID         = 0x02U,     
+  HAL_UART_RX_COMPLETE_CB_ID             = 0x03U,     
+  HAL_UART_ERROR_CB_ID                   = 0x04U,     
+  HAL_UART_ABORT_COMPLETE_CB_ID          = 0x05U,     
+  HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID = 0x06U,     
+  HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID  = 0x07U,     
+  HAL_UART_WAKEUP_CB_ID                  = 0x08U,     
+
+  HAL_UART_MSPINIT_CB_ID                 = 0x0BU,     
+  HAL_UART_MSPDEINIT_CB_ID               = 0x0CU      
+
+} HAL_UART_CallbackIDTypeDef;
+
+
+
+ 
+typedef  void (*pUART_CallbackTypeDef)(UART_HandleTypeDef *huart);   
+typedef  void (*pUART_RxEventCallbackTypeDef)(struct __UART_HandleTypeDef *huart, uint16_t Pos);    
+
+
 
 
 
@@ -17288,7 +17329,14 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart);
 void HAL_UART_MspDeInit(UART_HandleTypeDef *huart);
 
  
-#line 713 "D:\\Keil_v5\\ARM\\PACK\\Keil\\STM32F4xx_DFP\\2.16.0\\Drivers\\STM32F4xx_HAL_Driver\\Inc\\stm32f4xx_hal_uart.h"
+
+HAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
+                                            pUART_CallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID);
+
+HAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback);
+HAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart);
+
 
 
 
@@ -17696,83 +17744,6 @@ uint32_t HAL_GetUIDw2(void);
 
  
 #line 16 "Power\\Command.h"
-
-
-
-#line 28 "Power\\Command.h"
-
-
-
-
-
-
-
-
-typedef void (*SM2SU_REQ_CALL)(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
-
-typedef struct	tag_SM2SU_REQ_DPCH{
-	uint8_t	SM2SU_REQ_CD;
-	SM2SU_REQ_CALL	pFunc;
-	uint16_t InfoLength;
-} SM2SU_REQ_DPCH;
-
-
-
-#line 53 "Power\\Command.h"
-
-
-
-#line 63 "Power\\Command.h"
-
-
-typedef struct tag_POWER_COMMAND_PROTOCOL
-{
-		uint8_t HEADER[(4u)];
-		uint8_t CMD;
-		uint8_t LENGTH;
-		uint8_t INFO[(16u)];	
-		uint16_t CRC16;
-		uint8_t END[(4u)];
-}POWER_COMMAND_PROTOCOL;
-
-typedef union 
-{
-		uint8_t ByteAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u))];
-		uint16_t WordAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u)) >> 1];
-		uint32_t	LongAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u)) >> 2];
-		POWER_COMMAND_PROTOCOL  ContentDefAccess;
-}POWER_COMMAND;
-
-extern uint8_t PowerCommandRxBuffer[32u];
-extern uint8_t PowerCommandTxBuffer[32u];
-
-extern UART_HandleTypeDef * Uart_HandlePtr;
-extern DMA_HandleTypeDef * Udma_UartRx_HandlePtr;
-extern DMA_HandleTypeDef * Udma_Uarttx_HandlePtr;
-
-HAL_StatusTypeDef Power_Command_Transmit(uint8_t ReqCode);
-void Power_Command_Initilization(void);
-void Power_Command_Main_Loop(void);
-
-
-
-
-#line 11 "Power\\Command.c"
-#line 1 "Power\\ADS1115Driver.h"
-
-
-
-
-
-
-
-
- 
-
-
-
-
-#line 15 "Power\\ADS1115Driver.h"
 #line 1 "Power\\data_def.h"
 
 
@@ -17866,6 +17837,9 @@ typedef struct
 	uint16_t ai2_u;
 	uint16_t ai2_i;
 	
+	uint8_t AI_SW1;
+	uint8_t AI_SW2;
+	
 	STATE_INFORMATION_H p_state_h;
 	STATE_INFORMATION_L p_state_l;
 	FAULT_INFORMATION_H p_breakdown_h;
@@ -17879,33 +17853,15 @@ typedef enum
 	POWER_STATUS_POWERON,
 	POWER_STATUS_48VNOSTART,
 	POWER_STATUS_48VSTART,
-	POWER_STATUS_REMOTEOFF,
-	POWER_STATUS_POWEROFF,
 	POWER_STATUS_SHUTDWON,
+	POWER_STATUS_SOFTWAREPOWEROFF,
 	POWER_STATUS_FAULT,
 }POWER_STATUS_TYPE;
 
 
 
-#line 16 "Power\\ADS1115Driver.h"
-#line 1 "Power\\TemperatureDriver.h"
-
-
-
-
-
-#line 7 "Power\\TemperatureDriver.h"
-#line 8 "Power\\TemperatureDriver.h"
-
-
-uint8_t look_up_table(uint16_t *a,uint8_t ArrayLong,uint16_t data);
-float num_to_temperature(uint8_t num);
-void save_ntc_data(uint16_t data);			
-void save_ntc2_data(uint16_t data);		
-
-
-
-#line 17 "Power\\ADS1115Driver.h"
+#line 17 "Power\\Command.h"
+#line 1 "Power\\PowerMenu.h"
 
 
 
@@ -17915,17 +17871,13 @@ void save_ntc2_data(uint16_t data);
 
 
  
+	
 
 
 
- 
 
-
-
- 
-
-
-
+#line 16 "Power\\PowerMenu.h"
+#line 1 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
  
 
 
@@ -17937,92 +17889,31 @@ void save_ntc2_data(uint16_t data);
 
 
 
-#line 56 "Power\\ADS1115Driver.h"
-
-#line 65 "Power\\ADS1115Driver.h"
-
-
-
-
-#line 77 "Power\\ADS1115Driver.h"
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-extern I2C_HandleTypeDef * I2C_Ptr_48V_NTC;
-extern I2C_HandleTypeDef * I2C_Ptr_24V;
-extern I2C_HandleTypeDef * I2C_Ptr_AI;
-
-typedef union
-{
-	struct 
-	{
-		uint16_t COMP_QUE 		:2;
-		uint16_t COMP_LAT 		:1;
-		uint16_t COMP_POL 		:1;
-		uint16_t COMP_MODE  	:1;
-		uint16_t DR         	:3;
-		uint16_t MODE     		:1;
-		uint16_t PGA        	:3;
-		uint16_t MUX        	:3;
-		uint16_t OS         	:1;
-	}BIT;
-	uint16_t ALL;
-}ADS1115_CFG;
-
-typedef struct tag_ADS1115_DRIVER
-{
-	I2C_HandleTypeDef * I2C_Handle;
-	uint8_t ADDR;
-	ADS1115_CFG ConfigRegData;
-	int16_t SampleValue;
-	uint32_t *StartConversionTimerPtr;
-	uint32_t ConversionTime;
-	uint32_t ConfigErrorCnt;
-	uint32_t ConversionErrorCnt;
-	int16_t SampleValueMax;
-	int16_t SampleValueMin;
-	uint8_t SampleBuffer[2u];
-	HAL_StatusTypeDef ConfigResult;
-	HAL_StatusTypeDef ConversionTransmitResult;
-	HAL_StatusTypeDef ConversionReceiveResult;	
-}ADS1115_DRIVER;
-
-extern ADS1115_DRIVER ADS1115_NTC;
-extern ADS1115_DRIVER ADS1115_Voltage48V;
-extern ADS1115_DRIVER ADS1115_Current48V;
-extern ADS1115_DRIVER ADS1115_Voltage24V;
-extern ADS1115_DRIVER ADS1115_Current24V;
-extern ADS1115_DRIVER ADS1115_AnalogVoltageInput0;
-extern ADS1115_DRIVER ADS1115_AnalogVoltageInput1;
-extern ADS1115_DRIVER ADS1115_AnalogCurrentInput0;
-extern ADS1115_DRIVER ADS1115_AnalogCurrentInput1;
-void ADS1115_Driver_Initilization(void);
-void ADS1115_Driver_MainLoop(void);
-
-#line 12 "Power\\Command.c"
-#line 1 ".\\etherCAT\\applInterface.h"
-
-
-
+ 
+ 
 
  
 
 
 
 
+
+
+
  
+#line 31 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+
+ 
+ 
+#line 1 ".\\etherCAT\\SPIDriver.h"
+
+
 
 
 
@@ -18046,7 +17937,32 @@ void ADS1115_Driver_MainLoop(void);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
+
+
+
+
+
+
+
 
 
 
@@ -20293,9 +20209,147 @@ extern __declspec(__nothrow) void _membitmovewb(void *  , const void *  , int  ,
 
 
 
-#line 41 ".\\etherCAT\\applInterface.h"
-#line 42 ".\\etherCAT\\applInterface.h"
-#line 43 ".\\etherCAT\\applInterface.h"
+#line 58 ".\\etherCAT\\SPIDriver.h"
+#line 59 ".\\etherCAT\\SPIDriver.h"
+
+
+
+
+	
+	
+	
+	
+	
+#line 79 ".\\etherCAT\\SPIDriver.h"
+
+#line 91 ".\\etherCAT\\SPIDriver.h"
+
+
+
+
+
+
+
+  
+
+
+
+
+    typedef union {
+        unsigned short Val;
+        struct __attribute__((packed)) {
+            unsigned char LB;
+            unsigned char HB;
+        } byte;
+    } UINT16_VAL;
+
+    typedef union {
+        unsigned int Val;
+        unsigned short w[2] __attribute__((packed));
+        unsigned char  v[4];
+        struct __attribute__((packed)) {
+            unsigned short LW;
+            unsigned short HW;
+        } word;
+        struct __attribute__((packed)) {
+            unsigned char LB;
+            unsigned char HB;
+            unsigned char UB;
+            unsigned char MB;
+        } byte;
+    } UINT32_VAL;
+
+    typedef union {
+        unsigned long long Val;
+        unsigned short w[4];
+        unsigned char  v[8];
+    } UINT64_VAL;
+
+
+
+
+		
+extern SPI_HandleTypeDef *EcatHspiPtr;
+extern unsigned char EcatSpiReadBuffer[512u];
+extern unsigned char EcatSpiWriteBuffer[512u];
+	
+	
+	
+	
+	
+
+	void SPIWritePDRamRegister(unsigned char *WriteBuffer, unsigned short Address, unsigned short Count);
+	void SPIReadPDRamRegister(unsigned char *ReadBuffer, unsigned short Address, unsigned short Count);
+    void SPIReadRegUsingCSR(unsigned char *ReadBuffer, unsigned short Address, unsigned char Count);
+    void SPIWriteRegUsingCSR( unsigned char *WriteBuffer, unsigned short Address, unsigned char Count);
+	void SPIWriteDWord (unsigned short Address, unsigned int Val);
+	unsigned int SPIReadDWord (unsigned short Address);
+    void SPIWriteBurstMode (unsigned int Val);
+    unsigned int SPIReadBurstMode (void);
+    void SPISendAddr (unsigned short Address);
+    void PDIWriteLAN9252DirectReg( unsigned int Val, unsigned short Address);
+    unsigned int PDIReadLAN9252DirectReg( unsigned short Address);
+    void PDIReadReg(unsigned char *ReadBuffer, unsigned short Address, unsigned short Count);
+    void PDIWriteReg( unsigned char *WriteBuffer, unsigned short Address, unsigned short Count);
+
+
+
+
+
+
+#line 35 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+#line 1 ".\\etherCAT\\9252_HW.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
 #line 1 ".\\etherCAT\\esc.h"
 
 
@@ -20487,327 +20541,7 @@ TSYNCMAN;
 
 
  
-#line 44 ".\\etherCAT\\applInterface.h"
-#line 1 ".\\etherCAT\\ecatslv.h"
-
-
-
-
- 
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
- 
-
-#line 47 ".\\etherCAT\\ecatslv.h"
-
- 
-#line 1 ".\\etherCAT\\esc.h"
-
-
-
-
- 
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
- 
-#line 33 ".\\etherCAT\\esc.h"
-
-#line 206 ".\\etherCAT\\esc.h"
- 
-#line 50 ".\\etherCAT\\ecatslv.h"
-#line 1 ".\\etherCAT\\9252_HW.h"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-#line 1 ".\\etherCAT\\esc.h"
-
-
-
-
- 
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
- 
-#line 33 ".\\etherCAT\\esc.h"
-
-#line 206 ".\\etherCAT\\esc.h"
- 
 #line 53 ".\\etherCAT\\9252_HW.h"
-#line 1 ".\\etherCAT\\SPIDriver.h"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-#line 58 ".\\etherCAT\\SPIDriver.h"
-#line 59 ".\\etherCAT\\SPIDriver.h"
-
-
-
-
-	
-	
-	
-	
-	
-#line 79 ".\\etherCAT\\SPIDriver.h"
-
-#line 91 ".\\etherCAT\\SPIDriver.h"
-
-
-
-
-
-
-
-  
-
-
-
-
-    typedef union {
-        unsigned short Val;
-        struct __attribute__((packed)) {
-            unsigned char LB;
-            unsigned char HB;
-        } byte;
-    } UINT16_VAL;
-
-    typedef union {
-        unsigned int Val;
-        unsigned short w[2] __attribute__((packed));
-        unsigned char  v[4];
-        struct __attribute__((packed)) {
-            unsigned short LW;
-            unsigned short HW;
-        } word;
-        struct __attribute__((packed)) {
-            unsigned char LB;
-            unsigned char HB;
-            unsigned char UB;
-            unsigned char MB;
-        } byte;
-    } UINT32_VAL;
-
-    typedef union {
-        unsigned long long Val;
-        unsigned short w[4];
-        unsigned char  v[8];
-    } UINT64_VAL;
-
-
-
-
-		
-extern SPI_HandleTypeDef *EcatHspiPtr;
-extern unsigned char EcatSpiReadBuffer[512u];
-extern unsigned char EcatSpiWriteBuffer[512u];
-	
-	
-	
-	
-	
-
-	void SPIWritePDRamRegister(unsigned char *WriteBuffer, unsigned short Address, unsigned short Count);
-	void SPIReadPDRamRegister(unsigned char *ReadBuffer, unsigned short Address, unsigned short Count);
-    void SPIReadRegUsingCSR(unsigned char *ReadBuffer, unsigned short Address, unsigned char Count);
-    void SPIWriteRegUsingCSR( unsigned char *WriteBuffer, unsigned short Address, unsigned char Count);
-	void SPIWriteDWord (unsigned short Address, unsigned int Val);
-	unsigned int SPIReadDWord (unsigned short Address);
-    void SPIWriteBurstMode (unsigned int Val);
-    unsigned int SPIReadBurstMode (void);
-    void SPISendAddr (unsigned short Address);
-    void PDIWriteLAN9252DirectReg( unsigned int Val, unsigned short Address);
-    unsigned int PDIReadLAN9252DirectReg( unsigned short Address);
-    void PDIReadReg(unsigned char *ReadBuffer, unsigned short Address, unsigned short Count);
-    void PDIWriteReg( unsigned char *WriteBuffer, unsigned short Address, unsigned short Count);
-
-
-
-
-
-
 #line 54 ".\\etherCAT\\9252_HW.h"
 #line 1 ".\\etherCAT\\PDIDriver.h"
 
@@ -20996,6 +20730,292 @@ extern unsigned int PDI_Disable_Global_Interrupt();
 
 
 
+#line 36 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+#line 1 ".\\etherCAT\\ecatappl.h"
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+ 
+
+#line 48 ".\\etherCAT\\ecatappl.h"
+
+
+
+
+
+
+
+
+
+ 
+
+ 
+#line 85 ".\\etherCAT\\ecatappl.h"
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+ 
+
+extern unsigned char bEcatWaitForInputUpdate;  
+extern unsigned char bEtherCATRunLed;  
+extern unsigned char bEtherCATErrorLed;  
+extern unsigned char bRunApplication;  
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+extern    void       ECAT_CheckTimer(void);
+extern    void       PDI_Isr(void);
+extern    void       Sync0_Isr(void);
+extern    void       Sync1_Isr(void);
+extern    void       ECAT_Application(void);
+extern    void       PDO_ResetOutputs(void);
+extern    void       PDO_ReadInputs(void);
+extern    void       PDO_InputMapping(void);
+
+ 
+extern    void       CalcSMCycleTime(void);
+extern    unsigned short     ESC_EepromAccess(unsigned int wordaddress, unsigned short wordsize, unsigned short  *pData, unsigned char access);
+extern    unsigned short     ESC_EepromWriteCRC(void);
+
+ 
+
+
+
+
+ 
+#line 37 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+#line 1 ".\\etherCAT\\applInterface.h"
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+ 
+
+
+
+
+
+#line 41 ".\\etherCAT\\applInterface.h"
+#line 42 ".\\etherCAT\\applInterface.h"
+#line 43 ".\\etherCAT\\applInterface.h"
+#line 1 ".\\etherCAT\\esc.h"
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+ 
+#line 33 ".\\etherCAT\\esc.h"
+
+#line 206 ".\\etherCAT\\esc.h"
+ 
+#line 44 ".\\etherCAT\\applInterface.h"
+#line 1 ".\\etherCAT\\ecatslv.h"
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+ 
+
+#line 47 ".\\etherCAT\\ecatslv.h"
+
+ 
+#line 1 ".\\etherCAT\\esc.h"
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+ 
+#line 33 ".\\etherCAT\\esc.h"
+
+#line 206 ".\\etherCAT\\esc.h"
+ 
+#line 50 ".\\etherCAT\\ecatslv.h"
 #line 51 ".\\etherCAT\\ecatslv.h"
 
 
@@ -22420,19 +22440,7 @@ extern    void    COE_WriteBackupEntry(unsigned char subindex, const TOBJECT  * 
 #line 48 ".\\etherCAT\\ecatappl.h"
 
 
-
-
-
-
-
-
-
- 
-
- 
-#line 85 ".\\etherCAT\\ecatappl.h"
- 
-
+#line 87 ".\\etherCAT\\ecatappl.h"
 
 
 
@@ -22782,6 +22790,545 @@ extern void ECAT_StateChange(unsigned char alStatus, unsigned short alStatusCode
 
  
 
+#line 38 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+#line 1 ".\\Power\\ADS1115Driver.h"
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+#line 15 ".\\Power\\ADS1115Driver.h"
+#line 16 ".\\Power\\ADS1115Driver.h"
+#line 1 ".\\Power\\TemperatureDriver.h"
+
+
+
+
+
+#line 7 ".\\Power\\TemperatureDriver.h"
+#line 8 ".\\Power\\TemperatureDriver.h"
+
+
+uint8_t look_up_table(uint16_t *a,uint8_t ArrayLong,uint16_t data);
+float num_to_temperature(uint8_t num);
+void save_ntc_data(uint16_t data);			
+void save_ntc2_data(uint16_t data);		
+
+
+
+#line 17 ".\\Power\\ADS1115Driver.h"
+
+
+
+
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+#line 56 ".\\Power\\ADS1115Driver.h"
+
+#line 65 ".\\Power\\ADS1115Driver.h"
+
+
+
+
+#line 77 ".\\Power\\ADS1115Driver.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+extern I2C_HandleTypeDef * I2C_Ptr_48V_NTC;
+extern I2C_HandleTypeDef * I2C_Ptr_24V;
+extern I2C_HandleTypeDef * I2C_Ptr_AI;
+
+typedef union
+{
+	struct 
+	{
+		uint16_t COMP_QUE 		:2;
+		uint16_t COMP_LAT 		:1;
+		uint16_t COMP_POL 		:1;
+		uint16_t COMP_MODE  	:1;
+		uint16_t DR         	:3;
+		uint16_t MODE     		:1;
+		uint16_t PGA        	:3;
+		uint16_t MUX        	:3;
+		uint16_t OS         	:1;
+	}BIT;
+	uint16_t ALL;
+}ADS1115_CFG;
+
+typedef struct tag_ADS1115_DRIVER
+{
+	I2C_HandleTypeDef * I2C_Handle;
+	uint8_t ADDR;
+	ADS1115_CFG ConfigRegData;
+	int16_t SampleValue;
+	uint32_t *StartConversionTimerPtr;
+	uint32_t ConversionTime;
+	uint32_t ConfigErrorCnt;
+	uint32_t ConversionErrorCnt;
+	int16_t SampleValueMax;
+	int16_t SampleValueMin;
+	uint8_t SampleBuffer[2u];
+	HAL_StatusTypeDef ConfigResult;
+	HAL_StatusTypeDef ConversionTransmitResult;
+	HAL_StatusTypeDef ConversionReceiveResult;	
+}ADS1115_DRIVER;
+
+extern ADS1115_DRIVER ADS1115_NTC;
+extern ADS1115_DRIVER ADS1115_Voltage48V;
+extern ADS1115_DRIVER ADS1115_Current48V;
+extern ADS1115_DRIVER ADS1115_Voltage24V;
+extern ADS1115_DRIVER ADS1115_Current24V;
+extern ADS1115_DRIVER ADS1115_AnalogVoltageInput0;
+extern ADS1115_DRIVER ADS1115_AnalogVoltageInput1;
+extern ADS1115_DRIVER ADS1115_AnalogCurrentInput0;
+extern ADS1115_DRIVER ADS1115_AnalogCurrentInput1;
+void ADS1115_Driver_Initilization(void);
+void ADS1115_Driver_MainLoop(void);
+
+#line 39 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+#line 1 ".\\Power\\Command.h"
+
+
+
+
+
+
+
+
+ 
+	
+#line 40 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+ 
+
+ 
+ 
+
+ 
+
+ 
+ 
+
+ 
+
+ 
+ 
+
+ 
+
+ 
+void Error_Handler(void);
+
+ 
+
+ 
+
+ 
+#line 182 "C:\\Users\\LENOVO\\Desktop\\slavecontroller\\RTE\\Device\\STM32F407ZETx\\STCubeGenerated\\Inc\\main.h"
+ 
+
+ 
+
+
+
+
+
+#line 17 "Power\\PowerMenu.h"
+#line 18 "Power\\PowerMenu.h"
+#line 19 "Power\\PowerMenu.h"
+
+
+
+
+void close_all_dr_save_state(void);
+void first_open_dr_save_state(void);
+void Reload_State_All_Value(void);
+void Reload_Config_All_Value(void);
+void work_mode_operation(void);
+static void PowerOnCharge(void);
+void force_shutdown(uint8_t nxt_mode);
+void softwarepoweroff_mode_operation(void);
+void shutdown_mode_operation(void);
+
+
+
+#line 18 "Power\\Command.h"
+
+
+
+#line 27 "Power\\Command.h"
+
+
+
+																	
+
+
+
+
+
+
+
+
+
+
+
+typedef struct tag_POWER_COMMAND_PROTOCOL
+{
+		uint8_t HEADER[(4u)];
+		uint8_t CMD;
+		uint8_t LENGTH;
+		uint8_t INFO[(16u)];	
+		uint16_t CRC16;
+		uint8_t END[(4u)];
+}POWER_COMMAND_PROTOCOL;
+
+typedef union 
+{
+		uint8_t ByteAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u))];
+		uint16_t WordAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u)) >> 1];
+		uint32_t	LongAccess[((4u) + (4u) + (1u) + (1u) + (16u) + (2u)) >> 2];
+		POWER_COMMAND_PROTOCOL  ContentDefAccess;
+}POWER_COMMAND;
+
+typedef struct tag_POWER_COMMAND_RECEIVED 
+{
+	uint8_t RequireCode;
+	POWER_COMMAND PowerCommand;
+	
+	
+}POWER_COMMAND_RECEIVED;
+
+typedef void (*SM2SU_REQ_CALL)(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
+
+typedef struct	tag_SM2SU_REQ_DPCH{
+	uint8_t	SM2SU_REQ_CD;
+	SM2SU_REQ_CALL	pFunc;
+	uint16_t InfoLength;
+} SM2SU_REQ_DPCH;
+
+typedef uint8_t (*SU2SM_REQ_CALL)(POWER_COMMAND_RECEIVED *pData);
+
+typedef struct	tag_SU2SM_REQ_DPCH{
+	uint8_t	SU2SM_REQ_CD;
+	SU2SM_REQ_CALL	pFunc;
+} SU2SM_REQ_DPCH;
+
+
+
+#line 92 "Power\\Command.h"
+
+
+
+#line 102 "Power\\Command.h"
+
+
+extern POWER_COMMAND_RECEIVED PowerCommandReceived;
+extern uint8_t PowerCommandRxBuffer[32u];
+extern uint8_t PowerCommandTxBuffer[32u];
+
+extern UART_HandleTypeDef * Uart_HandlePtr;
+extern DMA_HandleTypeDef * Udma_UartRx_HandlePtr;
+extern DMA_HandleTypeDef * Udma_Uarttx_HandlePtr;
+
+HAL_StatusTypeDef Power_Command_Transmit(uint8_t ReqCode);
+void Power_Command_Initilization(void);
+void Power_Command_Main_Loop(void);
+void SU2SM_RxIdleEventCallback(UART_HandleTypeDef *huart, uint16_t Size);
+
+#line 11 "Power\\Command.c"
+#line 12 "Power\\Command.c"
+#line 1 ".\\etherCAT\\applInterface.h"
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+ 
+
+
+#line 56 ".\\etherCAT\\applInterface.h"
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+ 
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+extern unsigned short (*pAPPL_FoeRead)(unsigned short  * pName, unsigned short nameSize, unsigned int password, unsigned short maxBlockSize, unsigned short *pData);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+extern unsigned short(*pAPPL_FoeReadData)(unsigned int offset, unsigned short maxBlockSize, unsigned short *pData);
+
+
+
+
+
+
+
+
+
+ 
+extern void(*pAPPL_FoeError)(unsigned int errorCode);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+extern unsigned short (*pAPPL_FoeWrite)(unsigned short  * pName, unsigned short nameSize, unsigned int password);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+extern unsigned short(*pAPPL_FoeWriteData)(unsigned short  * pData, unsigned short Size, unsigned char bDataFollowing);
+
+ 
+
+
+
+
+
+
+
+ 
+extern void(*pAPPL_CoeReadInd)(unsigned short Index, unsigned char Subindex, unsigned char CompleteAccess);
+
+
+
+
+
+
+
+
+ 
+extern void(*pAPPL_CoeWriteInd)(unsigned short Index, unsigned char Subindex, unsigned char CompleteAccess);
+
+ 
+
+
+
+
+ 
+extern void(*pAPPL_MainLoop)();
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+ 
+extern unsigned short MainInit(void);
+
+
+
+
+
+
+
+
+ 
+extern void MainLoop(void);
+
+
+
+
+
+
+
+
+
+
+
+ 
+extern void ECAT_StateChange(unsigned char alStatus, unsigned short alStatusCode);
+
+
+ 
+
 #line 13 "Power\\Command.c"
 #line 1 ".\\CRC\\Crc16.h"
 
@@ -22854,11 +23401,15 @@ uint8_t PowerCommandTxBuffer[32u];
 UART_HandleTypeDef * Uart_HandlePtr;
 DMA_HandleTypeDef * Udma_UartRx_HandlePtr;
 DMA_HandleTypeDef * Udma_Uarttx_HandlePtr;
+POWER_COMMAND_RECEIVED PowerCommandReceived;
 
 static uint32_t PeriodicTransmissionTime = 0u;
 static unsigned char PeriodicTransmissionTimeout = 0;
 static uint16_t PwrCmdTxSize = 0u;
-
+static unsigned char Power_Command_Receive_Idle_Detected = 0;
+static unsigned char Power_Command_Receive_Buffer_Full =  0;
+static unsigned char Power_Command_Receive_Length_Error_Detected = 0;		
+static unsigned char Power_Command_ReceiveToIdle_Restart_Error = 0;				
 static void SM2SU_Req_Call_Periodic_Transmission(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
 static void SM2SU_Req_Call_Reply_Control_Command(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
 static void SM2SU_Req_Call_Power_Off_Require(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
@@ -22866,6 +23417,47 @@ static void SM2SU_Req_Call_Reply_Power_Off_Command(uint8_t ReqCd, uint8_t *pData
 static void SM2SU_Req_Call_Reply_Reboot_Command(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
 static void SM2SU_Req_Call_Compulsory_Power_Off_Command(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
 static void SM2SU_Req_Call_Encapsulation_Func(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength);
+static void Power_Command_Receive(uint8_t * pData, uint16_t Size);
+static uint8_t SU2SM_Req_Call_Reply_Periodic_Transmission(POWER_COMMAND_RECEIVED *pData);
+static uint8_t SU2SM_Req_Call_Control_Command(POWER_COMMAND_RECEIVED *pData);
+static uint8_t SU2SM_Req_Call_Reply_Power_Off_Require(POWER_COMMAND_RECEIVED *pData);
+static uint8_t SU2SM_Req_Call_Power_Off_Command(POWER_COMMAND_RECEIVED *pData);
+static uint8_t SU2SM_Req_Call_Reboot_Command(POWER_COMMAND_RECEIVED *pData);
+static uint8_t SU2SM_Req_Call_Reply_Compulsory_Power_Off_Command(POWER_COMMAND_RECEIVED *pData);
+
+const static SU2SM_REQ_DPCH strPwrCmdRxReqMap[6u]=
+{
+	{
+		1u, 
+		SU2SM_Req_Call_Reply_Periodic_Transmission, 
+	},
+	
+	{
+		2u, 
+		SU2SM_Req_Call_Control_Command, 
+	},
+	
+	{
+		3u, 
+		SU2SM_Req_Call_Reply_Power_Off_Require,
+	},
+	
+	{
+		4u, 
+		SU2SM_Req_Call_Power_Off_Command, 
+	},
+	
+	{
+		5u,
+		SU2SM_Req_Call_Reboot_Command,
+	},
+	
+	{
+		6u, 
+		SU2SM_Req_Call_Reply_Compulsory_Power_Off_Command, 
+	},
+};
+
 const static SM2SU_REQ_DPCH strPwrCmdTxReqMap[6u]=
 {
 	{
@@ -22907,7 +23499,7 @@ const static SM2SU_REQ_DPCH strPwrCmdTxReqMap[6u]=
 
 void Power_Command_Initilization(void)
 {
-
+  Uart_HandlePtr->RxEventCallback= SU2SM_RxIdleEventCallback;
 }
 
 HAL_StatusTypeDef Power_Command_Transmit(uint8_t ReqCode)
@@ -22930,6 +23522,17 @@ void Power_Command_Main_Loop(void)
 	uint32_t nowTime;
 	uint32_t elapseTime;
 	HAL_StatusTypeDef TransmitResult;
+	uint32_t i;
+	
+	for(i=0u; i<(uint32_t)6u;i++){
+		if(PowerCommandReceived.RequireCode == strPwrCmdRxReqMap[i].SU2SM_REQ_CD){
+			if(strPwrCmdRxReqMap[i].pFunc(&PowerCommandReceived) != 0u)
+			{
+				memset((uint8_t *)&PowerCommandReceived,0u, sizeof(PowerCommandReceived));
+			}
+			break;
+		}
+	}
 	
 	nowTime = HAL_GetTick();
 	elapseTime = nowTime - PeriodicTransmissionTime;
@@ -22949,6 +23552,153 @@ void Power_Command_Main_Loop(void)
 	{
 		
 	}
+}
+
+static void Power_Command_Receive(uint8_t * pData, uint16_t Size)
+{
+		unsigned char CommandReceived = 0;
+		uint16_t crc16;
+		uint16_t InfoLength;
+
+		if(Power_Command_Receive_Buffer_Full == 1)
+		{
+			CommandReceived = 1;
+		}
+		if(Power_Command_Receive_Idle_Detected == 1)
+		{
+			CommandReceived = 1;
+			Power_Command_Receive_Idle_Detected = 0;
+		}
+		
+		if (CommandReceived == 1)
+		{
+			if((pData[0u] != 0xFFu) || 				(pData[1u] != 0xAAu) || 				(pData[2u] != 0xAAu) || 				(pData[3u] != 0xFFu))
+
+
+
+			{
+				return;
+			}
+			InfoLength = pData[5u];
+			if(InfoLength > ((4u) + (4u) + (1u) + (1u) + (16u) + (2u)))
+			{
+				return;
+			}
+			
+			crc16 = CRC16_CCITT(pData, ((4u) + 																(1u) + (1u) + 																InfoLength));
+
+
+			if((pData[(4u) + 					(1u) + (1u) + 					InfoLength] != (uint8_t)(crc16 & 0xff)) 	|| 					(pData[(4u) + 					(1u) + (1u) + 					InfoLength + 1u] != (uint8_t)((crc16 >> 8)& 0xff)))		
+
+
+
+
+
+			{
+				return;
+			}						
+			switch(pData[4u])
+			{
+				case 0u:
+					return;	
+					break;
+				case 1u:
+					if(InfoLength != 0u)
+					{
+						return;
+					}
+					break;
+				case 2u:
+					if(InfoLength != 2u)
+					{
+						return;
+					}
+					break;
+				case 3u:
+				case 4u:
+				case 5u:
+				case 6u:
+					if(InfoLength != 1u)
+					{
+						return;
+					}
+					break;					
+				default:
+					return;
+					break;
+			}
+			
+			if((pData[(4u) + 					(1u) + (1u) + 					InfoLength + (2u)] != 0xEEu) || 				(pData[(4u) + 					(1u) + (1u) + 					InfoLength + (2u) + 1u] != 0x55u) || 				(pData[(4u) + 					(1u) + (1u) + 					InfoLength + (2u) + 2u] != 0x55u) || 				(pData[(4u) + 					(1u) + (1u) + 					InfoLength + (2u) + 3u] != 0xEEu))
+#line 267 "Power\\Command.c"
+			{
+				return;
+			}
+			PowerCommandReceived.RequireCode = pData[4u];
+			memcpy(PowerCommandReceived.PowerCommand.ContentDefAccess.HEADER, pData, (4u) + 																																	(1u) + (1u));
+
+			PowerCommandReceived.PowerCommand.ContentDefAccess.CRC16 = crc16;
+			memcpy(PowerCommandReceived.PowerCommand.ContentDefAccess.INFO, &pData[(4u) + 																																	(1u) + (1u)], InfoLength);
+
+			memcpy(PowerCommandReceived.PowerCommand.ContentDefAccess.END, &pData[(4u) + 																																	(1u) + (1u) + 																																	InfoLength + (2u)],4u);
+
+
+		}
+}
+
+static uint8_t SU2SM_Req_Call_Reply_Periodic_Transmission(POWER_COMMAND_RECEIVED *pData)
+{
+	
+	return 1u;
+}
+
+static uint8_t SU2SM_Req_Call_Control_Command(POWER_COMMAND_RECEIVED *pData)
+{
+		
+	return 1u;
+}
+
+
+static uint8_t SU2SM_Req_Call_Reply_Power_Off_Require(POWER_COMMAND_RECEIVED *pData)
+{
+		
+		return 1u;
+}
+
+
+static uint8_t SU2SM_Req_Call_Power_Off_Command(POWER_COMMAND_RECEIVED *pData)
+{
+  	
+	if((power_manage.work_mode == POWER_STATUS_48VNOSTART) || (power_manage.work_mode == POWER_STATUS_48VSTART))
+	{
+	  power_manage.work_mode = POWER_STATUS_SOFTWAREPOWEROFF;
+	}
+	 
+		return 1u;
+}
+
+
+static uint8_t SU2SM_Req_Call_Reboot_Command(POWER_COMMAND_RECEIVED *pData)
+{
+		
+		HAL_StatusTypeDef TransmitResult;
+	
+	  TransmitResult = Power_Command_Transmit((uint8_t)5u);
+		if(TransmitResult == HAL_OK)
+		{
+			HAL_Delay(5000);
+			force_shutdown(POWER_STATUS_IDLE);
+			HAL_Delay(1000);
+			power_manage.work_mode = POWER_STATUS_POWERON;
+		}
+	
+		return 1u;
+}
+
+
+static uint8_t SU2SM_Req_Call_Reply_Compulsory_Power_Off_Command(POWER_COMMAND_RECEIVED *pData)
+{
+		
+		return 1u;
 }
 
 static void SM2SU_Req_Call_Encapsulation_Func(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
@@ -23009,13 +23759,16 @@ static void SM2SU_Req_Call_Periodic_Transmission(uint8_t ReqCd, uint8_t *pData, 
 	{
 		
 		
-		
-		
+		pData[(4u) + (1u) + (1u)] = power_manage.p_state_l.VAL;
+		pData[(4u) + (1u) + (1u) + 1u] = power_manage.p_state_h.VAL;
+		pData[(4u) + (1u) + (1u) + 2u] = power_manage.p_breakdown_l.VAL;
+		pData[(4u) + (1u) + (1u) + 3u] = power_manage.p_breakdown_h.VAL;
 		
 		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
 	}
 }
 
+ 
 static void SM2SU_Req_Call_Reply_Control_Command(uint8_t ReqCd, uint8_t *pData, uint16_t *pSize, uint16_t InfoLength)
 {
 	if(ReqCd != 2u)
@@ -23027,8 +23780,8 @@ static void SM2SU_Req_Call_Reply_Control_Command(uint8_t ReqCd, uint8_t *pData, 
 	{
 		
 		
-		
-		
+
+
 		
 		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
 	}
@@ -23045,8 +23798,7 @@ static void SM2SU_Req_Call_Power_Off_Require(uint8_t ReqCd, uint8_t *pData, uint
 	{
 		
 		
-		
-		
+		pData[(4u) + (1u) + (1u)] = 0x01;
 		
 		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
 	}
@@ -23063,8 +23815,7 @@ static void SM2SU_Req_Call_Reply_Power_Off_Command(uint8_t ReqCd, uint8_t *pData
 	{
 		
 		
-		
-		
+		pData[(4u) + (1u) + (1u)] = 0x01;
 		
 		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
 	}
@@ -23081,8 +23832,7 @@ static void SM2SU_Req_Call_Reply_Reboot_Command(uint8_t ReqCd, uint8_t *pData, u
 	{
 		
 		
-		
-		
+		pData[(4u) + (1u) + (1u)] = 0x01;
 		
 		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
 	}
@@ -23104,4 +23854,38 @@ static void SM2SU_Req_Call_Compulsory_Power_Off_Command(uint8_t ReqCd, uint8_t *
 		
 		SM2SU_Req_Call_Encapsulation_Func(ReqCd, pData, pSize, InfoLength);
 	}
+}
+
+void SU2SM_RxIdleEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+{
+		uint16_t i;
+		uint16_t length;
+    if (huart->RxXferCount == 0U)
+    {
+				
+				
+			Power_Command_Receive_Buffer_Full = 1;
+		}
+		else
+		{
+				
+				
+			Power_Command_Receive_Idle_Detected = 1;
+		}
+		if(Size > ((4u) + (4u) + (1u) + (1u) + (16u) + (2u)))
+		{
+			Power_Command_Receive_Length_Error_Detected = 1;
+			length = ((4u) + (4u) + (1u) + (1u) + (16u) + (2u));				
+		}
+		else
+		{
+			length = Size;
+		}
+		Power_Command_Receive(PowerCommandRxBuffer,length);
+		memset(PowerCommandRxBuffer,0u, 32u);
+		
+		if (HAL_UARTEx_ReceiveToIdle_IT(huart, PowerCommandRxBuffer, 32u) != HAL_OK)
+		{
+				Power_Command_ReceiveToIdle_Restart_Error = 1;				
+		}	
 }

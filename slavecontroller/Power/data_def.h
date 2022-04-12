@@ -11,7 +11,7 @@
 #ifndef __DATA_DEF_H
 #define __DATA_DEF_H
 
-#include "stm32f4xx_hal.h"
+#include <stdint.h>
 
 
 
@@ -90,6 +90,9 @@ typedef struct
 	uint16_t ai2_u;
 	uint16_t ai2_i;
 	
+	uint8_t AI_SW1;
+	uint8_t AI_SW2;
+	
 	STATE_INFORMATION_H p_state_h;
 	STATE_INFORMATION_L p_state_l;
 	FAULT_INFORMATION_H p_breakdown_h;
@@ -103,9 +106,8 @@ typedef enum
 	POWER_STATUS_POWERON,
 	POWER_STATUS_48VNOSTART,
 	POWER_STATUS_48VSTART,
-	POWER_STATUS_REMOTEOFF,
-	POWER_STATUS_POWEROFF,
 	POWER_STATUS_SHUTDWON,
+	POWER_STATUS_SOFTWAREPOWEROFF,
 	POWER_STATUS_FAULT,
 }POWER_STATUS_TYPE;
 

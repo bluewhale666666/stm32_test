@@ -55,5 +55,7 @@
 .\objects\main.o: .\Power\data_def.h
 .\objects\main.o: .\Power\TemperatureDriver.h
 .\objects\main.o: .\Power\Command.h
-.\objects\main.o: .\Power\KeyIn.h
 .\objects\main.o: .\Power\PowerMenu.h
+.\objects\main.o: C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h
+.\objects\main.o: .\Power\Command.h
+.\objects\main.o: .\Power\KeyIn.h

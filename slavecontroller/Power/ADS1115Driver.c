@@ -419,11 +419,11 @@ void ADS1115_Driver_MainLoop(void)
 			}
 			else if(ADS1115_ChipC_Driver_Cnt == 2u)
 			{
-				save_ntc2_data(strpADC->SampleValue);
+				power_manage.dc48v_i = 409.6*strpADC->SampleValue/(0.05*ADC_Accuracy);
 			}
 			else if(ADS1115_ChipC_Driver_Cnt == 3u)
-			{
-				power_manage.dc48v_i = 409.6*strpADC->SampleValue/(0.05*ADC_Accuracy);
+			{				
+				save_ntc2_data(strpADC->SampleValue);
 			}
 			
 			if(ADS1115_ChipC_Driver_Cnt >= (uint8_t)ADS1115_ChipC_Driver_Number)

@@ -1,6 +1,8 @@
 .\objects\keyin.o: Power\KeyIn.c
 .\objects\keyin.o: Power\KeyIn.h
 .\objects\keyin.o: Power\data_def.h
+.\objects\keyin.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\keyin.o: C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h
 .\objects\keyin.o: D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h
 .\objects\keyin.o: C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\stm32f4xx_hal_conf.h
 .\objects\keyin.o: D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h
@@ -8,7 +10,6 @@
 .\objects\keyin.o: D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h
 .\objects\keyin.o: D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f407xx.h
 .\objects\keyin.o: D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cm4.h
-.\objects\keyin.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\keyin.o: D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmInstr.h
 .\objects\keyin.o: D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\cmsis_armcc.h
 .\objects\keyin.o: D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmFunc.h
@@ -33,7 +34,6 @@
 .\objects\keyin.o: D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h
 .\objects\keyin.o: D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h
 .\objects\keyin.o: D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h
-.\objects\keyin.o: C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h
 .\objects\keyin.o: .\etherCAT\SPIDriver.h
 .\objects\keyin.o: .\etherCAT\ecat_def.h
 .\objects\keyin.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
@@ -53,3 +53,9 @@
 .\objects\keyin.o: .\etherCAT\mailbox.h
 .\objects\keyin.o: .\etherCAT\ecatappl.h
 .\objects\keyin.o: .\etherCAT\foeappl.h
+.\objects\keyin.o: .\Power\ADS1115Driver.h
+.\objects\keyin.o: .\Power\TemperatureDriver.h
+.\objects\keyin.o: .\Power\Command.h
+.\objects\keyin.o: .\Power\PowerMenu.h
+.\objects\keyin.o: C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h
+.\objects\keyin.o: .\Power\Command.h

@@ -132,7 +132,7 @@
                           ENDP
 
 
-                          AREA ||i.HAL_HalfDuplex_Init||, CODE, READONLY, ALIGN=1
+                          AREA ||i.HAL_HalfDuplex_Init||, CODE, READONLY, ALIGN=2
 
                   HAL_HalfDuplex_Init PROC
 ;;;432      */
@@ -205,53 +205,63 @@
 000008  bd10              POP      {r4,pc}
                   |L3.10|
 00000a  f894003d          LDRB     r0,[r4,#0x3d]         ;446
-00000e  b928              CBNZ     r0,|L3.28|
+00000e  b960              CBNZ     r0,|L3.42|
 000010  2000              MOVS     r0,#0                 ;449
 000012  f884003c          STRB     r0,[r4,#0x3c]         ;449
-000016  4620              MOV      r0,r4                 ;463
-000018  f7fffffe          BL       HAL_UART_MspInit
-                  |L3.28|
-00001c  2024              MOVS     r0,#0x24              ;467
-00001e  f884003d          STRB     r0,[r4,#0x3d]         ;467
-000022  6820              LDR      r0,[r4,#0]            ;470
-000024  68c0              LDR      r0,[r0,#0xc]          ;470
-000026  f4205000          BIC      r0,r0,#0x2000         ;470
-00002a  6821              LDR      r1,[r4,#0]            ;470
-00002c  60c8              STR      r0,[r1,#0xc]          ;470
-00002e  4620              MOV      r0,r4                 ;473
-000030  f7fffffe          BL       UART_SetConfig
-000034  6820              LDR      r0,[r4,#0]            ;478
-000036  6900              LDR      r0,[r0,#0x10]         ;478
-000038  f4204090          BIC      r0,r0,#0x4800         ;478
-00003c  6821              LDR      r1,[r4,#0]            ;478
-00003e  6108              STR      r0,[r1,#0x10]         ;478
-000040  6820              LDR      r0,[r4,#0]            ;479
-000042  6940              LDR      r0,[r0,#0x14]         ;479
-000044  f0200022          BIC      r0,r0,#0x22           ;479
-000048  6821              LDR      r1,[r4,#0]            ;479
-00004a  6148              STR      r0,[r1,#0x14]         ;479
-00004c  6820              LDR      r0,[r4,#0]            ;482
-00004e  6940              LDR      r0,[r0,#0x14]         ;482
-000050  f0400008          ORR      r0,r0,#8              ;482
-000054  6821              LDR      r1,[r4,#0]            ;482
-000056  6148              STR      r0,[r1,#0x14]         ;482
-000058  6820              LDR      r0,[r4,#0]            ;485
-00005a  68c0              LDR      r0,[r0,#0xc]          ;485
-00005c  f4405000          ORR      r0,r0,#0x2000         ;485
-000060  6821              LDR      r1,[r4,#0]            ;485
-000062  60c8              STR      r0,[r1,#0xc]          ;485
-000064  2000              MOVS     r0,#0                 ;488
-000066  6420              STR      r0,[r4,#0x40]         ;488
-000068  2020              MOVS     r0,#0x20              ;489
-00006a  f884003d          STRB     r0,[r4,#0x3d]         ;489
-00006e  f884003e          STRB     r0,[r4,#0x3e]         ;490
-000072  2000              MOVS     r0,#0                 ;492
-000074  e7c8              B        |L3.8|
+000016  4620              MOV      r0,r4                 ;452
+000018  f7fffffe          BL       UART_InitCallbacksToDefault
+00001c  6ee0              LDR      r0,[r4,#0x6c]         ;454
+00001e  b908              CBNZ     r0,|L3.36|
+000020  4818              LDR      r0,|L3.132|
+000022  66e0              STR      r0,[r4,#0x6c]         ;456
+                  |L3.36|
+000024  4620              MOV      r0,r4                 ;460
+000026  6ee1              LDR      r1,[r4,#0x6c]         ;460
+000028  4788              BLX      r1                    ;460
+                  |L3.42|
+00002a  2024              MOVS     r0,#0x24              ;467
+00002c  f884003d          STRB     r0,[r4,#0x3d]         ;467
+000030  6820              LDR      r0,[r4,#0]            ;470
+000032  68c0              LDR      r0,[r0,#0xc]          ;470
+000034  f4205000          BIC      r0,r0,#0x2000         ;470
+000038  6821              LDR      r1,[r4,#0]            ;470
+00003a  60c8              STR      r0,[r1,#0xc]          ;470
+00003c  4620              MOV      r0,r4                 ;473
+00003e  f7fffffe          BL       UART_SetConfig
+000042  6820              LDR      r0,[r4,#0]            ;478
+000044  6900              LDR      r0,[r0,#0x10]         ;478
+000046  f4204090          BIC      r0,r0,#0x4800         ;478
+00004a  6821              LDR      r1,[r4,#0]            ;478
+00004c  6108              STR      r0,[r1,#0x10]         ;478
+00004e  6820              LDR      r0,[r4,#0]            ;479
+000050  6940              LDR      r0,[r0,#0x14]         ;479
+000052  f0200022          BIC      r0,r0,#0x22           ;479
+000056  6821              LDR      r1,[r4,#0]            ;479
+000058  6148              STR      r0,[r1,#0x14]         ;479
+00005a  6820              LDR      r0,[r4,#0]            ;482
+00005c  6940              LDR      r0,[r0,#0x14]         ;482
+00005e  f0400008          ORR      r0,r0,#8              ;482
+000062  6821              LDR      r1,[r4,#0]            ;482
+000064  6148              STR      r0,[r1,#0x14]         ;482
+000066  6820              LDR      r0,[r4,#0]            ;485
+000068  68c0              LDR      r0,[r0,#0xc]          ;485
+00006a  f4405000          ORR      r0,r0,#0x2000         ;485
+00006e  6821              LDR      r1,[r4,#0]            ;485
+000070  60c8              STR      r0,[r1,#0xc]          ;485
+000072  2000              MOVS     r0,#0                 ;488
+000074  6420              STR      r0,[r4,#0x40]         ;488
+000076  2020              MOVS     r0,#0x20              ;489
+000078  f884003d          STRB     r0,[r4,#0x3d]         ;489
+00007c  f884003e          STRB     r0,[r4,#0x3e]         ;490
+000080  2000              MOVS     r0,#0                 ;492
+000082  e7c1              B        |L3.8|
 ;;;494    
                           ENDP
 
+                  |L3.132|
+                          DCD      HAL_UART_MspInit
 
-                          AREA ||i.HAL_LIN_Init||, CODE, READONLY, ALIGN=1
+                          AREA ||i.HAL_LIN_Init||, CODE, READONLY, ALIGN=2
 
                   HAL_LIN_Init PROC
 ;;;505      */
@@ -332,61 +342,71 @@
 00000a  bd70              POP      {r4-r6,pc}
                   |L4.12|
 00000c  f894003d          LDRB     r0,[r4,#0x3d]         ;522
-000010  b928              CBNZ     r0,|L4.30|
+000010  b960              CBNZ     r0,|L4.44|
 000012  2000              MOVS     r0,#0                 ;525
 000014  f884003c          STRB     r0,[r4,#0x3c]         ;525
-000018  4620              MOV      r0,r4                 ;539
-00001a  f7fffffe          BL       HAL_UART_MspInit
-                  |L4.30|
-00001e  2024              MOVS     r0,#0x24              ;543
-000020  f884003d          STRB     r0,[r4,#0x3d]         ;543
-000024  6820              LDR      r0,[r4,#0]            ;546
-000026  68c0              LDR      r0,[r0,#0xc]          ;546
-000028  f4205000          BIC      r0,r0,#0x2000         ;546
-00002c  6821              LDR      r1,[r4,#0]            ;546
-00002e  60c8              STR      r0,[r1,#0xc]          ;546
-000030  4620              MOV      r0,r4                 ;549
-000032  f7fffffe          BL       UART_SetConfig
-000036  6820              LDR      r0,[r4,#0]            ;554
-000038  6900              LDR      r0,[r0,#0x10]         ;554
-00003a  f4206000          BIC      r0,r0,#0x800          ;554
-00003e  6821              LDR      r1,[r4,#0]            ;554
-000040  6108              STR      r0,[r1,#0x10]         ;554
-000042  6820              LDR      r0,[r4,#0]            ;555
-000044  6940              LDR      r0,[r0,#0x14]         ;555
-000046  f020002a          BIC      r0,r0,#0x2a           ;555
-00004a  6821              LDR      r1,[r4,#0]            ;555
-00004c  6148              STR      r0,[r1,#0x14]         ;555
-00004e  6820              LDR      r0,[r4,#0]            ;558
-000050  6900              LDR      r0,[r0,#0x10]         ;558
-000052  f4404080          ORR      r0,r0,#0x4000         ;558
-000056  6821              LDR      r1,[r4,#0]            ;558
-000058  6108              STR      r0,[r1,#0x10]         ;558
-00005a  6820              LDR      r0,[r4,#0]            ;561
-00005c  6900              LDR      r0,[r0,#0x10]         ;561
-00005e  f0200020          BIC      r0,r0,#0x20           ;561
-000062  6821              LDR      r1,[r4,#0]            ;561
-000064  6108              STR      r0,[r1,#0x10]         ;561
-000066  6820              LDR      r0,[r4,#0]            ;562
-000068  6900              LDR      r0,[r0,#0x10]         ;562
-00006a  4328              ORRS     r0,r0,r5              ;562
-00006c  6821              LDR      r1,[r4,#0]            ;562
-00006e  6108              STR      r0,[r1,#0x10]         ;562
-000070  6820              LDR      r0,[r4,#0]            ;565
-000072  68c0              LDR      r0,[r0,#0xc]          ;565
-000074  f4405000          ORR      r0,r0,#0x2000         ;565
-000078  6821              LDR      r1,[r4,#0]            ;565
-00007a  60c8              STR      r0,[r1,#0xc]          ;565
-00007c  2000              MOVS     r0,#0                 ;568
-00007e  6420              STR      r0,[r4,#0x40]         ;568
-000080  2020              MOVS     r0,#0x20              ;569
-000082  f884003d          STRB     r0,[r4,#0x3d]         ;569
-000086  f884003e          STRB     r0,[r4,#0x3e]         ;570
-00008a  2000              MOVS     r0,#0                 ;572
-00008c  e7bd              B        |L4.10|
+000018  4620              MOV      r0,r4                 ;528
+00001a  f7fffffe          BL       UART_InitCallbacksToDefault
+00001e  6ee0              LDR      r0,[r4,#0x6c]         ;530
+000020  b908              CBNZ     r0,|L4.38|
+000022  481e              LDR      r0,|L4.156|
+000024  66e0              STR      r0,[r4,#0x6c]         ;532
+                  |L4.38|
+000026  4620              MOV      r0,r4                 ;536
+000028  6ee1              LDR      r1,[r4,#0x6c]         ;536
+00002a  4788              BLX      r1                    ;536
+                  |L4.44|
+00002c  2024              MOVS     r0,#0x24              ;543
+00002e  f884003d          STRB     r0,[r4,#0x3d]         ;543
+000032  6820              LDR      r0,[r4,#0]            ;546
+000034  68c0              LDR      r0,[r0,#0xc]          ;546
+000036  f4205000          BIC      r0,r0,#0x2000         ;546
+00003a  6821              LDR      r1,[r4,#0]            ;546
+00003c  60c8              STR      r0,[r1,#0xc]          ;546
+00003e  4620              MOV      r0,r4                 ;549
+000040  f7fffffe          BL       UART_SetConfig
+000044  6820              LDR      r0,[r4,#0]            ;554
+000046  6900              LDR      r0,[r0,#0x10]         ;554
+000048  f4206000          BIC      r0,r0,#0x800          ;554
+00004c  6821              LDR      r1,[r4,#0]            ;554
+00004e  6108              STR      r0,[r1,#0x10]         ;554
+000050  6820              LDR      r0,[r4,#0]            ;555
+000052  6940              LDR      r0,[r0,#0x14]         ;555
+000054  f020002a          BIC      r0,r0,#0x2a           ;555
+000058  6821              LDR      r1,[r4,#0]            ;555
+00005a  6148              STR      r0,[r1,#0x14]         ;555
+00005c  6820              LDR      r0,[r4,#0]            ;558
+00005e  6900              LDR      r0,[r0,#0x10]         ;558
+000060  f4404080          ORR      r0,r0,#0x4000         ;558
+000064  6821              LDR      r1,[r4,#0]            ;558
+000066  6108              STR      r0,[r1,#0x10]         ;558
+000068  6820              LDR      r0,[r4,#0]            ;561
+00006a  6900              LDR      r0,[r0,#0x10]         ;561
+00006c  f0200020          BIC      r0,r0,#0x20           ;561
+000070  6821              LDR      r1,[r4,#0]            ;561
+000072  6108              STR      r0,[r1,#0x10]         ;561
+000074  6820              LDR      r0,[r4,#0]            ;562
+000076  6900              LDR      r0,[r0,#0x10]         ;562
+000078  4328              ORRS     r0,r0,r5              ;562
+00007a  6821              LDR      r1,[r4,#0]            ;562
+00007c  6108              STR      r0,[r1,#0x10]         ;562
+00007e  6820              LDR      r0,[r4,#0]            ;565
+000080  68c0              LDR      r0,[r0,#0xc]          ;565
+000082  f4405000          ORR      r0,r0,#0x2000         ;565
+000086  6821              LDR      r1,[r4,#0]            ;565
+000088  60c8              STR      r0,[r1,#0xc]          ;565
+00008a  2000              MOVS     r0,#0                 ;568
+00008c  6420              STR      r0,[r4,#0x40]         ;568
+00008e  2020              MOVS     r0,#0x20              ;569
+000090  f884003d          STRB     r0,[r4,#0x3d]         ;569
+000094  f884003e          STRB     r0,[r4,#0x3e]         ;570
+000098  2000              MOVS     r0,#0                 ;572
+00009a  e7b6              B        |L4.10|
 ;;;574    
                           ENDP
 
+                  |L4.156|
+                          DCD      HAL_UART_MspInit
 
                           AREA ||i.HAL_LIN_SendBreak||, CODE, READONLY, ALIGN=1
 
@@ -577,7 +597,7 @@
                           ENDP
 
 
-                          AREA ||i.HAL_MultiProcessor_Init||, CODE, READONLY, ALIGN=1
+                          AREA ||i.HAL_MultiProcessor_Init||, CODE, READONLY, ALIGN=2
 
                   HAL_MultiProcessor_Init PROC
 ;;;586      */
@@ -661,66 +681,76 @@
 00000c  bd70              POP      {r4-r6,pc}
                   |L8.14|
 00000e  f894003d          LDRB     r0,[r4,#0x3d]         ;604
-000012  b928              CBNZ     r0,|L8.32|
+000012  b960              CBNZ     r0,|L8.46|
 000014  2000              MOVS     r0,#0                 ;607
 000016  f884003c          STRB     r0,[r4,#0x3c]         ;607
-00001a  4620              MOV      r0,r4                 ;621
-00001c  f7fffffe          BL       HAL_UART_MspInit
-                  |L8.32|
-000020  2024              MOVS     r0,#0x24              ;625
-000022  f884003d          STRB     r0,[r4,#0x3d]         ;625
-000026  6820              LDR      r0,[r4,#0]            ;628
-000028  68c0              LDR      r0,[r0,#0xc]          ;628
-00002a  f4205000          BIC      r0,r0,#0x2000         ;628
-00002e  6821              LDR      r1,[r4,#0]            ;628
-000030  60c8              STR      r0,[r1,#0xc]          ;628
-000032  4620              MOV      r0,r4                 ;631
-000034  f7fffffe          BL       UART_SetConfig
-000038  6820              LDR      r0,[r4,#0]            ;636
-00003a  6900              LDR      r0,[r0,#0x10]         ;636
-00003c  f4204090          BIC      r0,r0,#0x4800         ;636
-000040  6821              LDR      r1,[r4,#0]            ;636
-000042  6108              STR      r0,[r1,#0x10]         ;636
-000044  6820              LDR      r0,[r4,#0]            ;637
-000046  6940              LDR      r0,[r0,#0x14]         ;637
-000048  f020002a          BIC      r0,r0,#0x2a           ;637
-00004c  6821              LDR      r1,[r4,#0]            ;637
-00004e  6148              STR      r0,[r1,#0x14]         ;637
-000050  6820              LDR      r0,[r4,#0]            ;640
-000052  6900              LDR      r0,[r0,#0x10]         ;640
-000054  f020000f          BIC      r0,r0,#0xf            ;640
-000058  6821              LDR      r1,[r4,#0]            ;640
-00005a  6108              STR      r0,[r1,#0x10]         ;640
-00005c  6820              LDR      r0,[r4,#0]            ;641
-00005e  6900              LDR      r0,[r0,#0x10]         ;641
-000060  4328              ORRS     r0,r0,r5              ;641
-000062  6821              LDR      r1,[r4,#0]            ;641
-000064  6108              STR      r0,[r1,#0x10]         ;641
-000066  6820              LDR      r0,[r4,#0]            ;644
-000068  68c0              LDR      r0,[r0,#0xc]          ;644
-00006a  f4206000          BIC      r0,r0,#0x800          ;644
-00006e  6821              LDR      r1,[r4,#0]            ;644
-000070  60c8              STR      r0,[r1,#0xc]          ;644
-000072  6820              LDR      r0,[r4,#0]            ;645
-000074  68c0              LDR      r0,[r0,#0xc]          ;645
-000076  4330              ORRS     r0,r0,r6              ;645
-000078  6821              LDR      r1,[r4,#0]            ;645
-00007a  60c8              STR      r0,[r1,#0xc]          ;645
-00007c  6820              LDR      r0,[r4,#0]            ;648
-00007e  68c0              LDR      r0,[r0,#0xc]          ;648
-000080  f4405000          ORR      r0,r0,#0x2000         ;648
-000084  6821              LDR      r1,[r4,#0]            ;648
-000086  60c8              STR      r0,[r1,#0xc]          ;648
-000088  2000              MOVS     r0,#0                 ;651
-00008a  6420              STR      r0,[r4,#0x40]         ;651
-00008c  2020              MOVS     r0,#0x20              ;652
-00008e  f884003d          STRB     r0,[r4,#0x3d]         ;652
-000092  f884003e          STRB     r0,[r4,#0x3e]         ;653
-000096  2000              MOVS     r0,#0                 ;655
-000098  e7b8              B        |L8.12|
+00001a  4620              MOV      r0,r4                 ;610
+00001c  f7fffffe          BL       UART_InitCallbacksToDefault
+000020  6ee0              LDR      r0,[r4,#0x6c]         ;612
+000022  b908              CBNZ     r0,|L8.40|
+000024  4820              LDR      r0,|L8.168|
+000026  66e0              STR      r0,[r4,#0x6c]         ;614
+                  |L8.40|
+000028  4620              MOV      r0,r4                 ;618
+00002a  6ee1              LDR      r1,[r4,#0x6c]         ;618
+00002c  4788              BLX      r1                    ;618
+                  |L8.46|
+00002e  2024              MOVS     r0,#0x24              ;625
+000030  f884003d          STRB     r0,[r4,#0x3d]         ;625
+000034  6820              LDR      r0,[r4,#0]            ;628
+000036  68c0              LDR      r0,[r0,#0xc]          ;628
+000038  f4205000          BIC      r0,r0,#0x2000         ;628
+00003c  6821              LDR      r1,[r4,#0]            ;628
+00003e  60c8              STR      r0,[r1,#0xc]          ;628
+000040  4620              MOV      r0,r4                 ;631
+000042  f7fffffe          BL       UART_SetConfig
+000046  6820              LDR      r0,[r4,#0]            ;636
+000048  6900              LDR      r0,[r0,#0x10]         ;636
+00004a  f4204090          BIC      r0,r0,#0x4800         ;636
+00004e  6821              LDR      r1,[r4,#0]            ;636
+000050  6108              STR      r0,[r1,#0x10]         ;636
+000052  6820              LDR      r0,[r4,#0]            ;637
+000054  6940              LDR      r0,[r0,#0x14]         ;637
+000056  f020002a          BIC      r0,r0,#0x2a           ;637
+00005a  6821              LDR      r1,[r4,#0]            ;637
+00005c  6148              STR      r0,[r1,#0x14]         ;637
+00005e  6820              LDR      r0,[r4,#0]            ;640
+000060  6900              LDR      r0,[r0,#0x10]         ;640
+000062  f020000f          BIC      r0,r0,#0xf            ;640
+000066  6821              LDR      r1,[r4,#0]            ;640
+000068  6108              STR      r0,[r1,#0x10]         ;640
+00006a  6820              LDR      r0,[r4,#0]            ;641
+00006c  6900              LDR      r0,[r0,#0x10]         ;641
+00006e  4328              ORRS     r0,r0,r5              ;641
+000070  6821              LDR      r1,[r4,#0]            ;641
+000072  6108              STR      r0,[r1,#0x10]         ;641
+000074  6820              LDR      r0,[r4,#0]            ;644
+000076  68c0              LDR      r0,[r0,#0xc]          ;644
+000078  f4206000          BIC      r0,r0,#0x800          ;644
+00007c  6821              LDR      r1,[r4,#0]            ;644
+00007e  60c8              STR      r0,[r1,#0xc]          ;644
+000080  6820              LDR      r0,[r4,#0]            ;645
+000082  68c0              LDR      r0,[r0,#0xc]          ;645
+000084  4330              ORRS     r0,r0,r6              ;645
+000086  6821              LDR      r1,[r4,#0]            ;645
+000088  60c8              STR      r0,[r1,#0xc]          ;645
+00008a  6820              LDR      r0,[r4,#0]            ;648
+00008c  68c0              LDR      r0,[r0,#0xc]          ;648
+00008e  f4405000          ORR      r0,r0,#0x2000         ;648
+000092  6821              LDR      r1,[r4,#0]            ;648
+000094  60c8              STR      r0,[r1,#0xc]          ;648
+000096  2000              MOVS     r0,#0                 ;651
+000098  6420              STR      r0,[r4,#0x40]         ;651
+00009a  2020              MOVS     r0,#0x20              ;652
+00009c  f884003d          STRB     r0,[r4,#0x3d]         ;652
+0000a0  f884003e          STRB     r0,[r4,#0x3e]         ;653
+0000a4  2000              MOVS     r0,#0                 ;655
+0000a6  e7b1              B        |L8.12|
 ;;;657    
                           ENDP
 
+                  |L8.168|
+                          DCD      HAL_UART_MspInit
 
                           AREA ||i.HAL_UARTEx_ReceiveToIdle||, CODE, READONLY, ALIGN=1
 
@@ -1769,13 +1799,14 @@
 ;;;2319   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;2320         /* Call registered Abort Receive Complete Callback */
 ;;;2321         huart->AbortReceiveCpltCallback(huart);
+0000b6  4620              MOV      r0,r4
+0000b8  6e21              LDR      r1,[r4,#0x60]
+0000ba  4788              BLX      r1
+0000bc  e009              B        |L17.210|
+                  |L17.190|
 ;;;2322   #else
 ;;;2323         /* Call legacy weak Abort Receive Complete Callback */
 ;;;2324         HAL_UART_AbortReceiveCpltCallback(huart);
-0000b6  4620              MOV      r0,r4
-0000b8  f7fffffe          BL       HAL_UART_AbortReceiveCpltCallback
-0000bc  e009              B        |L17.210|
-                  |L17.190|
 ;;;2325   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;2326       }
 ;;;2327     }
@@ -1798,12 +1829,13 @@
 ;;;2338   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;2339       /* Call registered Abort Receive Complete Callback */
 ;;;2340       huart->AbortReceiveCpltCallback(huart);
+0000cc  4620              MOV      r0,r4
+0000ce  6e21              LDR      r1,[r4,#0x60]
+0000d0  4788              BLX      r1
+                  |L17.210|
 ;;;2341   #else
 ;;;2342       /* Call legacy weak Abort Receive Complete Callback */
 ;;;2343       HAL_UART_AbortReceiveCpltCallback(huart);
-0000cc  4620              MOV      r0,r4
-0000ce  f7fffffe          BL       HAL_UART_AbortReceiveCpltCallback
-                  |L17.210|
 ;;;2344   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;2345     }
 ;;;2346   
@@ -2029,13 +2061,14 @@
 ;;;2234   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;2235         /* Call registered Abort Transmit Complete Callback */
 ;;;2236         huart->AbortTransmitCpltCallback(huart);
+000070  4620              MOV      r0,r4
+000072  6de1              LDR      r1,[r4,#0x5c]
+000074  4788              BLX      r1
+000076  e007              B        |L20.136|
+                  |L20.120|
 ;;;2237   #else
 ;;;2238         /* Call legacy weak Abort Transmit Complete Callback */
 ;;;2239         HAL_UART_AbortTransmitCpltCallback(huart);
-000070  4620              MOV      r0,r4
-000072  f7fffffe          BL       HAL_UART_AbortTransmitCpltCallback
-000076  e007              B        |L20.136|
-                  |L20.120|
 ;;;2240   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;2241       }
 ;;;2242     }
@@ -2055,12 +2088,13 @@
 ;;;2252   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;2253       /* Call registered Abort Transmit Complete Callback */
 ;;;2254       huart->AbortTransmitCpltCallback(huart);
+000082  4620              MOV      r0,r4
+000084  6de1              LDR      r1,[r4,#0x5c]
+000086  4788              BLX      r1
+                  |L20.136|
 ;;;2255   #else
 ;;;2256       /* Call legacy weak Abort Transmit Complete Callback */
 ;;;2257       HAL_UART_AbortTransmitCpltCallback(huart);
-000082  4620              MOV      r0,r4
-000084  f7fffffe          BL       HAL_UART_AbortTransmitCpltCallback
-                  |L20.136|
 ;;;2258   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;2259     }
 ;;;2260   
@@ -2340,12 +2374,13 @@
 ;;;2175   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;2176       /* Call registered Abort complete callback */
 ;;;2177       huart->AbortCpltCallback(huart);
+00013e  4620              MOV      r0,r4
+000140  6da1              LDR      r1,[r4,#0x58]
+000142  4788              BLX      r1
+                  |L21.324|
 ;;;2178   #else
 ;;;2179       /* Call legacy weak Abort complete callback */
 ;;;2180       HAL_UART_AbortCpltCallback(huart);
-00013e  4620              MOV      r0,r4
-000140  f7fffffe          BL       HAL_UART_AbortCpltCallback
-                  |L21.324|
 ;;;2181   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;2182     }
 ;;;2183   
@@ -2722,7 +2757,7 @@
                           ENDP
 
 
-                          AREA ||i.HAL_UART_DeInit||, CODE, READONLY, ALIGN=1
+                          AREA ||i.HAL_UART_DeInit||, CODE, READONLY, ALIGN=2
 
                   HAL_UART_DeInit PROC
 ;;;663      */
@@ -2778,21 +2813,29 @@
 000014  f4205000          BIC      r0,r0,#0x2000         ;678
 000018  6821              LDR      r1,[r4,#0]            ;678
 00001a  60c8              STR      r0,[r1,#0xc]          ;678
-00001c  4620              MOV      r0,r4                 ;689
-00001e  f7fffffe          BL       HAL_UART_MspDeInit
-000022  2000              MOVS     r0,#0                 ;692
-000024  6420              STR      r0,[r4,#0x40]         ;692
-000026  f884003d          STRB     r0,[r4,#0x3d]         ;693
-00002a  f884003e          STRB     r0,[r4,#0x3e]         ;694
-00002e  6320              STR      r0,[r4,#0x30]         ;695
-000030  bf00              NOP                            ;698
-000032  f884003c          STRB     r0,[r4,#0x3c]         ;698
-000036  bf00              NOP                            ;698
-000038  bf00              NOP                            ;700
-00003a  e7e5              B        |L25.8|
+00001c  6f20              LDR      r0,[r4,#0x70]         ;681
+00001e  b908              CBNZ     r0,|L25.36|
+000020  4808              LDR      r0,|L25.68|
+000022  6720              STR      r0,[r4,#0x70]         ;683
+                  |L25.36|
+000024  4620              MOV      r0,r4                 ;686
+000026  6f21              LDR      r1,[r4,#0x70]         ;686
+000028  4788              BLX      r1                    ;686
+00002a  2000              MOVS     r0,#0                 ;692
+00002c  6420              STR      r0,[r4,#0x40]         ;692
+00002e  f884003d          STRB     r0,[r4,#0x3d]         ;693
+000032  f884003e          STRB     r0,[r4,#0x3e]         ;694
+000036  6320              STR      r0,[r4,#0x30]         ;695
+000038  bf00              NOP                            ;698
+00003a  f884003c          STRB     r0,[r4,#0x3c]         ;698
+00003e  bf00              NOP                            ;698
+000040  bf00              NOP                            ;700
+000042  e7e1              B        |L25.8|
 ;;;702    
                           ENDP
 
+                  |L25.68|
+                          DCD      HAL_UART_MspDeInit
 
                           AREA ||i.HAL_UART_ErrorCallback||, CODE, READONLY, ALIGN=1
 
@@ -3195,17 +3238,20 @@
 000116  4788              BLX      r1                    ;2438
 000118  e00d              B        |L29.310|
                   |L29.282|
-00011a  4620              MOV      r0,r4                 ;2449
-00011c  f7fffffe          BL       HAL_UART_ErrorCallback
+00011a  4620              MOV      r0,r4                 ;2446
+00011c  6d61              LDR      r1,[r4,#0x54]         ;2446
+00011e  4788              BLX      r1                    ;2446
 000120  e009              B        |L29.310|
 000122  e009              B        |L29.312|
                   |L29.292|
-000124  4620              MOV      r0,r4                 ;2461
-000126  f7fffffe          BL       HAL_UART_ErrorCallback
+000124  4620              MOV      r0,r4                 ;2458
+000126  6d61              LDR      r1,[r4,#0x54]         ;2458
+000128  4788              BLX      r1                    ;2458
 00012a  e004              B        |L29.310|
                   |L29.300|
-00012c  4620              MOV      r0,r4                 ;2474
-00012e  f7fffffe          BL       HAL_UART_ErrorCallback
+00012c  4620              MOV      r0,r4                 ;2471
+00012e  6d61              LDR      r1,[r4,#0x54]         ;2471
+000130  4788              BLX      r1                    ;2471
 000132  2000              MOVS     r0,#0                 ;2477
 000134  6420              STR      r0,[r4,#0x40]         ;2477
                   |L29.310|
@@ -3310,12 +3356,13 @@
 000216  6ba0              LDR      r0,[r4,#0x38]         ;2523
 000218  f7fffffe          BL       HAL_DMA_Abort
                   |L29.540|
-00021c  8da0              LDRH     r0,[r4,#0x2c]         ;2530
-00021e  8de2              LDRH     r2,[r4,#0x2e]         ;2530
-000220  1a80              SUBS     r0,r0,r2              ;2530
-000222  b281              UXTH     r1,r0                 ;2530
-000224  4620              MOV      r0,r4                 ;2530
-000226  f7fffffe          BL       HAL_UARTEx_RxEventCallback
+00021c  8da0              LDRH     r0,[r4,#0x2c]         ;2527
+00021e  8de3              LDRH     r3,[r4,#0x2e]         ;2527
+000220  1ac0              SUBS     r0,r0,r3              ;2527
+000222  b281              UXTH     r1,r0                 ;2527
+000224  4620              MOV      r0,r4                 ;2527
+000226  6ea2              LDR      r2,[r4,#0x68]         ;2527
+000228  4790              BLX      r2                    ;2527
                   |L29.554|
 00022a  e703              B        |L29.52|
                   |L29.556|
@@ -3372,9 +3419,10 @@
 0002a0  2a00              CMP      r2,#0                 ;2554
 0002a2  d1f3              BNE      |L29.652|
 0002a4  bf00              NOP                            ;2554
-0002a6  4641              MOV      r1,r8                 ;2560
-0002a8  4620              MOV      r0,r4                 ;2560
-0002aa  f7fffffe          BL       HAL_UARTEx_RxEventCallback
+0002a6  4641              MOV      r1,r8                 ;2557
+0002a8  4620              MOV      r0,r4                 ;2557
+0002aa  6ea2              LDR      r2,[r4,#0x68]         ;2557
+0002ac  4790              BLX      r2                    ;2557
                   |L29.686|
 0002ae  e6c1              B        |L29.52|
                   |L29.688|
@@ -3402,7 +3450,7 @@
                   |L29.732|
                           DCD      UART_DMAAbortOnError
 
-                          AREA ||i.HAL_UART_Init||, CODE, READONLY, ALIGN=1
+                          AREA ||i.HAL_UART_Init||, CODE, READONLY, ALIGN=2
 
                   HAL_UART_Init PROC
 ;;;355      */
@@ -3489,46 +3537,56 @@
 000010  bf00              NOP                            ;375
                   |L30.18|
 000012  f894003d          LDRB     r0,[r4,#0x3d]         ;380
-000016  b928              CBNZ     r0,|L30.36|
+000016  b960              CBNZ     r0,|L30.50|
 000018  2000              MOVS     r0,#0                 ;383
 00001a  f884003c          STRB     r0,[r4,#0x3c]         ;383
-00001e  4620              MOV      r0,r4                 ;397
-000020  f7fffffe          BL       HAL_UART_MspInit
-                  |L30.36|
-000024  2024              MOVS     r0,#0x24              ;401
-000026  f884003d          STRB     r0,[r4,#0x3d]         ;401
-00002a  6820              LDR      r0,[r4,#0]            ;404
-00002c  68c0              LDR      r0,[r0,#0xc]          ;404
-00002e  f4205000          BIC      r0,r0,#0x2000         ;404
-000032  6821              LDR      r1,[r4,#0]            ;404
-000034  60c8              STR      r0,[r1,#0xc]          ;404
-000036  4620              MOV      r0,r4                 ;407
-000038  f7fffffe          BL       UART_SetConfig
-00003c  6820              LDR      r0,[r4,#0]            ;412
-00003e  6900              LDR      r0,[r0,#0x10]         ;412
-000040  f4204090          BIC      r0,r0,#0x4800         ;412
-000044  6821              LDR      r1,[r4,#0]            ;412
-000046  6108              STR      r0,[r1,#0x10]         ;412
-000048  6820              LDR      r0,[r4,#0]            ;413
-00004a  6940              LDR      r0,[r0,#0x14]         ;413
-00004c  f020002a          BIC      r0,r0,#0x2a           ;413
-000050  6821              LDR      r1,[r4,#0]            ;413
-000052  6148              STR      r0,[r1,#0x14]         ;413
-000054  6820              LDR      r0,[r4,#0]            ;416
-000056  68c0              LDR      r0,[r0,#0xc]          ;416
-000058  f4405000          ORR      r0,r0,#0x2000         ;416
-00005c  6821              LDR      r1,[r4,#0]            ;416
-00005e  60c8              STR      r0,[r1,#0xc]          ;416
-000060  2000              MOVS     r0,#0                 ;419
-000062  6420              STR      r0,[r4,#0x40]         ;419
-000064  2020              MOVS     r0,#0x20              ;420
-000066  f884003d          STRB     r0,[r4,#0x3d]         ;420
-00006a  f884003e          STRB     r0,[r4,#0x3e]         ;421
-00006e  2000              MOVS     r0,#0                 ;423
-000070  e7ca              B        |L30.8|
+00001e  4620              MOV      r0,r4                 ;386
+000020  f7fffffe          BL       UART_InitCallbacksToDefault
+000024  6ee0              LDR      r0,[r4,#0x6c]         ;388
+000026  b908              CBNZ     r0,|L30.44|
+000028  4815              LDR      r0,|L30.128|
+00002a  66e0              STR      r0,[r4,#0x6c]         ;390
+                  |L30.44|
+00002c  4620              MOV      r0,r4                 ;394
+00002e  6ee1              LDR      r1,[r4,#0x6c]         ;394
+000030  4788              BLX      r1                    ;394
+                  |L30.50|
+000032  2024              MOVS     r0,#0x24              ;401
+000034  f884003d          STRB     r0,[r4,#0x3d]         ;401
+000038  6820              LDR      r0,[r4,#0]            ;404
+00003a  68c0              LDR      r0,[r0,#0xc]          ;404
+00003c  f4205000          BIC      r0,r0,#0x2000         ;404
+000040  6821              LDR      r1,[r4,#0]            ;404
+000042  60c8              STR      r0,[r1,#0xc]          ;404
+000044  4620              MOV      r0,r4                 ;407
+000046  f7fffffe          BL       UART_SetConfig
+00004a  6820              LDR      r0,[r4,#0]            ;412
+00004c  6900              LDR      r0,[r0,#0x10]         ;412
+00004e  f4204090          BIC      r0,r0,#0x4800         ;412
+000052  6821              LDR      r1,[r4,#0]            ;412
+000054  6108              STR      r0,[r1,#0x10]         ;412
+000056  6820              LDR      r0,[r4,#0]            ;413
+000058  6940              LDR      r0,[r0,#0x14]         ;413
+00005a  f020002a          BIC      r0,r0,#0x2a           ;413
+00005e  6821              LDR      r1,[r4,#0]            ;413
+000060  6148              STR      r0,[r1,#0x14]         ;413
+000062  6820              LDR      r0,[r4,#0]            ;416
+000064  68c0              LDR      r0,[r0,#0xc]          ;416
+000066  f4405000          ORR      r0,r0,#0x2000         ;416
+00006a  6821              LDR      r1,[r4,#0]            ;416
+00006c  60c8              STR      r0,[r1,#0xc]          ;416
+00006e  2000              MOVS     r0,#0                 ;419
+000070  6420              STR      r0,[r4,#0x40]         ;419
+000072  2020              MOVS     r0,#0x20              ;420
+000074  f884003d          STRB     r0,[r4,#0x3d]         ;420
+000078  f884003e          STRB     r0,[r4,#0x3e]         ;421
+00007c  2000              MOVS     r0,#0                 ;423
+00007e  e7c3              B        |L30.8|
 ;;;425    
                           ENDP
 
+                  |L30.128|
+                          DCD      HAL_UART_MspInit
 
                           AREA ||i.HAL_UART_MspDeInit||, CODE, READONLY, ALIGN=1
 
@@ -3887,6 +3945,285 @@
                           ENDP
 
 
+                          AREA ||i.HAL_UART_RegisterCallback||, CODE, READONLY, ALIGN=1
+
+                  HAL_UART_RegisterCallback PROC
+;;;752      */
+;;;753    HAL_StatusTypeDef HAL_UART_RegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID,
+000000  b510              PUSH     {r4,lr}
+;;;754                                                pUART_CallbackTypeDef pCallback)
+;;;755    {
+000002  4603              MOV      r3,r0
+;;;756      HAL_StatusTypeDef status = HAL_OK;
+000004  2400              MOVS     r4,#0
+;;;757    
+;;;758      if (pCallback == NULL)
+000006  b92a              CBNZ     r2,|L36.20|
+;;;759      {
+;;;760        /* Update the error code */
+;;;761        huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+000008  6c18              LDR      r0,[r3,#0x40]
+00000a  f0400020          ORR      r0,r0,#0x20
+00000e  6418              STR      r0,[r3,#0x40]
+;;;762    
+;;;763        return HAL_ERROR;
+000010  2001              MOVS     r0,#1
+                  |L36.18|
+;;;764      }
+;;;765      /* Process locked */
+;;;766      __HAL_LOCK(huart);
+;;;767    
+;;;768      if (huart->gState == HAL_UART_STATE_READY)
+;;;769      {
+;;;770        switch (CallbackID)
+;;;771        {
+;;;772          case HAL_UART_TX_HALFCOMPLETE_CB_ID :
+;;;773            huart->TxHalfCpltCallback = pCallback;
+;;;774            break;
+;;;775    
+;;;776          case HAL_UART_TX_COMPLETE_CB_ID :
+;;;777            huart->TxCpltCallback = pCallback;
+;;;778            break;
+;;;779    
+;;;780          case HAL_UART_RX_HALFCOMPLETE_CB_ID :
+;;;781            huart->RxHalfCpltCallback = pCallback;
+;;;782            break;
+;;;783    
+;;;784          case HAL_UART_RX_COMPLETE_CB_ID :
+;;;785            huart->RxCpltCallback = pCallback;
+;;;786            break;
+;;;787    
+;;;788          case HAL_UART_ERROR_CB_ID :
+;;;789            huart->ErrorCallback = pCallback;
+;;;790            break;
+;;;791    
+;;;792          case HAL_UART_ABORT_COMPLETE_CB_ID :
+;;;793            huart->AbortCpltCallback = pCallback;
+;;;794            break;
+;;;795    
+;;;796          case HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID :
+;;;797            huart->AbortTransmitCpltCallback = pCallback;
+;;;798            break;
+;;;799    
+;;;800          case HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID :
+;;;801            huart->AbortReceiveCpltCallback = pCallback;
+;;;802            break;
+;;;803    
+;;;804          case HAL_UART_MSPINIT_CB_ID :
+;;;805            huart->MspInitCallback = pCallback;
+;;;806            break;
+;;;807    
+;;;808          case HAL_UART_MSPDEINIT_CB_ID :
+;;;809            huart->MspDeInitCallback = pCallback;
+;;;810            break;
+;;;811    
+;;;812          default :
+;;;813            /* Update the error code */
+;;;814            huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+;;;815    
+;;;816            /* Return error status */
+;;;817            status =  HAL_ERROR;
+;;;818            break;
+;;;819        }
+;;;820      }
+;;;821      else if (huart->gState == HAL_UART_STATE_RESET)
+;;;822      {
+;;;823        switch (CallbackID)
+;;;824        {
+;;;825          case HAL_UART_MSPINIT_CB_ID :
+;;;826            huart->MspInitCallback = pCallback;
+;;;827            break;
+;;;828    
+;;;829          case HAL_UART_MSPDEINIT_CB_ID :
+;;;830            huart->MspDeInitCallback = pCallback;
+;;;831            break;
+;;;832    
+;;;833          default :
+;;;834            /* Update the error code */
+;;;835            huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+;;;836    
+;;;837            /* Return error status */
+;;;838            status =  HAL_ERROR;
+;;;839            break;
+;;;840        }
+;;;841      }
+;;;842      else
+;;;843      {
+;;;844        /* Update the error code */
+;;;845        huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+;;;846    
+;;;847        /* Return error status */
+;;;848        status =  HAL_ERROR;
+;;;849      }
+;;;850    
+;;;851      /* Release Lock */
+;;;852      __HAL_UNLOCK(huart);
+;;;853    
+;;;854      return status;
+;;;855    }
+000012  bd10              POP      {r4,pc}
+                  |L36.20|
+000014  bf00              NOP                            ;766
+000016  f893003c          LDRB     r0,[r3,#0x3c]         ;766
+00001a  2801              CMP      r0,#1                 ;766
+00001c  d101              BNE      |L36.34|
+00001e  2002              MOVS     r0,#2                 ;766
+000020  e7f7              B        |L36.18|
+                  |L36.34|
+000022  2001              MOVS     r0,#1                 ;766
+000024  f883003c          STRB     r0,[r3,#0x3c]         ;766
+000028  bf00              NOP                            ;766
+00002a  f893003d          LDRB     r0,[r3,#0x3d]         ;768
+00002e  2820              CMP      r0,#0x20              ;768
+000030  d125              BNE      |L36.126|
+000032  290d              CMP      r1,#0xd               ;770
+000034  d21c              BCS      |L36.112|
+000036  e8dff001          TBB      [pc,r1]               ;770
+00003a  0709              DCB      0x07,0x09
+00003c  0b0d0f11          DCB      0x0b,0x0d,0x0f,0x11
+000040  13151b1b          DCB      0x13,0x15,0x1b,0x1b
+000044  1b171900          DCB      0x1b,0x17,0x19,0x00
+000048  645a              STR      r2,[r3,#0x44]         ;773
+00004a  e017              B        |L36.124|
+00004c  649a              STR      r2,[r3,#0x48]         ;777
+00004e  e015              B        |L36.124|
+000050  64da              STR      r2,[r3,#0x4c]         ;781
+000052  e013              B        |L36.124|
+000054  651a              STR      r2,[r3,#0x50]         ;785
+000056  e011              B        |L36.124|
+000058  655a              STR      r2,[r3,#0x54]         ;789
+00005a  e00f              B        |L36.124|
+00005c  659a              STR      r2,[r3,#0x58]         ;793
+00005e  e00d              B        |L36.124|
+000060  65da              STR      r2,[r3,#0x5c]         ;797
+000062  e00b              B        |L36.124|
+000064  661a              STR      r2,[r3,#0x60]         ;801
+000066  e009              B        |L36.124|
+000068  66da              STR      r2,[r3,#0x6c]         ;805
+00006a  e007              B        |L36.124|
+00006c  671a              STR      r2,[r3,#0x70]         ;809
+00006e  e005              B        |L36.124|
+                  |L36.112|
+000070  6c18              LDR      r0,[r3,#0x40]         ;814
+000072  f0400020          ORR      r0,r0,#0x20           ;814
+000076  6418              STR      r0,[r3,#0x40]         ;814
+000078  2401              MOVS     r4,#1                 ;817
+00007a  bf00              NOP                            ;818
+                  |L36.124|
+00007c  e017              B        |L36.174|
+                  |L36.126|
+00007e  f893003d          LDRB     r0,[r3,#0x3d]         ;821
+000082  b978              CBNZ     r0,|L36.164|
+000084  290b              CMP      r1,#0xb               ;823
+000086  d002              BEQ      |L36.142|
+000088  290c              CMP      r1,#0xc               ;823
+00008a  d104              BNE      |L36.150|
+00008c  e001              B        |L36.146|
+                  |L36.142|
+00008e  66da              STR      r2,[r3,#0x6c]         ;826
+000090  e007              B        |L36.162|
+                  |L36.146|
+000092  671a              STR      r2,[r3,#0x70]         ;830
+000094  e005              B        |L36.162|
+                  |L36.150|
+000096  6c18              LDR      r0,[r3,#0x40]         ;835
+000098  f0400020          ORR      r0,r0,#0x20           ;835
+00009c  6418              STR      r0,[r3,#0x40]         ;835
+00009e  2401              MOVS     r4,#1                 ;838
+0000a0  bf00              NOP                            ;839
+                  |L36.162|
+0000a2  e004              B        |L36.174|
+                  |L36.164|
+0000a4  6c18              LDR      r0,[r3,#0x40]         ;845
+0000a6  f0400020          ORR      r0,r0,#0x20           ;845
+0000aa  6418              STR      r0,[r3,#0x40]         ;845
+0000ac  2401              MOVS     r4,#1                 ;848
+                  |L36.174|
+0000ae  bf00              NOP                            ;852
+0000b0  2000              MOVS     r0,#0                 ;852
+0000b2  f883003c          STRB     r0,[r3,#0x3c]         ;852
+0000b6  bf00              NOP                            ;852
+0000b8  4620              MOV      r0,r4                 ;854
+0000ba  e7aa              B        |L36.18|
+;;;856    
+                          ENDP
+
+
+                          AREA ||i.HAL_UART_RegisterRxEventCallback||, CODE, READONLY, ALIGN=1
+
+                  HAL_UART_RegisterRxEventCallback PROC
+;;;977      */
+;;;978    HAL_StatusTypeDef HAL_UART_RegisterRxEventCallback(UART_HandleTypeDef *huart, pUART_RxEventCallbackTypeDef pCallback)
+000000  4602              MOV      r2,r0
+;;;979    {
+;;;980      HAL_StatusTypeDef status = HAL_OK;
+000002  2300              MOVS     r3,#0
+;;;981    
+;;;982      if (pCallback == NULL)
+000004  b929              CBNZ     r1,|L37.18|
+;;;983      {
+;;;984        huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+000006  6c10              LDR      r0,[r2,#0x40]
+000008  f0400020          ORR      r0,r0,#0x20
+00000c  6410              STR      r0,[r2,#0x40]
+;;;985    
+;;;986        return HAL_ERROR;
+00000e  2001              MOVS     r0,#1
+                  |L37.16|
+;;;987      }
+;;;988    
+;;;989      /* Process locked */
+;;;990      __HAL_LOCK(huart);
+;;;991    
+;;;992      if (huart->gState == HAL_UART_STATE_READY)
+;;;993      {
+;;;994        huart->RxEventCallback = pCallback;
+;;;995      }
+;;;996      else
+;;;997      {
+;;;998        huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+;;;999    
+;;;1000       status =  HAL_ERROR;
+;;;1001     }
+;;;1002   
+;;;1003     /* Release Lock */
+;;;1004     __HAL_UNLOCK(huart);
+;;;1005   
+;;;1006     return status;
+;;;1007   }
+000010  4770              BX       lr
+                  |L37.18|
+000012  bf00              NOP                            ;990
+000014  f892003c          LDRB     r0,[r2,#0x3c]         ;990
+000018  2801              CMP      r0,#1                 ;990
+00001a  d101              BNE      |L37.32|
+00001c  2002              MOVS     r0,#2                 ;990
+00001e  e7f7              B        |L37.16|
+                  |L37.32|
+000020  2001              MOVS     r0,#1                 ;990
+000022  f882003c          STRB     r0,[r2,#0x3c]         ;990
+000026  bf00              NOP                            ;990
+000028  f892003d          LDRB     r0,[r2,#0x3d]         ;992
+00002c  2820              CMP      r0,#0x20              ;992
+00002e  d101              BNE      |L37.52|
+000030  6691              STR      r1,[r2,#0x68]         ;994
+000032  e004              B        |L37.62|
+                  |L37.52|
+000034  6c10              LDR      r0,[r2,#0x40]         ;998
+000036  f0400020          ORR      r0,r0,#0x20           ;998
+00003a  6410              STR      r0,[r2,#0x40]         ;998
+00003c  2301              MOVS     r3,#1                 ;1000
+                  |L37.62|
+00003e  bf00              NOP                            ;1004
+000040  2000              MOVS     r0,#0                 ;1004
+000042  f882003c          STRB     r0,[r2,#0x3c]         ;1004
+000046  bf00              NOP                            ;1004
+000048  4618              MOV      r0,r3                 ;1006
+00004a  e7e1              B        |L37.16|
+;;;1008   
+                          ENDP
+
+
                           AREA ||i.HAL_UART_RxCpltCallback||, CODE, READONLY, ALIGN=1
 
                   HAL_UART_RxCpltCallback PROC
@@ -3941,16 +4278,16 @@
 ;;;1142     if (huart->gState == HAL_UART_STATE_READY)
 000010  f894003d          LDRB     r0,[r4,#0x3d]
 000014  2820              CMP      r0,#0x20
-000016  d15a              BNE      |L38.206|
+000016  d15a              BNE      |L40.206|
 ;;;1143     {
 ;;;1144       if ((pData == NULL) || (Size == 0U))
-000018  b106              CBZ      r6,|L38.28|
-00001a  b917              CBNZ     r7,|L38.34|
-                  |L38.28|
+000018  b106              CBZ      r6,|L40.28|
+00001a  b917              CBNZ     r7,|L40.34|
+                  |L40.28|
 ;;;1145       {
 ;;;1146         return  HAL_ERROR;
 00001c  2001              MOVS     r0,#1
-                  |L38.30|
+                  |L40.30|
 ;;;1147       }
 ;;;1148   
 ;;;1149       /* Process Locked */
@@ -4015,14 +4352,14 @@
 ;;;1208     }
 ;;;1209   }
 00001e  e8bd8ff8          POP      {r3-r11,pc}
-                  |L38.34|
+                  |L40.34|
 000022  bf00              NOP                            ;1150
 000024  f894003c          LDRB     r0,[r4,#0x3c]         ;1150
 000028  2801              CMP      r0,#1                 ;1150
-00002a  d101              BNE      |L38.48|
+00002a  d101              BNE      |L40.48|
 00002c  2002              MOVS     r0,#2                 ;1150
-00002e  e7f6              B        |L38.30|
-                  |L38.48|
+00002e  e7f6              B        |L40.30|
+                  |L40.48|
 000030  2001              MOVS     r0,#1                 ;1150
 000032  f884003c          STRB     r0,[r4,#0x3c]         ;1150
 000036  bf00              NOP                            ;1150
@@ -4036,69 +4373,69 @@
 00004a  84e7              STRH     r7,[r4,#0x26]         ;1159
 00004c  68a0              LDR      r0,[r4,#8]            ;1162
 00004e  f5b05f80          CMP      r0,#0x1000            ;1162
-000052  d104              BNE      |L38.94|
+000052  d104              BNE      |L40.94|
 000054  6920              LDR      r0,[r4,#0x10]         ;1162
-000056  b910              CBNZ     r0,|L38.94|
+000056  b910              CBNZ     r0,|L40.94|
 000058  2500              MOVS     r5,#0                 ;1164
 00005a  46b0              MOV      r8,r6                 ;1165
-00005c  e002              B        |L38.100|
-                  |L38.94|
+00005c  e002              B        |L40.100|
+                  |L40.94|
 00005e  4635              MOV      r5,r6                 ;1169
 000060  f04f0800          MOV      r8,#0                 ;1170
-                  |L38.100|
+                  |L40.100|
 000064  bf00              NOP                            ;1174
 000066  2000              MOVS     r0,#0                 ;1174
 000068  f884003c          STRB     r0,[r4,#0x3c]         ;1174
 00006c  bf00              NOP                            ;1174
-00006e  e01b              B        |L38.168|
-                  |L38.112|
+00006e  e01b              B        |L40.168|
+                  |L40.112|
 000070  4653              MOV      r3,r10                ;1178
 000072  2200              MOVS     r2,#0                 ;1178
 000074  2180              MOVS     r1,#0x80              ;1178
 000076  4620              MOV      r0,r4                 ;1178
 000078  f8cd9000          STR      r9,[sp,#0]            ;1178
 00007c  f7fffffe          BL       UART_WaitOnFlagUntilTimeout
-000080  b108              CBZ      r0,|L38.134|
+000080  b108              CBZ      r0,|L40.134|
 000082  2003              MOVS     r0,#3                 ;1180
-000084  e7cb              B        |L38.30|
-                  |L38.134|
-000086  b945              CBNZ     r5,|L38.154|
+000084  e7cb              B        |L40.30|
+                  |L40.134|
+000086  b945              CBNZ     r5,|L40.154|
 000088  f8b80000          LDRH     r0,[r8,#0]            ;1184
 00008c  f3c00008          UBFX     r0,r0,#0,#9           ;1184
 000090  6821              LDR      r1,[r4,#0]            ;1184
 000092  6048              STR      r0,[r1,#4]            ;1184
 000094  f1080802          ADD      r8,r8,#2              ;1185
-000098  e003              B        |L38.162|
-                  |L38.154|
+000098  e003              B        |L40.162|
+                  |L40.154|
 00009a  7828              LDRB     r0,[r5,#0]            ;1189
 00009c  6821              LDR      r1,[r4,#0]            ;1189
 00009e  6048              STR      r0,[r1,#4]            ;1189
 0000a0  1c6d              ADDS     r5,r5,#1              ;1190
-                  |L38.162|
+                  |L40.162|
 0000a2  8ce0              LDRH     r0,[r4,#0x26]         ;1192
 0000a4  1e40              SUBS     r0,r0,#1              ;1192
 0000a6  84e0              STRH     r0,[r4,#0x26]         ;1192
-                  |L38.168|
+                  |L40.168|
 0000a8  8ce0              LDRH     r0,[r4,#0x26]         ;1176
 0000aa  2800              CMP      r0,#0                 ;1176
-0000ac  d1e0              BNE      |L38.112|
+0000ac  d1e0              BNE      |L40.112|
 0000ae  4653              MOV      r3,r10                ;1195
 0000b0  2200              MOVS     r2,#0                 ;1195
 0000b2  2140              MOVS     r1,#0x40              ;1195
 0000b4  4620              MOV      r0,r4                 ;1195
 0000b6  f8cd9000          STR      r9,[sp,#0]            ;1195
 0000ba  f7fffffe          BL       UART_WaitOnFlagUntilTimeout
-0000be  b108              CBZ      r0,|L38.196|
+0000be  b108              CBZ      r0,|L40.196|
 0000c0  2003              MOVS     r0,#3                 ;1197
-0000c2  e7ac              B        |L38.30|
-                  |L38.196|
+0000c2  e7ac              B        |L40.30|
+                  |L40.196|
 0000c4  2020              MOVS     r0,#0x20              ;1201
 0000c6  f884003d          STRB     r0,[r4,#0x3d]         ;1201
 0000ca  2000              MOVS     r0,#0                 ;1203
-0000cc  e7a7              B        |L38.30|
-                  |L38.206|
+0000cc  e7a7              B        |L40.30|
+                  |L40.206|
 0000ce  2002              MOVS     r0,#2                 ;1207
-0000d0  e7a5              B        |L38.30|
+0000d0  e7a5              B        |L40.30|
 ;;;1210   
                           ENDP
 
@@ -4118,17 +4455,17 @@
 ;;;1399     if (huart->gState == HAL_UART_STATE_READY)
 000006  f894003d          LDRB     r0,[r4,#0x3d]
 00000a  2820              CMP      r0,#0x20
-00000c  d146              BNE      |L39.156|
+00000c  d146              BNE      |L41.156|
 ;;;1400     {
 ;;;1401       if ((pData == NULL) || (Size == 0U))
 00000e  9801              LDR      r0,[sp,#4]
-000010  b100              CBZ      r0,|L39.20|
-000012  b90d              CBNZ     r5,|L39.24|
-                  |L39.20|
+000010  b100              CBZ      r0,|L41.20|
+000012  b90d              CBNZ     r5,|L41.24|
+                  |L41.20|
 ;;;1402       {
 ;;;1403         return HAL_ERROR;
 000014  2001              MOVS     r0,#1
-                  |L39.22|
+                  |L41.22|
 ;;;1404       }
 ;;;1405   
 ;;;1406       /* Process Locked */
@@ -4175,14 +4512,14 @@
 ;;;1447     }
 ;;;1448   }
 000016  bdfe              POP      {r1-r7,pc}
-                  |L39.24|
+                  |L41.24|
 000018  bf00              NOP                            ;1407
 00001a  f894003c          LDRB     r0,[r4,#0x3c]         ;1407
 00001e  2801              CMP      r0,#1                 ;1407
-000020  d101              BNE      |L39.38|
+000020  d101              BNE      |L41.38|
 000022  2002              MOVS     r0,#2                 ;1407
-000024  e7f7              B        |L39.22|
-                  |L39.38|
+000024  e7f7              B        |L41.22|
+                  |L41.38|
 000026  2001              MOVS     r0,#1                 ;1407
 000028  f884003c          STRB     r0,[r4,#0x3c]         ;1407
 00002c  bf00              NOP                            ;1407
@@ -4194,13 +4531,13 @@
 000038  6420              STR      r0,[r4,#0x40]         ;1413
 00003a  2021              MOVS     r0,#0x21              ;1414
 00003c  f884003d          STRB     r0,[r4,#0x3d]         ;1414
-000040  4817              LDR      r0,|L39.160|
+000040  4817              LDR      r0,|L41.160|
 000042  6b61              LDR      r1,[r4,#0x34]         ;1417
 000044  63c8              STR      r0,[r1,#0x3c]         ;1417
-000046  4817              LDR      r0,|L39.164|
+000046  4817              LDR      r0,|L41.164|
 000048  6b61              LDR      r1,[r4,#0x34]         ;1420
 00004a  6408              STR      r0,[r1,#0x40]         ;1420
-00004c  4816              LDR      r0,|L39.168|
+00004c  4816              LDR      r0,|L41.168|
 00004e  6b61              LDR      r1,[r4,#0x34]         ;1423
 000050  64c8              STR      r0,[r1,#0x4c]         ;1423
 000052  2000              MOVS     r0,#0                 ;1426
@@ -4222,7 +4559,7 @@
 000078  bf00              NOP                            ;1436
 00007a  bf00              NOP                            ;1440
 00007c  bf00              NOP                            ;1440
-                  |L39.126|
+                  |L41.126|
 00007e  6821              LDR      r1,[r4,#0]            ;1440
 000080  3114              ADDS     r1,r1,#0x14           ;1440
 000082  e8511f00          LDREX    r1,[r1,#0]            ;1440
@@ -4231,21 +4568,21 @@
 00008c  3114              ADDS     r1,r1,#0x14           ;1440
 00008e  e8410200          STREX    r2,r0,[r1,#0]         ;1440
 000092  2a00              CMP      r2,#0                 ;1440
-000094  d1f3              BNE      |L39.126|
+000094  d1f3              BNE      |L41.126|
 000096  bf00              NOP                            ;1440
 000098  2000              MOVS     r0,#0                 ;1442
-00009a  e7bc              B        |L39.22|
-                  |L39.156|
+00009a  e7bc              B        |L41.22|
+                  |L41.156|
 00009c  2002              MOVS     r0,#2                 ;1446
-00009e  e7ba              B        |L39.22|
+00009e  e7ba              B        |L41.22|
 ;;;1449   
                           ENDP
 
-                  |L39.160|
+                  |L41.160|
                           DCD      UART_DMATransmitCplt
-                  |L39.164|
+                  |L41.164|
                           DCD      UART_DMATxHalfCplt
-                  |L39.168|
+                  |L41.168|
                           DCD      UART_DMAError
 
                           AREA ||i.HAL_UART_Transmit_IT||, CODE, READONLY, ALIGN=1
@@ -4260,16 +4597,16 @@
 ;;;1317     if (huart->gState == HAL_UART_STATE_READY)
 000004  f893003d          LDRB     r0,[r3,#0x3d]
 000008  2820              CMP      r0,#0x20
-00000a  d123              BNE      |L40.84|
+00000a  d123              BNE      |L42.84|
 ;;;1318     {
 ;;;1319       if ((pData == NULL) || (Size == 0U))
-00000c  b101              CBZ      r1,|L40.16|
-00000e  b90a              CBNZ     r2,|L40.20|
-                  |L40.16|
+00000c  b101              CBZ      r1,|L42.16|
+00000e  b90a              CBNZ     r2,|L42.20|
+                  |L42.16|
 ;;;1320       {
 ;;;1321         return HAL_ERROR;
 000010  2001              MOVS     r0,#1
-                  |L40.18|
+                  |L42.18|
 ;;;1322       }
 ;;;1323   
 ;;;1324       /* Process Locked */
@@ -4296,14 +4633,14 @@
 ;;;1345     }
 ;;;1346   }
 000012  bd10              POP      {r4,pc}
-                  |L40.20|
+                  |L42.20|
 000014  bf00              NOP                            ;1325
 000016  f893003c          LDRB     r0,[r3,#0x3c]         ;1325
 00001a  2801              CMP      r0,#1                 ;1325
-00001c  d101              BNE      |L40.34|
+00001c  d101              BNE      |L42.34|
 00001e  2002              MOVS     r0,#2                 ;1325
-000020  e7f7              B        |L40.18|
-                  |L40.34|
+000020  e7f7              B        |L42.18|
+                  |L42.34|
 000022  2001              MOVS     r0,#1                 ;1325
 000024  f883003c          STRB     r0,[r3,#0x3c]         ;1325
 000028  bf00              NOP                            ;1325
@@ -4324,10 +4661,10 @@
 00004c  681c              LDR      r4,[r3,#0]            ;1338
 00004e  60e0              STR      r0,[r4,#0xc]          ;1338
 000050  2000              MOVS     r0,#0                 ;1340
-000052  e7de              B        |L40.18|
-                  |L40.84|
+000052  e7de              B        |L42.18|
+                  |L42.84|
 000054  2002              MOVS     r0,#2                 ;1344
-000056  e7dc              B        |L40.18|
+000056  e7dc              B        |L42.18|
 ;;;1347   
                           ENDP
 
@@ -4366,6 +4703,289 @@
                           ENDP
 
 
+                          AREA ||i.HAL_UART_UnRegisterCallback||, CODE, READONLY, ALIGN=2
+
+                  HAL_UART_UnRegisterCallback PROC
+;;;874      */
+;;;875    HAL_StatusTypeDef HAL_UART_UnRegisterCallback(UART_HandleTypeDef *huart, HAL_UART_CallbackIDTypeDef CallbackID)
+000000  4602              MOV      r2,r0
+;;;876    {
+;;;877      HAL_StatusTypeDef status = HAL_OK;
+000002  2300              MOVS     r3,#0
+;;;878    
+;;;879      /* Process locked */
+;;;880      __HAL_LOCK(huart);
+000004  bf00              NOP      
+000006  f892003c          LDRB     r0,[r2,#0x3c]
+00000a  2801              CMP      r0,#1
+00000c  d101              BNE      |L45.18|
+00000e  2002              MOVS     r0,#2
+                  |L45.16|
+;;;881    
+;;;882      if (HAL_UART_STATE_READY == huart->gState)
+;;;883      {
+;;;884        switch (CallbackID)
+;;;885        {
+;;;886          case HAL_UART_TX_HALFCOMPLETE_CB_ID :
+;;;887            huart->TxHalfCpltCallback = HAL_UART_TxHalfCpltCallback;               /* Legacy weak  TxHalfCpltCallback       */
+;;;888            break;
+;;;889    
+;;;890          case HAL_UART_TX_COMPLETE_CB_ID :
+;;;891            huart->TxCpltCallback = HAL_UART_TxCpltCallback;                       /* Legacy weak TxCpltCallback            */
+;;;892            break;
+;;;893    
+;;;894          case HAL_UART_RX_HALFCOMPLETE_CB_ID :
+;;;895            huart->RxHalfCpltCallback = HAL_UART_RxHalfCpltCallback;               /* Legacy weak RxHalfCpltCallback        */
+;;;896            break;
+;;;897    
+;;;898          case HAL_UART_RX_COMPLETE_CB_ID :
+;;;899            huart->RxCpltCallback = HAL_UART_RxCpltCallback;                       /* Legacy weak RxCpltCallback            */
+;;;900            break;
+;;;901    
+;;;902          case HAL_UART_ERROR_CB_ID :
+;;;903            huart->ErrorCallback = HAL_UART_ErrorCallback;                         /* Legacy weak ErrorCallback             */
+;;;904            break;
+;;;905    
+;;;906          case HAL_UART_ABORT_COMPLETE_CB_ID :
+;;;907            huart->AbortCpltCallback = HAL_UART_AbortCpltCallback;                 /* Legacy weak AbortCpltCallback         */
+;;;908            break;
+;;;909    
+;;;910          case HAL_UART_ABORT_TRANSMIT_COMPLETE_CB_ID :
+;;;911            huart->AbortTransmitCpltCallback = HAL_UART_AbortTransmitCpltCallback; /* Legacy weak AbortTransmitCpltCallback */
+;;;912            break;
+;;;913    
+;;;914          case HAL_UART_ABORT_RECEIVE_COMPLETE_CB_ID :
+;;;915            huart->AbortReceiveCpltCallback = HAL_UART_AbortReceiveCpltCallback;   /* Legacy weak AbortReceiveCpltCallback  */
+;;;916            break;
+;;;917    
+;;;918          case HAL_UART_MSPINIT_CB_ID :
+;;;919            huart->MspInitCallback = HAL_UART_MspInit;                             /* Legacy weak MspInitCallback           */
+;;;920            break;
+;;;921    
+;;;922          case HAL_UART_MSPDEINIT_CB_ID :
+;;;923            huart->MspDeInitCallback = HAL_UART_MspDeInit;                         /* Legacy weak MspDeInitCallback         */
+;;;924            break;
+;;;925    
+;;;926          default :
+;;;927            /* Update the error code */
+;;;928            huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+;;;929    
+;;;930            /* Return error status */
+;;;931            status =  HAL_ERROR;
+;;;932            break;
+;;;933        }
+;;;934      }
+;;;935      else if (HAL_UART_STATE_RESET == huart->gState)
+;;;936      {
+;;;937        switch (CallbackID)
+;;;938        {
+;;;939          case HAL_UART_MSPINIT_CB_ID :
+;;;940            huart->MspInitCallback = HAL_UART_MspInit;
+;;;941            break;
+;;;942    
+;;;943          case HAL_UART_MSPDEINIT_CB_ID :
+;;;944            huart->MspDeInitCallback = HAL_UART_MspDeInit;
+;;;945            break;
+;;;946    
+;;;947          default :
+;;;948            /* Update the error code */
+;;;949            huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+;;;950    
+;;;951            /* Return error status */
+;;;952            status =  HAL_ERROR;
+;;;953            break;
+;;;954        }
+;;;955      }
+;;;956      else
+;;;957      {
+;;;958        /* Update the error code */
+;;;959        huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+;;;960    
+;;;961        /* Return error status */
+;;;962        status =  HAL_ERROR;
+;;;963      }
+;;;964    
+;;;965      /* Release Lock */
+;;;966      __HAL_UNLOCK(huart);
+;;;967    
+;;;968      return status;
+;;;969    }
+000010  4770              BX       lr
+                  |L45.18|
+000012  2001              MOVS     r0,#1                 ;880
+000014  f882003c          STRB     r0,[r2,#0x3c]         ;880
+000018  bf00              NOP                            ;880
+00001a  f892003d          LDRB     r0,[r2,#0x3d]         ;882
+00001e  2820              CMP      r0,#0x20              ;882
+000020  d12f              BNE      |L45.130|
+000022  290d              CMP      r1,#0xd               ;884
+000024  d226              BCS      |L45.116|
+000026  e8dff001          TBB      [pc,r1]               ;884
+00002a  070a              DCB      0x07,0x0a
+00002c  0d101316          DCB      0x0d,0x10,0x13,0x16
+000030  191c2525          DCB      0x19,0x1c,0x25,0x25
+000034  251f2200          DCB      0x25,0x1f,0x22,0x00
+000038  4822              LDR      r0,|L45.196|
+00003a  6450              STR      r0,[r2,#0x44]         ;887
+00003c  e020              B        |L45.128|
+00003e  4822              LDR      r0,|L45.200|
+000040  6490              STR      r0,[r2,#0x48]         ;891
+000042  e01d              B        |L45.128|
+000044  4821              LDR      r0,|L45.204|
+000046  64d0              STR      r0,[r2,#0x4c]         ;895
+000048  e01a              B        |L45.128|
+00004a  4821              LDR      r0,|L45.208|
+00004c  6510              STR      r0,[r2,#0x50]         ;899
+00004e  e017              B        |L45.128|
+000050  4820              LDR      r0,|L45.212|
+000052  6550              STR      r0,[r2,#0x54]         ;903
+000054  e014              B        |L45.128|
+000056  4820              LDR      r0,|L45.216|
+000058  6590              STR      r0,[r2,#0x58]         ;907
+00005a  e011              B        |L45.128|
+00005c  481f              LDR      r0,|L45.220|
+00005e  65d0              STR      r0,[r2,#0x5c]         ;911
+000060  e00e              B        |L45.128|
+000062  481f              LDR      r0,|L45.224|
+000064  6610              STR      r0,[r2,#0x60]         ;915
+000066  e00b              B        |L45.128|
+000068  481e              LDR      r0,|L45.228|
+00006a  66d0              STR      r0,[r2,#0x6c]         ;919
+00006c  e008              B        |L45.128|
+00006e  481e              LDR      r0,|L45.232|
+000070  6710              STR      r0,[r2,#0x70]         ;923
+000072  e005              B        |L45.128|
+                  |L45.116|
+000074  6c10              LDR      r0,[r2,#0x40]         ;928
+000076  f0400020          ORR      r0,r0,#0x20           ;928
+00007a  6410              STR      r0,[r2,#0x40]         ;928
+00007c  2301              MOVS     r3,#1                 ;931
+00007e  bf00              NOP                            ;932
+                  |L45.128|
+000080  e019              B        |L45.182|
+                  |L45.130|
+000082  f892003d          LDRB     r0,[r2,#0x3d]         ;935
+000086  b988              CBNZ     r0,|L45.172|
+000088  290b              CMP      r1,#0xb               ;937
+00008a  d002              BEQ      |L45.146|
+00008c  290c              CMP      r1,#0xc               ;937
+00008e  d106              BNE      |L45.158|
+000090  e002              B        |L45.152|
+                  |L45.146|
+000092  4814              LDR      r0,|L45.228|
+000094  66d0              STR      r0,[r2,#0x6c]         ;940
+000096  e008              B        |L45.170|
+                  |L45.152|
+000098  4813              LDR      r0,|L45.232|
+00009a  6710              STR      r0,[r2,#0x70]         ;944
+00009c  e005              B        |L45.170|
+                  |L45.158|
+00009e  6c10              LDR      r0,[r2,#0x40]         ;949
+0000a0  f0400020          ORR      r0,r0,#0x20           ;949
+0000a4  6410              STR      r0,[r2,#0x40]         ;949
+0000a6  2301              MOVS     r3,#1                 ;952
+0000a8  bf00              NOP                            ;953
+                  |L45.170|
+0000aa  e004              B        |L45.182|
+                  |L45.172|
+0000ac  6c10              LDR      r0,[r2,#0x40]         ;959
+0000ae  f0400020          ORR      r0,r0,#0x20           ;959
+0000b2  6410              STR      r0,[r2,#0x40]         ;959
+0000b4  2301              MOVS     r3,#1                 ;962
+                  |L45.182|
+0000b6  bf00              NOP                            ;966
+0000b8  2000              MOVS     r0,#0                 ;966
+0000ba  f882003c          STRB     r0,[r2,#0x3c]         ;966
+0000be  bf00              NOP                            ;966
+0000c0  4618              MOV      r0,r3                 ;968
+0000c2  e7a5              B        |L45.16|
+;;;970    
+                          ENDP
+
+                  |L45.196|
+                          DCD      HAL_UART_TxHalfCpltCallback
+                  |L45.200|
+                          DCD      HAL_UART_TxCpltCallback
+                  |L45.204|
+                          DCD      HAL_UART_RxHalfCpltCallback
+                  |L45.208|
+                          DCD      HAL_UART_RxCpltCallback
+                  |L45.212|
+                          DCD      HAL_UART_ErrorCallback
+                  |L45.216|
+                          DCD      HAL_UART_AbortCpltCallback
+                  |L45.220|
+                          DCD      HAL_UART_AbortTransmitCpltCallback
+                  |L45.224|
+                          DCD      HAL_UART_AbortReceiveCpltCallback
+                  |L45.228|
+                          DCD      HAL_UART_MspInit
+                  |L45.232|
+                          DCD      HAL_UART_MspDeInit
+
+                          AREA ||i.HAL_UART_UnRegisterRxEventCallback||, CODE, READONLY, ALIGN=2
+
+                  HAL_UART_UnRegisterRxEventCallback PROC
+;;;1014     */
+;;;1015   HAL_StatusTypeDef HAL_UART_UnRegisterRxEventCallback(UART_HandleTypeDef *huart)
+000000  4601              MOV      r1,r0
+;;;1016   {
+;;;1017     HAL_StatusTypeDef status = HAL_OK;
+000002  2200              MOVS     r2,#0
+;;;1018   
+;;;1019     /* Process locked */
+;;;1020     __HAL_LOCK(huart);
+000004  bf00              NOP      
+000006  f891003c          LDRB     r0,[r1,#0x3c]
+00000a  2801              CMP      r0,#1
+00000c  d101              BNE      |L46.18|
+00000e  2002              MOVS     r0,#2
+                  |L46.16|
+;;;1021   
+;;;1022     if (huart->gState == HAL_UART_STATE_READY)
+;;;1023     {
+;;;1024       huart->RxEventCallback = HAL_UARTEx_RxEventCallback; /* Legacy weak UART Rx Event Callback  */
+;;;1025     }
+;;;1026     else
+;;;1027     {
+;;;1028       huart->ErrorCode |= HAL_UART_ERROR_INVALID_CALLBACK;
+;;;1029   
+;;;1030       status =  HAL_ERROR;
+;;;1031     }
+;;;1032   
+;;;1033     /* Release Lock */
+;;;1034     __HAL_UNLOCK(huart);
+;;;1035     return status;
+;;;1036   }
+000010  4770              BX       lr
+                  |L46.18|
+000012  2001              MOVS     r0,#1                 ;1020
+000014  f881003c          STRB     r0,[r1,#0x3c]         ;1020
+000018  bf00              NOP                            ;1020
+00001a  f891003d          LDRB     r0,[r1,#0x3d]         ;1022
+00001e  2820              CMP      r0,#0x20              ;1022
+000020  d102              BNE      |L46.40|
+000022  4807              LDR      r0,|L46.64|
+000024  6688              STR      r0,[r1,#0x68]         ;1024
+000026  e004              B        |L46.50|
+                  |L46.40|
+000028  6c08              LDR      r0,[r1,#0x40]         ;1028
+00002a  f0400020          ORR      r0,r0,#0x20           ;1028
+00002e  6408              STR      r0,[r1,#0x40]         ;1028
+000030  2201              MOVS     r2,#1                 ;1030
+                  |L46.50|
+000032  bf00              NOP                            ;1034
+000034  2000              MOVS     r0,#0                 ;1034
+000036  f881003c          STRB     r0,[r1,#0x3c]         ;1034
+00003a  bf00              NOP                            ;1034
+00003c  4610              MOV      r0,r2                 ;1035
+00003e  e7e7              B        |L46.16|
+;;;1037   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
+                          ENDP
+
+                  |L46.64|
+                          DCD      HAL_UARTEx_RxEventCallback
+
                           AREA ||i.UART_DMAAbortOnError||, CODE, READONLY, ALIGN=1
 
                   UART_DMAAbortOnError PROC
@@ -4385,11 +5005,12 @@
 ;;;3337   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;3338     /*Call registered error callback*/
 ;;;3339     huart->ErrorCallback(huart);
+00000c  4620              MOV      r0,r4
+00000e  6d61              LDR      r1,[r4,#0x54]
+000010  4788              BLX      r1
 ;;;3340   #else
 ;;;3341     /*Call legacy weak error callback*/
 ;;;3342     HAL_UART_ErrorCallback(huart);
-00000c  4620              MOV      r0,r4
-00000e  f7fffffe          BL       HAL_UART_ErrorCallback
 ;;;3343   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;3344   }
 000012  bd70              POP      {r4-r6,pc}
@@ -4404,22 +5025,22 @@
 ;;;3128   static void UART_DMAError(DMA_HandleTypeDef *hdma)
 000000  b570              PUSH     {r4-r6,lr}
 ;;;3129   {
-000002  4606              MOV      r6,r0
+000002  4605              MOV      r5,r0
 ;;;3130     uint32_t dmarequest = 0x00U;
-000004  2500              MOVS     r5,#0
+000004  2600              MOVS     r6,#0
 ;;;3131     UART_HandleTypeDef *huart = (UART_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
-000006  6bb4              LDR      r4,[r6,#0x38]
+000006  6bac              LDR      r4,[r5,#0x38]
 ;;;3132   
 ;;;3133     /* Stop UART DMA Tx request if ongoing */
 ;;;3134     dmarequest = HAL_IS_BIT_SET(huart->Instance->CR3, USART_CR3_DMAT);
 000008  6820              LDR      r0,[r4,#0]
 00000a  6940              LDR      r0,[r0,#0x14]
-00000c  f3c015c0          UBFX     r5,r0,#7,#1
+00000c  f3c016c0          UBFX     r6,r0,#7,#1
 ;;;3135     if ((huart->gState == HAL_UART_STATE_BUSY_TX) && dmarequest)
 000010  f894003d          LDRB     r0,[r4,#0x3d]
 000014  2821              CMP      r0,#0x21
-000016  d105              BNE      |L44.36|
-000018  b125              CBZ      r5,|L44.36|
+000016  d105              BNE      |L48.36|
+000018  b126              CBZ      r6,|L48.36|
 ;;;3136     {
 ;;;3137       huart->TxXferCount = 0x00U;
 00001a  2000              MOVS     r0,#0
@@ -4427,19 +5048,19 @@
 ;;;3138       UART_EndTxTransfer(huart);
 00001e  4620              MOV      r0,r4
 000020  f7fffffe          BL       UART_EndTxTransfer
-                  |L44.36|
+                  |L48.36|
 ;;;3139     }
 ;;;3140   
 ;;;3141     /* Stop UART DMA Rx request if ongoing */
 ;;;3142     dmarequest = HAL_IS_BIT_SET(huart->Instance->CR3, USART_CR3_DMAR);
 000024  6820              LDR      r0,[r4,#0]
 000026  6940              LDR      r0,[r0,#0x14]
-000028  f3c01580          UBFX     r5,r0,#6,#1
+000028  f3c01680          UBFX     r6,r0,#6,#1
 ;;;3143     if ((huart->RxState == HAL_UART_STATE_BUSY_RX) && dmarequest)
 00002c  f894003e          LDRB     r0,[r4,#0x3e]
 000030  2822              CMP      r0,#0x22
-000032  d105              BNE      |L44.64|
-000034  b125              CBZ      r5,|L44.64|
+000032  d105              BNE      |L48.64|
+000034  b126              CBZ      r6,|L48.64|
 ;;;3144     {
 ;;;3145       huart->RxXferCount = 0x00U;
 000036  2000              MOVS     r0,#0
@@ -4447,7 +5068,7 @@
 ;;;3146       UART_EndRxTransfer(huart);
 00003a  4620              MOV      r0,r4
 00003c  f7fffffe          BL       UART_EndRxTransfer
-                  |L44.64|
+                  |L48.64|
 ;;;3147     }
 ;;;3148   
 ;;;3149     huart->ErrorCode |= HAL_UART_ERROR_DMA;
@@ -4457,11 +5078,12 @@
 ;;;3150   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;3151     /*Call registered error callback*/
 ;;;3152     huart->ErrorCallback(huart);
+000048  4620              MOV      r0,r4
+00004a  6d61              LDR      r1,[r4,#0x54]
+00004c  4788              BLX      r1
 ;;;3153   #else
 ;;;3154     /*Call legacy weak error callback*/
 ;;;3155     HAL_UART_ErrorCallback(huart);
-000048  4620              MOV      r0,r4
-00004a  f7fffffe          BL       HAL_UART_ErrorCallback
 ;;;3156   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;3157   }
 00004e  bd70              POP      {r4-r6,pc}
@@ -4485,7 +5107,7 @@
 000008  6800              LDR      r0,[r0,#0]
 00000a  f4007080          AND      r0,r0,#0x100
 00000e  2800              CMP      r0,#0
-000010  d142              BNE      |L45.152|
+000010  d142              BNE      |L49.152|
 ;;;3041     {
 ;;;3042       huart->RxXferCount = 0U;
 000012  85e0              STRH     r0,[r4,#0x2e]
@@ -4494,7 +5116,7 @@
 ;;;3045       ATOMIC_CLEAR_BIT(huart->Instance->CR1, USART_CR1_PEIE);
 000014  bf00              NOP      
 000016  bf00              NOP      
-                  |L45.24|
+                  |L49.24|
 000018  6821              LDR      r1,[r4,#0]
 00001a  310c              ADDS     r1,r1,#0xc
 00001c  e8511f00          LDREX    r1,[r1,#0]
@@ -4503,12 +5125,12 @@
 000026  310c              ADDS     r1,r1,#0xc
 000028  e8410200          STREX    r2,r0,[r1,#0]
 00002c  2a00              CMP      r2,#0
-00002e  d1f3              BNE      |L45.24|
+00002e  d1f3              BNE      |L49.24|
 000030  bf00              NOP      
 ;;;3046       ATOMIC_CLEAR_BIT(huart->Instance->CR3, USART_CR3_EIE);
 000032  bf00              NOP      
 000034  bf00              NOP      
-                  |L45.54|
+                  |L49.54|
 000036  6821              LDR      r1,[r4,#0]
 000038  3114              ADDS     r1,r1,#0x14
 00003a  e8511f00          LDREX    r1,[r1,#0]
@@ -4517,7 +5139,7 @@
 000044  3114              ADDS     r1,r1,#0x14
 000046  e8410200          STREX    r2,r0,[r1,#0]
 00004a  2a00              CMP      r2,#0
-00004c  d1f3              BNE      |L45.54|
+00004c  d1f3              BNE      |L49.54|
 00004e  bf00              NOP      
 ;;;3047   
 ;;;3048       /* Disable the DMA transfer for the receiver request by setting the DMAR bit
@@ -4525,7 +5147,7 @@
 ;;;3050       ATOMIC_CLEAR_BIT(huart->Instance->CR3, USART_CR3_DMAR);
 000050  bf00              NOP      
 000052  bf00              NOP      
-                  |L45.84|
+                  |L49.84|
 000054  6821              LDR      r1,[r4,#0]
 000056  3114              ADDS     r1,r1,#0x14
 000058  e8511f00          LDREX    r1,[r1,#0]
@@ -4534,7 +5156,7 @@
 000062  3114              ADDS     r1,r1,#0x14
 000064  e8410200          STREX    r2,r0,[r1,#0]
 000068  2a00              CMP      r2,#0
-00006a  d1f3              BNE      |L45.84|
+00006a  d1f3              BNE      |L49.84|
 00006c  bf00              NOP      
 ;;;3051   
 ;;;3052       /* At end of Rx process, restore huart->RxState to Ready */
@@ -4546,12 +5168,12 @@
 ;;;3056       if (huart->ReceptionType == HAL_UART_RECEPTION_TOIDLE)
 000074  6b20              LDR      r0,[r4,#0x30]
 000076  2801              CMP      r0,#1
-000078  d10e              BNE      |L45.152|
+000078  d10e              BNE      |L49.152|
 ;;;3057       {
 ;;;3058         ATOMIC_CLEAR_BIT(huart->Instance->CR1, USART_CR1_IDLEIE);
 00007a  bf00              NOP      
 00007c  bf00              NOP      
-                  |L45.126|
+                  |L49.126|
 00007e  6821              LDR      r1,[r4,#0]
 000080  310c              ADDS     r1,r1,#0xc
 000082  e8511f00          LDREX    r1,[r1,#0]
@@ -4560,9 +5182,9 @@
 00008c  310c              ADDS     r1,r1,#0xc
 00008e  e8410200          STREX    r2,r0,[r1,#0]
 000092  2a00              CMP      r2,#0
-000094  d1f3              BNE      |L45.126|
+000094  d1f3              BNE      |L49.126|
 000096  bf00              NOP      
-                  |L45.152|
+                  |L49.152|
 ;;;3059       }
 ;;;3060     }
 ;;;3061   
@@ -4571,19 +5193,20 @@
 ;;;3064     if (huart->ReceptionType == HAL_UART_RECEPTION_TOIDLE)
 000098  6b20              LDR      r0,[r4,#0x30]
 00009a  2801              CMP      r0,#1
-00009c  d104              BNE      |L45.168|
+00009c  d104              BNE      |L49.168|
 ;;;3065     {
 ;;;3066   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;3067       /*Call registered Rx Event callback*/
 ;;;3068       huart->RxEventCallback(huart, huart->RxXferSize);
+00009e  8da1              LDRH     r1,[r4,#0x2c]
+0000a0  4620              MOV      r0,r4
+0000a2  6ea2              LDR      r2,[r4,#0x68]
+0000a4  4790              BLX      r2
+0000a6  e002              B        |L49.174|
+                  |L49.168|
 ;;;3069   #else
 ;;;3070       /*Call legacy weak Rx Event callback*/
 ;;;3071       HAL_UARTEx_RxEventCallback(huart, huart->RxXferSize);
-00009e  8da1              LDRH     r1,[r4,#0x2c]
-0000a0  4620              MOV      r0,r4
-0000a2  f7fffffe          BL       HAL_UARTEx_RxEventCallback
-0000a6  e002              B        |L45.174|
-                  |L45.168|
 ;;;3072   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;3073     }
 ;;;3074     else
@@ -4592,12 +5215,13 @@
 ;;;3077   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;3078       /*Call registered Rx complete callback*/
 ;;;3079       huart->RxCpltCallback(huart);
+0000a8  4620              MOV      r0,r4
+0000aa  6d21              LDR      r1,[r4,#0x50]
+0000ac  4788              BLX      r1
+                  |L49.174|
 ;;;3080   #else
 ;;;3081       /*Call legacy weak Rx complete callback*/
 ;;;3082       HAL_UART_RxCpltCallback(huart);
-0000a8  4620              MOV      r0,r4
-0000aa  f7fffffe          BL       HAL_UART_RxCpltCallback
-                  |L45.174|
 ;;;3083   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;3084     }
 ;;;3085   }
@@ -4625,13 +5249,13 @@
 ;;;3407     /* Check if an Abort process is still ongoing */
 ;;;3408     if (huart->hdmatx != NULL)
 00000c  6b60              LDR      r0,[r4,#0x34]
-00000e  b118              CBZ      r0,|L46.24|
+00000e  b118              CBZ      r0,|L50.24|
 ;;;3409     {
 ;;;3410       if (huart->hdmatx->XferAbortCallback != NULL)
 000010  6b60              LDR      r0,[r4,#0x34]
 000012  6d00              LDR      r0,[r0,#0x50]
-000014  b100              CBZ      r0,|L46.24|
-                  |L46.22|
+000014  b100              CBZ      r0,|L50.24|
+                  |L50.22|
 ;;;3411       {
 ;;;3412         return;
 ;;;3413       }
@@ -4659,7 +5283,7 @@
 ;;;3435   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;3436   }
 000016  bd70              POP      {r4-r6,pc}
-                  |L46.24|
+                  |L50.24|
 000018  2000              MOVS     r0,#0                 ;3417
 00001a  84e0              STRH     r0,[r4,#0x26]         ;3417
 00001c  85e0              STRH     r0,[r4,#0x2e]         ;3418
@@ -4669,10 +5293,11 @@
 000026  f884003e          STRB     r0,[r4,#0x3e]         ;3425
 00002a  2000              MOVS     r0,#0                 ;3426
 00002c  6320              STR      r0,[r4,#0x30]         ;3426
-00002e  4620              MOV      r0,r4                 ;3434
-000030  f7fffffe          BL       HAL_UART_AbortCpltCallback
+00002e  4620              MOV      r0,r4                 ;3431
+000030  6da1              LDR      r1,[r4,#0x58]         ;3431
+000032  4788              BLX      r1                    ;3431
 000034  bf00              NOP      
-000036  e7ee              B        |L46.22|
+000036  e7ee              B        |L50.22|
 ;;;3437   
                           ENDP
 
@@ -4693,20 +5318,21 @@
 ;;;3099     if (huart->ReceptionType == HAL_UART_RECEPTION_TOIDLE)
 000006  6b20              LDR      r0,[r4,#0x30]
 000008  2801              CMP      r0,#1
-00000a  d105              BNE      |L47.24|
+00000a  d105              BNE      |L51.24|
 ;;;3100     {
 ;;;3101   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;3102       /*Call registered Rx Event callback*/
 ;;;3103       huart->RxEventCallback(huart, huart->RxXferSize / 2U);
-;;;3104   #else
-;;;3105       /*Call legacy weak Rx Event callback*/
-;;;3106       HAL_UARTEx_RxEventCallback(huart, huart->RxXferSize / 2U);
 00000c  8da0              LDRH     r0,[r4,#0x2c]
 00000e  0841              LSRS     r1,r0,#1
 000010  4620              MOV      r0,r4
-000012  f7fffffe          BL       HAL_UARTEx_RxEventCallback
-000016  e002              B        |L47.30|
-                  |L47.24|
+000012  6ea2              LDR      r2,[r4,#0x68]
+000014  4790              BLX      r2
+000016  e002              B        |L51.30|
+                  |L51.24|
+;;;3104   #else
+;;;3105       /*Call legacy weak Rx Event callback*/
+;;;3106       HAL_UARTEx_RxEventCallback(huart, huart->RxXferSize / 2U);
 ;;;3107   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;3108     }
 ;;;3109     else
@@ -4715,12 +5341,13 @@
 ;;;3112   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;3113       /*Call registered Rx Half complete callback*/
 ;;;3114       huart->RxHalfCpltCallback(huart);
+000018  4620              MOV      r0,r4
+00001a  6ce1              LDR      r1,[r4,#0x4c]
+00001c  4788              BLX      r1
+                  |L51.30|
 ;;;3115   #else
 ;;;3116       /*Call legacy weak Rx Half complete callback*/
 ;;;3117       HAL_UART_RxHalfCpltCallback(huart);
-000018  4620              MOV      r0,r4
-00001a  f7fffffe          BL       HAL_UART_RxHalfCpltCallback
-                  |L47.30|
 ;;;3118   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;3119     }
 ;;;3120   }
@@ -4756,11 +5383,12 @@
 ;;;3486   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;3487     /* Call registered Abort Receive Complete Callback */
 ;;;3488     huart->AbortReceiveCpltCallback(huart);
+000014  4620              MOV      r0,r4
+000016  6e21              LDR      r1,[r4,#0x60]
+000018  4788              BLX      r1
 ;;;3489   #else
 ;;;3490     /* Call legacy weak Abort Receive Complete Callback */
 ;;;3491     HAL_UART_AbortReceiveCpltCallback(huart);
-000014  4620              MOV      r0,r4
-000016  f7fffffe          BL       HAL_UART_AbortReceiveCpltCallback
 ;;;3492   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;3493   }
 00001a  bd70              POP      {r4-r6,pc}
@@ -4783,7 +5411,7 @@
 000006  6828              LDR      r0,[r5,#0]
 000008  6800              LDR      r0,[r0,#0]
 00000a  f4007080          AND      r0,r0,#0x100
-00000e  b9f8              CBNZ     r0,|L49.80|
+00000e  b9f8              CBNZ     r0,|L53.80|
 ;;;2987     {
 ;;;2988       huart->TxXferCount = 0x00U;
 000010  2000              MOVS     r0,#0
@@ -4794,7 +5422,7 @@
 ;;;2992       ATOMIC_CLEAR_BIT(huart->Instance->CR3, USART_CR3_DMAT);
 000014  bf00              NOP      
 000016  bf00              NOP      
-                  |L49.24|
+                  |L53.24|
 000018  6821              LDR      r1,[r4,#0]
 00001a  3114              ADDS     r1,r1,#0x14
 00001c  e8511f00          LDREX    r1,[r1,#0]
@@ -4803,14 +5431,14 @@
 000026  3114              ADDS     r1,r1,#0x14
 000028  e8410200          STREX    r2,r0,[r1,#0]
 00002c  2a00              CMP      r2,#0
-00002e  d1f3              BNE      |L49.24|
+00002e  d1f3              BNE      |L53.24|
 000030  bf00              NOP      
 ;;;2993   
 ;;;2994       /* Enable the UART Transmit Complete Interrupt */
 ;;;2995       ATOMIC_SET_BIT(huart->Instance->CR1, USART_CR1_TCIE);
 000032  bf00              NOP      
 000034  bf00              NOP      
-                  |L49.54|
+                  |L53.54|
 000036  6821              LDR      r1,[r4,#0]
 000038  310c              ADDS     r1,r1,#0xc
 00003a  e8511f00          LDREX    r1,[r1,#0]
@@ -4819,9 +5447,9 @@
 000044  310c              ADDS     r1,r1,#0xc
 000046  e8410200          STREX    r2,r0,[r1,#0]
 00004a  2a00              CMP      r2,#0
-00004c  d1f3              BNE      |L49.54|
-00004e  e002              B        |L49.86|
-                  |L49.80|
+00004c  d1f3              BNE      |L53.54|
+00004e  e002              B        |L53.86|
+                  |L53.80|
 ;;;2996   
 ;;;2997     }
 ;;;2998     /* DMA Circular mode */
@@ -4830,12 +5458,13 @@
 ;;;3001   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;3002       /*Call registered Tx complete callback*/
 ;;;3003       huart->TxCpltCallback(huart);
+000050  4620              MOV      r0,r4
+000052  6ca1              LDR      r1,[r4,#0x48]
+000054  4788              BLX      r1
+                  |L53.86|
 ;;;3004   #else
 ;;;3005       /*Call legacy weak Tx complete callback*/
 ;;;3006       HAL_UART_TxCpltCallback(huart);
-000050  4620              MOV      r0,r4
-000052  f7fffffe          BL       HAL_UART_TxCpltCallback
-                  |L49.86|
 ;;;3007   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;3008     }
 ;;;3009   }
@@ -4863,13 +5492,13 @@
 ;;;3361     /* Check if an Abort process is still ongoing */
 ;;;3362     if (huart->hdmarx != NULL)
 00000c  6ba0              LDR      r0,[r4,#0x38]
-00000e  b118              CBZ      r0,|L50.24|
+00000e  b118              CBZ      r0,|L54.24|
 ;;;3363     {
 ;;;3364       if (huart->hdmarx->XferAbortCallback != NULL)
 000010  6ba0              LDR      r0,[r4,#0x38]
 000012  6d00              LDR      r0,[r0,#0x50]
-000014  b100              CBZ      r0,|L50.24|
-                  |L50.22|
+000014  b100              CBZ      r0,|L54.24|
+                  |L54.22|
 ;;;3365       {
 ;;;3366         return;
 ;;;3367       }
@@ -4897,7 +5526,7 @@
 ;;;3389   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;3390   }
 000016  bd70              POP      {r4-r6,pc}
-                  |L50.24|
+                  |L54.24|
 000018  2000              MOVS     r0,#0                 ;3371
 00001a  84e0              STRH     r0,[r4,#0x26]         ;3371
 00001c  85e0              STRH     r0,[r4,#0x2e]         ;3372
@@ -4907,10 +5536,11 @@
 000026  f884003e          STRB     r0,[r4,#0x3e]         ;3379
 00002a  2000              MOVS     r0,#0                 ;3380
 00002c  6320              STR      r0,[r4,#0x30]         ;3380
-00002e  4620              MOV      r0,r4                 ;3388
-000030  f7fffffe          BL       HAL_UART_AbortCpltCallback
+00002e  4620              MOV      r0,r4                 ;3385
+000030  6da1              LDR      r1,[r4,#0x58]         ;3385
+000032  4788              BLX      r1                    ;3385
 000034  bf00              NOP      
-000036  e7ee              B        |L50.22|
+000036  e7ee              B        |L54.22|
 ;;;3391   
                           ENDP
 
@@ -4929,11 +5559,12 @@
 ;;;3021   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;3022     /*Call registered Tx complete callback*/
 ;;;3023     huart->TxHalfCpltCallback(huart);
+000006  4628              MOV      r0,r5
+000008  6c69              LDR      r1,[r5,#0x44]
+00000a  4788              BLX      r1
 ;;;3024   #else
 ;;;3025     /*Call legacy weak Tx complete callback*/
 ;;;3026     HAL_UART_TxHalfCpltCallback(huart);
-000006  4628              MOV      r0,r5
-000008  f7fffffe          BL       HAL_UART_TxHalfCpltCallback
 ;;;3027   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;3028   }
 00000c  bd70              POP      {r4-r6,pc}
@@ -4965,11 +5596,12 @@
 ;;;3457   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;3458     /* Call registered Abort Transmit Complete Callback */
 ;;;3459     huart->AbortTransmitCpltCallback(huart);
+000010  4620              MOV      r0,r4
+000012  6de1              LDR      r1,[r4,#0x5c]
+000014  4788              BLX      r1
 ;;;3460   #else
 ;;;3461     /* Call legacy weak Abort Transmit Complete Callback */
 ;;;3462     HAL_UART_AbortTransmitCpltCallback(huart);
-000010  4620              MOV      r0,r4
-000012  f7fffffe          BL       HAL_UART_AbortTransmitCpltCallback
 ;;;3463   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;3464   }
 000016  bd70              POP      {r4-r6,pc}
@@ -4987,7 +5619,7 @@
 ;;;3309     /* Disable RXNE, PE and ERR (Frame error, noise error, overrun error) interrupts */
 ;;;3310     ATOMIC_CLEAR_BIT(huart->Instance->CR1, (USART_CR1_RXNEIE | USART_CR1_PEIE));
 000002  bf00              NOP      
-                  |L53.4|
+                  |L57.4|
 000004  6802              LDR      r2,[r0,#0]
 000006  320c              ADDS     r2,r2,#0xc
 000008  e8522f00          LDREX    r2,[r2,#0]
@@ -4996,12 +5628,12 @@
 000012  320c              ADDS     r2,r2,#0xc
 000014  e8421300          STREX    r3,r1,[r2,#0]
 000018  2b00              CMP      r3,#0
-00001a  d1f3              BNE      |L53.4|
+00001a  d1f3              BNE      |L57.4|
 00001c  bf00              NOP      
 ;;;3311     ATOMIC_CLEAR_BIT(huart->Instance->CR3, USART_CR3_EIE);
 00001e  bf00              NOP      
 000020  bf00              NOP      
-                  |L53.34|
+                  |L57.34|
 000022  6802              LDR      r2,[r0,#0]
 000024  3214              ADDS     r2,r2,#0x14
 000026  e8522f00          LDREX    r2,[r2,#0]
@@ -5010,19 +5642,19 @@
 000030  3214              ADDS     r2,r2,#0x14
 000032  e8421300          STREX    r3,r1,[r2,#0]
 000036  2b00              CMP      r3,#0
-000038  d1f3              BNE      |L53.34|
+000038  d1f3              BNE      |L57.34|
 00003a  bf00              NOP      
 ;;;3312   
 ;;;3313     /* In case of reception waiting for IDLE event, disable also the IDLE IE interrupt source */
 ;;;3314     if (huart->ReceptionType == HAL_UART_RECEPTION_TOIDLE)
 00003c  6b01              LDR      r1,[r0,#0x30]
 00003e  2901              CMP      r1,#1
-000040  d10e              BNE      |L53.96|
+000040  d10e              BNE      |L57.96|
 ;;;3315     {
 ;;;3316       ATOMIC_CLEAR_BIT(huart->Instance->CR1, USART_CR1_IDLEIE);
 000042  bf00              NOP      
 000044  bf00              NOP      
-                  |L53.70|
+                  |L57.70|
 000046  6802              LDR      r2,[r0,#0]
 000048  320c              ADDS     r2,r2,#0xc
 00004a  e8522f00          LDREX    r2,[r2,#0]
@@ -5031,9 +5663,9 @@
 000054  320c              ADDS     r2,r2,#0xc
 000056  e8421300          STREX    r3,r1,[r2,#0]
 00005a  2b00              CMP      r3,#0
-00005c  d1f3              BNE      |L53.70|
+00005c  d1f3              BNE      |L57.70|
 00005e  bf00              NOP      
-                  |L53.96|
+                  |L57.96|
 ;;;3317     }
 ;;;3318   
 ;;;3319     /* At end of Rx process, restore huart->RxState to Ready */
@@ -5073,11 +5705,12 @@
 ;;;3549   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;3550     /*Call registered Tx complete callback*/
 ;;;3551     huart->TxCpltCallback(huart);
+000016  4620              MOV      r0,r4
+000018  6ca1              LDR      r1,[r4,#0x48]
+00001a  4788              BLX      r1
 ;;;3552   #else
 ;;;3553     /*Call legacy weak Tx complete callback*/
 ;;;3554     HAL_UART_TxCpltCallback(huart);
-000016  4620              MOV      r0,r4
-000018  f7fffffe          BL       HAL_UART_TxCpltCallback
 ;;;3555   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;3556   
 ;;;3557     return HAL_OK;
@@ -5098,7 +5731,7 @@
 ;;;3295     /* Disable TXEIE and TCIE interrupts */
 ;;;3296     ATOMIC_CLEAR_BIT(huart->Instance->CR1, (USART_CR1_TXEIE | USART_CR1_TCIE));
 000002  bf00              NOP      
-                  |L55.4|
+                  |L59.4|
 000004  6802              LDR      r2,[r0,#0]
 000006  320c              ADDS     r2,r2,#0xc
 000008  e8522f00          LDREX    r2,[r2,#0]
@@ -5107,7 +5740,7 @@
 000012  320c              ADDS     r2,r2,#0xc
 000014  e8421300          STREX    r3,r1,[r2,#0]
 000018  2b00              CMP      r3,#0
-00001a  d1f3              BNE      |L55.4|
+00001a  d1f3              BNE      |L59.4|
 00001c  bf00              NOP      
 ;;;3297   
 ;;;3298     /* At end of Tx process, restore huart->gState to Ready */
@@ -5119,6 +5752,66 @@
 ;;;3301   
                           ENDP
 
+
+                          AREA ||i.UART_InitCallbacksToDefault||, CODE, READONLY, ALIGN=2
+
+                  UART_InitCallbacksToDefault PROC
+;;;2959   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
+;;;2960   void UART_InitCallbacksToDefault(UART_HandleTypeDef *huart)
+000000  4909              LDR      r1,|L60.40|
+;;;2961   {
+;;;2962     /* Init the UART Callback settings */
+;;;2963     huart->TxHalfCpltCallback        = HAL_UART_TxHalfCpltCallback;        /* Legacy weak TxHalfCpltCallback        */
+000002  6441              STR      r1,[r0,#0x44]
+;;;2964     huart->TxCpltCallback            = HAL_UART_TxCpltCallback;            /* Legacy weak TxCpltCallback            */
+000004  4909              LDR      r1,|L60.44|
+000006  6481              STR      r1,[r0,#0x48]
+;;;2965     huart->RxHalfCpltCallback        = HAL_UART_RxHalfCpltCallback;        /* Legacy weak RxHalfCpltCallback        */
+000008  4909              LDR      r1,|L60.48|
+00000a  64c1              STR      r1,[r0,#0x4c]
+;;;2966     huart->RxCpltCallback            = HAL_UART_RxCpltCallback;            /* Legacy weak RxCpltCallback            */
+00000c  4909              LDR      r1,|L60.52|
+00000e  6501              STR      r1,[r0,#0x50]
+;;;2967     huart->ErrorCallback             = HAL_UART_ErrorCallback;             /* Legacy weak ErrorCallback             */
+000010  4909              LDR      r1,|L60.56|
+000012  6541              STR      r1,[r0,#0x54]
+;;;2968     huart->AbortCpltCallback         = HAL_UART_AbortCpltCallback;         /* Legacy weak AbortCpltCallback         */
+000014  4909              LDR      r1,|L60.60|
+000016  6581              STR      r1,[r0,#0x58]
+;;;2969     huart->AbortTransmitCpltCallback = HAL_UART_AbortTransmitCpltCallback; /* Legacy weak AbortTransmitCpltCallback */
+000018  4909              LDR      r1,|L60.64|
+00001a  65c1              STR      r1,[r0,#0x5c]
+;;;2970     huart->AbortReceiveCpltCallback  = HAL_UART_AbortReceiveCpltCallback;  /* Legacy weak AbortReceiveCpltCallback  */
+00001c  4909              LDR      r1,|L60.68|
+00001e  6601              STR      r1,[r0,#0x60]
+;;;2971     huart->RxEventCallback           = HAL_UARTEx_RxEventCallback;         /* Legacy weak RxEventCallback           */
+000020  4909              LDR      r1,|L60.72|
+000022  6681              STR      r1,[r0,#0x68]
+;;;2972   
+;;;2973   }
+000024  4770              BX       lr
+;;;2974   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
+                          ENDP
+
+000026  0000              DCW      0x0000
+                  |L60.40|
+                          DCD      HAL_UART_TxHalfCpltCallback
+                  |L60.44|
+                          DCD      HAL_UART_TxCpltCallback
+                  |L60.48|
+                          DCD      HAL_UART_RxHalfCpltCallback
+                  |L60.52|
+                          DCD      HAL_UART_RxCpltCallback
+                  |L60.56|
+                          DCD      HAL_UART_ErrorCallback
+                  |L60.60|
+                          DCD      HAL_UART_AbortCpltCallback
+                  |L60.64|
+                          DCD      HAL_UART_AbortTransmitCpltCallback
+                  |L60.68|
+                          DCD      HAL_UART_AbortReceiveCpltCallback
+                  |L60.72|
+                          DCD      HAL_UARTEx_RxEventCallback
 
                           AREA ||i.UART_Receive_IT||, CODE, READONLY, ALIGN=1
 
@@ -5135,14 +5828,14 @@
 ;;;3572     if (huart->RxState == HAL_UART_STATE_BUSY_RX)
 000004  f894003e          LDRB     r0,[r4,#0x3e]
 000008  2822              CMP      r0,#0x22
-00000a  d173              BNE      |L56.244|
+00000a  d173              BNE      |L61.244|
 ;;;3573     {
 ;;;3574       if ((huart->Init.WordLength == UART_WORDLENGTH_9B) && (huart->Init.Parity == UART_PARITY_NONE))
 00000c  68a0              LDR      r0,[r4,#8]
 00000e  f5b05f80          CMP      r0,#0x1000
-000012  d10c              BNE      |L56.46|
+000012  d10c              BNE      |L61.46|
 000014  6920              LDR      r0,[r4,#0x10]
-000016  b950              CBNZ     r0,|L56.46|
+000016  b950              CBNZ     r0,|L61.46|
 ;;;3575       {
 ;;;3576         pdata8bits  = NULL;
 000018  2500              MOVS     r5,#0
@@ -5157,8 +5850,8 @@
 000026  6aa0              LDR      r0,[r4,#0x28]
 000028  1c80              ADDS     r0,r0,#2
 00002a  62a0              STR      r0,[r4,#0x28]
-00002c  e015              B        |L56.90|
-                  |L56.46|
+00002c  e015              B        |L61.90|
+                  |L61.46|
 ;;;3580       }
 ;;;3581       else
 ;;;3582       {
@@ -5170,19 +5863,19 @@
 ;;;3586         if ((huart->Init.WordLength == UART_WORDLENGTH_9B) || ((huart->Init.WordLength == UART_WORDLENGTH_8B) && (huart->Init.Parity == UART_PARITY_NONE)))
 000032  68a0              LDR      r0,[r4,#8]
 000034  f5b05f80          CMP      r0,#0x1000
-000038  d003              BEQ      |L56.66|
+000038  d003              BEQ      |L61.66|
 00003a  68a0              LDR      r0,[r4,#8]
-00003c  b928              CBNZ     r0,|L56.74|
+00003c  b928              CBNZ     r0,|L61.74|
 00003e  6920              LDR      r0,[r4,#0x10]
-000040  b918              CBNZ     r0,|L56.74|
-                  |L56.66|
+000040  b918              CBNZ     r0,|L61.74|
+                  |L61.66|
 ;;;3587         {
 ;;;3588           *pdata8bits = (uint8_t)(huart->Instance->DR & (uint8_t)0x00FF);
 000042  6820              LDR      r0,[r4,#0]
 000044  6840              LDR      r0,[r0,#4]
 000046  7028              STRB     r0,[r5,#0]
-000048  e004              B        |L56.84|
-                  |L56.74|
+000048  e004              B        |L61.84|
+                  |L61.74|
 ;;;3589         }
 ;;;3590         else
 ;;;3591         {
@@ -5191,13 +5884,13 @@
 00004c  6840              LDR      r0,[r0,#4]
 00004e  f000007f          AND      r0,r0,#0x7f
 000052  7028              STRB     r0,[r5,#0]
-                  |L56.84|
+                  |L61.84|
 ;;;3593         }
 ;;;3594         huart->pRxBuffPtr += 1U;
 000054  6aa0              LDR      r0,[r4,#0x28]
 000056  1c40              ADDS     r0,r0,#1
 000058  62a0              STR      r0,[r4,#0x28]
-                  |L56.90|
+                  |L61.90|
 ;;;3595       }
 ;;;3596   
 ;;;3597       if (--huart->RxXferCount == 0U)
@@ -5206,7 +5899,7 @@
 00005e  b280              UXTH     r0,r0
 000060  85e0              STRH     r0,[r4,#0x2e]
 000062  2800              CMP      r0,#0
-000064  d144              BNE      |L56.240|
+000064  d144              BNE      |L61.240|
 ;;;3598       {
 ;;;3599         /* Disable the UART Data Register not empty Interrupt */
 ;;;3600         __HAL_UART_DISABLE_IT(huart, UART_IT_RXNE);
@@ -5242,7 +5935,7 @@
 ;;;3613         if (huart->ReceptionType == HAL_UART_RECEPTION_TOIDLE)
 000090  6b20              LDR      r0,[r4,#0x30]
 000092  2801              CMP      r0,#1
-000094  d126              BNE      |L56.228|
+000094  d126              BNE      |L61.228|
 ;;;3614         {
 ;;;3615           /* Set reception type to Standard */
 ;;;3616           huart->ReceptionType = HAL_UART_RECEPTION_STANDARD;
@@ -5253,7 +5946,7 @@
 ;;;3619           ATOMIC_CLEAR_BIT(huart->Instance->CR1, USART_CR1_IDLEIE);
 00009a  bf00              NOP      
 00009c  bf00              NOP      
-                  |L56.158|
+                  |L61.158|
 00009e  6821              LDR      r1,[r4,#0]
 0000a0  310c              ADDS     r1,r1,#0xc
 0000a2  e8511f00          LDREX    r1,[r1,#0]
@@ -5262,7 +5955,7 @@
 0000ac  310c              ADDS     r1,r1,#0xc
 0000ae  e8410200          STREX    r2,r0,[r1,#0]
 0000b2  2a00              CMP      r2,#0
-0000b4  d1f3              BNE      |L56.158|
+0000b4  d1f3              BNE      |L61.158|
 0000b6  bf00              NOP      
 ;;;3620   
 ;;;3621           /* Check if IDLE flag is set */
@@ -5271,7 +5964,7 @@
 0000ba  6800              LDR      r0,[r0,#0]
 0000bc  f0000010          AND      r0,r0,#0x10
 0000c0  2810              CMP      r0,#0x10
-0000c2  d10a              BNE      |L56.218|
+0000c2  d10a              BNE      |L61.218|
 ;;;3623           {
 ;;;3624             /* Clear IDLE flag in ISR */
 ;;;3625             __HAL_UART_CLEAR_IDLEFLAG(huart);
@@ -5286,20 +5979,21 @@
 0000d4  9000              STR      r0,[sp,#0]
 0000d6  bf00              NOP      
 0000d8  bf00              NOP      
-                  |L56.218|
+                  |L61.218|
 ;;;3626           }
 ;;;3627   
 ;;;3628   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;3629           /*Call registered Rx Event callback*/
 ;;;3630           huart->RxEventCallback(huart, huart->RxXferSize);
+0000da  8da1              LDRH     r1,[r4,#0x2c]
+0000dc  4620              MOV      r0,r4
+0000de  6ea2              LDR      r2,[r4,#0x68]
+0000e0  4790              BLX      r2
+0000e2  e002              B        |L61.234|
+                  |L61.228|
 ;;;3631   #else
 ;;;3632           /*Call legacy weak Rx Event callback*/
 ;;;3633           HAL_UARTEx_RxEventCallback(huart, huart->RxXferSize);
-0000da  8da1              LDRH     r1,[r4,#0x2c]
-0000dc  4620              MOV      r0,r4
-0000de  f7fffffe          BL       HAL_UARTEx_RxEventCallback
-0000e2  e002              B        |L56.234|
-                  |L56.228|
 ;;;3634   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;3635         }
 ;;;3636         else
@@ -5308,18 +6002,19 @@
 ;;;3639   #if (USE_HAL_UART_REGISTER_CALLBACKS == 1)
 ;;;3640           /*Call registered Rx complete callback*/
 ;;;3641           huart->RxCpltCallback(huart);
+0000e4  4620              MOV      r0,r4
+0000e6  6d21              LDR      r1,[r4,#0x50]
+0000e8  4788              BLX      r1
+                  |L61.234|
 ;;;3642   #else
 ;;;3643           /*Call legacy weak Rx complete callback*/
 ;;;3644           HAL_UART_RxCpltCallback(huart);
-0000e4  4620              MOV      r0,r4
-0000e6  f7fffffe          BL       HAL_UART_RxCpltCallback
-                  |L56.234|
 ;;;3645   #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
 ;;;3646         }
 ;;;3647   
 ;;;3648         return HAL_OK;
 0000ea  2000              MOVS     r0,#0
-                  |L56.236|
+                  |L61.236|
 ;;;3649       }
 ;;;3650       return HAL_OK;
 ;;;3651     }
@@ -5329,13 +6024,13 @@
 ;;;3655     }
 ;;;3656   }
 0000ec  bdf8              POP      {r3-r7,pc}
-0000ee  e001              B        |L56.244|
-                  |L56.240|
+0000ee  e001              B        |L61.244|
+                  |L61.240|
 0000f0  2000              MOVS     r0,#0                 ;3650
-0000f2  e7fb              B        |L56.236|
-                  |L56.244|
+0000f2  e7fb              B        |L61.236|
+                  |L61.244|
 0000f4  2002              MOVS     r0,#2                 ;3654
-0000f6  e7f9              B        |L56.236|
+0000f6  e7f9              B        |L61.236|
 ;;;3657   
                           ENDP
 
@@ -5416,21 +6111,21 @@
 ;;;3701       }
 ;;;3702   #elif defined(USART6)
 ;;;3703       if ((huart->Instance == USART1) || (huart->Instance == USART6))
-000048  4976              LDR      r1,|L57.548|
+000048  4976              LDR      r1,|L62.548|
 00004a  6820              LDR      r0,[r4,#0]
 00004c  4288              CMP      r0,r1
-00004e  d003              BEQ      |L57.88|
-000050  4975              LDR      r1,|L57.552|
+00004e  d003              BEQ      |L62.88|
+000050  4975              LDR      r1,|L62.552|
 000052  6820              LDR      r0,[r4,#0]
 000054  4288              CMP      r0,r1
-000056  d103              BNE      |L57.96|
-                  |L57.88|
+000056  d103              BNE      |L62.96|
+                  |L62.88|
 ;;;3704       {
 ;;;3705         pclk = HAL_RCC_GetPCLK2Freq();
 000058  f7fffffe          BL       HAL_RCC_GetPCLK2Freq
 00005c  4681              MOV      r9,r0
-00005e  e002              B        |L57.102|
-                  |L57.96|
+00005e  e002              B        |L62.102|
+                  |L62.96|
 ;;;3706       }
 ;;;3707   #else
 ;;;3708       if (huart->Instance == USART1)
@@ -5443,13 +6138,13 @@
 ;;;3715         pclk = HAL_RCC_GetPCLK1Freq();
 000060  f7fffffe          BL       HAL_RCC_GetPCLK1Freq
 000064  4681              MOV      r9,r0
-                  |L57.102|
+                  |L62.102|
 ;;;3716       }
 ;;;3717     /*-------------------------- USART BRR Configuration ---------------------*/
 ;;;3718     if (huart->Init.OverSampling == UART_OVERSAMPLING_8)
 000066  69e0              LDR      r0,[r4,#0x1c]
 000068  f5b04f00          CMP      r0,#0x8000
-00006c  d16c              BNE      |L57.328|
+00006c  d16c              BNE      |L62.328|
 ;;;3719     {
 ;;;3720       huart->Instance->BRR = UART_BRR_SAMPLING8(pclk, huart->Init.BaudRate);
 00006e  2002              MOVS     r0,#2
@@ -5528,8 +6223,8 @@
 000140  4450              ADD      r0,r0,r10
 000142  6821              LDR      r1,[r4,#0]
 000144  6088              STR      r0,[r1,#8]
-000146  e06a              B        |L57.542|
-                  |L57.328|
+000146  e06a              B        |L62.542|
+                  |L62.328|
 ;;;3721     }
 ;;;3722     else
 ;;;3723     {
@@ -5610,7 +6305,7 @@
 000218  4450              ADD      r0,r0,r10
 00021a  6821              LDR      r1,[r4,#0]
 00021c  6088              STR      r0,[r1,#8]
-                  |L57.542|
+                  |L62.542|
 ;;;3725     }
 ;;;3726   }
 00021e  e8bd8ff8          POP      {r3-r11,pc}
@@ -5618,9 +6313,9 @@
                           ENDP
 
 000222  0000              DCW      0x0000
-                  |L57.548|
+                  |L62.548|
                           DCD      0x40011000
-                  |L57.552|
+                  |L62.552|
                           DCD      0x40011400
 
                           AREA ||i.UART_Start_Receive_DMA||, CODE, READONLY, ALIGN=2
@@ -5650,19 +6345,19 @@
 ;;;3252   
 ;;;3253     /* Set the UART DMA transfer complete callback */
 ;;;3254     huart->hdmarx->XferCpltCallback = UART_DMAReceiveCplt;
-000018  4829              LDR      r0,|L58.192|
+000018  4829              LDR      r0,|L63.192|
 00001a  6ba1              LDR      r1,[r4,#0x38]
 00001c  63c8              STR      r0,[r1,#0x3c]
 ;;;3255   
 ;;;3256     /* Set the UART DMA Half transfer complete callback */
 ;;;3257     huart->hdmarx->XferHalfCpltCallback = UART_DMARxHalfCplt;
-00001e  4829              LDR      r0,|L58.196|
+00001e  4829              LDR      r0,|L63.196|
 000020  6ba1              LDR      r1,[r4,#0x38]
 000022  6408              STR      r0,[r1,#0x40]
 ;;;3258   
 ;;;3259     /* Set the DMA error callback */
 ;;;3260     huart->hdmarx->XferErrorCallback = UART_DMAError;
-000024  4828              LDR      r0,|L58.200|
+000024  4828              LDR      r0,|L63.200|
 000026  6ba1              LDR      r1,[r4,#0x38]
 000028  64c8              STR      r0,[r1,#0x4c]
 ;;;3261   
@@ -5708,7 +6403,7 @@
 ;;;3276     ATOMIC_SET_BIT(huart->Instance->CR1, USART_CR1_PEIE);
 000060  bf00              NOP      
 000062  bf00              NOP      
-                  |L58.100|
+                  |L63.100|
 000064  6821              LDR      r1,[r4,#0]
 000066  310c              ADDS     r1,r1,#0xc
 000068  e8511f00          LDREX    r1,[r1,#0]
@@ -5717,14 +6412,14 @@
 000072  310c              ADDS     r1,r1,#0xc
 000074  e8410200          STREX    r2,r0,[r1,#0]
 000078  2a00              CMP      r2,#0
-00007a  d1f3              BNE      |L58.100|
+00007a  d1f3              BNE      |L63.100|
 00007c  bf00              NOP      
 ;;;3277   
 ;;;3278     /* Enable the UART Error Interrupt: (Frame error, noise error, overrun error) */
 ;;;3279     ATOMIC_SET_BIT(huart->Instance->CR3, USART_CR3_EIE);
 00007e  bf00              NOP      
 000080  bf00              NOP      
-                  |L58.130|
+                  |L63.130|
 000082  6821              LDR      r1,[r4,#0]
 000084  3114              ADDS     r1,r1,#0x14
 000086  e8511f00          LDREX    r1,[r1,#0]
@@ -5733,7 +6428,7 @@
 000090  3114              ADDS     r1,r1,#0x14
 000092  e8410200          STREX    r2,r0,[r1,#0]
 000096  2a00              CMP      r2,#0
-000098  d1f3              BNE      |L58.130|
+000098  d1f3              BNE      |L63.130|
 00009a  bf00              NOP      
 ;;;3280   
 ;;;3281     /* Enable the DMA transfer for the receiver request by setting the DMAR bit
@@ -5741,7 +6436,7 @@
 ;;;3283     ATOMIC_SET_BIT(huart->Instance->CR3, USART_CR3_DMAR);
 00009c  bf00              NOP      
 00009e  bf00              NOP      
-                  |L58.160|
+                  |L63.160|
 0000a0  6821              LDR      r1,[r4,#0]
 0000a2  3114              ADDS     r1,r1,#0x14
 0000a4  e8511f00          LDREX    r1,[r1,#0]
@@ -5750,7 +6445,7 @@
 0000ae  3114              ADDS     r1,r1,#0x14
 0000b0  e8410200          STREX    r2,r0,[r1,#0]
 0000b4  2a00              CMP      r2,#0
-0000b6  d1f3              BNE      |L58.160|
+0000b6  d1f3              BNE      |L63.160|
 0000b8  bf00              NOP      
 ;;;3284   
 ;;;3285     return HAL_OK;
@@ -5761,11 +6456,11 @@
 ;;;3287   
                           ENDP
 
-                  |L58.192|
+                  |L63.192|
                           DCD      UART_DMAReceiveCplt
-                  |L58.196|
+                  |L63.196|
                           DCD      UART_DMARxHalfCplt
-                  |L58.200|
+                  |L63.200|
                           DCD      UART_DMAError
 
                           AREA ||i.UART_Start_Receive_IT||, CODE, READONLY, ALIGN=1
@@ -5842,14 +6537,14 @@
 ;;;3506     if (huart->gState == HAL_UART_STATE_BUSY_TX)
 000002  f891003d          LDRB     r0,[r1,#0x3d]
 000006  2821              CMP      r0,#0x21
-000008  d128              BNE      |L60.92|
+000008  d128              BNE      |L65.92|
 ;;;3507     {
 ;;;3508       if ((huart->Init.WordLength == UART_WORDLENGTH_9B) && (huart->Init.Parity == UART_PARITY_NONE))
 00000a  6888              LDR      r0,[r1,#8]
 00000c  f5b05f80          CMP      r0,#0x1000
-000010  d10b              BNE      |L60.42|
+000010  d10b              BNE      |L65.42|
 000012  6908              LDR      r0,[r1,#0x10]
-000014  b948              CBNZ     r0,|L60.42|
+000014  b948              CBNZ     r0,|L65.42|
 ;;;3509       {
 ;;;3510         tmp = (uint16_t *) huart->pTxBuffPtr;
 000016  6a0a              LDR      r2,[r1,#0x20]
@@ -5862,8 +6557,8 @@
 000022  6a08              LDR      r0,[r1,#0x20]
 000024  1c80              ADDS     r0,r0,#2
 000026  6208              STR      r0,[r1,#0x20]
-000028  e005              B        |L60.54|
-                  |L60.42|
+000028  e005              B        |L65.54|
+                  |L65.42|
 ;;;3513       }
 ;;;3514       else
 ;;;3515       {
@@ -5874,7 +6569,7 @@
 000030  7818              LDRB     r0,[r3,#0]
 000032  680b              LDR      r3,[r1,#0]
 000034  6058              STR      r0,[r3,#4]
-                  |L60.54|
+                  |L65.54|
 ;;;3517       }
 ;;;3518   
 ;;;3519       if (--huart->TxXferCount == 0U)
@@ -5882,7 +6577,7 @@
 000038  1e40              SUBS     r0,r0,#1
 00003a  b280              UXTH     r0,r0
 00003c  84c8              STRH     r0,[r1,#0x26]
-00003e  b958              CBNZ     r0,|L60.88|
+00003e  b958              CBNZ     r0,|L65.88|
 ;;;3520       {
 ;;;3521         /* Disable the UART Transmit Complete Interrupt */
 ;;;3522         __HAL_UART_DISABLE_IT(huart, UART_IT_TXE);
@@ -5899,11 +6594,11 @@
 000050  f0400040          ORR      r0,r0,#0x40
 000054  680b              LDR      r3,[r1,#0]
 000056  60d8              STR      r0,[r3,#0xc]
-                  |L60.88|
+                  |L65.88|
 ;;;3526       }
 ;;;3527       return HAL_OK;
 000058  2000              MOVS     r0,#0
-                  |L60.90|
+                  |L65.90|
 ;;;3528     }
 ;;;3529     else
 ;;;3530     {
@@ -5911,9 +6606,9 @@
 ;;;3532     }
 ;;;3533   }
 00005a  4770              BX       lr
-                  |L60.92|
+                  |L65.92|
 00005c  2002              MOVS     r0,#2                 ;3531
-00005e  e7fc              B        |L60.90|
+00005e  e7fc              B        |L65.90|
 ;;;3534   
                           ENDP
 
@@ -5933,27 +6628,27 @@
 00000c  9e06              LDR      r6,[sp,#0x18]
 ;;;3172     /* Wait until flag is set */
 ;;;3173     while ((__HAL_UART_GET_FLAG(huart, Flag) ? SET : RESET) == Status)
-00000e  e034              B        |L61.122|
-                  |L61.16|
+00000e  e034              B        |L66.122|
+                  |L66.16|
 ;;;3174     {
 ;;;3175       /* Check for the Timeout */
 ;;;3176       if (Timeout != HAL_MAX_DELAY)
 000010  1c70              ADDS     r0,r6,#1
-000012  b388              CBZ      r0,|L61.120|
+000012  b388              CBZ      r0,|L66.120|
 ;;;3177       {
 ;;;3178         if ((Timeout == 0U) || ((HAL_GetTick() - Tickstart) > Timeout))
-000014  b12e              CBZ      r6,|L61.34|
+000014  b12e              CBZ      r6,|L66.34|
 000016  f7fffffe          BL       HAL_GetTick
 00001a  eba00008          SUB      r0,r0,r8
 00001e  42b0              CMP      r0,r6
-000020  d92b              BLS      |L61.122|
-                  |L61.34|
+000020  d92b              BLS      |L66.122|
+                  |L66.34|
 ;;;3179         {
 ;;;3180           /* Disable TXE, RXNE, PE and ERR (Frame error, noise error, overrun error) interrupts for the interrupt process */
 ;;;3181           ATOMIC_CLEAR_BIT(huart->Instance->CR1, (USART_CR1_RXNEIE | USART_CR1_PEIE | USART_CR1_TXEIE));
 000022  bf00              NOP      
 000024  bf00              NOP      
-                  |L61.38|
+                  |L66.38|
 000026  6821              LDR      r1,[r4,#0]
 000028  310c              ADDS     r1,r1,#0xc
 00002a  e8511f00          LDREX    r1,[r1,#0]
@@ -5962,12 +6657,12 @@
 000034  310c              ADDS     r1,r1,#0xc
 000036  e8410200          STREX    r2,r0,[r1,#0]
 00003a  2a00              CMP      r2,#0
-00003c  d1f3              BNE      |L61.38|
+00003c  d1f3              BNE      |L66.38|
 00003e  bf00              NOP      
 ;;;3182           ATOMIC_CLEAR_BIT(huart->Instance->CR3, USART_CR3_EIE);
 000040  bf00              NOP      
 000042  bf00              NOP      
-                  |L61.68|
+                  |L66.68|
 000044  6821              LDR      r1,[r4,#0]
 000046  3114              ADDS     r1,r1,#0x14
 000048  e8511f00          LDREX    r1,[r1,#0]
@@ -5976,7 +6671,7 @@
 000052  3114              ADDS     r1,r1,#0x14
 000054  e8410200          STREX    r2,r0,[r1,#0]
 000058  2a00              CMP      r2,#0
-00005a  d1f3              BNE      |L61.68|
+00005a  d1f3              BNE      |L66.68|
 00005c  bf00              NOP      
 ;;;3183   
 ;;;3184           huart->gState  = HAL_UART_STATE_READY;
@@ -5994,30 +6689,30 @@
 ;;;3189   
 ;;;3190           return HAL_TIMEOUT;
 000072  2003              MOVS     r0,#3
-                  |L61.116|
+                  |L66.116|
 ;;;3191         }
 ;;;3192       }
 ;;;3193     }
 ;;;3194     return HAL_OK;
 ;;;3195   }
 000074  e8bd81f0          POP      {r4-r8,pc}
-                  |L61.120|
-000078  e7ff              B        |L61.122|
-                  |L61.122|
+                  |L66.120|
+000078  e7ff              B        |L66.122|
+                  |L66.122|
 00007a  6820              LDR      r0,[r4,#0]            ;3173
 00007c  6800              LDR      r0,[r0,#0]            ;3173
 00007e  4028              ANDS     r0,r0,r5              ;3173
 000080  42a8              CMP      r0,r5                 ;3173
-000082  d101              BNE      |L61.136|
+000082  d101              BNE      |L66.136|
 000084  2001              MOVS     r0,#1                 ;3173
-000086  e000              B        |L61.138|
-                  |L61.136|
+000086  e000              B        |L66.138|
+                  |L66.136|
 000088  2000              MOVS     r0,#0                 ;3173
-                  |L61.138|
+                  |L66.138|
 00008a  42b8              CMP      r0,r7                 ;3173
-00008c  d0c0              BEQ      |L61.16|
+00008c  d0c0              BEQ      |L66.16|
 00008e  2000              MOVS     r0,#0                 ;3194
-000090  e7f0              B        |L61.116|
+000090  e7f0              B        |L66.116|
 ;;;3196   
                           ENDP
 

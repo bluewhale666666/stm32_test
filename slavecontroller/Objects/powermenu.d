@@ -1,6 +1,8 @@
 .\objects\powermenu.o: Power\PowerMenu.c
 .\objects\powermenu.o: Power\PowerMenu.h
 .\objects\powermenu.o: Power\data_def.h
+.\objects\powermenu.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\powermenu.o: C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h
 .\objects\powermenu.o: D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h
 .\objects\powermenu.o: C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\stm32f4xx_hal_conf.h
 .\objects\powermenu.o: D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h
@@ -8,7 +10,6 @@
 .\objects\powermenu.o: D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h
 .\objects\powermenu.o: D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f407xx.h
 .\objects\powermenu.o: D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cm4.h
-.\objects\powermenu.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\powermenu.o: D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmInstr.h
 .\objects\powermenu.o: D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\cmsis_armcc.h
 .\objects\powermenu.o: D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmFunc.h
@@ -33,7 +34,6 @@
 .\objects\powermenu.o: D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h
 .\objects\powermenu.o: D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h
 .\objects\powermenu.o: D:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h
-.\objects\powermenu.o: C:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc\main.h
 .\objects\powermenu.o: .\etherCAT\SPIDriver.h
 .\objects\powermenu.o: .\etherCAT\ecat_def.h
 .\objects\powermenu.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
@@ -53,6 +53,7 @@
 .\objects\powermenu.o: .\etherCAT\mailbox.h
 .\objects\powermenu.o: .\etherCAT\ecatappl.h
 .\objects\powermenu.o: .\etherCAT\foeappl.h
-.\objects\powermenu.o: Power\ADS1115Driver.h
-.\objects\powermenu.o: Power\TemperatureDriver.h
-.\objects\powermenu.o: Power\Command.h
+.\objects\powermenu.o: .\Power\ADS1115Driver.h
+.\objects\powermenu.o: .\Power\TemperatureDriver.h
+.\objects\powermenu.o: .\Power\Command.h
+.\objects\powermenu.o: .\Power\PowerMenu.h
