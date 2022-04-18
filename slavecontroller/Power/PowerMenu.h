@@ -29,7 +29,7 @@ static void PowerOnCharge(void);
 void force_shutdown(uint8_t nxt_mode);
 void softwarepoweroff_mode_operation(void);
 void shutdown_mode_operation(void);
-
+void Reboot_mode_operation(void);
 
 
 #endif

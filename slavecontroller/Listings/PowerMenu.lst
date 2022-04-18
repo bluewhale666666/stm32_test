@@ -50727,7 +50727,7 @@ Sstatic void PowerOnCharge(void);
 Svoid force_shutdown(uint8_t nxt_mode);
 Svoid softwarepoweroff_mode_operation(void);
 Svoid shutdown_mode_operation(void);
-S
+Svoid Reboot_mode_operation(void);
 S
 S
 N#endif
@@ -50825,7 +50825,8 @@ N#define SU2SM_REQ_CD_REBOOT_COMMAND 5u
 N#define SU2SM_REQ_CD_REPLY_COMPULSORY_POWER_OFF_COMMAND 6u
 N#define SU2SM_REQ_MAX 6u
 N
-N
+Nextern BOOL    Reboot_Flag;
+Xextern unsigned char    Reboot_Flag;
 Nextern POWER_COMMAND_RECEIVED PowerCommandReceived;
 Nextern uint8_t PowerCommandRxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
 Xextern uint8_t PowerCommandRxBuffer[32u];
@@ -51010,7 +51011,7 @@ Nstatic void PowerOnCharge(void);
 Nvoid force_shutdown(uint8_t nxt_mode);
 Nvoid softwarepoweroff_mode_operation(void);
 Nvoid shutdown_mode_operation(void);
-N
+Nvoid Reboot_mode_operation(void);
 N
 N
 N#endif
@@ -51228,6 +51229,47 @@ N			break;
 N	}
 N}
 N
+Nvoid Reboot_mode_operation(void)
+N{
+N	HAL_StatusTypeDef TransmitResult;
+N	uint32_t nowTime;
+N	uint32_t elapseTime;
+N	static uint8_t RebootState = 0u;
+N	static uint32_t RebootTime = 0u;
+N
+N	
+N	switch(RebootState)
+N	{
+N		case 0u:	
+N		  TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_REPLY_REBOOT_COMMAND);
+X		  TransmitResult = Power_Command_Transmit((uint8_t)5u);
+N	    if(TransmitResult == HAL_OK)
+N			{
+N				RebootTime = HAL_GetTick();
+N				RebootState = 1u;
+N			}
+N			break;
+N		case 1u:
+N			nowTime = HAL_GetTick();
+N	    elapseTime = nowTime - RebootTime; 
+N		  if(elapseTime >= 5000)
+N		  {
+N			  force_shutdown(POWER_STATUS_IDLE);
+N				RebootState = 2u;
+N		  }		
+N			break;
+N		case 2u:
+N			HAL_Delay(1000);
+N		  power_manage.work_mode = POWER_STATUS_POWERON;
+N			Reboot_Flag = FALSE;
+X			Reboot_Flag = 0;
+N	    RebootState = 0u;
+N			break;
+N		default:
+N			break;		
+N	}
+N}
+N
 Nvoid work_mode_operation(void)
 N{
 N	
@@ -51253,10 +51295,16 @@ N	  HAL_GPIO_WritePin(AI_IU_SW2_GPIO_Port, AI_IU_SW2_Pin, GPIO_PIN_SET);
 X	  HAL_GPIO_WritePin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x0400UL)), ((uint16_t)0x0002), GPIO_PIN_SET);
 N	}
 N	
+N
 N	switch(power_manage.work_mode)
 N	{
 N		case POWER_STATUS_IDLE:
 N			sampling_flag = 1u;
+N			if(Reboot_Flag == TRUE)
+X			if(Reboot_Flag == 1)
+N			{
+N				Reboot_mode_operation();			
+N			}
 N		  break;
 N		case POWER_STATUS_POWERON:
 N			sampling_flag = 1u;
@@ -51266,9 +51314,19 @@ N	    power_manage.work_mode = POWER_STATUS_48VNOSTART;
 N		  break;
 N		case POWER_STATUS_48VNOSTART:
 N		  PowerOnCharge();
+N			if(Reboot_Flag == TRUE)
+X			if(Reboot_Flag == 1)
+N			{
+N				Reboot_mode_operation();			
+N			}
 N			break;
 N		case POWER_STATUS_48VSTART:
 N		  PowerAccessCharge();
+N			if(Reboot_Flag == TRUE)
+X			if(Reboot_Flag == 1)
+N			{
+N				Reboot_mode_operation();			
+N			}
 N			break;
 N		case POWER_STATUS_SHUTDWON:
 N      shutdown_mode_operation();

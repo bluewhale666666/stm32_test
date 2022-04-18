@@ -51005,7 +51005,7 @@ S#define SU2SM_REQ_CD_REBOOT_COMMAND 5u
 S#define SU2SM_REQ_CD_REPLY_COMPULSORY_POWER_OFF_COMMAND 6u
 S#define SU2SM_REQ_MAX 6u
 S
-S
+Sextern BOOL    Reboot_Flag;
 Sextern POWER_COMMAND_RECEIVED PowerCommandReceived;
 Sextern uint8_t PowerCommandRxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
 Sextern uint8_t PowerCommandTxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
@@ -51034,7 +51034,7 @@ Nstatic void PowerOnCharge(void);
 Nvoid force_shutdown(uint8_t nxt_mode);
 Nvoid softwarepoweroff_mode_operation(void);
 Nvoid shutdown_mode_operation(void);
-N
+Nvoid Reboot_mode_operation(void);
 N
 N
 N#endif
@@ -51132,7 +51132,8 @@ N#define SU2SM_REQ_CD_REBOOT_COMMAND 5u
 N#define SU2SM_REQ_CD_REPLY_COMPULSORY_POWER_OFF_COMMAND 6u
 N#define SU2SM_REQ_MAX 6u
 N
-N
+Nextern BOOL    Reboot_Flag;
+Xextern unsigned char    Reboot_Flag;
 Nextern POWER_COMMAND_RECEIVED PowerCommandReceived;
 Nextern uint8_t PowerCommandRxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
 Xextern uint8_t PowerCommandRxBuffer[32u];

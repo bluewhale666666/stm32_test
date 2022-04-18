@@ -245,6 +245,116 @@
                   |L2.160|
                           DCD      power_manage
 
+                          AREA ||i.Reboot_mode_operation||, CODE, READONLY, ALIGN=2
+
+                  Reboot_mode_operation PROC
+;;;205    
+;;;206    void Reboot_mode_operation(void)
+000000  b570              PUSH     {r4-r6,lr}
+;;;207    {
+;;;208    	HAL_StatusTypeDef TransmitResult;
+;;;209    	uint32_t nowTime;
+;;;210    	uint32_t elapseTime;
+;;;211    	static uint8_t RebootState = 0u;
+;;;212    	static uint32_t RebootTime = 0u;
+;;;213    
+;;;214    	
+;;;215    	switch(RebootState)
+000002  481b              LDR      r0,|L3.112|
+000004  7800              LDRB     r0,[r0,#0]  ; RebootState
+000006  b120              CBZ      r0,|L3.18|
+000008  2801              CMP      r0,#1
+00000a  d00f              BEQ      |L3.44|
+00000c  2802              CMP      r0,#2
+00000e  d12b              BNE      |L3.104|
+000010  e01d              B        |L3.78|
+                  |L3.18|
+;;;216    	{
+;;;217    		case 0u:	
+;;;218    		  TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_REPLY_REBOOT_COMMAND);
+000012  2005              MOVS     r0,#5
+000014  f7fffffe          BL       Power_Command_Transmit
+000018  4604              MOV      r4,r0
+;;;219    	    if(TransmitResult == HAL_OK)
+00001a  b934              CBNZ     r4,|L3.42|
+;;;220    			{
+;;;221    				RebootTime = HAL_GetTick();
+00001c  f7fffffe          BL       HAL_GetTick
+000020  4914              LDR      r1,|L3.116|
+000022  6008              STR      r0,[r1,#0]  ; RebootTime
+;;;222    				RebootState = 1u;
+000024  2001              MOVS     r0,#1
+000026  4912              LDR      r1,|L3.112|
+000028  7008              STRB     r0,[r1,#0]
+                  |L3.42|
+;;;223    			}
+;;;224    			break;
+00002a  e01e              B        |L3.106|
+                  |L3.44|
+;;;225    		case 1u:
+;;;226    			nowTime = HAL_GetTick();
+00002c  f7fffffe          BL       HAL_GetTick
+000030  4605              MOV      r5,r0
+;;;227    	    elapseTime = nowTime - RebootTime; 
+000032  4810              LDR      r0,|L3.116|
+000034  6800              LDR      r0,[r0,#0]  ; RebootTime
+000036  1a2e              SUBS     r6,r5,r0
+;;;228    		  if(elapseTime >= 5000)
+000038  f2413088          MOV      r0,#0x1388
+00003c  4286              CMP      r6,r0
+00003e  d305              BCC      |L3.76|
+;;;229    		  {
+;;;230    			  force_shutdown(POWER_STATUS_IDLE);
+000040  2000              MOVS     r0,#0
+000042  f7fffffe          BL       force_shutdown
+;;;231    				RebootState = 2u;
+000046  2002              MOVS     r0,#2
+000048  4909              LDR      r1,|L3.112|
+00004a  7008              STRB     r0,[r1,#0]
+                  |L3.76|
+;;;232    		  }		
+;;;233    			break;
+00004c  e00d              B        |L3.106|
+                  |L3.78|
+;;;234    		case 2u:
+;;;235    			HAL_Delay(1000);
+00004e  f44f707a          MOV      r0,#0x3e8
+000052  f7fffffe          BL       HAL_Delay
+;;;236    		  power_manage.work_mode = POWER_STATUS_POWERON;
+000056  2001              MOVS     r0,#1
+000058  4907              LDR      r1,|L3.120|
+00005a  7088              STRB     r0,[r1,#2]
+;;;237    			Reboot_Flag = FALSE;
+00005c  2000              MOVS     r0,#0
+00005e  4907              LDR      r1,|L3.124|
+000060  7008              STRB     r0,[r1,#0]
+;;;238    	    RebootState = 0u;
+000062  4903              LDR      r1,|L3.112|
+000064  7008              STRB     r0,[r1,#0]
+;;;239    			break;
+000066  e000              B        |L3.106|
+                  |L3.104|
+;;;240    		default:
+;;;241    			break;		
+000068  bf00              NOP      
+                  |L3.106|
+00006a  bf00              NOP                            ;224
+;;;242    	}
+;;;243    }
+00006c  bd70              POP      {r4-r6,pc}
+;;;244    
+                          ENDP
+
+00006e  0000              DCW      0x0000
+                  |L3.112|
+                          DCD      RebootState
+                  |L3.116|
+                          DCD      RebootTime
+                  |L3.120|
+                          DCD      power_manage
+                  |L3.124|
+                          DCD      Reboot_Flag
+
                           AREA ||i.Reload_Config_All_Value||, CODE, READONLY, ALIGN=2
 
                   Reload_Config_All_Value PROC
@@ -253,7 +363,7 @@
 000000  f44f70fa          MOV      r0,#0x1f4
 ;;;62     {
 ;;;63     	power_manage.upload_time = 500;
-000004  4901              LDR      r1,|L3.12|
+000004  4901              LDR      r1,|L4.12|
 000006  8008              STRH     r0,[r1,#0]
 ;;;64     }
 000008  4770              BX       lr
@@ -261,7 +371,7 @@
                           ENDP
 
 00000a  0000              DCW      0x0000
-                  |L3.12|
+                  |L4.12|
                           DCD      power_manage
 
                           AREA ||i.Reload_State_All_Value||, CODE, READONLY, ALIGN=2
@@ -275,27 +385,27 @@
 000002  f7fffffe          BL       close_all_dr_save_state
 ;;;55     	power_manage.p_breakdown_h.VAL = 0x00u;
 000006  2000              MOVS     r0,#0
-000008  4905              LDR      r1,|L4.32|
+000008  4905              LDR      r1,|L5.32|
 00000a  7608              STRB     r0,[r1,#0x18]
 ;;;56     	power_manage.p_breakdown_l.VAL = 0x00u;
 00000c  7648              STRB     r0,[r1,#0x19]
 ;;;57     	HAL_GPIO_WritePin(OC_PROTECT_GPIO_Port, OC_PROTECT_Pin, GPIO_PIN_RESET);
 00000e  2200              MOVS     r2,#0
 000010  2102              MOVS     r1,#2
-000012  4804              LDR      r0,|L4.36|
+000012  4804              LDR      r0,|L5.36|
 000014  f7fffffe          BL       HAL_GPIO_WritePin
 ;;;58     	power_manage.work_mode = 0u;
 000018  2000              MOVS     r0,#0
-00001a  4901              LDR      r1,|L4.32|
+00001a  4901              LDR      r1,|L5.32|
 00001c  7088              STRB     r0,[r1,#2]
 ;;;59     }
 00001e  bd10              POP      {r4,pc}
 ;;;60     
                           ENDP
 
-                  |L4.32|
+                  |L5.32|
                           DCD      power_manage
-                  |L4.36|
+                  |L5.36|
                           DCD      0x40021000
 
                           AREA ||i.close_all_dr_save_state||, CODE, READONLY, ALIGN=2
@@ -307,7 +417,7 @@
 ;;;22     {
 ;;;23     	power_manage.p_state_h.VAL = 0x00u;
 000002  2000              MOVS     r0,#0
-000004  490a              LDR      r1,|L5.48|
+000004  490a              LDR      r1,|L6.48|
 000006  7588              STRB     r0,[r1,#0x16]
 ;;;24       power_manage.p_state_l.VAL = 0x00u;
 000008  75c8              STRB     r0,[r1,#0x17]
@@ -316,17 +426,17 @@
 ;;;27     	HAL_GPIO_WritePin(GPIOB, V24V_OUT1_Pin, GPIO_PIN_RESET);
 00000a  2200              MOVS     r2,#0
 00000c  f44f7100          MOV      r1,#0x200
-000010  4808              LDR      r0,|L5.52|
+000010  4808              LDR      r0,|L6.52|
 000012  f7fffffe          BL       HAL_GPIO_WritePin
 ;;;28       HAL_GPIO_WritePin(GPIOF, V24V_OUT4_Pin|POWER24V_ON_Pin, GPIO_PIN_RESET);
 000016  2200              MOVS     r2,#0
 000018  f2410104          MOV      r1,#0x1004
-00001c  4806              LDR      r0,|L5.56|
+00001c  4806              LDR      r0,|L6.56|
 00001e  f7fffffe          BL       HAL_GPIO_WritePin
 ;;;29     	HAL_GPIO_WritePin(GPIOF, ES_SHUTDOWN_Pin, GPIO_PIN_SET);
 000022  2201              MOVS     r2,#1
 000024  0351              LSLS     r1,r2,#13
-000026  4804              LDR      r0,|L5.56|
+000026  4804              LDR      r0,|L6.56|
 000028  f7fffffe          BL       HAL_GPIO_WritePin
 ;;;30     }
 00002c  bd10              POP      {r4,pc}
@@ -334,11 +444,11 @@
                           ENDP
 
 00002e  0000              DCW      0x0000
-                  |L5.48|
+                  |L6.48|
                           DCD      power_manage
-                  |L5.52|
+                  |L6.52|
                           DCD      0x40020400
-                  |L5.56|
+                  |L6.56|
                           DCD      0x40021400
 
                           AREA ||i.first_open_dr_save_state||, CODE, READONLY, ALIGN=2
@@ -350,7 +460,7 @@
 ;;;44     {
 ;;;45     	power_manage.p_state_h.VAL = 0x05u;
 000002  2005              MOVS     r0,#5
-000004  4907              LDR      r1,|L6.36|
+000004  4907              LDR      r1,|L7.36|
 000006  7588              STRB     r0,[r1,#0x16]
 ;;;46       power_manage.p_state_l.VAL = 0x7fu; 
 000008  207f              MOVS     r0,#0x7f
@@ -359,23 +469,23 @@
 ;;;48     	HAL_GPIO_WritePin(GPIOB, V24V_OUT1_Pin, GPIO_PIN_SET);
 00000c  2201              MOVS     r2,#1
 00000e  0251              LSLS     r1,r2,#9
-000010  4805              LDR      r0,|L6.40|
+000010  4805              LDR      r0,|L7.40|
 000012  f7fffffe          BL       HAL_GPIO_WritePin
 ;;;49       HAL_GPIO_WritePin(GPIOF, V24V_OUT4_Pin|POWER24V_ON_Pin, GPIO_PIN_SET);
 000016  2201              MOVS     r2,#1
 000018  f2410104          MOV      r1,#0x1004
-00001c  4803              LDR      r0,|L6.44|
+00001c  4803              LDR      r0,|L7.44|
 00001e  f7fffffe          BL       HAL_GPIO_WritePin
 ;;;50     }
 000022  bd10              POP      {r4,pc}
 ;;;51     
                           ENDP
 
-                  |L6.36|
+                  |L7.36|
                           DCD      power_manage
-                  |L6.40|
+                  |L7.40|
                           DCD      0x40020400
-                  |L6.44|
+                  |L7.44|
                           DCD      0x40021400
 
                           AREA ||i.force_shutdown||, CODE, READONLY, ALIGN=2
@@ -392,13 +502,13 @@
 ;;;36     	HAL_GPIO_WritePin(OC_PROTECT_GPIO_Port, OC_PROTECT_Pin, GPIO_PIN_RESET);
 000008  2200              MOVS     r2,#0
 00000a  2102              MOVS     r1,#2
-00000c  4808              LDR      r0,|L7.48|
+00000c  4808              LDR      r0,|L8.48|
 00000e  f7fffffe          BL       HAL_GPIO_WritePin
 ;;;37     	power_manage.p_state_h.STATE_DEFINE_H.DC48_OC = 0;
-000012  4808              LDR      r0,|L7.52|
+000012  4808              LDR      r0,|L8.52|
 000014  7d80              LDRB     r0,[r0,#0x16]  ; power_manage
 000016  f0200002          BIC      r0,r0,#2
-00001a  4906              LDR      r1,|L7.52|
+00001a  4906              LDR      r1,|L8.52|
 00001c  7588              STRB     r0,[r1,#0x16]
 ;;;38     	power_manage.p_state_h.STATE_DEFINE_H.SYSTEM_RUN = 0;
 00001e  4608              MOV      r0,r1
@@ -415,9 +525,9 @@
                           ENDP
 
 00002e  0000              DCW      0x0000
-                  |L7.48|
+                  |L8.48|
                           DCD      0x40021000
-                  |L7.52|
+                  |L8.52|
                           DCD      power_manage
 
                           AREA ||i.shutdown_mode_operation||, CODE, READONLY, ALIGN=2
@@ -434,13 +544,13 @@
 ;;;148    	static uint32_t ShutdownTime = 0u;
 ;;;149    	
 ;;;150    	switch(ShutdownState)
-000002  4813              LDR      r0,|L8.80|
+000002  4813              LDR      r0,|L9.80|
 000004  7800              LDRB     r0,[r0,#0]  ; ShutdownState
-000006  b110              CBZ      r0,|L8.14|
+000006  b110              CBZ      r0,|L9.14|
 000008  2801              CMP      r0,#1
-00000a  d11e              BNE      |L8.74|
-00000c  e00c              B        |L8.40|
-                  |L8.14|
+00000a  d11e              BNE      |L9.74|
+00000c  e00c              B        |L9.40|
+                  |L9.14|
 ;;;151    	{
 ;;;152    		case 0u:	
 ;;;153    		  TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_POWER_OFF_REQUIRE);
@@ -448,50 +558,50 @@
 000010  f7fffffe          BL       Power_Command_Transmit
 000014  4604              MOV      r4,r0
 ;;;154    	    if(TransmitResult == HAL_OK)
-000016  b934              CBNZ     r4,|L8.38|
+000016  b934              CBNZ     r4,|L9.38|
 ;;;155    			{
 ;;;156    				ShutdownTime = HAL_GetTick();
 000018  f7fffffe          BL       HAL_GetTick
-00001c  490d              LDR      r1,|L8.84|
+00001c  490d              LDR      r1,|L9.84|
 00001e  6008              STR      r0,[r1,#0]  ; ShutdownTime
 ;;;157    				ShutdownState = 1u;
 000020  2001              MOVS     r0,#1
-000022  490b              LDR      r1,|L8.80|
+000022  490b              LDR      r1,|L9.80|
 000024  7008              STRB     r0,[r1,#0]
-                  |L8.38|
+                  |L9.38|
 ;;;158    			}
 ;;;159    			break;
-000026  e011              B        |L8.76|
-                  |L8.40|
+000026  e011              B        |L9.76|
+                  |L9.40|
 ;;;160    		case 1u:
 ;;;161    			ShutdownnowTime = HAL_GetTick();
 000028  f7fffffe          BL       HAL_GetTick
 00002c  4605              MOV      r5,r0
 ;;;162    	    ShutdownelapseTime = ShutdownnowTime - ShutdownTime; 
-00002e  4809              LDR      r0,|L8.84|
+00002e  4809              LDR      r0,|L9.84|
 000030  6800              LDR      r0,[r0,#0]  ; ShutdownTime
 000032  1a2e              SUBS     r6,r5,r0
 ;;;163    		  if(ShutdownelapseTime >= 5000)
 000034  f2413088          MOV      r0,#0x1388
 000038  4286              CMP      r6,r0
-00003a  d305              BCC      |L8.72|
+00003a  d305              BCC      |L9.72|
 ;;;164    		  {
 ;;;165    			  force_shutdown(POWER_STATUS_IDLE);
 00003c  2000              MOVS     r0,#0
 00003e  f7fffffe          BL       force_shutdown
 ;;;166    				ShutdownState = 0u;
 000042  2000              MOVS     r0,#0
-000044  4902              LDR      r1,|L8.80|
+000044  4902              LDR      r1,|L9.80|
 000046  7008              STRB     r0,[r1,#0]
-                  |L8.72|
+                  |L9.72|
 ;;;167    		  }		
 ;;;168    			break;
-000048  e000              B        |L8.76|
-                  |L8.74|
+000048  e000              B        |L9.76|
+                  |L9.74|
 ;;;169    		default:
 ;;;170    			break;		
 00004a  bf00              NOP      
-                  |L8.76|
+                  |L9.76|
 00004c  bf00              NOP                            ;159
 ;;;171    	}
 ;;;172    }
@@ -499,9 +609,9 @@
 ;;;173    
                           ENDP
 
-                  |L8.80|
+                  |L9.80|
                           DCD      ShutdownState
-                  |L8.84|
+                  |L9.84|
                           DCD      ShutdownTime
 
                           AREA ||i.softwarepoweroff_mode_operation||, CODE, READONLY, ALIGN=2
@@ -518,13 +628,13 @@
 ;;;180    	static uint32_t softwarepoweroffTime = 0u;
 ;;;181    	
 ;;;182    	switch(softwarepoweroffState)
-000002  4813              LDR      r0,|L9.80|
+000002  4813              LDR      r0,|L10.80|
 000004  7800              LDRB     r0,[r0,#0]  ; softwarepoweroffState
-000006  b110              CBZ      r0,|L9.14|
+000006  b110              CBZ      r0,|L10.14|
 000008  2801              CMP      r0,#1
-00000a  d11e              BNE      |L9.74|
-00000c  e00c              B        |L9.40|
-                  |L9.14|
+00000a  d11e              BNE      |L10.74|
+00000c  e00c              B        |L10.40|
+                  |L10.14|
 ;;;183    	{
 ;;;184    		case 0u:	
 ;;;185    		  TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_REPLY_POWER_OFF_COMMAND);
@@ -532,50 +642,50 @@
 000010  f7fffffe          BL       Power_Command_Transmit
 000014  4604              MOV      r4,r0
 ;;;186    	    if(TransmitResult == HAL_OK)
-000016  b934              CBNZ     r4,|L9.38|
+000016  b934              CBNZ     r4,|L10.38|
 ;;;187    			{
 ;;;188    				softwarepoweroffTime = HAL_GetTick();
 000018  f7fffffe          BL       HAL_GetTick
-00001c  490d              LDR      r1,|L9.84|
+00001c  490d              LDR      r1,|L10.84|
 00001e  6008              STR      r0,[r1,#0]  ; softwarepoweroffTime
 ;;;189    				softwarepoweroffState = 1u;
 000020  2001              MOVS     r0,#1
-000022  490b              LDR      r1,|L9.80|
+000022  490b              LDR      r1,|L10.80|
 000024  7008              STRB     r0,[r1,#0]
-                  |L9.38|
+                  |L10.38|
 ;;;190    			}
 ;;;191    			break;
-000026  e011              B        |L9.76|
-                  |L9.40|
+000026  e011              B        |L10.76|
+                  |L10.40|
 ;;;192    		case 1u:
 ;;;193    			softwarepoweroffnowTime = HAL_GetTick();
 000028  f7fffffe          BL       HAL_GetTick
 00002c  4605              MOV      r5,r0
 ;;;194    	    softwarepoweroffelapseTime = softwarepoweroffnowTime - softwarepoweroffTime; 
-00002e  4809              LDR      r0,|L9.84|
+00002e  4809              LDR      r0,|L10.84|
 000030  6800              LDR      r0,[r0,#0]  ; softwarepoweroffTime
 000032  1a2e              SUBS     r6,r5,r0
 ;;;195    		  if(softwarepoweroffelapseTime >= 5000)
 000034  f2413088          MOV      r0,#0x1388
 000038  4286              CMP      r6,r0
-00003a  d305              BCC      |L9.72|
+00003a  d305              BCC      |L10.72|
 ;;;196    		  {
 ;;;197    			  force_shutdown(POWER_STATUS_IDLE);
 00003c  2000              MOVS     r0,#0
 00003e  f7fffffe          BL       force_shutdown
 ;;;198    				softwarepoweroffState = 0u;
 000042  2000              MOVS     r0,#0
-000044  4902              LDR      r1,|L9.80|
+000044  4902              LDR      r1,|L10.80|
 000046  7008              STRB     r0,[r1,#0]
-                  |L9.72|
+                  |L10.72|
 ;;;199    		  }		
 ;;;200    			break;
-000048  e000              B        |L9.76|
-                  |L9.74|
+000048  e000              B        |L10.76|
+                  |L10.74|
 ;;;201    		default:
 ;;;202    			break;		
 00004a  bf00              NOP      
-                  |L9.76|
+                  |L10.76|
 00004c  bf00              NOP                            ;191
 ;;;203    	}
 ;;;204    }
@@ -583,148 +693,181 @@
 ;;;205    
                           ENDP
 
-                  |L9.80|
+                  |L10.80|
                           DCD      softwarepoweroffState
-                  |L9.84|
+                  |L10.84|
                           DCD      softwarepoweroffTime
 
                           AREA ||i.work_mode_operation||, CODE, READONLY, ALIGN=2
 
                   work_mode_operation PROC
-;;;205    
-;;;206    void work_mode_operation(void)
+;;;244    
+;;;245    void work_mode_operation(void)
 000000  b510              PUSH     {r4,lr}
-;;;207    {
-;;;208    	
-;;;209    	if(power_manage.AI_SW1 == 1) /* 电压 */
-000002  4827              LDR      r0,|L10.160|
+;;;246    {
+;;;247    	
+;;;248    	if(power_manage.AI_SW1 == 1) /* 电压 */
+000002  4830              LDR      r0,|L11.196|
 000004  7d00              LDRB     r0,[r0,#0x14]  ; power_manage
 000006  2801              CMP      r0,#1
-000008  d105              BNE      |L10.22|
-;;;210    	{
-;;;211    		HAL_GPIO_WritePin(AI_IU_SW1_GPIO_Port, AI_IU_SW1_Pin, GPIO_PIN_RESET);
+000008  d105              BNE      |L11.22|
+;;;249    	{
+;;;250    		HAL_GPIO_WritePin(AI_IU_SW1_GPIO_Port, AI_IU_SW1_Pin, GPIO_PIN_RESET);
 00000a  2200              MOVS     r2,#0
 00000c  2140              MOVS     r1,#0x40
-00000e  4825              LDR      r0,|L10.164|
+00000e  482e              LDR      r0,|L11.200|
 000010  f7fffffe          BL       HAL_GPIO_WritePin
-000014  e007              B        |L10.38|
-                  |L10.22|
-;;;212    	}
-;;;213    	else if(power_manage.AI_SW1 == 0) /* 电流 */
-000016  4822              LDR      r0,|L10.160|
+000014  e007              B        |L11.38|
+                  |L11.22|
+;;;251    	}
+;;;252    	else if(power_manage.AI_SW1 == 0) /* 电流 */
+000016  482b              LDR      r0,|L11.196|
 000018  7d00              LDRB     r0,[r0,#0x14]  ; power_manage
-00001a  b920              CBNZ     r0,|L10.38|
-;;;214    	{
-;;;215    	  HAL_GPIO_WritePin(AI_IU_SW1_GPIO_Port, AI_IU_SW1_Pin, GPIO_PIN_SET);
+00001a  b920              CBNZ     r0,|L11.38|
+;;;253    	{
+;;;254    	  HAL_GPIO_WritePin(AI_IU_SW1_GPIO_Port, AI_IU_SW1_Pin, GPIO_PIN_SET);
 00001c  2201              MOVS     r2,#1
 00001e  2140              MOVS     r1,#0x40
-000020  4820              LDR      r0,|L10.164|
+000020  4829              LDR      r0,|L11.200|
 000022  f7fffffe          BL       HAL_GPIO_WritePin
-                  |L10.38|
-;;;216    	}
-;;;217    	
-;;;218    	if(power_manage.AI_SW2 == 1)
-000026  481e              LDR      r0,|L10.160|
+                  |L11.38|
+;;;255    	}
+;;;256    	
+;;;257    	if(power_manage.AI_SW2 == 1)
+000026  4827              LDR      r0,|L11.196|
 000028  7d40              LDRB     r0,[r0,#0x15]  ; power_manage
 00002a  2801              CMP      r0,#1
-00002c  d105              BNE      |L10.58|
-;;;219    	{
-;;;220    		HAL_GPIO_WritePin(AI_IU_SW2_GPIO_Port, AI_IU_SW2_Pin, GPIO_PIN_RESET);
+00002c  d105              BNE      |L11.58|
+;;;258    	{
+;;;259    		HAL_GPIO_WritePin(AI_IU_SW2_GPIO_Port, AI_IU_SW2_Pin, GPIO_PIN_RESET);
 00002e  2200              MOVS     r2,#0
 000030  2102              MOVS     r1,#2
-000032  481d              LDR      r0,|L10.168|
+000032  4826              LDR      r0,|L11.204|
 000034  f7fffffe          BL       HAL_GPIO_WritePin
-000038  e007              B        |L10.74|
-                  |L10.58|
-;;;221    	}
-;;;222    	else if(power_manage.AI_SW2 == 0)
-00003a  4819              LDR      r0,|L10.160|
+000038  e007              B        |L11.74|
+                  |L11.58|
+;;;260    	}
+;;;261    	else if(power_manage.AI_SW2 == 0)
+00003a  4822              LDR      r0,|L11.196|
 00003c  7d40              LDRB     r0,[r0,#0x15]  ; power_manage
-00003e  b920              CBNZ     r0,|L10.74|
-;;;223    	{
-;;;224    	  HAL_GPIO_WritePin(AI_IU_SW2_GPIO_Port, AI_IU_SW2_Pin, GPIO_PIN_SET);
+00003e  b920              CBNZ     r0,|L11.74|
+;;;262    	{
+;;;263    	  HAL_GPIO_WritePin(AI_IU_SW2_GPIO_Port, AI_IU_SW2_Pin, GPIO_PIN_SET);
 000040  2201              MOVS     r2,#1
 000042  2102              MOVS     r1,#2
-000044  4818              LDR      r0,|L10.168|
+000044  4821              LDR      r0,|L11.204|
 000046  f7fffffe          BL       HAL_GPIO_WritePin
-                  |L10.74|
-;;;225    	}
-;;;226    	
-;;;227    	switch(power_manage.work_mode)
-00004a  4815              LDR      r0,|L10.160|
+                  |L11.74|
+;;;264    	}
+;;;265    	
+;;;266    
+;;;267    	switch(power_manage.work_mode)
+00004a  481e              LDR      r0,|L11.196|
 00004c  7880              LDRB     r0,[r0,#2]  ; power_manage
 00004e  2806              CMP      r0,#6
-000050  d223              BCS      |L10.154|
+000050  d235              BCS      |L11.190|
 000052  e8dff000          TBB      [pc,r0]
-000056  0307              DCB      0x03,0x07
-000058  16191c1f          DCB      0x16,0x19,0x1c,0x1f
-;;;228    	{
-;;;229    		case POWER_STATUS_IDLE:
-;;;230    			sampling_flag = 1u;
+000056  030d              DCB      0x03,0x0d
+000058  1c252e31          DCB      0x1c,0x25,0x2e,0x31
+;;;268    	{
+;;;269    		case POWER_STATUS_IDLE:
+;;;270    			sampling_flag = 1u;
 00005c  2001              MOVS     r0,#1
-00005e  4913              LDR      r1,|L10.172|
+00005e  491c              LDR      r1,|L11.208|
 000060  7008              STRB     r0,[r1,#0]
-;;;231    		  break;
-000062  e01b              B        |L10.156|
-;;;232    		case POWER_STATUS_POWERON:
-;;;233    			sampling_flag = 1u;
-000064  2001              MOVS     r0,#1
-000066  4911              LDR      r1,|L10.172|
-000068  7008              STRB     r0,[r1,#0]
-;;;234    		  first_open_dr_save_state();
-00006a  f7fffffe          BL       first_open_dr_save_state
-;;;235    		  power_manage.p_state_h.STATE_DEFINE_H.SYSTEM_RUN = 1u;
-00006e  480c              LDR      r0,|L10.160|
-000070  7d80              LDRB     r0,[r0,#0x16]  ; power_manage
-000072  f0200001          BIC      r0,r0,#1
-000076  1c40              ADDS     r0,r0,#1
-000078  4909              LDR      r1,|L10.160|
-00007a  7588              STRB     r0,[r1,#0x16]
-;;;236    	    power_manage.work_mode = POWER_STATUS_48VNOSTART;
-00007c  2002              MOVS     r0,#2
-00007e  7088              STRB     r0,[r1,#2]
-;;;237    		  break;
-000080  e00c              B        |L10.156|
-;;;238    		case POWER_STATUS_48VNOSTART:
-;;;239    		  PowerOnCharge();
-000082  f7fffffe          BL       PowerOnCharge
-;;;240    			break;
-000086  e009              B        |L10.156|
-;;;241    		case POWER_STATUS_48VSTART:
-;;;242    		  PowerAccessCharge();
-000088  f7fffffe          BL       PowerAccessCharge
-;;;243    			break;
-00008c  e006              B        |L10.156|
-;;;244    		case POWER_STATUS_SHUTDWON:
-;;;245          shutdown_mode_operation();
-00008e  f7fffffe          BL       shutdown_mode_operation
-;;;246    	    break;
-000092  e003              B        |L10.156|
-;;;247    		case POWER_STATUS_SOFTWAREPOWEROFF:
-;;;248          softwarepoweroff_mode_operation();
-000094  f7fffffe          BL       softwarepoweroff_mode_operation
-;;;249    			break;
-000098  e000              B        |L10.156|
-                  |L10.154|
-;;;250    		default:
-;;;251    			break;	
-00009a  bf00              NOP      
-                  |L10.156|
-00009c  bf00              NOP                            ;231
-;;;252    	}
-;;;253    }
-00009e  bd10              POP      {r4,pc}
-;;;254    
+;;;271    			if(Reboot_Flag == TRUE)
+000062  481c              LDR      r0,|L11.212|
+000064  7800              LDRB     r0,[r0,#0]  ; Reboot_Flag
+000066  2801              CMP      r0,#1
+000068  d101              BNE      |L11.110|
+;;;272    			{
+;;;273    				Reboot_mode_operation();			
+00006a  f7fffffe          BL       Reboot_mode_operation
+                  |L11.110|
+;;;274    			}
+;;;275    		  break;
+00006e  e027              B        |L11.192|
+;;;276    		case POWER_STATUS_POWERON:
+;;;277    			sampling_flag = 1u;
+000070  2001              MOVS     r0,#1
+000072  4917              LDR      r1,|L11.208|
+000074  7008              STRB     r0,[r1,#0]
+;;;278    		  first_open_dr_save_state();
+000076  f7fffffe          BL       first_open_dr_save_state
+;;;279    		  power_manage.p_state_h.STATE_DEFINE_H.SYSTEM_RUN = 1u;
+00007a  4812              LDR      r0,|L11.196|
+00007c  7d80              LDRB     r0,[r0,#0x16]  ; power_manage
+00007e  f0200001          BIC      r0,r0,#1
+000082  1c40              ADDS     r0,r0,#1
+000084  490f              LDR      r1,|L11.196|
+000086  7588              STRB     r0,[r1,#0x16]
+;;;280    	    power_manage.work_mode = POWER_STATUS_48VNOSTART;
+000088  2002              MOVS     r0,#2
+00008a  7088              STRB     r0,[r1,#2]
+;;;281    		  break;
+00008c  e018              B        |L11.192|
+;;;282    		case POWER_STATUS_48VNOSTART:
+;;;283    		  PowerOnCharge();
+00008e  f7fffffe          BL       PowerOnCharge
+;;;284    			if(Reboot_Flag == TRUE)
+000092  4810              LDR      r0,|L11.212|
+000094  7800              LDRB     r0,[r0,#0]  ; Reboot_Flag
+000096  2801              CMP      r0,#1
+000098  d101              BNE      |L11.158|
+;;;285    			{
+;;;286    				Reboot_mode_operation();			
+00009a  f7fffffe          BL       Reboot_mode_operation
+                  |L11.158|
+;;;287    			}
+;;;288    			break;
+00009e  e00f              B        |L11.192|
+;;;289    		case POWER_STATUS_48VSTART:
+;;;290    		  PowerAccessCharge();
+0000a0  f7fffffe          BL       PowerAccessCharge
+;;;291    			if(Reboot_Flag == TRUE)
+0000a4  480b              LDR      r0,|L11.212|
+0000a6  7800              LDRB     r0,[r0,#0]  ; Reboot_Flag
+0000a8  2801              CMP      r0,#1
+0000aa  d101              BNE      |L11.176|
+;;;292    			{
+;;;293    				Reboot_mode_operation();			
+0000ac  f7fffffe          BL       Reboot_mode_operation
+                  |L11.176|
+;;;294    			}
+;;;295    			break;
+0000b0  e006              B        |L11.192|
+;;;296    		case POWER_STATUS_SHUTDWON:
+;;;297          shutdown_mode_operation();
+0000b2  f7fffffe          BL       shutdown_mode_operation
+;;;298    	    break;
+0000b6  e003              B        |L11.192|
+;;;299    		case POWER_STATUS_SOFTWAREPOWEROFF:
+;;;300          softwarepoweroff_mode_operation();
+0000b8  f7fffffe          BL       softwarepoweroff_mode_operation
+;;;301    			break;
+0000bc  e000              B        |L11.192|
+                  |L11.190|
+;;;302    		default:
+;;;303    			break;	
+0000be  bf00              NOP      
+                  |L11.192|
+0000c0  bf00              NOP                            ;275
+;;;304    	}
+;;;305    }
+0000c2  bd10              POP      {r4,pc}
+;;;306    
                           ENDP
 
-                  |L10.160|
+                  |L11.196|
                           DCD      power_manage
-                  |L10.164|
+                  |L11.200|
                           DCD      0x40021000
-                  |L10.168|
+                  |L11.204|
                           DCD      0x40020400
-                  |L10.172|
+                  |L11.208|
                           DCD      sampling_flag
+                  |L11.212|
+                          DCD      Reboot_Flag
 
                           AREA ||.data||, DATA, ALIGN=2
 
@@ -745,6 +888,10 @@
                   softwarepoweroffState
 000018  00000000          DCB      0x00,0x00,0x00,0x00
                   softwarepoweroffTime
+                          DCD      0x00000000
+                  RebootState
+000020  00000000          DCB      0x00,0x00,0x00,0x00
+                  RebootTime
                           DCD      0x00000000
 
 ;*** Start embedded assembler ***

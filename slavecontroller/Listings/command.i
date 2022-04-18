@@ -22993,7 +22993,7 @@ static void PowerOnCharge(void);
 void force_shutdown(uint8_t nxt_mode);
 void softwarepoweroff_mode_operation(void);
 void shutdown_mode_operation(void);
-
+void Reboot_mode_operation(void);
 
 
 #line 18 "Power\\Command.h"
@@ -23065,7 +23065,7 @@ typedef struct	tag_SU2SM_REQ_DPCH{
 
 #line 102 "Power\\Command.h"
 
-
+extern unsigned char    Reboot_Flag;
 extern POWER_COMMAND_RECEIVED PowerCommandReceived;
 extern uint8_t PowerCommandRxBuffer[32u];
 extern uint8_t PowerCommandTxBuffer[32u];
@@ -23395,6 +23395,7 @@ uint16_t CRC16_CCITT(uint8_t *ptr, uint8_t len);
 
 #line 21 "Power\\Command.c"
 
+unsigned char    Reboot_Flag = 0;
 uint8_t PowerCommandRxBuffer[32u];
 uint8_t PowerCommandTxBuffer[32u];
 
@@ -23534,24 +23535,30 @@ void Power_Command_Main_Loop(void)
 		}
 	}
 	
-	nowTime = HAL_GetTick();
-	elapseTime = nowTime - PeriodicTransmissionTime;
-	if (elapseTime >= 500u)
+	if((power_manage.work_mode != POWER_STATUS_IDLE) && (power_manage.work_mode != POWER_STATUS_SHUTDWON) 		&& (power_manage.work_mode != POWER_STATUS_SOFTWAREPOWEROFF))
+
 	{
-		TransmitResult = Power_Command_Transmit((uint8_t)1u);
-		if(TransmitResult == HAL_OK)
+		nowTime = HAL_GetTick();
+		elapseTime = nowTime - PeriodicTransmissionTime;
+		if (elapseTime >= 500u)
 		{
-			PeriodicTransmissionTime = HAL_GetTick();
+			TransmitResult = Power_Command_Transmit((uint8_t)1u);
+			if(TransmitResult == HAL_OK)
+			{
+				PeriodicTransmissionTime = HAL_GetTick();
+			}
 		}
+		else if(elapseTime >= 1000u)
+		{
+			PeriodicTransmissionTimeout = 1;
+		}
+		else
+		{
+			
+		}	
 	}
-	else if(elapseTime >= 1000u)
-	{
-		PeriodicTransmissionTimeout = 1;
-	}
-	else
-	{
-		
-	}
+	
+
 }
 
 static void Power_Command_Receive(uint8_t * pData, uint16_t Size)
@@ -23629,7 +23636,7 @@ static void Power_Command_Receive(uint8_t * pData, uint16_t Size)
 			}
 			
 			if((pData[(4u) + 					(1u) + (1u) + 					InfoLength + (2u)] != 0xEEu) || 				(pData[(4u) + 					(1u) + (1u) + 					InfoLength + (2u) + 1u] != 0x55u) || 				(pData[(4u) + 					(1u) + (1u) + 					InfoLength + (2u) + 2u] != 0x55u) || 				(pData[(4u) + 					(1u) + (1u) + 					InfoLength + (2u) + 3u] != 0xEEu))
-#line 267 "Power\\Command.c"
+#line 274 "Power\\Command.c"
 			{
 				return;
 			}
@@ -23679,17 +23686,11 @@ static uint8_t SU2SM_Req_Call_Power_Off_Command(POWER_COMMAND_RECEIVED *pData)
 
 static uint8_t SU2SM_Req_Call_Reboot_Command(POWER_COMMAND_RECEIVED *pData)
 {
-		
-		HAL_StatusTypeDef TransmitResult;
 	
-	  TransmitResult = Power_Command_Transmit((uint8_t)5u);
-		if(TransmitResult == HAL_OK)
-		{
-			HAL_Delay(5000);
-			force_shutdown(POWER_STATUS_IDLE);
-			HAL_Delay(1000);
-			power_manage.work_mode = POWER_STATUS_POWERON;
-		}
+	if((power_manage.work_mode == POWER_STATUS_48VNOSTART) || (power_manage.work_mode == POWER_STATUS_48VSTART))
+	{
+	   Reboot_Flag = 1;
+	}
 	
 		return 1u;
 }

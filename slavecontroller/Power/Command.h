@@ -100,7 +100,7 @@ typedef struct	tag_SU2SM_REQ_DPCH{
 #define SU2SM_REQ_CD_REPLY_COMPULSORY_POWER_OFF_COMMAND 6u
 #define SU2SM_REQ_MAX 6u
 
-
+extern BOOL    Reboot_Flag;
 extern POWER_COMMAND_RECEIVED PowerCommandReceived;
 extern uint8_t PowerCommandRxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
 extern uint8_t PowerCommandTxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];

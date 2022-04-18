@@ -19,6 +19,7 @@
 #define REPLY_REBOOT_COMMAND_LENGTH 1u
 #define COMPULSORY_POWER_OFF_COMMAND_LENGTH 1u
 
+BOOL    Reboot_Flag = FALSE;
 uint8_t PowerCommandRxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
 uint8_t PowerCommandTxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
 
@@ -158,24 +159,30 @@ void Power_Command_Main_Loop(void)
 		}
 	}
 	
-	nowTime = HAL_GetTick();
-	elapseTime = nowTime - PeriodicTransmissionTime;
-	if (elapseTime >= SM2SU_PERIODIC_TRANSMIT_IN_MS)
+	if((power_manage.work_mode != POWER_STATUS_IDLE) && (power_manage.work_mode != POWER_STATUS_SHUTDWON) \
+		&& (power_manage.work_mode != POWER_STATUS_SOFTWAREPOWEROFF))
 	{
-		TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_PERIODIC_TRANSMISSION);
-		if(TransmitResult == HAL_OK)
+		nowTime = HAL_GetTick();
+		elapseTime = nowTime - PeriodicTransmissionTime;
+		if (elapseTime >= SM2SU_PERIODIC_TRANSMIT_IN_MS)
 		{
-			PeriodicTransmissionTime = HAL_GetTick();
+			TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_PERIODIC_TRANSMISSION);
+			if(TransmitResult == HAL_OK)
+			{
+				PeriodicTransmissionTime = HAL_GetTick();
+			}
 		}
+		else if(elapseTime >= SM2SU_PERIODIC_TRANSMIT_TIMEOUT_IN_MS)
+		{
+			PeriodicTransmissionTimeout = TRUE;
+		}
+		else
+		{
+			//no statement
+		}	
 	}
-	else if(elapseTime >= SM2SU_PERIODIC_TRANSMIT_TIMEOUT_IN_MS)
-	{
-		PeriodicTransmissionTimeout = TRUE;
-	}
-	else
-	{
-		//no statement
-	}
+	
+
 }
 
 static void Power_Command_Receive(uint8_t * pData, uint16_t Size)
@@ -313,17 +320,11 @@ static uint8_t SU2SM_Req_Call_Power_Off_Command(POWER_COMMAND_RECEIVED *pData)
 
 static uint8_t SU2SM_Req_Call_Reboot_Command(POWER_COMMAND_RECEIVED *pData)
 {
-		//TODO
-		HAL_StatusTypeDef TransmitResult;
-	
-	  TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_REPLY_REBOOT_COMMAND);
-		if(TransmitResult == HAL_OK)
-		{
-			HAL_Delay(5000);
-			force_shutdown(POWER_STATUS_IDLE);
-			HAL_Delay(1000);
-			power_manage.work_mode = POWER_STATUS_POWERON;
-		}
+	//TODO
+	if((power_manage.work_mode == POWER_STATUS_48VNOSTART) || (power_manage.work_mode == POWER_STATUS_48VSTART))
+	{
+	   Reboot_Flag = TRUE;
+	}
 	
 		return 1u;
 }

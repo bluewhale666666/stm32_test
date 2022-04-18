@@ -234,10 +234,47 @@ void PowerOffREMOTEKeyInState(void)
 	}
 }
 
+uint8_t ACPowerOK_TEST_FLAG = 0;
+void ACPowerOKInState(void)
+{
+	uint32_t ACPowerOKnowTime;
+	uint32_t ACPowerOKelapseTime;
+	static uint8_t ACPowerOKState = 0u;
+	static uint32_t ACPowerOKTime = 0u;
+	
+	switch(ACPowerOKState)
+	{
+		case 0u:
+		//	if(ACPowerOK_TEST_FLAG == 1)
+			if(HAL_GPIO_ReadPin(ACPower_OK_GPIO_Port,ACPower_OK_Pin) == GPIO_PIN_SET)
+			{
+				ACPowerOKTime = HAL_GetTick();
+				ACPowerOKState = 1u;
+			}
+			break;
+		case 1u:
+		//	if(ACPowerOK_TEST_FLAG == 1)
+			if(HAL_GPIO_ReadPin(ACPower_OK_GPIO_Port,ACPower_OK_Pin) == GPIO_PIN_SET)
+			{
+				ACPowerOKnowTime = HAL_GetTick();
+	  	  ACPowerOKelapseTime = ACPowerOKnowTime - ACPowerOKTime;
+		    if(ACPowerOKelapseTime >= 100)
+			  {
+			    power_manage.work_mode = POWER_STATUS_SHUTDWON;
+					ACPowerOKState = 0u;
+			  }
+			}
+	  	break;
+		default:
+			break;
+	}
+}
+	
+	
 
 void KeyScan(uint8_t mode)
 {
-  /*远程关机和OK信号未加*/
+  /*OK信号未加*/
 	switch(mode)
 	{
 		case POWER_STATUS_IDLE:
@@ -248,6 +285,7 @@ void KeyScan(uint8_t mode)
 		case POWER_STATUS_48VSTART:
 			 PowerOffKeyInState();
 		   PowerOffREMOTEKeyInState();
+		   ACPowerOKInState();
 			break;
 		default:
 			break;

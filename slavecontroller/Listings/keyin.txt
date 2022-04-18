@@ -2,52 +2,152 @@
 ; commandline ArmCC [--c99 --list --split_sections --debug -c --asm --interleave -o.\objects\keyin.o --asm_dir=.\Listings\ --list_dir=.\Listings\ --depend=.\objects\keyin.d --cpu=Cortex-M4.fp --apcs=interwork -O0 --diag_suppress=9931 -I.\etherCAT -I.\Power -I.\CRC -IC:\Users\LENOVO\Desktop\slavecontroller\RTE -IC:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx -IC:\Users\LENOVO\Desktop\slavecontroller\RTE\Device\STM32F407ZETx\STCubeGenerated\Inc -ID:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include -ID:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include -ID:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.16.0\Drivers\STM32F4xx_HAL_Driver\Inc -ISTCubeGenerated\Inc -D__UVISION_VERSION=520 -D_RTE_ -DSTM32F407xx --omf_browse=.\objects\keyin.crf Power\KeyIn.c]
                           THUMB
 
+                          AREA ||i.ACPowerOKInState||, CODE, READONLY, ALIGN=2
+
+                  ACPowerOKInState PROC
+;;;237    uint8_t ACPowerOK_TEST_FLAG = 0;
+;;;238    void ACPowerOKInState(void)
+000000  b570              PUSH     {r4-r6,lr}
+;;;239    {
+;;;240    	uint32_t ACPowerOKnowTime;
+;;;241    	uint32_t ACPowerOKelapseTime;
+;;;242    	static uint8_t ACPowerOKState = 0u;
+;;;243    	static uint32_t ACPowerOKTime = 0u;
+;;;244    	
+;;;245    	switch(ACPowerOKState)
+000002  4816              LDR      r0,|L1.92|
+000004  7800              LDRB     r0,[r0,#0]  ; ACPowerOKState
+000006  b110              CBZ      r0,|L1.14|
+000008  2801              CMP      r0,#1
+00000a  d123              BNE      |L1.84|
+00000c  e00d              B        |L1.42|
+                  |L1.14|
+;;;246    	{
+;;;247    		case 0u:
+;;;248    		//	if(ACPowerOK_TEST_FLAG == 1)
+;;;249    			if(HAL_GPIO_ReadPin(ACPower_OK_GPIO_Port,ACPower_OK_Pin) == GPIO_PIN_SET)
+00000e  2102              MOVS     r1,#2
+000010  4813              LDR      r0,|L1.96|
+000012  f7fffffe          BL       HAL_GPIO_ReadPin
+000016  2801              CMP      r0,#1
+000018  d106              BNE      |L1.40|
+;;;250    			{
+;;;251    				ACPowerOKTime = HAL_GetTick();
+00001a  f7fffffe          BL       HAL_GetTick
+00001e  4911              LDR      r1,|L1.100|
+000020  6008              STR      r0,[r1,#0]  ; ACPowerOKTime
+;;;252    				ACPowerOKState = 1u;
+000022  2001              MOVS     r0,#1
+000024  490d              LDR      r1,|L1.92|
+000026  7008              STRB     r0,[r1,#0]
+                  |L1.40|
+;;;253    			}
+;;;254    			break;
+000028  e015              B        |L1.86|
+                  |L1.42|
+;;;255    		case 1u:
+;;;256    		//	if(ACPowerOK_TEST_FLAG == 1)
+;;;257    			if(HAL_GPIO_ReadPin(ACPower_OK_GPIO_Port,ACPower_OK_Pin) == GPIO_PIN_SET)
+00002a  2102              MOVS     r1,#2
+00002c  480c              LDR      r0,|L1.96|
+00002e  f7fffffe          BL       HAL_GPIO_ReadPin
+000032  2801              CMP      r0,#1
+000034  d10d              BNE      |L1.82|
+;;;258    			{
+;;;259    				ACPowerOKnowTime = HAL_GetTick();
+000036  f7fffffe          BL       HAL_GetTick
+00003a  4604              MOV      r4,r0
+;;;260    	  	  ACPowerOKelapseTime = ACPowerOKnowTime - ACPowerOKTime;
+00003c  4809              LDR      r0,|L1.100|
+00003e  6800              LDR      r0,[r0,#0]  ; ACPowerOKTime
+000040  1a25              SUBS     r5,r4,r0
+;;;261    		    if(ACPowerOKelapseTime >= 100)
+000042  2d64              CMP      r5,#0x64
+000044  d305              BCC      |L1.82|
+;;;262    			  {
+;;;263    			    power_manage.work_mode = POWER_STATUS_SHUTDWON;
+000046  2004              MOVS     r0,#4
+000048  4907              LDR      r1,|L1.104|
+00004a  7088              STRB     r0,[r1,#2]
+;;;264    					ACPowerOKState = 0u;
+00004c  2000              MOVS     r0,#0
+00004e  4903              LDR      r1,|L1.92|
+000050  7008              STRB     r0,[r1,#0]
+                  |L1.82|
+;;;265    			  }
+;;;266    			}
+;;;267    	  	break;
+000052  e000              B        |L1.86|
+                  |L1.84|
+;;;268    		default:
+;;;269    			break;
+000054  bf00              NOP      
+                  |L1.86|
+000056  bf00              NOP                            ;254
+;;;270    	}
+;;;271    }
+000058  bd70              POP      {r4-r6,pc}
+;;;272    	
+                          ENDP
+
+00005a  0000              DCW      0x0000
+                  |L1.92|
+                          DCD      ACPowerOKState
+                  |L1.96|
+                          DCD      0x40021800
+                  |L1.100|
+                          DCD      ACPowerOKTime
+                  |L1.104|
+                          DCD      power_manage
+
                           AREA ||i.KeyScan||, CODE, READONLY, ALIGN=1
 
                   KeyScan PROC
-;;;237    
-;;;238    void KeyScan(uint8_t mode)
+;;;274    
+;;;275    void KeyScan(uint8_t mode)
 000000  b510              PUSH     {r4,lr}
-;;;239    {
+;;;276    {
 000002  4604              MOV      r4,r0
-;;;240      /*远程关机和OK信号未加*/
-;;;241    	switch(mode)
-000004  b124              CBZ      r4,|L1.16|
+;;;277      /*OK信号未加*/
+;;;278    	switch(mode)
+000004  b124              CBZ      r4,|L2.16|
 000006  2c02              CMP      r4,#2
-000008  d007              BEQ      |L1.26|
+000008  d007              BEQ      |L2.26|
 00000a  2c03              CMP      r4,#3
-00000c  d10b              BNE      |L1.38|
-00000e  e005              B        |L1.28|
-                  |L1.16|
-;;;242    	{
-;;;243    		case POWER_STATUS_IDLE:
-;;;244    			 PowerOnKeyInState();
+00000c  d10d              BNE      |L2.42|
+00000e  e005              B        |L2.28|
+                  |L2.16|
+;;;279    	{
+;;;280    		case POWER_STATUS_IDLE:
+;;;281    			 PowerOnKeyInState();
 000010  f7fffffe          BL       PowerOnKeyInState
-;;;245           PowerOnRemoteKeyInState();
+;;;282           PowerOnRemoteKeyInState();
 000014  f7fffffe          BL       PowerOnRemoteKeyInState
-;;;246    		   break;
-000018  e006              B        |L1.40|
-                  |L1.26|
-;;;247    		case POWER_STATUS_48VNOSTART: 
-;;;248    		case POWER_STATUS_48VSTART:
+;;;283    		   break;
+000018  e008              B        |L2.44|
+                  |L2.26|
+;;;284    		case POWER_STATUS_48VNOSTART: 
+;;;285    		case POWER_STATUS_48VSTART:
 00001a  bf00              NOP      
-                  |L1.28|
-;;;249    			 PowerOffKeyInState();
+                  |L2.28|
+;;;286    			 PowerOffKeyInState();
 00001c  f7fffffe          BL       PowerOffKeyInState
-;;;250    		   PowerOffREMOTEKeyInState();
+;;;287    		   PowerOffREMOTEKeyInState();
 000020  f7fffffe          BL       PowerOffREMOTEKeyInState
-;;;251    			break;
-000024  e000              B        |L1.40|
-                  |L1.38|
-;;;252    		default:
-;;;253    			break;
-000026  bf00              NOP      
-                  |L1.40|
-000028  bf00              NOP                            ;246
-;;;254    	}
-;;;255    }
-00002a  bd10              POP      {r4,pc}
-;;;256    	
+;;;288    		   ACPowerOKInState();
+000024  f7fffffe          BL       ACPowerOKInState
+;;;289    			break;
+000028  e000              B        |L2.44|
+                  |L2.42|
+;;;290    		default:
+;;;291    			break;
+00002a  bf00              NOP      
+                  |L2.44|
+00002c  bf00              NOP                            ;283
+;;;292    	}
+;;;293    }
+00002e  bd10              POP      {r4,pc}
+;;;294    	
                           ENDP
 
 
@@ -63,132 +163,132 @@
 ;;;134    	static uint32_t elapse = 0u;	
 ;;;135    	
 ;;;136    	switch(POWEROFF_KEYIN_STATE)
-000004  4826              LDR      r0,|L2.160|
+000004  4826              LDR      r0,|L3.160|
 000006  7800              LDRB     r0,[r0,#0]  ; POWEROFF_KEYIN_STATE
-000008  b130              CBZ      r0,|L2.24|
+000008  b130              CBZ      r0,|L3.24|
 00000a  2801              CMP      r0,#1
-00000c  d011              BEQ      |L2.50|
+00000c  d011              BEQ      |L3.50|
 00000e  2802              CMP      r0,#2
-000010  d024              BEQ      |L2.92|
+000010  d024              BEQ      |L3.92|
 000012  2803              CMP      r0,#3
-000014  d141              BNE      |L2.154|
-000016  e02f              B        |L2.120|
-                  |L2.24|
+000014  d141              BNE      |L3.154|
+000016  e02f              B        |L3.120|
+                  |L3.24|
 ;;;137    	{
 ;;;138    		case 0u: 
 ;;;139    			if(HAL_GPIO_ReadPin(POWERON_KEYIN_GPIO_Port,POWERON_KEYIN_Pin) == GPIO_PIN_RESET)
 000018  2101              MOVS     r1,#1
-00001a  4822              LDR      r0,|L2.164|
+00001a  4822              LDR      r0,|L3.164|
 00001c  f7fffffe          BL       HAL_GPIO_ReadPin
-000020  b930              CBNZ     r0,|L2.48|
+000020  b930              CBNZ     r0,|L3.48|
 ;;;140    			{
 ;;;141    				POWEROFF_KEYIN_STATE = 1u;
 000022  2001              MOVS     r0,#1
-000024  491e              LDR      r1,|L2.160|
+000024  491e              LDR      r1,|L3.160|
 000026  7008              STRB     r0,[r1,#0]
 ;;;142    				POWEROFF_KEYIN_TIMER = HAL_GetTick();
 000028  f7fffffe          BL       HAL_GetTick
-00002c  491e              LDR      r1,|L2.168|
+00002c  491e              LDR      r1,|L3.168|
 00002e  6008              STR      r0,[r1,#0]  ; POWEROFF_KEYIN_TIMER
-                  |L2.48|
+                  |L3.48|
 ;;;143    			}
 ;;;144    			break;
-000030  e034              B        |L2.156|
-                  |L2.50|
+000030  e034              B        |L3.156|
+                  |L3.50|
 ;;;145    		case 1u:
 ;;;146    			if(HAL_GPIO_ReadPin(POWERON_KEYIN_GPIO_Port,POWERON_KEYIN_Pin) == GPIO_PIN_RESET)
 000032  2101              MOVS     r1,#1
-000034  481b              LDR      r0,|L2.164|
+000034  481b              LDR      r0,|L3.164|
 000036  f7fffffe          BL       HAL_GPIO_ReadPin
-00003a  b958              CBNZ     r0,|L2.84|
+00003a  b958              CBNZ     r0,|L3.84|
 ;;;147    			{
 ;;;148    				now = HAL_GetTick();
 00003c  f7fffffe          BL       HAL_GetTick
 000040  4604              MOV      r4,r0
 ;;;149    		  	elapse = now - POWEROFF_KEYIN_TIMER;
-000042  4819              LDR      r0,|L2.168|
+000042  4819              LDR      r0,|L3.168|
 000044  6800              LDR      r0,[r0,#0]  ; POWEROFF_KEYIN_TIMER
 000046  1a20              SUBS     r0,r4,r0
-000048  4918              LDR      r1,|L2.172|
+000048  4918              LDR      r1,|L3.172|
 00004a  6008              STR      r0,[r1,#0]  ; elapse
 ;;;150    				POWEROFF_KEYIN_STATE = 2u;
 00004c  2002              MOVS     r0,#2
-00004e  4914              LDR      r1,|L2.160|
+00004e  4914              LDR      r1,|L3.160|
 000050  7008              STRB     r0,[r1,#0]
-000052  e002              B        |L2.90|
-                  |L2.84|
+000052  e002              B        |L3.90|
+                  |L3.84|
 ;;;151    			}
 ;;;152    			else
 ;;;153    			{
 ;;;154    			  POWEROFF_KEYIN_STATE = 0u;
 000054  2000              MOVS     r0,#0
-000056  4912              LDR      r1,|L2.160|
+000056  4912              LDR      r1,|L3.160|
 000058  7008              STRB     r0,[r1,#0]
-                  |L2.90|
+                  |L3.90|
 ;;;155    			}
 ;;;156    			break;
-00005a  e01f              B        |L2.156|
-                  |L2.92|
+00005a  e01f              B        |L3.156|
+                  |L3.92|
 ;;;157    		case 2u:
 ;;;158    			if(elapse >= 3000u)
-00005c  4813              LDR      r0,|L2.172|
+00005c  4813              LDR      r0,|L3.172|
 00005e  6800              LDR      r0,[r0,#0]  ; elapse
 000060  f64031b8          MOV      r1,#0xbb8
 000064  4288              CMP      r0,r1
-000066  d303              BCC      |L2.112|
+000066  d303              BCC      |L3.112|
 ;;;159    			{
 ;;;160    			  POWEROFF_KEYIN_STATE = 3u;
 000068  2003              MOVS     r0,#3
-00006a  490d              LDR      r1,|L2.160|
+00006a  490d              LDR      r1,|L3.160|
 00006c  7008              STRB     r0,[r1,#0]
-00006e  e002              B        |L2.118|
-                  |L2.112|
+00006e  e002              B        |L3.118|
+                  |L3.112|
 ;;;161    			}
 ;;;162    			else
 ;;;163    			{
 ;;;164    			  POWEROFF_KEYIN_STATE = 1u;
 000070  2001              MOVS     r0,#1
-000072  490b              LDR      r1,|L2.160|
+000072  490b              LDR      r1,|L3.160|
 000074  7008              STRB     r0,[r1,#0]
-                  |L2.118|
+                  |L3.118|
 ;;;165    			}
 ;;;166    			break;
-000076  e011              B        |L2.156|
-                  |L2.120|
+000076  e011              B        |L3.156|
+                  |L3.120|
 ;;;167    		case 3u:
 ;;;168    		  if(HAL_GPIO_ReadPin(POWERON_KEYIN_GPIO_Port,POWERON_KEYIN_Pin) == GPIO_PIN_SET)
 000078  2101              MOVS     r1,#1
-00007a  480a              LDR      r0,|L2.164|
+00007a  480a              LDR      r0,|L3.164|
 00007c  f7fffffe          BL       HAL_GPIO_ReadPin
 000080  2801              CMP      r0,#1
-000082  d106              BNE      |L2.146|
+000082  d106              BNE      |L3.146|
 ;;;169    			{
 ;;;170    				power_manage.work_mode = POWER_STATUS_SHUTDWON;
 000084  2004              MOVS     r0,#4
-000086  490a              LDR      r1,|L2.176|
+000086  490a              LDR      r1,|L3.176|
 000088  7088              STRB     r0,[r1,#2]
 ;;;171    				POWEROFF_KEYIN_STATE = 0u;
 00008a  2000              MOVS     r0,#0
-00008c  4904              LDR      r1,|L2.160|
+00008c  4904              LDR      r1,|L3.160|
 00008e  7008              STRB     r0,[r1,#0]
-000090  e002              B        |L2.152|
-                  |L2.146|
+000090  e002              B        |L3.152|
+                  |L3.146|
 ;;;172    			}
 ;;;173    			else
 ;;;174    			{
 ;;;175    			  POWEROFF_KEYIN_STATE = 2u;
 000092  2002              MOVS     r0,#2
-000094  4902              LDR      r1,|L2.160|
+000094  4902              LDR      r1,|L3.160|
 000096  7008              STRB     r0,[r1,#0]
-                  |L2.152|
+                  |L3.152|
 ;;;176    			}
 ;;;177    			break;	
-000098  e000              B        |L2.156|
-                  |L2.154|
+000098  e000              B        |L3.156|
+                  |L3.154|
 ;;;178    		default:
 ;;;179    			break;
 00009a  bf00              NOP      
-                  |L2.156|
+                  |L3.156|
 00009c  bf00              NOP                            ;144
 ;;;180    	}
 ;;;181    }
@@ -196,15 +296,15 @@
 ;;;182    
                           ENDP
 
-                  |L2.160|
+                  |L3.160|
                           DCD      POWEROFF_KEYIN_STATE
-                  |L2.164|
+                  |L3.164|
                           DCD      0x40021000
-                  |L2.168|
+                  |L3.168|
                           DCD      POWEROFF_KEYIN_TIMER
-                  |L2.172|
-                          DCD      |symbol_number.21|
-                  |L2.176|
+                  |L3.172|
+                          DCD      |symbol_number.24|
+                  |L3.176|
                           DCD      power_manage
 
                           AREA ||i.PowerOffREMOTEKeyInState||, CODE, READONLY, ALIGN=2
@@ -219,132 +319,132 @@
 ;;;188    	static uint32_t elapse = 0u;	
 ;;;189    	
 ;;;190    	switch(POWEROFFREMOTE_KEYIN_STATE)
-000004  4828              LDR      r0,|L3.168|
+000004  4828              LDR      r0,|L4.168|
 000006  7800              LDRB     r0,[r0,#0]  ; POWEROFFREMOTE_KEYIN_STATE
-000008  b130              CBZ      r0,|L3.24|
+000008  b130              CBZ      r0,|L4.24|
 00000a  2801              CMP      r0,#1
-00000c  d012              BEQ      |L3.52|
+00000c  d012              BEQ      |L4.52|
 00000e  2802              CMP      r0,#2
-000010  d026              BEQ      |L3.96|
+000010  d026              BEQ      |L4.96|
 000012  2803              CMP      r0,#3
-000014  d144              BNE      |L3.160|
-000016  e031              B        |L3.124|
-                  |L3.24|
+000014  d144              BNE      |L4.160|
+000016  e031              B        |L4.124|
+                  |L4.24|
 ;;;191    	{
 ;;;192    		case 0u: 
 ;;;193    			if(HAL_GPIO_ReadPin(POWEROFF_REMOTEIN_GPIO_Port,POWEROFF_REMOTEIN_Pin) == GPIO_PIN_RESET)
 000018  f44f4100          MOV      r1,#0x8000
-00001c  4823              LDR      r0,|L3.172|
+00001c  4823              LDR      r0,|L4.172|
 00001e  f7fffffe          BL       HAL_GPIO_ReadPin
-000022  b930              CBNZ     r0,|L3.50|
+000022  b930              CBNZ     r0,|L4.50|
 ;;;194    			{
 ;;;195    				POWEROFFREMOTE_KEYIN_STATE = 1u;
 000024  2001              MOVS     r0,#1
-000026  4920              LDR      r1,|L3.168|
+000026  4920              LDR      r1,|L4.168|
 000028  7008              STRB     r0,[r1,#0]
 ;;;196    				POWEROFFREMOTE_KEYIN_TIMER = HAL_GetTick();
 00002a  f7fffffe          BL       HAL_GetTick
-00002e  4920              LDR      r1,|L3.176|
+00002e  4920              LDR      r1,|L4.176|
 000030  6008              STR      r0,[r1,#0]  ; POWEROFFREMOTE_KEYIN_TIMER
-                  |L3.50|
+                  |L4.50|
 ;;;197    			}
 ;;;198    			break;
-000032  e036              B        |L3.162|
-                  |L3.52|
+000032  e036              B        |L4.162|
+                  |L4.52|
 ;;;199    		case 1u:
 ;;;200    			if(HAL_GPIO_ReadPin(POWEROFF_REMOTEIN_GPIO_Port,POWEROFF_REMOTEIN_Pin) == GPIO_PIN_RESET)
 000034  f44f4100          MOV      r1,#0x8000
-000038  481c              LDR      r0,|L3.172|
+000038  481c              LDR      r0,|L4.172|
 00003a  f7fffffe          BL       HAL_GPIO_ReadPin
-00003e  b958              CBNZ     r0,|L3.88|
+00003e  b958              CBNZ     r0,|L4.88|
 ;;;201    			{
 ;;;202    				now = HAL_GetTick();
 000040  f7fffffe          BL       HAL_GetTick
 000044  4604              MOV      r4,r0
 ;;;203    		  	elapse = now - POWEROFFREMOTE_KEYIN_TIMER;
-000046  481a              LDR      r0,|L3.176|
+000046  481a              LDR      r0,|L4.176|
 000048  6800              LDR      r0,[r0,#0]  ; POWEROFFREMOTE_KEYIN_TIMER
 00004a  1a20              SUBS     r0,r4,r0
-00004c  4919              LDR      r1,|L3.180|
+00004c  4919              LDR      r1,|L4.180|
 00004e  6008              STR      r0,[r1,#0]  ; elapse
 ;;;204    				POWEROFFREMOTE_KEYIN_STATE = 2u;
 000050  2002              MOVS     r0,#2
-000052  4915              LDR      r1,|L3.168|
+000052  4915              LDR      r1,|L4.168|
 000054  7008              STRB     r0,[r1,#0]
-000056  e002              B        |L3.94|
-                  |L3.88|
+000056  e002              B        |L4.94|
+                  |L4.88|
 ;;;205    			}
 ;;;206    			else
 ;;;207    			{
 ;;;208    			  POWEROFFREMOTE_KEYIN_STATE = 0u;
 000058  2000              MOVS     r0,#0
-00005a  4913              LDR      r1,|L3.168|
+00005a  4913              LDR      r1,|L4.168|
 00005c  7008              STRB     r0,[r1,#0]
-                  |L3.94|
+                  |L4.94|
 ;;;209    			}
 ;;;210    			break;
-00005e  e020              B        |L3.162|
-                  |L3.96|
+00005e  e020              B        |L4.162|
+                  |L4.96|
 ;;;211    		case 2u:
 ;;;212    			if(elapse >= 3000u)
-000060  4814              LDR      r0,|L3.180|
+000060  4814              LDR      r0,|L4.180|
 000062  6800              LDR      r0,[r0,#0]  ; elapse
 000064  f64031b8          MOV      r1,#0xbb8
 000068  4288              CMP      r0,r1
-00006a  d303              BCC      |L3.116|
+00006a  d303              BCC      |L4.116|
 ;;;213    			{
 ;;;214    			  POWEROFFREMOTE_KEYIN_STATE = 3u;
 00006c  2003              MOVS     r0,#3
-00006e  490e              LDR      r1,|L3.168|
+00006e  490e              LDR      r1,|L4.168|
 000070  7008              STRB     r0,[r1,#0]
-000072  e002              B        |L3.122|
-                  |L3.116|
+000072  e002              B        |L4.122|
+                  |L4.116|
 ;;;215    			}
 ;;;216    			else
 ;;;217    			{
 ;;;218    			  POWEROFFREMOTE_KEYIN_STATE = 1u;
 000074  2001              MOVS     r0,#1
-000076  490c              LDR      r1,|L3.168|
+000076  490c              LDR      r1,|L4.168|
 000078  7008              STRB     r0,[r1,#0]
-                  |L3.122|
+                  |L4.122|
 ;;;219    			}
 ;;;220    			break;
-00007a  e012              B        |L3.162|
-                  |L3.124|
+00007a  e012              B        |L4.162|
+                  |L4.124|
 ;;;221    		case 3u:
 ;;;222    		  if(HAL_GPIO_ReadPin(POWEROFF_REMOTEIN_GPIO_Port,POWEROFF_REMOTEIN_Pin) == GPIO_PIN_SET)
 00007c  f44f4100          MOV      r1,#0x8000
-000080  480a              LDR      r0,|L3.172|
+000080  480a              LDR      r0,|L4.172|
 000082  f7fffffe          BL       HAL_GPIO_ReadPin
 000086  2801              CMP      r0,#1
-000088  d106              BNE      |L3.152|
+000088  d106              BNE      |L4.152|
 ;;;223    			{
 ;;;224    				power_manage.work_mode = POWER_STATUS_SHUTDWON;
 00008a  2004              MOVS     r0,#4
-00008c  490a              LDR      r1,|L3.184|
+00008c  490a              LDR      r1,|L4.184|
 00008e  7088              STRB     r0,[r1,#2]
 ;;;225    				POWEROFFREMOTE_KEYIN_STATE = 0u;
 000090  2000              MOVS     r0,#0
-000092  4905              LDR      r1,|L3.168|
+000092  4905              LDR      r1,|L4.168|
 000094  7008              STRB     r0,[r1,#0]
-000096  e002              B        |L3.158|
-                  |L3.152|
+000096  e002              B        |L4.158|
+                  |L4.152|
 ;;;226    			}
 ;;;227    			else
 ;;;228    			{
 ;;;229    			  POWEROFFREMOTE_KEYIN_STATE = 2u;
 000098  2002              MOVS     r0,#2
-00009a  4903              LDR      r1,|L3.168|
+00009a  4903              LDR      r1,|L4.168|
 00009c  7008              STRB     r0,[r1,#0]
-                  |L3.158|
+                  |L4.158|
 ;;;230    			}
 ;;;231    			break;	
-00009e  e000              B        |L3.162|
-                  |L3.160|
+00009e  e000              B        |L4.162|
+                  |L4.160|
 ;;;232    		default:
 ;;;233    			break;
 0000a0  bf00              NOP      
-                  |L3.162|
+                  |L4.162|
 0000a2  bf00              NOP                            ;198
 ;;;234    	}
 ;;;235    }
@@ -353,15 +453,15 @@
                           ENDP
 
 0000a6  0000              DCW      0x0000
-                  |L3.168|
+                  |L4.168|
                           DCD      POWEROFFREMOTE_KEYIN_STATE
-                  |L3.172|
+                  |L4.172|
                           DCD      0x40021000
-                  |L3.176|
+                  |L4.176|
                           DCD      POWEROFFREMOTE_KEYIN_TIMER
-                  |L3.180|
-                          DCD      |symbol_number.22|
-                  |L3.184|
+                  |L4.180|
+                          DCD      |symbol_number.25|
+                  |L4.184|
                           DCD      power_manage
 
                           AREA ||i.PowerOnKeyInState||, CODE, READONLY, ALIGN=2
@@ -376,130 +476,130 @@
 ;;;26     	static uint32_t elapse = 0u;
 ;;;27     	
 ;;;28     	switch(POWERON_KEYIN_STATE)
-000004  4825              LDR      r0,|L4.156|
+000004  4825              LDR      r0,|L5.156|
 000006  7800              LDRB     r0,[r0,#0]  ; POWERON_KEYIN_STATE
-000008  b130              CBZ      r0,|L4.24|
+000008  b130              CBZ      r0,|L5.24|
 00000a  2801              CMP      r0,#1
-00000c  d011              BEQ      |L4.50|
+00000c  d011              BEQ      |L5.50|
 00000e  2802              CMP      r0,#2
-000010  d024              BEQ      |L4.92|
+000010  d024              BEQ      |L5.92|
 000012  2803              CMP      r0,#3
-000014  d13f              BNE      |L4.150|
-000016  e02e              B        |L4.118|
-                  |L4.24|
+000014  d13f              BNE      |L5.150|
+000016  e02e              B        |L5.118|
+                  |L5.24|
 ;;;29     	{
 ;;;30     		case 0u: 
 ;;;31     			if(HAL_GPIO_ReadPin(POWERON_KEYIN_GPIO_Port,POWERON_KEYIN_Pin) == GPIO_PIN_RESET)
 000018  2101              MOVS     r1,#1
-00001a  4821              LDR      r0,|L4.160|
+00001a  4821              LDR      r0,|L5.160|
 00001c  f7fffffe          BL       HAL_GPIO_ReadPin
-000020  b930              CBNZ     r0,|L4.48|
+000020  b930              CBNZ     r0,|L5.48|
 ;;;32     			{
 ;;;33     				POWERON_KEYIN_STATE = 1u;
 000022  2001              MOVS     r0,#1
-000024  491d              LDR      r1,|L4.156|
+000024  491d              LDR      r1,|L5.156|
 000026  7008              STRB     r0,[r1,#0]
 ;;;34     				POWERON_KEYIN_TIMER = HAL_GetTick();
 000028  f7fffffe          BL       HAL_GetTick
-00002c  491d              LDR      r1,|L4.164|
+00002c  491d              LDR      r1,|L5.164|
 00002e  6008              STR      r0,[r1,#0]  ; POWERON_KEYIN_TIMER
-                  |L4.48|
+                  |L5.48|
 ;;;35     			}
 ;;;36     			break;
-000030  e032              B        |L4.152|
-                  |L4.50|
+000030  e032              B        |L5.152|
+                  |L5.50|
 ;;;37     		case 1u:
 ;;;38     			if(HAL_GPIO_ReadPin(POWERON_KEYIN_GPIO_Port,POWERON_KEYIN_Pin) == GPIO_PIN_RESET)
 000032  2101              MOVS     r1,#1
-000034  481a              LDR      r0,|L4.160|
+000034  481a              LDR      r0,|L5.160|
 000036  f7fffffe          BL       HAL_GPIO_ReadPin
-00003a  b958              CBNZ     r0,|L4.84|
+00003a  b958              CBNZ     r0,|L5.84|
 ;;;39     			{
 ;;;40     				now = HAL_GetTick();
 00003c  f7fffffe          BL       HAL_GetTick
 000040  4604              MOV      r4,r0
 ;;;41     		  	elapse = now - POWERON_KEYIN_TIMER;
-000042  4818              LDR      r0,|L4.164|
+000042  4818              LDR      r0,|L5.164|
 000044  6800              LDR      r0,[r0,#0]  ; POWERON_KEYIN_TIMER
 000046  1a20              SUBS     r0,r4,r0
-000048  4917              LDR      r1,|L4.168|
+000048  4917              LDR      r1,|L5.168|
 00004a  6008              STR      r0,[r1,#0]  ; elapse
 ;;;42     				POWERON_KEYIN_STATE = 2u;
 00004c  2002              MOVS     r0,#2
-00004e  4913              LDR      r1,|L4.156|
+00004e  4913              LDR      r1,|L5.156|
 000050  7008              STRB     r0,[r1,#0]
-000052  e002              B        |L4.90|
-                  |L4.84|
+000052  e002              B        |L5.90|
+                  |L5.84|
 ;;;43     			}
 ;;;44     			else
 ;;;45     			{
 ;;;46     			  POWERON_KEYIN_STATE = 0u;
 000054  2000              MOVS     r0,#0
-000056  4911              LDR      r1,|L4.156|
+000056  4911              LDR      r1,|L5.156|
 000058  7008              STRB     r0,[r1,#0]
-                  |L4.90|
+                  |L5.90|
 ;;;47     			}
 ;;;48     			break;
-00005a  e01d              B        |L4.152|
-                  |L4.92|
+00005a  e01d              B        |L5.152|
+                  |L5.92|
 ;;;49     		case 2u:
 ;;;50     			if(elapse >= 1000u)
-00005c  4812              LDR      r0,|L4.168|
+00005c  4812              LDR      r0,|L5.168|
 00005e  6800              LDR      r0,[r0,#0]  ; elapse
 000060  f5b07f7a          CMP      r0,#0x3e8
-000064  d303              BCC      |L4.110|
+000064  d303              BCC      |L5.110|
 ;;;51     			{
 ;;;52     			  POWERON_KEYIN_STATE = 3u;
 000066  2003              MOVS     r0,#3
-000068  490c              LDR      r1,|L4.156|
+000068  490c              LDR      r1,|L5.156|
 00006a  7008              STRB     r0,[r1,#0]
-00006c  e002              B        |L4.116|
-                  |L4.110|
+00006c  e002              B        |L5.116|
+                  |L5.110|
 ;;;53     			}
 ;;;54     			else
 ;;;55     			{
 ;;;56     			  POWERON_KEYIN_STATE = 1u;
 00006e  2001              MOVS     r0,#1
-000070  490a              LDR      r1,|L4.156|
+000070  490a              LDR      r1,|L5.156|
 000072  7008              STRB     r0,[r1,#0]
-                  |L4.116|
+                  |L5.116|
 ;;;57     			}
 ;;;58     			break;
-000074  e010              B        |L4.152|
-                  |L4.118|
+000074  e010              B        |L5.152|
+                  |L5.118|
 ;;;59     		case 3u:
 ;;;60     		  if(HAL_GPIO_ReadPin(POWERON_KEYIN_GPIO_Port,POWERON_KEYIN_Pin) == GPIO_PIN_SET)
 000076  2101              MOVS     r1,#1
-000078  4809              LDR      r0,|L4.160|
+000078  4809              LDR      r0,|L5.160|
 00007a  f7fffffe          BL       HAL_GPIO_ReadPin
 00007e  2801              CMP      r0,#1
-000080  d105              BNE      |L4.142|
+000080  d105              BNE      |L5.142|
 ;;;61     			{
 ;;;62     				power_manage.work_mode = POWER_STATUS_POWERON;
-000082  490a              LDR      r1,|L4.172|
+000082  490a              LDR      r1,|L5.172|
 000084  7088              STRB     r0,[r1,#2]
 ;;;63     				POWERON_KEYIN_STATE = 0u;
 000086  2000              MOVS     r0,#0
-000088  4904              LDR      r1,|L4.156|
+000088  4904              LDR      r1,|L5.156|
 00008a  7008              STRB     r0,[r1,#0]
-00008c  e002              B        |L4.148|
-                  |L4.142|
+00008c  e002              B        |L5.148|
+                  |L5.142|
 ;;;64     			}
 ;;;65     			else
 ;;;66     			{
 ;;;67     			  POWERON_KEYIN_STATE = 2u;
 00008e  2002              MOVS     r0,#2
-000090  4902              LDR      r1,|L4.156|
+000090  4902              LDR      r1,|L5.156|
 000092  7008              STRB     r0,[r1,#0]
-                  |L4.148|
+                  |L5.148|
 ;;;68     			}
 ;;;69     			break;	
-000094  e000              B        |L4.152|
-                  |L4.150|
+000094  e000              B        |L5.152|
+                  |L5.150|
 ;;;70     		default:
 ;;;71     			break;
 000096  bf00              NOP      
-                  |L4.152|
+                  |L5.152|
 000098  bf00              NOP                            ;36
 ;;;72     	}
 ;;;73     }
@@ -507,15 +607,15 @@
 ;;;74     
                           ENDP
 
-                  |L4.156|
+                  |L5.156|
                           DCD      POWERON_KEYIN_STATE
-                  |L4.160|
+                  |L5.160|
                           DCD      0x40021000
-                  |L4.164|
+                  |L5.164|
                           DCD      POWERON_KEYIN_TIMER
-                  |L4.168|
+                  |L5.168|
                           DCD      elapse
-                  |L4.172|
+                  |L5.172|
                           DCD      power_manage
 
                           AREA ||i.PowerOnRemoteKeyInState||, CODE, READONLY, ALIGN=2
@@ -530,130 +630,130 @@
 ;;;80     	static uint32_t elapse = 0u;
 ;;;81     	
 ;;;82     	switch(POWERONREMOTE_KEYIN_STATE)
-000004  4827              LDR      r0,|L5.164|
+000004  4827              LDR      r0,|L6.164|
 000006  7800              LDRB     r0,[r0,#0]  ; POWERONREMOTE_KEYIN_STATE
-000008  b130              CBZ      r0,|L5.24|
+000008  b130              CBZ      r0,|L6.24|
 00000a  2801              CMP      r0,#1
-00000c  d012              BEQ      |L5.52|
+00000c  d012              BEQ      |L6.52|
 00000e  2802              CMP      r0,#2
-000010  d026              BEQ      |L5.96|
+000010  d026              BEQ      |L6.96|
 000012  2803              CMP      r0,#3
-000014  d142              BNE      |L5.156|
-000016  e030              B        |L5.122|
-                  |L5.24|
+000014  d142              BNE      |L6.156|
+000016  e030              B        |L6.122|
+                  |L6.24|
 ;;;83     	{
 ;;;84     		case 0u: 
 ;;;85     			if(HAL_GPIO_ReadPin(POWERON_REMOTEIN_GPIO_Port,POWERON_REMOTEIN_Pin) == GPIO_PIN_RESET)
 000018  f44f7180          MOV      r1,#0x100
-00001c  4822              LDR      r0,|L5.168|
+00001c  4822              LDR      r0,|L6.168|
 00001e  f7fffffe          BL       HAL_GPIO_ReadPin
-000022  b930              CBNZ     r0,|L5.50|
+000022  b930              CBNZ     r0,|L6.50|
 ;;;86     			{
 ;;;87     				POWERONREMOTE_KEYIN_STATE = 1u;
 000024  2001              MOVS     r0,#1
-000026  491f              LDR      r1,|L5.164|
+000026  491f              LDR      r1,|L6.164|
 000028  7008              STRB     r0,[r1,#0]
 ;;;88     				POWERONREMOTE_KEYIN_TIMER = HAL_GetTick();
 00002a  f7fffffe          BL       HAL_GetTick
-00002e  491f              LDR      r1,|L5.172|
+00002e  491f              LDR      r1,|L6.172|
 000030  6008              STR      r0,[r1,#0]  ; POWERONREMOTE_KEYIN_TIMER
-                  |L5.50|
+                  |L6.50|
 ;;;89     			}
 ;;;90     			break;
-000032  e034              B        |L5.158|
-                  |L5.52|
+000032  e034              B        |L6.158|
+                  |L6.52|
 ;;;91     		case 1u:
 ;;;92     			if(HAL_GPIO_ReadPin(POWERON_REMOTEIN_GPIO_Port,POWERON_REMOTEIN_Pin) == GPIO_PIN_RESET)
 000034  f44f7180          MOV      r1,#0x100
-000038  481b              LDR      r0,|L5.168|
+000038  481b              LDR      r0,|L6.168|
 00003a  f7fffffe          BL       HAL_GPIO_ReadPin
-00003e  b958              CBNZ     r0,|L5.88|
+00003e  b958              CBNZ     r0,|L6.88|
 ;;;93     			{
 ;;;94     				now = HAL_GetTick();
 000040  f7fffffe          BL       HAL_GetTick
 000044  4604              MOV      r4,r0
 ;;;95     		  	elapse = now - POWERONREMOTE_KEYIN_TIMER;
-000046  4819              LDR      r0,|L5.172|
+000046  4819              LDR      r0,|L6.172|
 000048  6800              LDR      r0,[r0,#0]  ; POWERONREMOTE_KEYIN_TIMER
 00004a  1a20              SUBS     r0,r4,r0
-00004c  4918              LDR      r1,|L5.176|
+00004c  4918              LDR      r1,|L6.176|
 00004e  6008              STR      r0,[r1,#0]  ; elapse
 ;;;96     				POWERONREMOTE_KEYIN_STATE = 2u;
 000050  2002              MOVS     r0,#2
-000052  4914              LDR      r1,|L5.164|
+000052  4914              LDR      r1,|L6.164|
 000054  7008              STRB     r0,[r1,#0]
-000056  e002              B        |L5.94|
-                  |L5.88|
+000056  e002              B        |L6.94|
+                  |L6.88|
 ;;;97     			}
 ;;;98     			else
 ;;;99     			{
 ;;;100    			  POWERONREMOTE_KEYIN_STATE = 0u;
 000058  2000              MOVS     r0,#0
-00005a  4912              LDR      r1,|L5.164|
+00005a  4912              LDR      r1,|L6.164|
 00005c  7008              STRB     r0,[r1,#0]
-                  |L5.94|
+                  |L6.94|
 ;;;101    			}
 ;;;102    			break;
-00005e  e01e              B        |L5.158|
-                  |L5.96|
+00005e  e01e              B        |L6.158|
+                  |L6.96|
 ;;;103    		case 2u:
 ;;;104    			if(elapse >= 1000u)
-000060  4813              LDR      r0,|L5.176|
+000060  4813              LDR      r0,|L6.176|
 000062  6800              LDR      r0,[r0,#0]  ; elapse
 000064  f5b07f7a          CMP      r0,#0x3e8
-000068  d303              BCC      |L5.114|
+000068  d303              BCC      |L6.114|
 ;;;105    			{
 ;;;106    			  POWERONREMOTE_KEYIN_STATE = 3u;
 00006a  2003              MOVS     r0,#3
-00006c  490d              LDR      r1,|L5.164|
+00006c  490d              LDR      r1,|L6.164|
 00006e  7008              STRB     r0,[r1,#0]
-000070  e002              B        |L5.120|
-                  |L5.114|
+000070  e002              B        |L6.120|
+                  |L6.114|
 ;;;107    			}
 ;;;108    			else
 ;;;109    			{
 ;;;110    			  POWERONREMOTE_KEYIN_STATE = 1u;
 000072  2001              MOVS     r0,#1
-000074  490b              LDR      r1,|L5.164|
+000074  490b              LDR      r1,|L6.164|
 000076  7008              STRB     r0,[r1,#0]
-                  |L5.120|
+                  |L6.120|
 ;;;111    			}
 ;;;112    			break;
-000078  e011              B        |L5.158|
-                  |L5.122|
+000078  e011              B        |L6.158|
+                  |L6.122|
 ;;;113    		case 3u:
 ;;;114    		  if(HAL_GPIO_ReadPin(POWERON_REMOTEIN_GPIO_Port,POWERON_REMOTEIN_Pin) == GPIO_PIN_SET)
 00007a  f44f7180          MOV      r1,#0x100
-00007e  480a              LDR      r0,|L5.168|
+00007e  480a              LDR      r0,|L6.168|
 000080  f7fffffe          BL       HAL_GPIO_ReadPin
 000084  2801              CMP      r0,#1
-000086  d105              BNE      |L5.148|
+000086  d105              BNE      |L6.148|
 ;;;115    			{
 ;;;116    				power_manage.work_mode = POWER_STATUS_POWERON;
-000088  490a              LDR      r1,|L5.180|
+000088  490a              LDR      r1,|L6.180|
 00008a  7088              STRB     r0,[r1,#2]
 ;;;117    				POWERONREMOTE_KEYIN_STATE = 0u;
 00008c  2000              MOVS     r0,#0
-00008e  4905              LDR      r1,|L5.164|
+00008e  4905              LDR      r1,|L6.164|
 000090  7008              STRB     r0,[r1,#0]
-000092  e002              B        |L5.154|
-                  |L5.148|
+000092  e002              B        |L6.154|
+                  |L6.148|
 ;;;118    			}
 ;;;119    			else
 ;;;120    			{
 ;;;121    			  POWERONREMOTE_KEYIN_STATE = 2u;
 000094  2002              MOVS     r0,#2
-000096  4903              LDR      r1,|L5.164|
+000096  4903              LDR      r1,|L6.164|
 000098  7008              STRB     r0,[r1,#0]
-                  |L5.154|
+                  |L6.154|
 ;;;122    			}
 ;;;123    			break;	
-00009a  e000              B        |L5.158|
-                  |L5.156|
+00009a  e000              B        |L6.158|
+                  |L6.156|
 ;;;124    		default:
 ;;;125    			break;
 00009c  bf00              NOP      
-                  |L5.158|
+                  |L6.158|
 00009e  bf00              NOP                            ;90
 ;;;126    	}
 ;;;127    }
@@ -662,15 +762,15 @@
                           ENDP
 
 0000a2  0000              DCW      0x0000
-                  |L5.164|
+                  |L6.164|
                           DCD      POWERONREMOTE_KEYIN_STATE
-                  |L5.168|
+                  |L6.168|
                           DCD      0x40020400
-                  |L5.172|
+                  |L6.172|
                           DCD      POWERONREMOTE_KEYIN_TIMER
-                  |L5.176|
-                          DCD      |symbol_number.20|
-                  |L5.180|
+                  |L6.176|
+                          DCD      |symbol_number.23|
+                  |L6.180|
                           DCD      power_manage
 
                           AREA ||.bss||, DATA, NOINIT, ALIGN=1
@@ -695,14 +795,20 @@
                   POWEROFFREMOTE_KEYIN_TIMER
                           DCD      0x00000000
                   POWEROFFREMOTE_KEYIN_STATE
-00001c  00000000          DCB      0x00,0x00,0x00,0x00
+00001c  00                DCB      0x00
+                  ACPowerOK_TEST_FLAG
+00001d  000000            DCB      0x00,0x00,0x00
                   elapse
                           DCD      0x00000000
-                  |symbol_number.20|
+                  |symbol_number.23|
                           DCD      0x00000000
-                  |symbol_number.21|
+                  |symbol_number.24|
                           DCD      0x00000000
-                  |symbol_number.22|
+                  |symbol_number.25|
+                          DCD      0x00000000
+                  ACPowerOKState
+000030  00000000          DCB      0x00,0x00,0x00,0x00
+                  ACPowerOKTime
                           DCD      0x00000000
 
 ;*** Start embedded assembler ***

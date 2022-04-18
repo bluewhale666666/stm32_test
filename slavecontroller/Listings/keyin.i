@@ -22986,7 +22986,7 @@ static void PowerOnCharge(void);
 void force_shutdown(uint8_t nxt_mode);
 void softwarepoweroff_mode_operation(void);
 void shutdown_mode_operation(void);
-
+void Reboot_mode_operation(void);
 
 
 #line 18 ".\\Power\\Command.h"
@@ -23058,7 +23058,7 @@ typedef struct	tag_SU2SM_REQ_DPCH{
 
 #line 102 ".\\Power\\Command.h"
 
-
+extern unsigned char    Reboot_Flag;
 extern POWER_COMMAND_RECEIVED PowerCommandReceived;
 extern uint8_t PowerCommandRxBuffer[32u];
 extern uint8_t PowerCommandTxBuffer[32u];
@@ -23120,6 +23120,7 @@ void PowerOnKeyInState(void);
 void PowerOnRemoteKeyInState(void);
 void PowerOffKeyInState(void);
 void PowerOffREMOTEKeyInState(void);
+void ACPowerOKInState(void);
 void KeyScan(uint8_t mode);
 
 
@@ -23353,6 +23354,43 @@ void PowerOffREMOTEKeyInState(void)
 	}
 }
 
+uint8_t ACPowerOK_TEST_FLAG = 0;
+void ACPowerOKInState(void)
+{
+	uint32_t ACPowerOKnowTime;
+	uint32_t ACPowerOKelapseTime;
+	static uint8_t ACPowerOKState = 0u;
+	static uint32_t ACPowerOKTime = 0u;
+	
+	switch(ACPowerOKState)
+	{
+		case 0u:
+		
+			if(HAL_GPIO_ReadPin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1800UL)),((uint16_t)0x0002)) == GPIO_PIN_SET)
+			{
+				ACPowerOKTime = HAL_GetTick();
+				ACPowerOKState = 1u;
+			}
+			break;
+		case 1u:
+		
+			if(HAL_GPIO_ReadPin(((GPIO_TypeDef *) ((0x40000000UL + 0x00020000UL) + 0x1800UL)),((uint16_t)0x0002)) == GPIO_PIN_SET)
+			{
+				ACPowerOKnowTime = HAL_GetTick();
+	  	  ACPowerOKelapseTime = ACPowerOKnowTime - ACPowerOKTime;
+		    if(ACPowerOKelapseTime >= 100)
+			  {
+			    power_manage.work_mode = POWER_STATUS_SHUTDWON;
+					ACPowerOKState = 0u;
+			  }
+			}
+	  	break;
+		default:
+			break;
+	}
+}
+	
+	
 
 void KeyScan(uint8_t mode)
 {
@@ -23367,6 +23405,7 @@ void KeyScan(uint8_t mode)
 		case POWER_STATUS_48VSTART:
 			 PowerOffKeyInState();
 		   PowerOffREMOTEKeyInState();
+		   ACPowerOKInState();
 			break;
 		default:
 			break;

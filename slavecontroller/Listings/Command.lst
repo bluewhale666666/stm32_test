@@ -50799,7 +50799,7 @@ S#define SU2SM_REQ_CD_REBOOT_COMMAND 5u
 S#define SU2SM_REQ_CD_REPLY_COMPULSORY_POWER_OFF_COMMAND 6u
 S#define SU2SM_REQ_MAX 6u
 S
-S
+Sextern BOOL    Reboot_Flag;
 Sextern POWER_COMMAND_RECEIVED PowerCommandReceived;
 Sextern uint8_t PowerCommandRxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
 Sextern uint8_t PowerCommandTxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
@@ -50982,7 +50982,7 @@ Nstatic void PowerOnCharge(void);
 Nvoid force_shutdown(uint8_t nxt_mode);
 Nvoid softwarepoweroff_mode_operation(void);
 Nvoid shutdown_mode_operation(void);
-N
+Nvoid Reboot_mode_operation(void);
 N
 N
 N#endif
@@ -51080,7 +51080,8 @@ N#define SU2SM_REQ_CD_REBOOT_COMMAND 5u
 N#define SU2SM_REQ_CD_REPLY_COMPULSORY_POWER_OFF_COMMAND 6u
 N#define SU2SM_REQ_MAX 6u
 N
-N
+Nextern BOOL    Reboot_Flag;
+Xextern unsigned char    Reboot_Flag;
 Nextern POWER_COMMAND_RECEIVED PowerCommandReceived;
 Nextern uint8_t PowerCommandRxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
 Xextern uint8_t PowerCommandRxBuffer[32u];
@@ -51451,6 +51452,8 @@ N#define REPLY_POWER_OFF_COMMAND_LENGTH 1u
 N#define REPLY_REBOOT_COMMAND_LENGTH 1u
 N#define COMPULSORY_POWER_OFF_COMMAND_LENGTH 1u
 N
+NBOOL    Reboot_Flag = FALSE;
+Xunsigned char    Reboot_Flag = 0;
 Nuint8_t PowerCommandRxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
 Xuint8_t PowerCommandRxBuffer[32u];
 Nuint8_t PowerCommandTxBuffer[POWER_COMMAND_TXRX_BUFFER_SIZE];
@@ -51620,28 +51623,35 @@ N			break;
 N		}
 N	}
 N	
-N	nowTime = HAL_GetTick();
-N	elapseTime = nowTime - PeriodicTransmissionTime;
-N	if (elapseTime >= SM2SU_PERIODIC_TRANSMIT_IN_MS)
-X	if (elapseTime >= 500u)
+N	if((power_manage.work_mode != POWER_STATUS_IDLE) && (power_manage.work_mode != POWER_STATUS_SHUTDWON) \
+N		&& (power_manage.work_mode != POWER_STATUS_SOFTWAREPOWEROFF))
+X	if((power_manage.work_mode != POWER_STATUS_IDLE) && (power_manage.work_mode != POWER_STATUS_SHUTDWON) 		&& (power_manage.work_mode != POWER_STATUS_SOFTWAREPOWEROFF))
 N	{
-N		TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_PERIODIC_TRANSMISSION);
-X		TransmitResult = Power_Command_Transmit((uint8_t)1u);
-N		if(TransmitResult == HAL_OK)
+N		nowTime = HAL_GetTick();
+N		elapseTime = nowTime - PeriodicTransmissionTime;
+N		if (elapseTime >= SM2SU_PERIODIC_TRANSMIT_IN_MS)
+X		if (elapseTime >= 500u)
 N		{
-N			PeriodicTransmissionTime = HAL_GetTick();
+N			TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_PERIODIC_TRANSMISSION);
+X			TransmitResult = Power_Command_Transmit((uint8_t)1u);
+N			if(TransmitResult == HAL_OK)
+N			{
+N				PeriodicTransmissionTime = HAL_GetTick();
+N			}
 N		}
+N		else if(elapseTime >= SM2SU_PERIODIC_TRANSMIT_TIMEOUT_IN_MS)
+X		else if(elapseTime >= 1000u)
+N		{
+N			PeriodicTransmissionTimeout = TRUE;
+X			PeriodicTransmissionTimeout = 1;
+N		}
+N		else
+N		{
+N			//no statement
+N		}	
 N	}
-N	else if(elapseTime >= SM2SU_PERIODIC_TRANSMIT_TIMEOUT_IN_MS)
-X	else if(elapseTime >= 1000u)
-N	{
-N		PeriodicTransmissionTimeout = TRUE;
-X		PeriodicTransmissionTimeout = 1;
-N	}
-N	else
-N	{
-N		//no statement
-N	}
+N	
+N
 N}
 N
 Nstatic void Power_Command_Receive(uint8_t * pData, uint16_t Size)
@@ -51794,18 +51804,12 @@ N
 N
 Nstatic uint8_t SU2SM_Req_Call_Reboot_Command(POWER_COMMAND_RECEIVED *pData)
 N{
-N		//TODO
-N		HAL_StatusTypeDef TransmitResult;
-N	
-N	  TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_REPLY_REBOOT_COMMAND);
-X	  TransmitResult = Power_Command_Transmit((uint8_t)5u);
-N		if(TransmitResult == HAL_OK)
-N		{
-N			HAL_Delay(5000);
-N			force_shutdown(POWER_STATUS_IDLE);
-N			HAL_Delay(1000);
-N			power_manage.work_mode = POWER_STATUS_POWERON;
-N		}
+N	//TODO
+N	if((power_manage.work_mode == POWER_STATUS_48VNOSTART) || (power_manage.work_mode == POWER_STATUS_48VSTART))
+N	{
+N	   Reboot_Flag = TRUE;
+X	   Reboot_Flag = 1;
+N	}
 N	
 N		return 1u;
 N}

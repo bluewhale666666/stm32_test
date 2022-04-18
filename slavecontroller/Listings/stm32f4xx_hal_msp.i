@@ -22992,7 +22992,7 @@ static void PowerOnCharge(void);
 void force_shutdown(uint8_t nxt_mode);
 void softwarepoweroff_mode_operation(void);
 void shutdown_mode_operation(void);
-
+void Reboot_mode_operation(void);
 
 
 #line 18 ".\\Power\\Command.h"
@@ -23064,7 +23064,7 @@ typedef struct	tag_SU2SM_REQ_DPCH{
 
 #line 102 ".\\Power\\Command.h"
 
-
+extern unsigned char    Reboot_Flag;
 extern POWER_COMMAND_RECEIVED PowerCommandReceived;
 extern uint8_t PowerCommandRxBuffer[32u];
 extern uint8_t PowerCommandTxBuffer[32u];

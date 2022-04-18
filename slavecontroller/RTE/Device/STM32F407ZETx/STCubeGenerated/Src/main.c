@@ -86,9 +86,6 @@ void PHY_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	uint32_t nowTime;
-	uint32_t elapseTime;
-	uint32_t startTime;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/

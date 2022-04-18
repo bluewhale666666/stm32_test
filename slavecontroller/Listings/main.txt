@@ -5,84 +5,84 @@
                           AREA ||i.Error_Handler||, CODE, READONLY, ALIGN=1
 
                   Error_Handler PROC
-;;;668      */
-;;;669    void Error_Handler(void)
+;;;665      */
+;;;666    void Error_Handler(void)
 000000  b672              CPSID    i
-;;;670    {
-;;;671      /* USER CODE BEGIN Error_Handler_Debug */
-;;;672      /* User can add his own implementation to report the HAL error return state */
-;;;673      __disable_irq();
-;;;674      while (1)
+;;;667    {
+;;;668      /* USER CODE BEGIN Error_Handler_Debug */
+;;;669      /* User can add his own implementation to report the HAL error return state */
+;;;670      __disable_irq();
+;;;671      while (1)
 000002  bf00              NOP      
                   |L1.4|
 000004  e7fe              B        |L1.4|
-;;;675      {
-;;;676      }
-;;;677      /* USER CODE END Error_Handler_Debug */
-;;;678    }
-;;;679    
+;;;672      {
+;;;673      }
+;;;674      /* USER CODE END Error_Handler_Debug */
+;;;675    }
+;;;676    
                           ENDP
 
 
                           AREA ||i.MX_CAN1_Init||, CODE, READONLY, ALIGN=2
 
                   MX_CAN1_Init PROC
-;;;208      */
-;;;209    static void MX_CAN1_Init(void)
+;;;205      */
+;;;206    static void MX_CAN1_Init(void)
 000000  b510              PUSH     {r4,lr}
-;;;210    {
-;;;211    
-;;;212      /* USER CODE BEGIN CAN1_Init 0 */
-;;;213    
-;;;214      /* USER CODE END CAN1_Init 0 */
-;;;215    
-;;;216      /* USER CODE BEGIN CAN1_Init 1 */
-;;;217    
-;;;218      /* USER CODE END CAN1_Init 1 */
-;;;219      hcan1.Instance = CAN1;
+;;;207    {
+;;;208    
+;;;209      /* USER CODE BEGIN CAN1_Init 0 */
+;;;210    
+;;;211      /* USER CODE END CAN1_Init 0 */
+;;;212    
+;;;213      /* USER CODE BEGIN CAN1_Init 1 */
+;;;214    
+;;;215      /* USER CODE END CAN1_Init 1 */
+;;;216      hcan1.Instance = CAN1;
 000002  480b              LDR      r0,|L2.48|
 000004  490b              LDR      r1,|L2.52|
 000006  6008              STR      r0,[r1,#0]  ; hcan1
-;;;220      hcan1.Init.Prescaler = 16;
+;;;217      hcan1.Init.Prescaler = 16;
 000008  2010              MOVS     r0,#0x10
 00000a  6048              STR      r0,[r1,#4]  ; hcan1
-;;;221      hcan1.Init.Mode = CAN_MODE_NORMAL;
+;;;218      hcan1.Init.Mode = CAN_MODE_NORMAL;
 00000c  2100              MOVS     r1,#0
 00000e  4809              LDR      r0,|L2.52|
 000010  6081              STR      r1,[r0,#8]
-;;;222      hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
+;;;219      hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
 000012  60c1              STR      r1,[r0,#0xc]
-;;;223      hcan1.Init.TimeSeg1 = CAN_BS1_1TQ;
+;;;220      hcan1.Init.TimeSeg1 = CAN_BS1_1TQ;
 000014  6101              STR      r1,[r0,#0x10]
-;;;224      hcan1.Init.TimeSeg2 = CAN_BS2_1TQ;
+;;;221      hcan1.Init.TimeSeg2 = CAN_BS2_1TQ;
 000016  6141              STR      r1,[r0,#0x14]
-;;;225      hcan1.Init.TimeTriggeredMode = DISABLE;
+;;;222      hcan1.Init.TimeTriggeredMode = DISABLE;
 000018  7601              STRB     r1,[r0,#0x18]
-;;;226      hcan1.Init.AutoBusOff = DISABLE;
+;;;223      hcan1.Init.AutoBusOff = DISABLE;
 00001a  7641              STRB     r1,[r0,#0x19]
-;;;227      hcan1.Init.AutoWakeUp = DISABLE;
+;;;224      hcan1.Init.AutoWakeUp = DISABLE;
 00001c  7681              STRB     r1,[r0,#0x1a]
-;;;228      hcan1.Init.AutoRetransmission = DISABLE;
+;;;225      hcan1.Init.AutoRetransmission = DISABLE;
 00001e  76c1              STRB     r1,[r0,#0x1b]
-;;;229      hcan1.Init.ReceiveFifoLocked = DISABLE;
+;;;226      hcan1.Init.ReceiveFifoLocked = DISABLE;
 000020  7701              STRB     r1,[r0,#0x1c]
-;;;230      hcan1.Init.TransmitFifoPriority = DISABLE;
+;;;227      hcan1.Init.TransmitFifoPriority = DISABLE;
 000022  7741              STRB     r1,[r0,#0x1d]
-;;;231      if (HAL_CAN_Init(&hcan1) != HAL_OK)
+;;;228      if (HAL_CAN_Init(&hcan1) != HAL_OK)
 000024  f7fffffe          BL       HAL_CAN_Init
 000028  b108              CBZ      r0,|L2.46|
-;;;232      {
-;;;233        Error_Handler();
+;;;229      {
+;;;230        Error_Handler();
 00002a  f7fffffe          BL       Error_Handler
                   |L2.46|
-;;;234      }
-;;;235      /* USER CODE BEGIN CAN1_Init 2 */
-;;;236    
-;;;237      /* USER CODE END CAN1_Init 2 */
-;;;238    
-;;;239    }
+;;;231      }
+;;;232      /* USER CODE BEGIN CAN1_Init 2 */
+;;;233    
+;;;234      /* USER CODE END CAN1_Init 2 */
+;;;235    
+;;;236    }
 00002e  bd10              POP      {r4,pc}
-;;;240    
+;;;237    
                           ENDP
 
                   |L2.48|
@@ -93,18 +93,18 @@
                           AREA ||i.MX_GPIO_Init||, CODE, READONLY, ALIGN=2
 
                   MX_GPIO_Init PROC
-;;;456      */
-;;;457    static void MX_GPIO_Init(void)
+;;;453      */
+;;;454    static void MX_GPIO_Init(void)
 000000  b500              PUSH     {lr}
-;;;458    {
+;;;455    {
 000002  b087              SUB      sp,sp,#0x1c
-;;;459      GPIO_InitTypeDef GPIO_InitStruct = {0};
+;;;456      GPIO_InitTypeDef GPIO_InitStruct = {0};
 000004  2114              MOVS     r1,#0x14
 000006  a802              ADD      r0,sp,#8
 000008  f7fffffe          BL       __aeabi_memclr4
-;;;460    
-;;;461      /* GPIO Ports Clock Enable */
-;;;462      __HAL_RCC_GPIOE_CLK_ENABLE();
+;;;457    
+;;;458      /* GPIO Ports Clock Enable */
+;;;459      __HAL_RCC_GPIOE_CLK_ENABLE();
 00000c  bf00              NOP      
 00000e  2000              MOVS     r0,#0
 000010  9001              STR      r0,[sp,#4]
@@ -119,7 +119,7 @@
 000026  9001              STR      r0,[sp,#4]
 000028  bf00              NOP      
 00002a  bf00              NOP      
-;;;463      __HAL_RCC_GPIOF_CLK_ENABLE();
+;;;460      __HAL_RCC_GPIOF_CLK_ENABLE();
 00002c  bf00              NOP      
 00002e  2000              MOVS     r0,#0
 000030  9001              STR      r0,[sp,#4]
@@ -133,7 +133,7 @@
 000044  9001              STR      r0,[sp,#4]
 000046  bf00              NOP      
 000048  bf00              NOP      
-;;;464      __HAL_RCC_GPIOH_CLK_ENABLE();
+;;;461      __HAL_RCC_GPIOH_CLK_ENABLE();
 00004a  bf00              NOP      
 00004c  2000              MOVS     r0,#0
 00004e  9001              STR      r0,[sp,#4]
@@ -147,7 +147,7 @@
 000062  9001              STR      r0,[sp,#4]
 000064  bf00              NOP      
 000066  bf00              NOP      
-;;;465      __HAL_RCC_GPIOA_CLK_ENABLE();
+;;;462      __HAL_RCC_GPIOA_CLK_ENABLE();
 000068  bf00              NOP      
 00006a  2000              MOVS     r0,#0
 00006c  9001              STR      r0,[sp,#4]
@@ -161,7 +161,7 @@
 000080  9001              STR      r0,[sp,#4]
 000082  bf00              NOP      
 000084  bf00              NOP      
-;;;466      __HAL_RCC_GPIOC_CLK_ENABLE();
+;;;463      __HAL_RCC_GPIOC_CLK_ENABLE();
 000086  bf00              NOP      
 000088  2000              MOVS     r0,#0
 00008a  9001              STR      r0,[sp,#4]
@@ -175,7 +175,7 @@
 00009e  9001              STR      r0,[sp,#4]
 0000a0  bf00              NOP      
 0000a2  bf00              NOP      
-;;;467      __HAL_RCC_GPIOB_CLK_ENABLE();
+;;;464      __HAL_RCC_GPIOB_CLK_ENABLE();
 0000a4  bf00              NOP      
 0000a6  2000              MOVS     r0,#0
 0000a8  9001              STR      r0,[sp,#4]
@@ -189,7 +189,7 @@
 0000bc  9001              STR      r0,[sp,#4]
 0000be  bf00              NOP      
 0000c0  bf00              NOP      
-;;;468      __HAL_RCC_GPIOG_CLK_ENABLE();
+;;;465      __HAL_RCC_GPIOG_CLK_ENABLE();
 0000c2  bf00              NOP      
 0000c4  2000              MOVS     r0,#0
 0000c6  9001              STR      r0,[sp,#4]
@@ -203,7 +203,7 @@
 0000da  9001              STR      r0,[sp,#4]
 0000dc  bf00              NOP      
 0000de  bf00              NOP      
-;;;469      __HAL_RCC_GPIOD_CLK_ENABLE();
+;;;466      __HAL_RCC_GPIOD_CLK_ENABLE();
 0000e0  bf00              NOP      
 0000e2  2000              MOVS     r0,#0
 0000e4  9001              STR      r0,[sp,#4]
@@ -217,408 +217,408 @@
 0000f8  9001              STR      r0,[sp,#4]
 0000fa  bf00              NOP      
 0000fc  bf00              NOP      
-;;;470    
-;;;471      /*Configure GPIO pin Output Level */
-;;;472      HAL_GPIO_WritePin(GPIOE, AI_IU_SW1_Pin|OC_PROTECT_Pin, GPIO_PIN_RESET);
+;;;467    
+;;;468      /*Configure GPIO pin Output Level */
+;;;469      HAL_GPIO_WritePin(GPIOE, AI_IU_SW1_Pin|OC_PROTECT_Pin, GPIO_PIN_RESET);
 0000fe  2200              MOVS     r2,#0
 000100  2142              MOVS     r1,#0x42
 000102  488e              LDR      r0,|L3.828|
 000104  f7fffffe          BL       HAL_GPIO_WritePin
-;;;473    
-;;;474      /*Configure GPIO pin Output Level */
-;;;475      HAL_GPIO_WritePin(GPIOF, V24V_OUT4_Pin|POWER24V_ON_Pin, GPIO_PIN_RESET);
+;;;470    
+;;;471      /*Configure GPIO pin Output Level */
+;;;472      HAL_GPIO_WritePin(GPIOF, V24V_OUT4_Pin|POWER24V_ON_Pin, GPIO_PIN_RESET);
 000108  2200              MOVS     r2,#0
 00010a  f2410104          MOV      r1,#0x1004
 00010e  488c              LDR      r0,|L3.832|
 000110  f7fffffe          BL       HAL_GPIO_WritePin
-;;;476    
-;;;477      /*Configure GPIO pin Output Level */
-;;;478      HAL_GPIO_WritePin(GPIOF, LED6_Pin|PHY_RESET_Pin|ET_RESETN_Pin|LED3_Pin
+;;;473    
+;;;474      /*Configure GPIO pin Output Level */
+;;;475      HAL_GPIO_WritePin(GPIOF, LED6_Pin|PHY_RESET_Pin|ET_RESETN_Pin|LED3_Pin
 000114  2201              MOVS     r2,#1
 000116  f2427138          MOV      r1,#0x2738
 00011a  4889              LDR      r0,|L3.832|
 00011c  f7fffffe          BL       HAL_GPIO_WritePin
-;;;479                              |LED4_Pin|LED5_Pin|ES_SHUTDOWN_Pin, GPIO_PIN_SET);
-;;;480    
-;;;481      /*Configure GPIO pin Output Level */
-;;;482      HAL_GPIO_WritePin(RS485_RE_GPIO_Port, RS485_RE_Pin, GPIO_PIN_SET);
+;;;476                              |LED4_Pin|LED5_Pin|ES_SHUTDOWN_Pin, GPIO_PIN_SET);
+;;;477    
+;;;478      /*Configure GPIO pin Output Level */
+;;;479      HAL_GPIO_WritePin(RS485_RE_GPIO_Port, RS485_RE_Pin, GPIO_PIN_SET);
 000120  2201              MOVS     r2,#1
 000122  2110              MOVS     r1,#0x10
 000124  4887              LDR      r0,|L3.836|
 000126  f7fffffe          BL       HAL_GPIO_WritePin
-;;;483    
-;;;484      /*Configure GPIO pin Output Level */
-;;;485      HAL_GPIO_WritePin(GPIOC, LED2_Pin|LED1_Pin|ST_OUT_1_Pin, GPIO_PIN_SET);
+;;;480    
+;;;481      /*Configure GPIO pin Output Level */
+;;;482      HAL_GPIO_WritePin(GPIOC, LED2_Pin|LED1_Pin|ST_OUT_1_Pin, GPIO_PIN_SET);
 00012a  2201              MOVS     r2,#1
 00012c  f44f7198          MOV      r1,#0x130
 000130  4885              LDR      r0,|L3.840|
 000132  f7fffffe          BL       HAL_GPIO_WritePin
-;;;486    
-;;;487      /*Configure GPIO pin Output Level */
-;;;488      HAL_GPIO_WritePin(GPIOB, AI_IU_SW2_Pin|V24V_OUT1_Pin, GPIO_PIN_RESET);
+;;;483    
+;;;484      /*Configure GPIO pin Output Level */
+;;;485      HAL_GPIO_WritePin(GPIOB, AI_IU_SW2_Pin|V24V_OUT1_Pin, GPIO_PIN_RESET);
 000136  2200              MOVS     r2,#0
 000138  f2402102          MOV      r1,#0x202
 00013c  4883              LDR      r0,|L3.844|
 00013e  f7fffffe          BL       HAL_GPIO_WritePin
-;;;489    
-;;;490      /*Configure GPIO pin Output Level */
-;;;491      HAL_GPIO_WritePin(GPIOE, ST_OUT_24_Pin|ST_OUT_23_Pin|ST_OUT_22_Pin|ST_OUT_20_Pin
+;;;486    
+;;;487      /*Configure GPIO pin Output Level */
+;;;488      HAL_GPIO_WritePin(GPIOE, ST_OUT_24_Pin|ST_OUT_23_Pin|ST_OUT_22_Pin|ST_OUT_20_Pin
 000142  2201              MOVS     r2,#1
 000144  f44f41f8          MOV      r1,#0x7c00
 000148  487c              LDR      r0,|L3.828|
 00014a  f7fffffe          BL       HAL_GPIO_WritePin
-;;;492                              |ST_OUT_21_Pin, GPIO_PIN_SET);
-;;;493    
-;;;494      /*Configure GPIO pin Output Level */
-;;;495      HAL_GPIO_WritePin(GPIOB, ST_OUT_19_Pin|ST_OUT_18_Pin|ST_OUT_17_Pin|ST_OUT_8_Pin, GPIO_PIN_SET);
+;;;489                              |ST_OUT_21_Pin, GPIO_PIN_SET);
+;;;490    
+;;;491      /*Configure GPIO pin Output Level */
+;;;492      HAL_GPIO_WritePin(GPIOB, ST_OUT_19_Pin|ST_OUT_18_Pin|ST_OUT_17_Pin|ST_OUT_8_Pin, GPIO_PIN_SET);
 00014e  2201              MOVS     r2,#1
 000150  f44f4170          MOV      r1,#0xf000
 000154  487d              LDR      r0,|L3.844|
 000156  f7fffffe          BL       HAL_GPIO_WritePin
-;;;496    
-;;;497      /*Configure GPIO pin Output Level */
-;;;498      HAL_GPIO_WritePin(GPIOD, ST_OUT_7_Pin|ST_OUT_6_Pin|ST_OUT_5_Pin, GPIO_PIN_SET);
+;;;493    
+;;;494      /*Configure GPIO pin Output Level */
+;;;495      HAL_GPIO_WritePin(GPIOD, ST_OUT_7_Pin|ST_OUT_6_Pin|ST_OUT_5_Pin, GPIO_PIN_SET);
 00015a  2201              MOVS     r2,#1
 00015c  f44f61e0          MOV      r1,#0x700
 000160  487b              LDR      r0,|L3.848|
 000162  f7fffffe          BL       HAL_GPIO_WritePin
-;;;499    
-;;;500      /*Configure GPIO pin Output Level */
-;;;501      HAL_GPIO_WritePin(GPIOG, LAN9252_CS_Pin|ST_OUT_4_Pin|ST_OUT_3_Pin|ST_OUT_2_Pin, GPIO_PIN_SET);
+;;;496    
+;;;497      /*Configure GPIO pin Output Level */
+;;;498      HAL_GPIO_WritePin(GPIOG, LAN9252_CS_Pin|ST_OUT_4_Pin|ST_OUT_3_Pin|ST_OUT_2_Pin, GPIO_PIN_SET);
 000166  2201              MOVS     r2,#1
 000168  f44f71e8          MOV      r1,#0x1d0
 00016c  4879              LDR      r0,|L3.852|
 00016e  f7fffffe          BL       HAL_GPIO_WritePin
-;;;502    
-;;;503      /*Configure GPIO pins : SYNC0_Pin SYNC1_Pin */
-;;;504      GPIO_InitStruct.Pin = SYNC0_Pin|SYNC1_Pin;
+;;;499    
+;;;500      /*Configure GPIO pins : SYNC0_Pin SYNC1_Pin */
+;;;501      GPIO_InitStruct.Pin = SYNC0_Pin|SYNC1_Pin;
 000172  200c              MOVS     r0,#0xc
 000174  9002              STR      r0,[sp,#8]
-;;;505      GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+;;;502      GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
 000176  f44f1004          MOV      r0,#0x210000
 00017a  9003              STR      r0,[sp,#0xc]
-;;;506      GPIO_InitStruct.Pull = GPIO_NOPULL;
+;;;503      GPIO_InitStruct.Pull = GPIO_NOPULL;
 00017c  2000              MOVS     r0,#0
 00017e  9004              STR      r0,[sp,#0x10]
-;;;507      HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+;;;504      HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 000180  a902              ADD      r1,sp,#8
 000182  486e              LDR      r0,|L3.828|
 000184  f7fffffe          BL       HAL_GPIO_Init
-;;;508    
-;;;509      /*Configure GPIO pins : AI_IU_SW1_Pin OC_PROTECT_Pin */
-;;;510      GPIO_InitStruct.Pin = AI_IU_SW1_Pin|OC_PROTECT_Pin;
+;;;505    
+;;;506      /*Configure GPIO pins : AI_IU_SW1_Pin OC_PROTECT_Pin */
+;;;507      GPIO_InitStruct.Pin = AI_IU_SW1_Pin|OC_PROTECT_Pin;
 000188  2042              MOVS     r0,#0x42
 00018a  9002              STR      r0,[sp,#8]
-;;;511      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+;;;508      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 00018c  2001              MOVS     r0,#1
 00018e  9003              STR      r0,[sp,#0xc]
-;;;512      GPIO_InitStruct.Pull = GPIO_NOPULL;
+;;;509      GPIO_InitStruct.Pull = GPIO_NOPULL;
 000190  2000              MOVS     r0,#0
 000192  9004              STR      r0,[sp,#0x10]
-;;;513      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+;;;510      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 000194  9005              STR      r0,[sp,#0x14]
-;;;514      HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+;;;511      HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 000196  a902              ADD      r1,sp,#8
 000198  4868              LDR      r0,|L3.828|
 00019a  f7fffffe          BL       HAL_GPIO_Init
-;;;515    
-;;;516      /*Configure GPIO pins : V24V_OUT4_Pin POWER24V_ON_Pin ES_SHUTDOWN_Pin */
-;;;517      GPIO_InitStruct.Pin = V24V_OUT4_Pin|POWER24V_ON_Pin|ES_SHUTDOWN_Pin;
+;;;512    
+;;;513      /*Configure GPIO pins : V24V_OUT4_Pin POWER24V_ON_Pin ES_SHUTDOWN_Pin */
+;;;514      GPIO_InitStruct.Pin = V24V_OUT4_Pin|POWER24V_ON_Pin|ES_SHUTDOWN_Pin;
 00019e  f2430004          MOV      r0,#0x3004
 0001a2  9002              STR      r0,[sp,#8]
-;;;518      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+;;;515      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 0001a4  2001              MOVS     r0,#1
 0001a6  9003              STR      r0,[sp,#0xc]
-;;;519      GPIO_InitStruct.Pull = GPIO_NOPULL;
+;;;516      GPIO_InitStruct.Pull = GPIO_NOPULL;
 0001a8  2000              MOVS     r0,#0
 0001aa  9004              STR      r0,[sp,#0x10]
-;;;520      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+;;;517      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 0001ac  9005              STR      r0,[sp,#0x14]
-;;;521      HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+;;;518      HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 0001ae  a902              ADD      r1,sp,#8
 0001b0  4863              LDR      r0,|L3.832|
 0001b2  f7fffffe          BL       HAL_GPIO_Init
-;;;522    
-;;;523      /*Configure GPIO pins : LED6_Pin PHY_RESET_Pin ET_RESETN_Pin LED3_Pin
-;;;524                               LED4_Pin LED5_Pin */
-;;;525      GPIO_InitStruct.Pin = LED6_Pin|PHY_RESET_Pin|ET_RESETN_Pin|LED3_Pin
+;;;519    
+;;;520      /*Configure GPIO pins : LED6_Pin PHY_RESET_Pin ET_RESETN_Pin LED3_Pin
+;;;521                               LED4_Pin LED5_Pin */
+;;;522      GPIO_InitStruct.Pin = LED6_Pin|PHY_RESET_Pin|ET_RESETN_Pin|LED3_Pin
 0001b6  f44f60e7          MOV      r0,#0x738
 0001ba  9002              STR      r0,[sp,#8]
-;;;526                              |LED4_Pin|LED5_Pin;
-;;;527      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+;;;523                              |LED4_Pin|LED5_Pin;
+;;;524      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
 0001bc  2011              MOVS     r0,#0x11
 0001be  9003              STR      r0,[sp,#0xc]
-;;;528      GPIO_InitStruct.Pull = GPIO_NOPULL;
+;;;525      GPIO_InitStruct.Pull = GPIO_NOPULL;
 0001c0  2000              MOVS     r0,#0
 0001c2  9004              STR      r0,[sp,#0x10]
-;;;529      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+;;;526      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 0001c4  9005              STR      r0,[sp,#0x14]
-;;;530      HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+;;;527      HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 0001c6  a902              ADD      r1,sp,#8
 0001c8  485d              LDR      r0,|L3.832|
 0001ca  f7fffffe          BL       HAL_GPIO_Init
-;;;531    
-;;;532      /*Configure GPIO pin : IRQ_Pin */
-;;;533      GPIO_InitStruct.Pin = IRQ_Pin;
+;;;528    
+;;;529      /*Configure GPIO pin : IRQ_Pin */
+;;;530      GPIO_InitStruct.Pin = IRQ_Pin;
 0001ce  2002              MOVS     r0,#2
 0001d0  9002              STR      r0,[sp,#8]
-;;;534      GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+;;;531      GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
 0001d2  f44f1004          MOV      r0,#0x210000
 0001d6  9003              STR      r0,[sp,#0xc]
-;;;535      GPIO_InitStruct.Pull = GPIO_NOPULL;
+;;;532      GPIO_InitStruct.Pull = GPIO_NOPULL;
 0001d8  2000              MOVS     r0,#0
 0001da  9004              STR      r0,[sp,#0x10]
-;;;536      HAL_GPIO_Init(IRQ_GPIO_Port, &GPIO_InitStruct);
+;;;533      HAL_GPIO_Init(IRQ_GPIO_Port, &GPIO_InitStruct);
 0001dc  a902              ADD      r1,sp,#8
 0001de  4859              LDR      r0,|L3.836|
 0001e0  f7fffffe          BL       HAL_GPIO_Init
-;;;537    
-;;;538      /*Configure GPIO pin : RS485_RE_Pin */
-;;;539      GPIO_InitStruct.Pin = RS485_RE_Pin;
+;;;534    
+;;;535      /*Configure GPIO pin : RS485_RE_Pin */
+;;;536      GPIO_InitStruct.Pin = RS485_RE_Pin;
 0001e4  2010              MOVS     r0,#0x10
 0001e6  9002              STR      r0,[sp,#8]
-;;;540      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+;;;537      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 0001e8  2001              MOVS     r0,#1
 0001ea  9003              STR      r0,[sp,#0xc]
-;;;541      GPIO_InitStruct.Pull = GPIO_PULLUP;
+;;;538      GPIO_InitStruct.Pull = GPIO_PULLUP;
 0001ec  9004              STR      r0,[sp,#0x10]
-;;;542      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+;;;539      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 0001ee  2003              MOVS     r0,#3
 0001f0  9005              STR      r0,[sp,#0x14]
-;;;543      HAL_GPIO_Init(RS485_RE_GPIO_Port, &GPIO_InitStruct);
+;;;540      HAL_GPIO_Init(RS485_RE_GPIO_Port, &GPIO_InitStruct);
 0001f2  a902              ADD      r1,sp,#8
 0001f4  4853              LDR      r0,|L3.836|
 0001f6  f7fffffe          BL       HAL_GPIO_Init
-;;;544    
-;;;545      /*Configure GPIO pins : LED2_Pin LED1_Pin ST_OUT_1_Pin */
-;;;546      GPIO_InitStruct.Pin = LED2_Pin|LED1_Pin|ST_OUT_1_Pin;
+;;;541    
+;;;542      /*Configure GPIO pins : LED2_Pin LED1_Pin ST_OUT_1_Pin */
+;;;543      GPIO_InitStruct.Pin = LED2_Pin|LED1_Pin|ST_OUT_1_Pin;
 0001fa  f44f7098          MOV      r0,#0x130
 0001fe  9002              STR      r0,[sp,#8]
-;;;547      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+;;;544      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
 000200  2011              MOVS     r0,#0x11
 000202  9003              STR      r0,[sp,#0xc]
-;;;548      GPIO_InitStruct.Pull = GPIO_NOPULL;
+;;;545      GPIO_InitStruct.Pull = GPIO_NOPULL;
 000204  2000              MOVS     r0,#0
 000206  9004              STR      r0,[sp,#0x10]
-;;;549      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+;;;546      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 000208  9005              STR      r0,[sp,#0x14]
-;;;550      HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+;;;547      HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 00020a  a902              ADD      r1,sp,#8
 00020c  484e              LDR      r0,|L3.840|
 00020e  f7fffffe          BL       HAL_GPIO_Init
-;;;551    
-;;;552      /*Configure GPIO pins : AI_IU_SW2_Pin V24V_OUT1_Pin */
-;;;553      GPIO_InitStruct.Pin = AI_IU_SW2_Pin|V24V_OUT1_Pin;
+;;;548    
+;;;549      /*Configure GPIO pins : AI_IU_SW2_Pin V24V_OUT1_Pin */
+;;;550      GPIO_InitStruct.Pin = AI_IU_SW2_Pin|V24V_OUT1_Pin;
 000212  f2402002          MOV      r0,#0x202
 000216  9002              STR      r0,[sp,#8]
-;;;554      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+;;;551      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 000218  2001              MOVS     r0,#1
 00021a  9003              STR      r0,[sp,#0xc]
-;;;555      GPIO_InitStruct.Pull = GPIO_NOPULL;
+;;;552      GPIO_InitStruct.Pull = GPIO_NOPULL;
 00021c  2000              MOVS     r0,#0
 00021e  9004              STR      r0,[sp,#0x10]
-;;;556      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+;;;553      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 000220  9005              STR      r0,[sp,#0x14]
-;;;557      HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+;;;554      HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 000222  a902              ADD      r1,sp,#8
 000224  4849              LDR      r0,|L3.844|
 000226  f7fffffe          BL       HAL_GPIO_Init
-;;;558    
-;;;559      /*Configure GPIO pin : SAFE_48V_SWITCH_Pin */
-;;;560      GPIO_InitStruct.Pin = SAFE_48V_SWITCH_Pin;
+;;;555    
+;;;556      /*Configure GPIO pin : SAFE_48V_SWITCH_Pin */
+;;;557      GPIO_InitStruct.Pin = SAFE_48V_SWITCH_Pin;
 00022a  f44f6000          MOV      r0,#0x800
 00022e  9002              STR      r0,[sp,#8]
-;;;561      GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+;;;558      GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 000230  2000              MOVS     r0,#0
 000232  9003              STR      r0,[sp,#0xc]
-;;;562      GPIO_InitStruct.Pull = GPIO_NOPULL;
+;;;559      GPIO_InitStruct.Pull = GPIO_NOPULL;
 000234  9004              STR      r0,[sp,#0x10]
-;;;563      HAL_GPIO_Init(SAFE_48V_SWITCH_GPIO_Port, &GPIO_InitStruct);
+;;;560      HAL_GPIO_Init(SAFE_48V_SWITCH_GPIO_Port, &GPIO_InitStruct);
 000236  a902              ADD      r1,sp,#8
 000238  4841              LDR      r0,|L3.832|
 00023a  f7fffffe          BL       HAL_GPIO_Init
-;;;564    
-;;;565      /*Configure GPIO pins : ACPower_OK_Pin ST_IN_19_Pin ST_IN_18_Pin ST_IN_17_Pin
-;;;566                               ST_IN_6_Pin ST_IN_5_Pin ST_IN_1_Pin ST_IN_2_Pin
-;;;567                               ST_IN_3_Pin ST_IN_4_Pin */
-;;;568      GPIO_InitStruct.Pin = ACPower_OK_Pin|ST_IN_19_Pin|ST_IN_18_Pin|ST_IN_17_Pin
+;;;561    
+;;;562      /*Configure GPIO pins : ACPower_OK_Pin ST_IN_19_Pin ST_IN_18_Pin ST_IN_17_Pin
+;;;563                               ST_IN_6_Pin ST_IN_5_Pin ST_IN_1_Pin ST_IN_2_Pin
+;;;564                               ST_IN_3_Pin ST_IN_4_Pin */
+;;;565      GPIO_InitStruct.Pin = ACPower_OK_Pin|ST_IN_19_Pin|ST_IN_18_Pin|ST_IN_17_Pin
 00023e  f647602e          MOV      r0,#0x7e2e
 000242  9002              STR      r0,[sp,#8]
-;;;569                              |ST_IN_6_Pin|ST_IN_5_Pin|ST_IN_1_Pin|ST_IN_2_Pin
-;;;570                              |ST_IN_3_Pin|ST_IN_4_Pin;
-;;;571      GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+;;;566                              |ST_IN_6_Pin|ST_IN_5_Pin|ST_IN_1_Pin|ST_IN_2_Pin
+;;;567                              |ST_IN_3_Pin|ST_IN_4_Pin;
+;;;568      GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 000244  2000              MOVS     r0,#0
 000246  9003              STR      r0,[sp,#0xc]
-;;;572      GPIO_InitStruct.Pull = GPIO_NOPULL;
+;;;569      GPIO_InitStruct.Pull = GPIO_NOPULL;
 000248  9004              STR      r0,[sp,#0x10]
-;;;573      HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+;;;570      HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 00024a  a902              ADD      r1,sp,#8
 00024c  4841              LDR      r0,|L3.852|
 00024e  f7fffffe          BL       HAL_GPIO_Init
-;;;574    
-;;;575      /*Configure GPIO pins : ST_OUT_24_Pin ST_OUT_23_Pin ST_OUT_22_Pin ST_OUT_20_Pin
-;;;576                               ST_OUT_21_Pin */
-;;;577      GPIO_InitStruct.Pin = ST_OUT_24_Pin|ST_OUT_23_Pin|ST_OUT_22_Pin|ST_OUT_20_Pin
+;;;571    
+;;;572      /*Configure GPIO pins : ST_OUT_24_Pin ST_OUT_23_Pin ST_OUT_22_Pin ST_OUT_20_Pin
+;;;573                               ST_OUT_21_Pin */
+;;;574      GPIO_InitStruct.Pin = ST_OUT_24_Pin|ST_OUT_23_Pin|ST_OUT_22_Pin|ST_OUT_20_Pin
 000252  f44f40f8          MOV      r0,#0x7c00
 000256  9002              STR      r0,[sp,#8]
-;;;578                              |ST_OUT_21_Pin;
-;;;579      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+;;;575                              |ST_OUT_21_Pin;
+;;;576      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
 000258  2011              MOVS     r0,#0x11
 00025a  9003              STR      r0,[sp,#0xc]
-;;;580      GPIO_InitStruct.Pull = GPIO_NOPULL;
+;;;577      GPIO_InitStruct.Pull = GPIO_NOPULL;
 00025c  2000              MOVS     r0,#0
 00025e  9004              STR      r0,[sp,#0x10]
-;;;581      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+;;;578      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 000260  9005              STR      r0,[sp,#0x14]
-;;;582      HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+;;;579      HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 000262  a902              ADD      r1,sp,#8
 000264  4835              LDR      r0,|L3.828|
 000266  f7fffffe          BL       HAL_GPIO_Init
-;;;583    
-;;;584      /*Configure GPIO pins : POWEROFF_REMOTEIN_Pin POWERON_KEYIN_Pin */
-;;;585      GPIO_InitStruct.Pin = POWEROFF_REMOTEIN_Pin|POWERON_KEYIN_Pin;
+;;;580    
+;;;581      /*Configure GPIO pins : POWEROFF_REMOTEIN_Pin POWERON_KEYIN_Pin */
+;;;582      GPIO_InitStruct.Pin = POWEROFF_REMOTEIN_Pin|POWERON_KEYIN_Pin;
 00026a  f2480001          MOV      r0,#0x8001
 00026e  9002              STR      r0,[sp,#8]
-;;;586      GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+;;;583      GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 000270  2000              MOVS     r0,#0
 000272  9003              STR      r0,[sp,#0xc]
-;;;587      GPIO_InitStruct.Pull = GPIO_NOPULL;
+;;;584      GPIO_InitStruct.Pull = GPIO_NOPULL;
 000274  9004              STR      r0,[sp,#0x10]
-;;;588      HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+;;;585      HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 000276  a902              ADD      r1,sp,#8
 000278  4830              LDR      r0,|L3.828|
 00027a  f7fffffe          BL       HAL_GPIO_Init
-;;;589    
-;;;590      /*Configure GPIO pins : ST_OUT_19_Pin ST_OUT_18_Pin ST_OUT_17_Pin ST_OUT_8_Pin */
-;;;591      GPIO_InitStruct.Pin = ST_OUT_19_Pin|ST_OUT_18_Pin|ST_OUT_17_Pin|ST_OUT_8_Pin;
+;;;586    
+;;;587      /*Configure GPIO pins : ST_OUT_19_Pin ST_OUT_18_Pin ST_OUT_17_Pin ST_OUT_8_Pin */
+;;;588      GPIO_InitStruct.Pin = ST_OUT_19_Pin|ST_OUT_18_Pin|ST_OUT_17_Pin|ST_OUT_8_Pin;
 00027e  f44f4070          MOV      r0,#0xf000
 000282  9002              STR      r0,[sp,#8]
-;;;592      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+;;;589      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
 000284  2011              MOVS     r0,#0x11
 000286  9003              STR      r0,[sp,#0xc]
-;;;593      GPIO_InitStruct.Pull = GPIO_NOPULL;
+;;;590      GPIO_InitStruct.Pull = GPIO_NOPULL;
 000288  2000              MOVS     r0,#0
 00028a  9004              STR      r0,[sp,#0x10]
-;;;594      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+;;;591      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 00028c  9005              STR      r0,[sp,#0x14]
-;;;595      HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+;;;592      HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 00028e  a902              ADD      r1,sp,#8
 000290  482e              LDR      r0,|L3.844|
 000292  f7fffffe          BL       HAL_GPIO_Init
-;;;596    
-;;;597      /*Configure GPIO pins : ST_OUT_7_Pin ST_OUT_6_Pin ST_OUT_5_Pin */
-;;;598      GPIO_InitStruct.Pin = ST_OUT_7_Pin|ST_OUT_6_Pin|ST_OUT_5_Pin;
+;;;593    
+;;;594      /*Configure GPIO pins : ST_OUT_7_Pin ST_OUT_6_Pin ST_OUT_5_Pin */
+;;;595      GPIO_InitStruct.Pin = ST_OUT_7_Pin|ST_OUT_6_Pin|ST_OUT_5_Pin;
 000296  f44f60e0          MOV      r0,#0x700
 00029a  9002              STR      r0,[sp,#8]
-;;;599      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+;;;596      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
 00029c  2011              MOVS     r0,#0x11
 00029e  9003              STR      r0,[sp,#0xc]
-;;;600      GPIO_InitStruct.Pull = GPIO_NOPULL;
+;;;597      GPIO_InitStruct.Pull = GPIO_NOPULL;
 0002a0  2000              MOVS     r0,#0
 0002a2  9004              STR      r0,[sp,#0x10]
-;;;601      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+;;;598      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 0002a4  9005              STR      r0,[sp,#0x14]
-;;;602      HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+;;;599      HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 0002a6  a902              ADD      r1,sp,#8
 0002a8  4829              LDR      r0,|L3.848|
 0002aa  f7fffffe          BL       HAL_GPIO_Init
-;;;603    
-;;;604      /*Configure GPIO pins : ST_IN_23_Pin ST_IN_22_Pin ST_IN_21_Pin ST_IN_24_Pin
-;;;605                               ST_IN_20_Pin ST_IN_8_Pin ST_IN_7_Pin */
-;;;606      GPIO_InitStruct.Pin = ST_IN_23_Pin|ST_IN_22_Pin|ST_IN_21_Pin|ST_IN_24_Pin
+;;;600    
+;;;601      /*Configure GPIO pins : ST_IN_23_Pin ST_IN_22_Pin ST_IN_21_Pin ST_IN_24_Pin
+;;;602                               ST_IN_20_Pin ST_IN_8_Pin ST_IN_7_Pin */
+;;;603      GPIO_InitStruct.Pin = ST_IN_23_Pin|ST_IN_22_Pin|ST_IN_21_Pin|ST_IN_24_Pin
 0002ae  f64f00c0          MOV      r0,#0xf8c0
 0002b2  9002              STR      r0,[sp,#8]
-;;;607                              |ST_IN_20_Pin|ST_IN_8_Pin|ST_IN_7_Pin;
-;;;608      GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+;;;604                              |ST_IN_20_Pin|ST_IN_8_Pin|ST_IN_7_Pin;
+;;;605      GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 0002b4  2000              MOVS     r0,#0
 0002b6  9003              STR      r0,[sp,#0xc]
-;;;609      GPIO_InitStruct.Pull = GPIO_NOPULL;
+;;;606      GPIO_InitStruct.Pull = GPIO_NOPULL;
 0002b8  9004              STR      r0,[sp,#0x10]
-;;;610      HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+;;;607      HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 0002ba  a902              ADD      r1,sp,#8
 0002bc  4824              LDR      r0,|L3.848|
 0002be  f7fffffe          BL       HAL_GPIO_Init
-;;;611    
-;;;612      /*Configure GPIO pin : LAN9252_CS_Pin */
-;;;613      GPIO_InitStruct.Pin = LAN9252_CS_Pin;
+;;;608    
+;;;609      /*Configure GPIO pin : LAN9252_CS_Pin */
+;;;610      GPIO_InitStruct.Pin = LAN9252_CS_Pin;
 0002c2  2010              MOVS     r0,#0x10
 0002c4  9002              STR      r0,[sp,#8]
-;;;614      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+;;;611      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 0002c6  2001              MOVS     r0,#1
 0002c8  9003              STR      r0,[sp,#0xc]
-;;;615      GPIO_InitStruct.Pull = GPIO_PULLUP;
+;;;612      GPIO_InitStruct.Pull = GPIO_PULLUP;
 0002ca  9004              STR      r0,[sp,#0x10]
-;;;616      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+;;;613      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 0002cc  2003              MOVS     r0,#3
 0002ce  9005              STR      r0,[sp,#0x14]
-;;;617      HAL_GPIO_Init(LAN9252_CS_GPIO_Port, &GPIO_InitStruct);
+;;;614      HAL_GPIO_Init(LAN9252_CS_GPIO_Port, &GPIO_InitStruct);
 0002d0  a902              ADD      r1,sp,#8
 0002d2  4820              LDR      r0,|L3.852|
 0002d4  f7fffffe          BL       HAL_GPIO_Init
-;;;618    
-;;;619      /*Configure GPIO pins : ST_OUT_4_Pin ST_OUT_3_Pin ST_OUT_2_Pin */
-;;;620      GPIO_InitStruct.Pin = ST_OUT_4_Pin|ST_OUT_3_Pin|ST_OUT_2_Pin;
+;;;615    
+;;;616      /*Configure GPIO pins : ST_OUT_4_Pin ST_OUT_3_Pin ST_OUT_2_Pin */
+;;;617      GPIO_InitStruct.Pin = ST_OUT_4_Pin|ST_OUT_3_Pin|ST_OUT_2_Pin;
 0002d8  f44f70e0          MOV      r0,#0x1c0
 0002dc  9002              STR      r0,[sp,#8]
-;;;621      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
+;;;618      GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
 0002de  2011              MOVS     r0,#0x11
 0002e0  9003              STR      r0,[sp,#0xc]
-;;;622      GPIO_InitStruct.Pull = GPIO_NOPULL;
+;;;619      GPIO_InitStruct.Pull = GPIO_NOPULL;
 0002e2  2000              MOVS     r0,#0
 0002e4  9004              STR      r0,[sp,#0x10]
-;;;623      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+;;;620      GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 0002e6  9005              STR      r0,[sp,#0x14]
-;;;624      HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+;;;621      HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 0002e8  a902              ADD      r1,sp,#8
 0002ea  481a              LDR      r0,|L3.852|
 0002ec  f7fffffe          BL       HAL_GPIO_Init
-;;;625    
-;;;626      /*Configure GPIO pin : POWERON_REMOTEIN_Pin */
-;;;627      GPIO_InitStruct.Pin = POWERON_REMOTEIN_Pin;
+;;;622    
+;;;623      /*Configure GPIO pin : POWERON_REMOTEIN_Pin */
+;;;624      GPIO_InitStruct.Pin = POWERON_REMOTEIN_Pin;
 0002f0  f44f7080          MOV      r0,#0x100
 0002f4  9002              STR      r0,[sp,#8]
-;;;628      GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+;;;625      GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 0002f6  2000              MOVS     r0,#0
 0002f8  9003              STR      r0,[sp,#0xc]
-;;;629      GPIO_InitStruct.Pull = GPIO_NOPULL;
+;;;626      GPIO_InitStruct.Pull = GPIO_NOPULL;
 0002fa  9004              STR      r0,[sp,#0x10]
-;;;630      HAL_GPIO_Init(POWERON_REMOTEIN_GPIO_Port, &GPIO_InitStruct);
+;;;627      HAL_GPIO_Init(POWERON_REMOTEIN_GPIO_Port, &GPIO_InitStruct);
 0002fc  a902              ADD      r1,sp,#8
 0002fe  4813              LDR      r0,|L3.844|
 000300  f7fffffe          BL       HAL_GPIO_Init
-;;;631    
-;;;632      /* EXTI interrupt init*/
-;;;633      HAL_NVIC_SetPriority(EXTI1_IRQn, 6, 0);
+;;;628    
+;;;629      /* EXTI interrupt init*/
+;;;630      HAL_NVIC_SetPriority(EXTI1_IRQn, 6, 0);
 000304  2200              MOVS     r2,#0
 000306  2106              MOVS     r1,#6
 000308  2007              MOVS     r0,#7
 00030a  f7fffffe          BL       HAL_NVIC_SetPriority
-;;;634      HAL_NVIC_EnableIRQ(EXTI1_IRQn);
+;;;631      HAL_NVIC_EnableIRQ(EXTI1_IRQn);
 00030e  2007              MOVS     r0,#7
 000310  f7fffffe          BL       HAL_NVIC_EnableIRQ
-;;;635    
-;;;636      HAL_NVIC_SetPriority(EXTI2_IRQn, 6, 1);
+;;;632    
+;;;633      HAL_NVIC_SetPriority(EXTI2_IRQn, 6, 1);
 000314  2201              MOVS     r2,#1
 000316  2106              MOVS     r1,#6
 000318  2008              MOVS     r0,#8
 00031a  f7fffffe          BL       HAL_NVIC_SetPriority
-;;;637      HAL_NVIC_EnableIRQ(EXTI2_IRQn);
+;;;634      HAL_NVIC_EnableIRQ(EXTI2_IRQn);
 00031e  2008              MOVS     r0,#8
 000320  f7fffffe          BL       HAL_NVIC_EnableIRQ
-;;;638    
-;;;639      HAL_NVIC_SetPriority(EXTI3_IRQn, 7, 0);
+;;;635    
+;;;636      HAL_NVIC_SetPriority(EXTI3_IRQn, 7, 0);
 000324  2200              MOVS     r2,#0
 000326  2107              MOVS     r1,#7
 000328  2009              MOVS     r0,#9
 00032a  f7fffffe          BL       HAL_NVIC_SetPriority
-;;;640      HAL_NVIC_EnableIRQ(EXTI3_IRQn);
+;;;637      HAL_NVIC_EnableIRQ(EXTI3_IRQn);
 00032e  2009              MOVS     r0,#9
 000330  f7fffffe          BL       HAL_NVIC_EnableIRQ
-;;;641    
-;;;642    }
+;;;638    
+;;;639    }
 000334  b007              ADD      sp,sp,#0x1c
 000336  bd00              POP      {pc}
-;;;643    
+;;;640    
                           ENDP
 
                   |L3.824|
@@ -641,58 +641,58 @@
                           AREA ||i.MX_I2C1_Init||, CODE, READONLY, ALIGN=2
 
                   MX_I2C1_Init PROC
-;;;245      */
-;;;246    static void MX_I2C1_Init(void)
+;;;242      */
+;;;243    static void MX_I2C1_Init(void)
 000000  b510              PUSH     {r4,lr}
-;;;247    {
-;;;248    
-;;;249      /* USER CODE BEGIN I2C1_Init 0 */
-;;;250    
-;;;251      /* USER CODE END I2C1_Init 0 */
-;;;252    
-;;;253      /* USER CODE BEGIN I2C1_Init 1 */
-;;;254    
-;;;255      /* USER CODE END I2C1_Init 1 */
-;;;256      hi2c1.Instance = I2C1;
+;;;244    {
+;;;245    
+;;;246      /* USER CODE BEGIN I2C1_Init 0 */
+;;;247    
+;;;248      /* USER CODE END I2C1_Init 0 */
+;;;249    
+;;;250      /* USER CODE BEGIN I2C1_Init 1 */
+;;;251    
+;;;252      /* USER CODE END I2C1_Init 1 */
+;;;253      hi2c1.Instance = I2C1;
 000002  480b              LDR      r0,|L4.48|
 000004  490b              LDR      r1,|L4.52|
 000006  6008              STR      r0,[r1,#0]  ; hi2c1
-;;;257      hi2c1.Init.ClockSpeed = 100000;
+;;;254      hi2c1.Init.ClockSpeed = 100000;
 000008  480b              LDR      r0,|L4.56|
 00000a  6048              STR      r0,[r1,#4]  ; hi2c1
-;;;258      hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
+;;;255      hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
 00000c  2100              MOVS     r1,#0
 00000e  4809              LDR      r0,|L4.52|
 000010  6081              STR      r1,[r0,#8]
-;;;259      hi2c1.Init.OwnAddress1 = 0;
+;;;256      hi2c1.Init.OwnAddress1 = 0;
 000012  60c1              STR      r1,[r0,#0xc]
-;;;260      hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+;;;257      hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
 000014  f44f4180          MOV      r1,#0x4000
 000018  6101              STR      r1,[r0,#0x10]
-;;;261      hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+;;;258      hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
 00001a  2100              MOVS     r1,#0
 00001c  6141              STR      r1,[r0,#0x14]
-;;;262      hi2c1.Init.OwnAddress2 = 0;
+;;;259      hi2c1.Init.OwnAddress2 = 0;
 00001e  6181              STR      r1,[r0,#0x18]
-;;;263      hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+;;;260      hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
 000020  61c1              STR      r1,[r0,#0x1c]
-;;;264      hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+;;;261      hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
 000022  6201              STR      r1,[r0,#0x20]
-;;;265      if (HAL_I2C_Init(&hi2c1) != HAL_OK)
+;;;262      if (HAL_I2C_Init(&hi2c1) != HAL_OK)
 000024  f7fffffe          BL       HAL_I2C_Init
 000028  b108              CBZ      r0,|L4.46|
-;;;266      {
-;;;267        Error_Handler();
+;;;263      {
+;;;264        Error_Handler();
 00002a  f7fffffe          BL       Error_Handler
                   |L4.46|
-;;;268      }
-;;;269      /* USER CODE BEGIN I2C1_Init 2 */
-;;;270    
-;;;271      /* USER CODE END I2C1_Init 2 */
-;;;272    
-;;;273    }
+;;;265      }
+;;;266      /* USER CODE BEGIN I2C1_Init 2 */
+;;;267    
+;;;268      /* USER CODE END I2C1_Init 2 */
+;;;269    
+;;;270    }
 00002e  bd10              POP      {r4,pc}
-;;;274    
+;;;271    
                           ENDP
 
                   |L4.48|
@@ -705,58 +705,58 @@
                           AREA ||i.MX_I2C2_Init||, CODE, READONLY, ALIGN=2
 
                   MX_I2C2_Init PROC
-;;;279      */
-;;;280    static void MX_I2C2_Init(void)
+;;;276      */
+;;;277    static void MX_I2C2_Init(void)
 000000  b510              PUSH     {r4,lr}
-;;;281    {
-;;;282    
-;;;283      /* USER CODE BEGIN I2C2_Init 0 */
-;;;284    
-;;;285      /* USER CODE END I2C2_Init 0 */
-;;;286    
-;;;287      /* USER CODE BEGIN I2C2_Init 1 */
-;;;288    
-;;;289      /* USER CODE END I2C2_Init 1 */
-;;;290      hi2c2.Instance = I2C2;
+;;;278    {
+;;;279    
+;;;280      /* USER CODE BEGIN I2C2_Init 0 */
+;;;281    
+;;;282      /* USER CODE END I2C2_Init 0 */
+;;;283    
+;;;284      /* USER CODE BEGIN I2C2_Init 1 */
+;;;285    
+;;;286      /* USER CODE END I2C2_Init 1 */
+;;;287      hi2c2.Instance = I2C2;
 000002  480b              LDR      r0,|L5.48|
 000004  490b              LDR      r1,|L5.52|
 000006  6008              STR      r0,[r1,#0]  ; hi2c2
-;;;291      hi2c2.Init.ClockSpeed = 100000;
+;;;288      hi2c2.Init.ClockSpeed = 100000;
 000008  480b              LDR      r0,|L5.56|
 00000a  6048              STR      r0,[r1,#4]  ; hi2c2
-;;;292      hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
+;;;289      hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
 00000c  2100              MOVS     r1,#0
 00000e  4809              LDR      r0,|L5.52|
 000010  6081              STR      r1,[r0,#8]
-;;;293      hi2c2.Init.OwnAddress1 = 0;
+;;;290      hi2c2.Init.OwnAddress1 = 0;
 000012  60c1              STR      r1,[r0,#0xc]
-;;;294      hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+;;;291      hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
 000014  f44f4180          MOV      r1,#0x4000
 000018  6101              STR      r1,[r0,#0x10]
-;;;295      hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+;;;292      hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
 00001a  2100              MOVS     r1,#0
 00001c  6141              STR      r1,[r0,#0x14]
-;;;296      hi2c2.Init.OwnAddress2 = 0;
+;;;293      hi2c2.Init.OwnAddress2 = 0;
 00001e  6181              STR      r1,[r0,#0x18]
-;;;297      hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+;;;294      hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
 000020  61c1              STR      r1,[r0,#0x1c]
-;;;298      hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+;;;295      hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
 000022  6201              STR      r1,[r0,#0x20]
-;;;299      if (HAL_I2C_Init(&hi2c2) != HAL_OK)
+;;;296      if (HAL_I2C_Init(&hi2c2) != HAL_OK)
 000024  f7fffffe          BL       HAL_I2C_Init
 000028  b108              CBZ      r0,|L5.46|
-;;;300      {
-;;;301        Error_Handler();
+;;;297      {
+;;;298        Error_Handler();
 00002a  f7fffffe          BL       Error_Handler
                   |L5.46|
-;;;302      }
-;;;303      /* USER CODE BEGIN I2C2_Init 2 */
-;;;304    
-;;;305      /* USER CODE END I2C2_Init 2 */
-;;;306    
-;;;307    }
+;;;299      }
+;;;300      /* USER CODE BEGIN I2C2_Init 2 */
+;;;301    
+;;;302      /* USER CODE END I2C2_Init 2 */
+;;;303    
+;;;304    }
 00002e  bd10              POP      {r4,pc}
-;;;308    
+;;;305    
                           ENDP
 
                   |L5.48|
@@ -769,58 +769,58 @@
                           AREA ||i.MX_I2C3_Init||, CODE, READONLY, ALIGN=2
 
                   MX_I2C3_Init PROC
-;;;313      */
-;;;314    static void MX_I2C3_Init(void)
+;;;310      */
+;;;311    static void MX_I2C3_Init(void)
 000000  b510              PUSH     {r4,lr}
-;;;315    {
-;;;316    
-;;;317      /* USER CODE BEGIN I2C3_Init 0 */
-;;;318    
-;;;319      /* USER CODE END I2C3_Init 0 */
-;;;320    
-;;;321      /* USER CODE BEGIN I2C3_Init 1 */
-;;;322    
-;;;323      /* USER CODE END I2C3_Init 1 */
-;;;324      hi2c3.Instance = I2C3;
+;;;312    {
+;;;313    
+;;;314      /* USER CODE BEGIN I2C3_Init 0 */
+;;;315    
+;;;316      /* USER CODE END I2C3_Init 0 */
+;;;317    
+;;;318      /* USER CODE BEGIN I2C3_Init 1 */
+;;;319    
+;;;320      /* USER CODE END I2C3_Init 1 */
+;;;321      hi2c3.Instance = I2C3;
 000002  480b              LDR      r0,|L6.48|
 000004  490b              LDR      r1,|L6.52|
 000006  6008              STR      r0,[r1,#0]  ; hi2c3
-;;;325      hi2c3.Init.ClockSpeed = 100000;
+;;;322      hi2c3.Init.ClockSpeed = 100000;
 000008  480b              LDR      r0,|L6.56|
 00000a  6048              STR      r0,[r1,#4]  ; hi2c3
-;;;326      hi2c3.Init.DutyCycle = I2C_DUTYCYCLE_2;
+;;;323      hi2c3.Init.DutyCycle = I2C_DUTYCYCLE_2;
 00000c  2100              MOVS     r1,#0
 00000e  4809              LDR      r0,|L6.52|
 000010  6081              STR      r1,[r0,#8]
-;;;327      hi2c3.Init.OwnAddress1 = 0;
+;;;324      hi2c3.Init.OwnAddress1 = 0;
 000012  60c1              STR      r1,[r0,#0xc]
-;;;328      hi2c3.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+;;;325      hi2c3.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
 000014  f44f4180          MOV      r1,#0x4000
 000018  6101              STR      r1,[r0,#0x10]
-;;;329      hi2c3.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+;;;326      hi2c3.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
 00001a  2100              MOVS     r1,#0
 00001c  6141              STR      r1,[r0,#0x14]
-;;;330      hi2c3.Init.OwnAddress2 = 0;
+;;;327      hi2c3.Init.OwnAddress2 = 0;
 00001e  6181              STR      r1,[r0,#0x18]
-;;;331      hi2c3.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+;;;328      hi2c3.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
 000020  61c1              STR      r1,[r0,#0x1c]
-;;;332      hi2c3.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+;;;329      hi2c3.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
 000022  6201              STR      r1,[r0,#0x20]
-;;;333      if (HAL_I2C_Init(&hi2c3) != HAL_OK)
+;;;330      if (HAL_I2C_Init(&hi2c3) != HAL_OK)
 000024  f7fffffe          BL       HAL_I2C_Init
 000028  b108              CBZ      r0,|L6.46|
-;;;334      {
-;;;335        Error_Handler();
+;;;331      {
+;;;332        Error_Handler();
 00002a  f7fffffe          BL       Error_Handler
                   |L6.46|
-;;;336      }
-;;;337      /* USER CODE BEGIN I2C3_Init 2 */
-;;;338    
-;;;339      /* USER CODE END I2C3_Init 2 */
-;;;340    
-;;;341    }
+;;;333      }
+;;;334      /* USER CODE BEGIN I2C3_Init 2 */
+;;;335    
+;;;336      /* USER CODE END I2C3_Init 2 */
+;;;337    
+;;;338    }
 00002e  bd10              POP      {r4,pc}
-;;;342    
+;;;339    
                           ENDP
 
                   |L6.48|
@@ -833,72 +833,72 @@
                           AREA ||i.MX_SPI3_Init||, CODE, READONLY, ALIGN=2
 
                   MX_SPI3_Init PROC
-;;;347      */
-;;;348    static void MX_SPI3_Init(void)
+;;;344      */
+;;;345    static void MX_SPI3_Init(void)
 000000  b510              PUSH     {r4,lr}
-;;;349    {
-;;;350    
-;;;351      /* USER CODE BEGIN SPI3_Init 0 */
-;;;352    
-;;;353      /* USER CODE END SPI3_Init 0 */
-;;;354    
-;;;355      /* USER CODE BEGIN SPI3_Init 1 */
-;;;356    
-;;;357      /* USER CODE END SPI3_Init 1 */
-;;;358      /* SPI3 parameter configuration*/
-;;;359      hspi3.Instance = SPI3;
+;;;346    {
+;;;347    
+;;;348      /* USER CODE BEGIN SPI3_Init 0 */
+;;;349    
+;;;350      /* USER CODE END SPI3_Init 0 */
+;;;351    
+;;;352      /* USER CODE BEGIN SPI3_Init 1 */
+;;;353    
+;;;354      /* USER CODE END SPI3_Init 1 */
+;;;355      /* SPI3 parameter configuration*/
+;;;356      hspi3.Instance = SPI3;
 000002  480e              LDR      r0,|L7.60|
 000004  490e              LDR      r1,|L7.64|
 000006  6008              STR      r0,[r1,#0]  ; hspi3
-;;;360      hspi3.Init.Mode = SPI_MODE_MASTER;
+;;;357      hspi3.Init.Mode = SPI_MODE_MASTER;
 000008  f44f7082          MOV      r0,#0x104
 00000c  6048              STR      r0,[r1,#4]  ; hspi3
-;;;361      hspi3.Init.Direction = SPI_DIRECTION_2LINES;
+;;;358      hspi3.Init.Direction = SPI_DIRECTION_2LINES;
 00000e  2100              MOVS     r1,#0
 000010  480b              LDR      r0,|L7.64|
 000012  6081              STR      r1,[r0,#8]
-;;;362      hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
+;;;359      hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
 000014  60c1              STR      r1,[r0,#0xc]
-;;;363      hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
+;;;360      hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
 000016  6101              STR      r1,[r0,#0x10]
-;;;364      hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
+;;;361      hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
 000018  6141              STR      r1,[r0,#0x14]
-;;;365      hspi3.Init.NSS = SPI_NSS_SOFT;
+;;;362      hspi3.Init.NSS = SPI_NSS_SOFT;
 00001a  f44f7100          MOV      r1,#0x200
 00001e  6181              STR      r1,[r0,#0x18]
-;;;366      hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
+;;;363      hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
 000020  2110              MOVS     r1,#0x10
 000022  61c1              STR      r1,[r0,#0x1c]
-;;;367      hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
+;;;364      hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
 000024  2100              MOVS     r1,#0
 000026  6201              STR      r1,[r0,#0x20]
-;;;368      hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
+;;;365      hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
 000028  6241              STR      r1,[r0,#0x24]
-;;;369      hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+;;;366      hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
 00002a  6281              STR      r1,[r0,#0x28]
-;;;370      hspi3.Init.CRCPolynomial = 10;
+;;;367      hspi3.Init.CRCPolynomial = 10;
 00002c  210a              MOVS     r1,#0xa
 00002e  62c1              STR      r1,[r0,#0x2c]
-;;;371      if (HAL_SPI_Init(&hspi3) != HAL_OK)
+;;;368      if (HAL_SPI_Init(&hspi3) != HAL_OK)
 000030  f7fffffe          BL       HAL_SPI_Init
 000034  b108              CBZ      r0,|L7.58|
-;;;372      {
-;;;373        Error_Handler();
+;;;369      {
+;;;370        Error_Handler();
 000036  f7fffffe          BL       Error_Handler
                   |L7.58|
-;;;374      }
-;;;375      /* USER CODE BEGIN SPI3_Init 2 */
-;;;376    //	hspi3.pTxBuffPtr = EcatSpiWriteBuffer;
-;;;377    //	hspi3.pRxBuffPtr = EcatSpiReadBuffer;
-;;;378    //	hspi3.RxXferSize = SPI_BUFFER_SIZE;
-;;;379    //	hspi3.TxXferSize = SPI_BUFFER_SIZE;
-;;;380    //	hspi3.RxXferCount = 0u;
-;;;381    //	hspi3.TxXferCount = 0u;
-;;;382      /* USER CODE END SPI3_Init 2 */
-;;;383    
-;;;384    }
+;;;371      }
+;;;372      /* USER CODE BEGIN SPI3_Init 2 */
+;;;373    //	hspi3.pTxBuffPtr = EcatSpiWriteBuffer;
+;;;374    //	hspi3.pRxBuffPtr = EcatSpiReadBuffer;
+;;;375    //	hspi3.RxXferSize = SPI_BUFFER_SIZE;
+;;;376    //	hspi3.TxXferSize = SPI_BUFFER_SIZE;
+;;;377    //	hspi3.RxXferCount = 0u;
+;;;378    //	hspi3.TxXferCount = 0u;
+;;;379      /* USER CODE END SPI3_Init 2 */
+;;;380    
+;;;381    }
 00003a  bd10              POP      {r4,pc}
-;;;385    
+;;;382    
                           ENDP
 
                   |L7.60|
@@ -909,56 +909,56 @@
                           AREA ||i.MX_USART1_UART_Init||, CODE, READONLY, ALIGN=2
 
                   MX_USART1_UART_Init PROC
-;;;390      */
-;;;391    static void MX_USART1_UART_Init(void)
+;;;387      */
+;;;388    static void MX_USART1_UART_Init(void)
 000000  b510              PUSH     {r4,lr}
-;;;392    {
-;;;393    
-;;;394      /* USER CODE BEGIN USART1_Init 0 */
-;;;395    
-;;;396      /* USER CODE END USART1_Init 0 */
-;;;397    
-;;;398      /* USER CODE BEGIN USART1_Init 1 */
-;;;399    
-;;;400      /* USER CODE END USART1_Init 1 */
-;;;401      huart1.Instance = USART1;
+;;;389    {
+;;;390    
+;;;391      /* USER CODE BEGIN USART1_Init 0 */
+;;;392    
+;;;393      /* USER CODE END USART1_Init 0 */
+;;;394    
+;;;395      /* USER CODE BEGIN USART1_Init 1 */
+;;;396    
+;;;397      /* USER CODE END USART1_Init 1 */
+;;;398      huart1.Instance = USART1;
 000002  480b              LDR      r0,|L8.48|
 000004  490b              LDR      r1,|L8.52|
 000006  6008              STR      r0,[r1,#0]  ; huart1
-;;;402      huart1.Init.BaudRate = 19200;
+;;;399      huart1.Init.BaudRate = 19200;
 000008  f44f4096          MOV      r0,#0x4b00
 00000c  6048              STR      r0,[r1,#4]  ; huart1
-;;;403      huart1.Init.WordLength = UART_WORDLENGTH_8B;
+;;;400      huart1.Init.WordLength = UART_WORDLENGTH_8B;
 00000e  2100              MOVS     r1,#0
 000010  4808              LDR      r0,|L8.52|
 000012  6081              STR      r1,[r0,#8]
-;;;404      huart1.Init.StopBits = UART_STOPBITS_1;
+;;;401      huart1.Init.StopBits = UART_STOPBITS_1;
 000014  60c1              STR      r1,[r0,#0xc]
-;;;405      huart1.Init.Parity = UART_PARITY_NONE;
+;;;402      huart1.Init.Parity = UART_PARITY_NONE;
 000016  6101              STR      r1,[r0,#0x10]
-;;;406      huart1.Init.Mode = UART_MODE_TX_RX;
+;;;403      huart1.Init.Mode = UART_MODE_TX_RX;
 000018  210c              MOVS     r1,#0xc
 00001a  6141              STR      r1,[r0,#0x14]
-;;;407      huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+;;;404      huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
 00001c  2100              MOVS     r1,#0
 00001e  6181              STR      r1,[r0,#0x18]
-;;;408      huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+;;;405      huart1.Init.OverSampling = UART_OVERSAMPLING_16;
 000020  61c1              STR      r1,[r0,#0x1c]
-;;;409      if (HAL_UART_Init(&huart1) != HAL_OK)
+;;;406      if (HAL_UART_Init(&huart1) != HAL_OK)
 000022  f7fffffe          BL       HAL_UART_Init
 000026  b108              CBZ      r0,|L8.44|
-;;;410      {
-;;;411        Error_Handler();
+;;;407      {
+;;;408        Error_Handler();
 000028  f7fffffe          BL       Error_Handler
                   |L8.44|
-;;;412      }
-;;;413      /* USER CODE BEGIN USART1_Init 2 */
-;;;414    
-;;;415      /* USER CODE END USART1_Init 2 */
-;;;416    
-;;;417    }
+;;;409      }
+;;;410      /* USER CODE BEGIN USART1_Init 2 */
+;;;411    
+;;;412      /* USER CODE END USART1_Init 2 */
+;;;413    
+;;;414    }
 00002c  bd10              POP      {r4,pc}
-;;;418    
+;;;415    
                           ENDP
 
 00002e  0000              DCW      0x0000
@@ -970,56 +970,56 @@
                           AREA ||i.MX_USART2_UART_Init||, CODE, READONLY, ALIGN=2
 
                   MX_USART2_UART_Init PROC
-;;;423      */
-;;;424    static void MX_USART2_UART_Init(void)
+;;;420      */
+;;;421    static void MX_USART2_UART_Init(void)
 000000  b510              PUSH     {r4,lr}
-;;;425    {
-;;;426    
-;;;427      /* USER CODE BEGIN USART2_Init 0 */
-;;;428    
-;;;429      /* USER CODE END USART2_Init 0 */
-;;;430    
-;;;431      /* USER CODE BEGIN USART2_Init 1 */
-;;;432    
-;;;433      /* USER CODE END USART2_Init 1 */
-;;;434      huart2.Instance = USART2;
+;;;422    {
+;;;423    
+;;;424      /* USER CODE BEGIN USART2_Init 0 */
+;;;425    
+;;;426      /* USER CODE END USART2_Init 0 */
+;;;427    
+;;;428      /* USER CODE BEGIN USART2_Init 1 */
+;;;429    
+;;;430      /* USER CODE END USART2_Init 1 */
+;;;431      huart2.Instance = USART2;
 000002  480b              LDR      r0,|L9.48|
 000004  490b              LDR      r1,|L9.52|
 000006  6008              STR      r0,[r1,#0]  ; huart2
-;;;435      huart2.Init.BaudRate = 115200;
+;;;432      huart2.Init.BaudRate = 115200;
 000008  f44f30e1          MOV      r0,#0x1c200
 00000c  6048              STR      r0,[r1,#4]  ; huart2
-;;;436      huart2.Init.WordLength = UART_WORDLENGTH_8B;
+;;;433      huart2.Init.WordLength = UART_WORDLENGTH_8B;
 00000e  2100              MOVS     r1,#0
 000010  4808              LDR      r0,|L9.52|
 000012  6081              STR      r1,[r0,#8]
-;;;437      huart2.Init.StopBits = UART_STOPBITS_1;
+;;;434      huart2.Init.StopBits = UART_STOPBITS_1;
 000014  60c1              STR      r1,[r0,#0xc]
-;;;438      huart2.Init.Parity = UART_PARITY_NONE;
+;;;435      huart2.Init.Parity = UART_PARITY_NONE;
 000016  6101              STR      r1,[r0,#0x10]
-;;;439      huart2.Init.Mode = UART_MODE_TX_RX;
+;;;436      huart2.Init.Mode = UART_MODE_TX_RX;
 000018  210c              MOVS     r1,#0xc
 00001a  6141              STR      r1,[r0,#0x14]
-;;;440      huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+;;;437      huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
 00001c  2100              MOVS     r1,#0
 00001e  6181              STR      r1,[r0,#0x18]
-;;;441      huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+;;;438      huart2.Init.OverSampling = UART_OVERSAMPLING_16;
 000020  61c1              STR      r1,[r0,#0x1c]
-;;;442      if (HAL_UART_Init(&huart2) != HAL_OK)
+;;;439      if (HAL_UART_Init(&huart2) != HAL_OK)
 000022  f7fffffe          BL       HAL_UART_Init
 000026  b108              CBZ      r0,|L9.44|
-;;;443      {
-;;;444        Error_Handler();
+;;;440      {
+;;;441        Error_Handler();
 000028  f7fffffe          BL       Error_Handler
                   |L9.44|
-;;;445      }
-;;;446      /* USER CODE BEGIN USART2_Init 2 */
-;;;447    
-;;;448      /* USER CODE END USART2_Init 2 */
-;;;449    
-;;;450    }
+;;;442      }
+;;;443      /* USER CODE BEGIN USART2_Init 2 */
+;;;444    
+;;;445      /* USER CODE END USART2_Init 2 */
+;;;446    
+;;;447    }
 00002c  bd10              POP      {r4,pc}
-;;;451    
+;;;448    
                           ENDP
 
 00002e  0000              DCW      0x0000
@@ -1031,50 +1031,50 @@
                           AREA ||i.PHY_Init||, CODE, READONLY, ALIGN=2
 
                   PHY_Init PROC
-;;;644    /* USER CODE BEGIN 4 */
-;;;645    void PHY_Init(void)
+;;;641    /* USER CODE BEGIN 4 */
+;;;642    void PHY_Init(void)
 000000  b570              PUSH     {r4-r6,lr}
-;;;646    {
-;;;647    	uint32_t startTime;
-;;;648    	uint32_t nowTime;
-;;;649    	uint32_t elapseTime;
-;;;650    	
-;;;651    	startTime = HAL_GetTick();
+;;;643    {
+;;;644    	uint32_t startTime;
+;;;645    	uint32_t nowTime;
+;;;646    	uint32_t elapseTime;
+;;;647    	
+;;;648    	startTime = HAL_GetTick();
 000002  f7fffffe          BL       HAL_GetTick
 000006  4605              MOV      r5,r0
-;;;652    	elapseTime = 0u;
+;;;649    	elapseTime = 0u;
 000008  2600              MOVS     r6,#0
-;;;653    	GPIOF->ODR &= 0xffefu;
+;;;650    	GPIOF->ODR &= 0xffefu;
 00000a  480a              LDR      r0,|L10.52|
 00000c  6800              LDR      r0,[r0,#0]
 00000e  f64f71ef          MOV      r1,#0xffef
 000012  4008              ANDS     r0,r0,r1
 000014  4907              LDR      r1,|L10.52|
 000016  6008              STR      r0,[r1,#0]
-;;;654    
-;;;655    	while(elapseTime <= 1u)
+;;;651    
+;;;652    	while(elapseTime <= 1u)
 000018  e003              B        |L10.34|
                   |L10.26|
-;;;656    	{
-;;;657    		nowTime = HAL_GetTick();
+;;;653    	{
+;;;654    		nowTime = HAL_GetTick();
 00001a  f7fffffe          BL       HAL_GetTick
 00001e  4604              MOV      r4,r0
-;;;658    		elapseTime = nowTime - startTime;
+;;;655    		elapseTime = nowTime - startTime;
 000020  1b66              SUBS     r6,r4,r5
                   |L10.34|
-000022  2e01              CMP      r6,#1                 ;655
+000022  2e01              CMP      r6,#1                 ;652
 000024  d9f9              BLS      |L10.26|
-;;;659    	}
-;;;660    
-;;;661    	GPIOF->ODR |= ((uint32_t)1u << 4u);
+;;;656    	}
+;;;657    
+;;;658    	GPIOF->ODR |= ((uint32_t)1u << 4u);
 000026  4803              LDR      r0,|L10.52|
 000028  6800              LDR      r0,[r0,#0]
 00002a  f0400010          ORR      r0,r0,#0x10
 00002e  4901              LDR      r1,|L10.52|
 000030  6008              STR      r0,[r1,#0]
-;;;662    }
+;;;659    }
 000032  bd70              POP      {r4-r6,pc}
-;;;663    /* USER CODE END 4 */
+;;;660    /* USER CODE END 4 */
                           ENDP
 
                   |L10.52|
@@ -1083,23 +1083,23 @@
                           AREA ||i.SystemClock_Config||, CODE, READONLY, ALIGN=2
 
                   SystemClock_Config PROC
-;;;163      */
-;;;164    void SystemClock_Config(void)
+;;;160      */
+;;;161    void SystemClock_Config(void)
 000000  b500              PUSH     {lr}
-;;;165    {
+;;;162    {
 000002  b093              SUB      sp,sp,#0x4c
-;;;166      RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+;;;163      RCC_OscInitTypeDef RCC_OscInitStruct = {0};
 000004  2130              MOVS     r1,#0x30
 000006  a807              ADD      r0,sp,#0x1c
 000008  f7fffffe          BL       __aeabi_memclr4
-;;;167      RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+;;;164      RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 00000c  2114              MOVS     r1,#0x14
 00000e  a802              ADD      r0,sp,#8
 000010  f7fffffe          BL       __aeabi_memclr4
-;;;168    
-;;;169      /** Configure the main internal regulator output voltage
-;;;170      */
-;;;171      __HAL_RCC_PWR_CLK_ENABLE();
+;;;165    
+;;;166      /** Configure the main internal regulator output voltage
+;;;167      */
+;;;168      __HAL_RCC_PWR_CLK_ENABLE();
 000014  bf00              NOP      
 000016  2000              MOVS     r0,#0
 000018  9001              STR      r0,[sp,#4]
@@ -1114,7 +1114,7 @@
 00002e  9001              STR      r0,[sp,#4]
 000030  bf00              NOP      
 000032  bf00              NOP      
-;;;172      __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+;;;169      __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 000034  bf00              NOP      
 000036  2000              MOVS     r0,#0
 000038  9001              STR      r0,[sp,#4]
@@ -1129,78 +1129,78 @@
 00004e  9001              STR      r0,[sp,#4]
 000050  bf00              NOP      
 000052  bf00              NOP      
-;;;173      /** Initializes the RCC Oscillators according to the specified parameters
-;;;174      * in the RCC_OscInitTypeDef structure.
-;;;175      */
-;;;176      RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+;;;170      /** Initializes the RCC Oscillators according to the specified parameters
+;;;171      * in the RCC_OscInitTypeDef structure.
+;;;172      */
+;;;173      RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
 000054  2002              MOVS     r0,#2
 000056  9007              STR      r0,[sp,#0x1c]
-;;;177      RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+;;;174      RCC_OscInitStruct.HSIState = RCC_HSI_ON;
 000058  2001              MOVS     r0,#1
 00005a  900a              STR      r0,[sp,#0x28]
-;;;178      RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+;;;175      RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
 00005c  2010              MOVS     r0,#0x10
 00005e  900b              STR      r0,[sp,#0x2c]
-;;;179      RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+;;;176      RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
 000060  2002              MOVS     r0,#2
 000062  900d              STR      r0,[sp,#0x34]
-;;;180      RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+;;;177      RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
 000064  2100              MOVS     r1,#0
 000066  910e              STR      r1,[sp,#0x38]
-;;;181      RCC_OscInitStruct.PLL.PLLM = 8;
+;;;178      RCC_OscInitStruct.PLL.PLLM = 8;
 000068  2108              MOVS     r1,#8
 00006a  910f              STR      r1,[sp,#0x3c]
-;;;182      RCC_OscInitStruct.PLL.PLLN = 168;
+;;;179      RCC_OscInitStruct.PLL.PLLN = 168;
 00006c  21a8              MOVS     r1,#0xa8
 00006e  9110              STR      r1,[sp,#0x40]
-;;;183      RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+;;;180      RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
 000070  2102              MOVS     r1,#2
 000072  9111              STR      r1,[sp,#0x44]
-;;;184      RCC_OscInitStruct.PLL.PLLQ = 4;
+;;;181      RCC_OscInitStruct.PLL.PLLQ = 4;
 000074  2104              MOVS     r1,#4
 000076  9112              STR      r1,[sp,#0x48]
-;;;185      if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+;;;182      if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
 000078  a807              ADD      r0,sp,#0x1c
 00007a  f7fffffe          BL       HAL_RCC_OscConfig
 00007e  b108              CBZ      r0,|L11.132|
-;;;186      {
-;;;187        Error_Handler();
+;;;183      {
+;;;184        Error_Handler();
 000080  f7fffffe          BL       Error_Handler
                   |L11.132|
-;;;188      }
-;;;189      /** Initializes the CPU, AHB and APB buses clocks
-;;;190      */
-;;;191      RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+;;;185      }
+;;;186      /** Initializes the CPU, AHB and APB buses clocks
+;;;187      */
+;;;188      RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
 000084  200f              MOVS     r0,#0xf
 000086  9002              STR      r0,[sp,#8]
-;;;192                                  |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-;;;193      RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+;;;189                                  |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+;;;190      RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
 000088  2002              MOVS     r0,#2
 00008a  9003              STR      r0,[sp,#0xc]
-;;;194      RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+;;;191      RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
 00008c  2000              MOVS     r0,#0
 00008e  9004              STR      r0,[sp,#0x10]
-;;;195      RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+;;;192      RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
 000090  f44f50a0          MOV      r0,#0x1400
 000094  9005              STR      r0,[sp,#0x14]
-;;;196      RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+;;;193      RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 000096  f44f5080          MOV      r0,#0x1000
 00009a  9006              STR      r0,[sp,#0x18]
-;;;197    
-;;;198      if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
+;;;194    
+;;;195      if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
 00009c  2105              MOVS     r1,#5
 00009e  a802              ADD      r0,sp,#8
 0000a0  f7fffffe          BL       HAL_RCC_ClockConfig
 0000a4  b108              CBZ      r0,|L11.170|
-;;;199      {
-;;;200        Error_Handler();
+;;;196      {
+;;;197        Error_Handler();
 0000a6  f7fffffe          BL       Error_Handler
                   |L11.170|
-;;;201      }
-;;;202    }
+;;;198      }
+;;;199    }
 0000aa  b013              ADD      sp,sp,#0x4c
 0000ac  bd00              POP      {pc}
-;;;203    
+;;;200    
                           ENDP
 
 0000ae  0000              DCW      0x0000
@@ -1217,119 +1217,116 @@
 000000  f7fffffe          BL       HAL_Init
 ;;;87     {
 ;;;88       /* USER CODE BEGIN 1 */
-;;;89     	uint32_t nowTime;
-;;;90     	uint32_t elapseTime;
-;;;91     	uint32_t startTime;
-;;;92       /* USER CODE END 1 */
-;;;93     
-;;;94       /* MCU Configuration--------------------------------------------------------*/
+;;;89       /* USER CODE END 1 */
+;;;90     
+;;;91       /* MCU Configuration--------------------------------------------------------*/
+;;;92     
+;;;93       /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+;;;94       HAL_Init();
 ;;;95     
-;;;96       /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-;;;97       HAL_Init();
-;;;98     
-;;;99       /* USER CODE BEGIN Init */
-;;;100    
-;;;101      /* USER CODE END Init */
-;;;102    
-;;;103      /* Configure the system clock */
-;;;104      SystemClock_Config();
+;;;96       /* USER CODE BEGIN Init */
+;;;97     
+;;;98       /* USER CODE END Init */
+;;;99     
+;;;100      /* Configure the system clock */
+;;;101      SystemClock_Config();
 000004  f7fffffe          BL       SystemClock_Config
-;;;105    
-;;;106      /* USER CODE BEGIN SysInit */
-;;;107    
-;;;108      /* USER CODE END SysInit */
-;;;109    
-;;;110      /* Initialize all configured peripherals */
-;;;111      MX_GPIO_Init();
+;;;102    
+;;;103      /* USER CODE BEGIN SysInit */
+;;;104    
+;;;105      /* USER CODE END SysInit */
+;;;106    
+;;;107      /* Initialize all configured peripherals */
+;;;108      MX_GPIO_Init();
 000008  f7fffffe          BL       MX_GPIO_Init
-;;;112      MX_SPI3_Init();
+;;;109      MX_SPI3_Init();
 00000c  f7fffffe          BL       MX_SPI3_Init
-;;;113      MX_CAN1_Init();
+;;;110      MX_CAN1_Init();
 000010  f7fffffe          BL       MX_CAN1_Init
-;;;114      MX_I2C1_Init();
+;;;111      MX_I2C1_Init();
 000014  f7fffffe          BL       MX_I2C1_Init
-;;;115      MX_I2C2_Init();
+;;;112      MX_I2C2_Init();
 000018  f7fffffe          BL       MX_I2C2_Init
-;;;116      MX_I2C3_Init();
+;;;113      MX_I2C3_Init();
 00001c  f7fffffe          BL       MX_I2C3_Init
-;;;117      MX_USART1_UART_Init();
+;;;114      MX_USART1_UART_Init();
 000020  f7fffffe          BL       MX_USART1_UART_Init
-;;;118      MX_USART2_UART_Init();
+;;;115      MX_USART2_UART_Init();
 000024  f7fffffe          BL       MX_USART2_UART_Init
-;;;119      /* USER CODE BEGIN 2 */
-;;;120        EcatHspiPtr = &hspi3;
+;;;116      /* USER CODE BEGIN 2 */
+;;;117        EcatHspiPtr = &hspi3;
 000028  4812              LDR      r0,|L12.116|
 00002a  4913              LDR      r1,|L12.120|
 00002c  6008              STR      r0,[r1,#0]  ; EcatHspiPtr
-;;;121    		I2C_Ptr_24V = &hi2c1;
+;;;118    		I2C_Ptr_24V = &hi2c1;
 00002e  4813              LDR      r0,|L12.124|
 000030  4913              LDR      r1,|L12.128|
 000032  6008              STR      r0,[r1,#0]  ; I2C_Ptr_24V
-;;;122    		I2C_Ptr_48V_NTC = &hi2c3;
+;;;119    		I2C_Ptr_48V_NTC = &hi2c3;
 000034  4813              LDR      r0,|L12.132|
 000036  4914              LDR      r1,|L12.136|
 000038  6008              STR      r0,[r1,#0]  ; I2C_Ptr_48V_NTC
-;;;123    		I2C_Ptr_AI = &hi2c2;
+;;;120    		I2C_Ptr_AI = &hi2c2;
 00003a  4814              LDR      r0,|L12.140|
 00003c  4914              LDR      r1,|L12.144|
 00003e  6008              STR      r0,[r1,#0]  ; I2C_Ptr_AI
-;;;124    		Uart_HandlePtr = &huart1;
+;;;121    		Uart_HandlePtr = &huart1;
 000040  4814              LDR      r0,|L12.148|
 000042  4915              LDR      r1,|L12.152|
 000044  6008              STR      r0,[r1,#0]  ; Uart_HandlePtr
-;;;125    //		Udma_UartRx_HandlePtr = &hdma_usart1_rx;
-;;;126    //		Udma_Uarttx_HandlePtr = &hdma_usart1_tx;
-;;;127    //    LAN9252_Init();
-;;;128    //    MainInit();
-;;;129    //    bRunApplication = TRUE;
-;;;130    //		PHY_Init();
-;;;131    //		HAL_GPIO_WritePin(OC_PROTECT_GPIO_Port, OC_PROTECT_Pin, GPIO_PIN_RESET);
-;;;132    //		HAL_GPIO_WritePin(V24V_OUT1_GPIO_Port, V24V_OUT1_Pin, GPIO_PIN_SET);
-;;;133    //		HAL_GPIO_WritePin(ES_SHUTDOWN_GPIO_Port, ES_SHUTDOWN_Pin, GPIO_PIN_SET);		
-;;;134    		if (HAL_UARTEx_ReceiveToIdle_IT(&huart1, PowerCommandRxBuffer, POWER_COMMAND_TXRX_BUFFER_SIZE) != HAL_OK)
+;;;122    //		Udma_UartRx_HandlePtr = &hdma_usart1_rx;
+;;;123    //		Udma_Uarttx_HandlePtr = &hdma_usart1_tx;
+;;;124    //    LAN9252_Init();
+;;;125    //    MainInit();
+;;;126    //    bRunApplication = TRUE;
+;;;127    //		PHY_Init();
+;;;128    //		HAL_GPIO_WritePin(OC_PROTECT_GPIO_Port, OC_PROTECT_Pin, GPIO_PIN_RESET);
+;;;129    //		HAL_GPIO_WritePin(V24V_OUT1_GPIO_Port, V24V_OUT1_Pin, GPIO_PIN_SET);
+;;;130    //		HAL_GPIO_WritePin(ES_SHUTDOWN_GPIO_Port, ES_SHUTDOWN_Pin, GPIO_PIN_SET);		
+;;;131    		if (HAL_UARTEx_ReceiveToIdle_IT(&huart1, PowerCommandRxBuffer, POWER_COMMAND_TXRX_BUFFER_SIZE) != HAL_OK)
 000046  2220              MOVS     r2,#0x20
 000048  4914              LDR      r1,|L12.156|
 00004a  f7fffffe          BL       HAL_UARTEx_ReceiveToIdle_IT
 00004e  b108              CBZ      r0,|L12.84|
-;;;135    		{
-;;;136    			Error_Handler();		
+;;;132    		{
+;;;133    			Error_Handler();		
 000050  f7fffffe          BL       Error_Handler
                   |L12.84|
-;;;137    		}	
-;;;138    		ADS1115_Driver_Initilization();
+;;;134    		}	
+;;;135    		ADS1115_Driver_Initilization();
 000054  f7fffffe          BL       ADS1115_Driver_Initilization
-;;;139    		Power_Command_Initilization();
+;;;136    		Power_Command_Initilization();
 000058  f7fffffe          BL       Power_Command_Initilization
-;;;140      /* USER CODE END 2 */
-;;;141    
-;;;142      /* Infinite loop */
-;;;143      /* USER CODE BEGIN WHILE */
-;;;144      while (1)
+;;;137      /* USER CODE END 2 */
+;;;138    
+;;;139      /* Infinite loop */
+;;;140      /* USER CODE BEGIN WHILE */
+;;;141      while (1)
 00005c  e009              B        |L12.114|
                   |L12.94|
-;;;145      {
-;;;146    //		MainLoop();
-;;;147    	  work_mode_operation();
+;;;142      {
+;;;143    //		MainLoop();
+;;;144    	  work_mode_operation();
 00005e  f7fffffe          BL       work_mode_operation
-;;;148    		ADS1115_Driver_MainLoop();
+;;;145    		ADS1115_Driver_MainLoop();
 000062  f7fffffe          BL       ADS1115_Driver_MainLoop
-;;;149    		KeyScan(power_manage.work_mode);
+;;;146    		KeyScan(power_manage.work_mode);
 000066  490e              LDR      r1,|L12.160|
 000068  7888              LDRB     r0,[r1,#2]  ; power_manage
 00006a  f7fffffe          BL       KeyScan
-;;;150    		Power_Command_Main_Loop();
+;;;147    		Power_Command_Main_Loop();
 00006e  f7fffffe          BL       Power_Command_Main_Loop
                   |L12.114|
 000072  e7f4              B        |L12.94|
-;;;151    		
-;;;152    		
-;;;153        /* USER CODE END WHILE */
-;;;154    
-;;;155        /* USER CODE BEGIN 3 */
-;;;156      }
-;;;157      /* USER CODE END 3 */
-;;;158    }
-;;;159    
+;;;148    		
+;;;149    		
+;;;150        /* USER CODE END WHILE */
+;;;151    
+;;;152        /* USER CODE BEGIN 3 */
+;;;153      }
+;;;154      /* USER CODE END 3 */
+;;;155    }
+;;;156    
                           ENDP
 
                   |L12.116|

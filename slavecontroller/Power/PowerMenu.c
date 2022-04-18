@@ -203,6 +203,45 @@ void softwarepoweroff_mode_operation(void)
 	}
 }
 
+void Reboot_mode_operation(void)
+{
+	HAL_StatusTypeDef TransmitResult;
+	uint32_t nowTime;
+	uint32_t elapseTime;
+	static uint8_t RebootState = 0u;
+	static uint32_t RebootTime = 0u;
+
+	
+	switch(RebootState)
+	{
+		case 0u:	
+		  TransmitResult = Power_Command_Transmit((uint8_t)SM2SU_REQ_CD_REPLY_REBOOT_COMMAND);
+	    if(TransmitResult == HAL_OK)
+			{
+				RebootTime = HAL_GetTick();
+				RebootState = 1u;
+			}
+			break;
+		case 1u:
+			nowTime = HAL_GetTick();
+	    elapseTime = nowTime - RebootTime; 
+		  if(elapseTime >= 5000)
+		  {
+			  force_shutdown(POWER_STATUS_IDLE);
+				RebootState = 2u;
+		  }		
+			break;
+		case 2u:
+			HAL_Delay(1000);
+		  power_manage.work_mode = POWER_STATUS_POWERON;
+			Reboot_Flag = FALSE;
+	    RebootState = 0u;
+			break;
+		default:
+			break;		
+	}
+}
+
 void work_mode_operation(void)
 {
 	
@@ -224,10 +263,15 @@ void work_mode_operation(void)
 	  HAL_GPIO_WritePin(AI_IU_SW2_GPIO_Port, AI_IU_SW2_Pin, GPIO_PIN_SET);
 	}
 	
+
 	switch(power_manage.work_mode)
 	{
 		case POWER_STATUS_IDLE:
 			sampling_flag = 1u;
+			if(Reboot_Flag == TRUE)
+			{
+				Reboot_mode_operation();			
+			}
 		  break;
 		case POWER_STATUS_POWERON:
 			sampling_flag = 1u;
@@ -237,9 +281,17 @@ void work_mode_operation(void)
 		  break;
 		case POWER_STATUS_48VNOSTART:
 		  PowerOnCharge();
+			if(Reboot_Flag == TRUE)
+			{
+				Reboot_mode_operation();			
+			}
 			break;
 		case POWER_STATUS_48VSTART:
 		  PowerAccessCharge();
+			if(Reboot_Flag == TRUE)
+			{
+				Reboot_mode_operation();			
+			}
 			break;
 		case POWER_STATUS_SHUTDWON:
       shutdown_mode_operation();
